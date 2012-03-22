@@ -6,7 +6,7 @@ Use install.sh.
 
 * If you run it as root it will install system wide (currently untested!).
 * If you run it as yourself, it will install locally in your account.
-* Alternatively, if you run it as yourself with linked at the end (`./install.sh linked`), it will be linked to the repo. This option makes the most sense if you want to do development.
+* Alternatively, if you run it as yourself with linked at the end (`./install.sh linked`), it will be linked to the repo. *This option makes the most sense if you want to do development*.
 
 For now, read install.sh to see what it does.
 
