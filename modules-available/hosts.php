@@ -86,5 +86,5 @@ class Hosts extends Module
 
 $core=core::assert();
 $core->registerModule(new Hosts());
-
+ 
 ?>

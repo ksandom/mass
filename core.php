@@ -325,5 +325,5 @@ class Module
 		$this->core=&$core;
 	}
 }
-
+ 
 ?>

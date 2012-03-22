@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 # Copyright (c) 2012, Kevin Sandom under the BSD License. See LICENSE for full details.
-
+ 
 define('programName', 'mass');
 $description="A script for doing awesome stuff on many nodes of a cluster.";
 

@@ -167,5 +167,5 @@ class CommandLine extends Module
 
 $core=core::assert();
 $core->registerModule(new CommandLine());
-
+ 
 ?>

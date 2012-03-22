@@ -37,5 +37,5 @@ class JsonOut extends Module
 
 $core=core::assert();
 $core->registerModule(new JsonOut());
-
+ 
 ?>

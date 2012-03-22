@@ -56,5 +56,5 @@ class Example extends Module
 
 $core=core::assert();
 $core->registerModule(new Example());
-
+ 
 ?>
