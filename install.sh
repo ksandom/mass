@@ -8,6 +8,7 @@
 #
 # This is useful for development where you want to test changes without reinstalling.
 
+# install.sh will get replaced eventually. For now it does what I need.
 
 programName='mass'
 
