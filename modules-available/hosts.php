@@ -18,7 +18,7 @@ class Hosts extends Module
 		{
 			case 'init':
 				$this->dataDir=$this->core->get('General', 'configDir').'/data';
-				$hostFiles=$this->core->getFileList($this->dataDir);
+				$hostFiles=$this->core->getFileList($this->dataDir.'/hosts');
 				$allHostDefinitions=array();
 				foreach ($hostFiles as $filename=>$hostFile)
 				{

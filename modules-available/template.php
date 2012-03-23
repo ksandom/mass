@@ -36,14 +36,18 @@ class Template extends Module
 
 	function processTemplate($fileName)
 	{
-		$contents=file_get_contents($fileName);
-		
-		while (strpos($contents, templateMacroBegin)!==false)
+		if (file_exists($fileName))
 		{
-			$contents=$this->findAndRunMacro($contents);
+			$contents=file_get_contents($fileName);
+			
+			while (strpos($contents, templateMacroBegin)!==false)
+			{
+				$contents=$this->findAndRunMacro($contents);
+			}
+			
+			return $contents;
 		}
-		
-		return $contents;
+		else $this->core->complain($this, "Could not find file $fileName");
 	}
 	
 	function findAndRunMacro($contents)

@@ -2,6 +2,7 @@
 is a modularised script for managing several nodes of a cluster. This undersells it... I'll think of a better description soon.
 
 # Install
+See docs/install.md
 Use install.sh.
 
 * If you run it as root it will install system wide (currently untested!).
