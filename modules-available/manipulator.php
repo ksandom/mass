@@ -22,8 +22,10 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('f', 'flatten'), 'flatten', 'Flatten an array or arrays into a keyed array of values.');
 				break;
 			case 'toString':
+				return $this->toString($this->core->getSharedMemory());
 				break;
 			case 'flatten':
+				return $this->flatten($this->core->getSharedMemory());
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -31,6 +33,33 @@ class Manipulator extends Module
 		}
 	}
 	
+	function toString($input)
+	{
+		return $input;
+	}
+	
+	function flatten($input)
+	{
+		return $input;
+	}
+	
+	private function getArrayNodes(&$output, $input, &$clashes)
+	{
+		foreach ($input as $key=>$value)
+		{
+			if (is_numeric($key)) $output[]=$value;
+			else
+			{
+				if (!isset($output[$key])) $output[$key]=$value;
+				else
+				{
+					# work out new key based on clashes
+					
+				}
+				
+			}
+		}
+	}
 }
 
 $core=core::assert();
