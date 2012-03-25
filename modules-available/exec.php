@@ -17,7 +17,7 @@ class Exec extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('e', 'exec'), 'exec', 'Blindly execute what ever we recieve. USE WITH CARE!"');
+				$this->core->registerFeature($this, array('e', 'exec'), 'exec', 'Blindly execute what ever we recieve. USE WITH CARE!');
 				break;
 			case 'followup':
 				break;
@@ -34,12 +34,12 @@ class Exec extends Module
 	{
 		foreach ($input as $line)
 		{
-			if (is_array($line)) $this->run($line);
+			if (is_string($line)) $this->run($line);
 		}
 	}
 	
 	function run($line)
-	{
+	{ // Run stuff via this function so that it can easily be abstracted out later on.
 		return `$line`;
 	}
 	

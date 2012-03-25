@@ -243,7 +243,16 @@ class core extends Module
 		$entry=array('obj'=>&$obj, 'flags'=>$flags, 'name'=>$name, 'description'=>$description);
 		foreach ($flags as $flag)
 		{
-			$this->setRef('Features', $flag, $entry);
+			if (!isset($this->store['Features'][$flag]))
+			{
+				$this->setRef('Features', $flag, $entry);
+			}
+			else
+			{
+				$existing=$this->get('Features', $flag);
+				$existingName=$existing['obj']->getName();
+				$this->complain($obj, "Feature $flag has already been registered by $existingName");
+			}
 		}
 	}
 	

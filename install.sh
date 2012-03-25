@@ -47,18 +47,24 @@ function doInstall
 	startDir=`pwd` # for some reason ~- wasn't working
 	mkdir -p "$configDir/data/hosts" "$binExec" "$bin"
 	if [ "$bin" != '.' ]; then
-		cp -Rv modules-* core.php "$configDir"
+		cp -Rv modules-* core.php macros-* "$configDir"
+		cd "$configDir"
+		mkdir -p modules-enabled macros-enabled
 		cp -Rv $programName "$bin"
 		cd $binExec
 		pwd
 		ln -sfv "$bin/$programName" .
 		chmod 755 "$bin/$programName"
+		cd "$configDir/macros-enabled"
+		ln -sf ../macros-available/* .
 	else
 		cd "$configDir"
-		ln -sfv "$startDir"/modules-*available "$startDir/core.php" . 
-		mkdir -p modules-enabled
+		ln -sfv "$startDir"/modules-*available "$startDir"/macros-*available "$startDir/core.php" . 
+		mkdir -p modules-enabled macros-enabled
 		cd $binExec
 		ln -sfv "$startDir/$programName" .
+		cd "$configDir/macros-enabled"
+		ln -sf ../macros-available/* .
 	fi
 	
 }
@@ -69,6 +75,10 @@ if [ `id -u` -gt 0 ];then
 			linkedInstall
 		;;
 		*)
+			echo "This is broken at the moment and is low on my priorities to fix. Feel free to fix it."
+			echo "I suggest that you run './install linked' as this will be most useful to people at the moment."
+			echo "Alternatively you can comment out the exit and roll the dice ;)"
+			exit 1
 			userInstall
 		;;
 	esac

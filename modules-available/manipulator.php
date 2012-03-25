@@ -17,7 +17,7 @@ class Manipulator extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array or arrays into an array of strings. eg --toString="blah file=%hostName% ip=%externalIP%"');
+				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array of arrays into an array of strings. eg --toString="blah file=%hostName% ip=%externalIP%"');
 				$this->core->registerFeature($this, array('f', 'flatten'), 'flatten', 'Flatten an array or arrays into a keyed array of values. --flatten[=limit]. Note that "limit" specifies how far to go into the nesting before simply returning what ever is below.');
 				break;
 			case 'followup':
