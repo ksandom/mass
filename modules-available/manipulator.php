@@ -17,13 +17,13 @@ class Manipulator extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array or arrays into an array of strings.');
+				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array or arrays into an array of strings. eg --toString="blah file=%hostName% ip=%externalIP%"');
 				$this->core->registerFeature($this, array('f', 'flatten'), 'flatten', 'Flatten an array or arrays into a keyed array of values. --flatten[=limit]. Note that "limit" specifies how far to go into the nesting before simply returning what ever is below.');
 				break;
 			case 'followup':
 				break;
 			case 'toString':
-				return $this->toString($this->core->getSharedMemory());
+				return $this->toString($this->core->getSharedMemory(), $this->core->get('Global', 'toString'));
 				break;
 			case 'flatten':
 				return $this->flatten($this->core->getSharedMemory(), $this->core->get('Global', 'flatten'));
@@ -34,9 +34,33 @@ class Manipulator extends Module
 		}
 	}
 	
-	function toString($input)
+	function replace($input, $search, $replace)
 	{
-		return $input;
+		return implode($replace, explode($search, $input));
+	}
+	
+	function toString($input, $template)
+	{
+		$output=array();
+		
+		foreach ($input as $line)
+		{
+			if (is_array($line))
+			{
+				$outputLine=$template;
+				foreach ($line as $key=>$value)
+				{
+					$outputLine=$this->replace($outputLine, "%$key%", $value);
+				}
+				$output[]=$outputLine;
+			}
+			else
+			{
+				$output[]=$this->replace($template, '%value%', $line);
+			}
+		}
+		
+		return $output;
 	}
 	
 	function flatten($input, $limit, $nesting=0)

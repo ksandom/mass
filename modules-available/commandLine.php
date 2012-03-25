@@ -137,7 +137,7 @@ class CommandLine extends Module
 		{
 			if (is_string($output)) 
 			{
-				$derivedPrefix=($prefix)?"$prefix: ":'';
+				$derivedPrefix=($prefix or is_numeric($prefix))?"$prefix: ":'';
 				echo "$indent$derivedPrefix$output\n";
 			}
 			elseif (is_array($output))
