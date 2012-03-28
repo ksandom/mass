@@ -49,7 +49,7 @@ class Hosts extends Module
 		foreach ($host as $key=>$detail)
 		{
 			#echo "detail $key\n";
-			if (strpos($detail, $search))
+			if (strpos($detail, $search)!==false)
 			{
 				return true;
 			}

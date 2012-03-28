@@ -3,3 +3,7 @@
 #   mass --list=cus --toString="konsole -e bash -c 'echo %hostName%;
 # ssh %externalIP%;
 # read' &" --exec;
+
+list ~!Global,term!~;
+toString konsole -e bash -c 'ssh %externalIP%' &;
+exec;

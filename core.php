@@ -2,6 +2,8 @@
 # Copyright (c) 2012, Kevin Sandom under the BSD License. See LICENSE for full details.
 
 define('valueSeparator', ',');
+define('storeValueBegin', '~!');
+define('storeValueEnd', '!~');
 
 class core extends Module
 {
@@ -119,12 +121,31 @@ class core extends Module
 			$obj=&$this->core->get('Features', $argument);
 			if (is_array($obj))
 			{
-				$this->set('Global', $obj['name'], $value);
+				$this->set('Global', $obj['name'], $this->processValue($value));
 				return $obj['obj']->event($obj['name']);
 			}
 			else $this->complain(null, "Could not find a module to match '$argument'", 'triggerEvent');
 		}
 		return false;
+	}
+	
+	function processValue($value)
+	{ // Substitute in an variables
+		$output=$value;
+		
+		while (strpos($output, '~!')!==false)
+		{
+			$startPos=strpos($output, storeValueBegin)+2;
+			$endPos=strpos($output, storeValueEnd);
+			$length=$endPos-$startPos;
+			
+			$varDef=substr($output, $startPos, $length);
+			$varParts=explode(',', $varDef);
+			$varValue=$this->get($varParts[0], $varParts[1]);
+			$output=implode($varValue, explode(storeValueBegin.$varDef.storeValueEnd, $output));
+		}
+		
+		return $output;
 	}
 	
 	function addAction($argument, $value=null, $macroName='default')
@@ -157,9 +178,11 @@ class core extends Module
 				foreach ($this->store['Macros'][$macroName] as $actionItem)
 				{
 					//print_r($actionItem['obj']);
-					$this->set('Global', $actionItem['name'], $actionItem['value']);
+					#$this->set('Global', $actionItem['name'], $actionItem['value']);
 					//$this->out($actionItem['obj']['obj']->event($actionItem['name']));
-					$this->setSharedMemory($actionItem['obj']['obj']->event($actionItem['name']));
+					#$this->setSharedMemory($actionItem['obj']['obj']->event($actionItem['name']));
+					
+					$this->setSharedMemory($this->triggerEvent($actionItem['name'], $actionItem['value']));
 				}
 				
 				$sharedMemory=&$this->getSharedMemory();
