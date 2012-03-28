@@ -31,6 +31,8 @@ class Hosts extends Module
 				break;
 			case 'followup':
 				break;
+			case 'last':
+				break;
 			case 'list':
 				return $this->listHosts();
 				break;

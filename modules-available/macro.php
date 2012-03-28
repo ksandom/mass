@@ -36,9 +36,12 @@ class Macro extends Module
 				return $this->listMacros();
 				break;
 			case 'followup':
+				$this->loadSavedMacros();
+				break;
+			case 'last':
 				break;
 			default:
-				$this->core->complain($this, 'Unknown event', $event);
+				return$this->runMacro($event);
 				break;
 		}
 	}
@@ -68,7 +71,7 @@ class Macro extends Module
 				$value='';
 			}
 			
-			$this->core->addAction($argument, $value, $macroName);
+			if ($argument and $argument!='#') $this->core->addAction($argument, $value, $macroName);
 		}
 	}
 	
@@ -87,6 +90,31 @@ class Macro extends Module
 			$output[]=$macroName;
 		}
 		return $output;
+	}
+	
+	function loadSavedMacros()
+	{
+		$fileList=$this->core->getFileList($this->core->get('General', 'configDir').'/macros-enabled');
+		foreach ($fileList as $fileName=>$fullPath)
+		{
+			$nameParts=explode('.', $fileName);
+			if ($nameParts[1]=='macro') // Only invest further time if it actually is a macro.
+			{
+				$macroName=$nameParts[0];
+				$contents=file_get_contents($fullPath);
+				$contentsParts=explode("\n", $contents);
+				
+				if (substr($contentsParts[0], 0, 2)=='# ')
+				{
+					$description=substr($contentsParts[0], 2);
+					#$this->core->set('Macro', $macroName, $contents);
+					$this->defineMacro("$macroName:$contents");
+					
+					$this->core->registerFeature($this, array($macroName), $macroName, 'Macro: '.$description);
+				}
+				else $this->core->complain($this, "$fullPath appears to be a macro, but doesn't have a helpful comment on the first line begining with a # .");
+			}
+		}
 	}
 }
 

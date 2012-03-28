@@ -21,6 +21,8 @@ class Exec extends Module
 				break;
 			case 'followup':
 				break;
+			case 'last':
+				break;
 			case 'exec':
 				$this->exec($this->core->getSharedMemory());
 				break;

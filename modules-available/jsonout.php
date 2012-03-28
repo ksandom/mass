@@ -19,6 +19,8 @@ class JsonOut extends Module
 				break;
 			case 'followup':
 				break;
+			case 'last':
+				break;
 			case 'json':
 				$this->core->setRef('General', 'outputObject', $this);
 				break;

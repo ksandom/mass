@@ -22,6 +22,8 @@ class Manipulator extends Module
 				break;
 			case 'followup':
 				break;
+			case 'last':
+				break;
 			case 'toString':
 				return $this->toString($this->core->getSharedMemory(), $this->core->get('Global', 'toString'));
 				break;

@@ -24,6 +24,8 @@ class Template extends Module
 				break;
 			case 'followup':
 				break;
+			case 'last':
+				break;
 			case 'template':
 				#$this->core->setRef('General', 'outputObject', $this);
 				return $this->processTemplate($this->core->get('Global', 'template'));

@@ -38,6 +38,8 @@ class Example extends Module
 			case 'followup':
 				# Do anything you need to do before the main flow begins, but requires all the other modules to be loaded. IT WILL BE RARE THAT YOU SHOULD USE THIS! An example is commandLine.php which needs all modules to be loaded before it can process arguments that might reference them.
 				break;
+			case 'last':
+				break;
 			case 'example':
 				return $this->aFeature();
 				break;

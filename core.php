@@ -32,8 +32,12 @@ class core extends Module
 				$this->registerFeature($this, array('set'), 'set', 'set a value. --set=moduleName'.valueSeparator.'variableName'.valueSeparator.'value');
 				$this->registerFeature($this, array('setJson'), 'setJson', 'set a json encoded array as an array. --setJson=moduleName'.valueSeparator.'variableName'.valueSeparator.'jsonValue');
 				$this->registerFeature($this, array('dump'), 'dump', 'Dump internal state.');
+				$this->registerFeature($this, array('ping'), 'ping', 'Useful for debugging.');
+				$this->registerFeature($this, array('#'), '#', 'Comment.');
 				break;
 			case 'followup':
+				break;
+			case 'last':
 				break;
 			case 'get':
 				$parms=$this->interpretParms($this->get('Global', 'get'));
@@ -50,6 +54,11 @@ class core extends Module
 				break;
 			case 'dump':
 				return $this->dumpState();
+				break;
+			case 'ping':
+				echo "Pong.\n";
+				break;
+			case '#':
 				break;
 			default:
 				$this->complain($this, 'Unknown event', $event);
@@ -309,6 +318,7 @@ function loadModules(&$core, $sourcePath)
 	
 	$core->callInits(); // Basic init only
 	$core->callInits('followup'); // Any action that needs to be taken once all modules are loaded.
+	$core->callInits('last'); // Any action that needs to be taken once all modules are loaded.
 }
 
 

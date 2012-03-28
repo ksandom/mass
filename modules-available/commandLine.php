@@ -21,6 +21,8 @@ class CommandLine extends Module
 				$this->core->setRef('General', 'outputObject', $this);
 				break;
 			case 'followup':
+				break;
+			case 'last':
 				$this->processArgs();
 				break;
 			case 'help':
