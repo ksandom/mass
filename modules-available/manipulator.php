@@ -19,10 +19,18 @@ class Manipulator extends Module
 			case 'init':
 				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array of arrays into an array of strings. eg --toString="blah file=%hostName% ip=%externalIP%"');
 				$this->core->registerFeature($this, array('f', 'flatten'), 'flatten', 'Flatten an array or arrays into a keyed array of values. --flatten[=limit]. Note that "limit" specifies how far to go into the nesting before simply returning what ever is below.');
+				$this->core->registerFeature($this, array('requireEach'), 'requireEach', 'Require each entry to match this regular expression. --requireEach=regex');
+				$this->core->registerFeature($this, array('requireEntry'), 'requireEntry', 'Require a named entry in each of the root entries. A regular expression can be supplied to provide a more precise match. --requireEntry=entryKey[,regex]');
 				break;
 			case 'followup':
 				break;
 			case 'last':
+				break;
+			case 'requireEach':
+				return $this->requireEach($this->core->getSharedMemory(), $this->core->get('Global', 'requireEach'));
+				break;
+			case 'requireEntry':
+				return $this->requireEntry($this->core->getSharedMemory(), $this->core->get('Global', 'requireEntry'));
 				break;
 			case 'toString':
 				return $this->toString($this->core->getSharedMemory(), $this->core->get('Global', 'toString'));
@@ -100,6 +108,56 @@ class Manipulator extends Module
 				}
 			}
 		}
+	}
+	
+	private function requireEach($input, $search)
+	{
+		$output=array();
+		foreach ($input as $line)
+		{
+			if (is_string($line))
+			{
+				if (preg_match('/'.$search.'/', $line))
+				{
+					$output[]=$line;
+				}
+			}
+		}
+		
+		return $output;
+	}
+	
+	private function requireEntry($input, $search)
+	{
+		$output=array();
+		$searchParts=explode(',', $search);
+		$neededKey=$searchParts[0];
+		$neededRegex=$searchParts[1];
+		
+		foreach ($input as $line)
+		{
+			if ($neededKey)
+			{
+				if (isset($line[$neededKey]))
+				{
+					if ($neededRegex)
+					{
+						if (preg_match('/'.$search.'/', $line[$neededKey])) $output[]=$line;
+					}
+					else $output[]=$line;
+				}
+			}
+			else
+			{
+				if (is_array($line))
+				{
+					if (count($this->requireEach($line, $neededRegex))) $output[]=$line;
+				}
+			}
+		}
+		
+		print_r($output);
+		return $output;
 	}
 }
 
