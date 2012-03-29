@@ -49,7 +49,8 @@ class Hosts extends Module
 		foreach ($host as $key=>$detail)
 		{
 			#echo "detail $key\n";
-			if (strpos($detail, $search)!==false)
+			#if (strpos($detail, $search)!==false)
+			if (preg_match('/'.$search.'/', $detail))
 			{
 				return true;
 			}
