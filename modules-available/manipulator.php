@@ -83,7 +83,6 @@ class Manipulator extends Module
 	
 	private function getArrayNodes(&$output, $input, &$clashes, $limit, $nesting)
 	{
-		echo "$limit, $nesting\n";
 		foreach ($input as $key=>$value)
 		{
 			if (is_array($value) and !(is_numeric($limit) and ($nesting>=$limit)))
@@ -101,7 +100,6 @@ class Manipulator extends Module
 						# work out new key based on clashes
 						$clashes[$key]=(isset($clashes[$key]))?$clashes[$key]+1:1;
 						$newKey="$key{$clashes[$key]}";
-						echo "Chose key $newKey\n";
 						$output[$newKey]=$value;
 					}
 					
@@ -132,7 +130,7 @@ class Manipulator extends Module
 		$output=array();
 		$searchParts=explode(',', $search);
 		$neededKey=$searchParts[0];
-		$neededRegex=$searchParts[1];
+		$neededRegex=(isset($searchParts[1]))?$searchParts[1]:false;
 		
 		foreach ($input as $line)
 		{
@@ -142,7 +140,8 @@ class Manipulator extends Module
 				{
 					if ($neededRegex)
 					{
-						if (preg_match('/'.$search.'/', $line[$neededKey])) $output[]=$line;
+						echo "search=$neededRegex key=$neededKey\n";
+						if (preg_match('/'.$neededRegex.'/', $line[$neededKey])) $output[]=$line;
 					}
 					else $output[]=$line;
 				}
@@ -156,7 +155,7 @@ class Manipulator extends Module
 			}
 		}
 		
-		print_r($output);
+		//print_r($output);
 		return $output;
 	}
 }

@@ -182,7 +182,12 @@ class core extends Module
 					//$this->out($actionItem['obj']['obj']->event($actionItem['name']));
 					#$this->setSharedMemory($actionItem['obj']['obj']->event($actionItem['name']));
 					
-					$this->setSharedMemory($this->triggerEvent($actionItem['name'], $actionItem['value']));
+					$returnedValue=$this->triggerEvent($actionItem['name'], $actionItem['value']);
+					$this->setSharedMemory($returnedValue);
+					
+					//print_r($returnedValue);
+					//echo "a={$actionItem['name']} v={$actionItem['value']} r=$returnedValue";
+					//print_r($this->getSharedMemory());
 				}
 				
 				$sharedMemory=&$this->getSharedMemory();
