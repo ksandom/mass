@@ -177,17 +177,8 @@ class core extends Module
 				# Iterate through the actions to be taken
 				foreach ($this->store['Macros'][$macroName] as $actionItem)
 				{
-					//print_r($actionItem['obj']);
-					#$this->set('Global', $actionItem['name'], $actionItem['value']);
-					//$this->out($actionItem['obj']['obj']->event($actionItem['name']));
-					#$this->setSharedMemory($actionItem['obj']['obj']->event($actionItem['name']));
-					
 					$returnedValue=$this->triggerEvent($actionItem['name'], $actionItem['value']);
 					$this->setSharedMemory($returnedValue);
-					
-					//print_r($returnedValue);
-					//echo "a={$actionItem['name']} v={$actionItem['value']} r=$returnedValue";
-					//print_r($this->getSharedMemory());
 				}
 				
 				$sharedMemory=&$this->getSharedMemory();
