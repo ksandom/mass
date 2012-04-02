@@ -49,7 +49,7 @@ function doInstall
 	if [ "$bin" != '.' ]; then
 		cp -Rv modules-* core.php macros-* "$configDir"
 		cd "$configDir"
-		mkdir -p modules-enabled macros-enabled
+		mkdir -p modules-enabled macros-enabled templates-enabled
 		cp -Rv $programName "$bin"
 		cd $binExec
 		pwd
@@ -57,10 +57,12 @@ function doInstall
 		chmod 755 "$bin/$programName"
 		cd "$configDir/macros-enabled"
 		ln -sf ../macros-available/* .
+		cd "$configDir/templates-enabled"
+		ln -sf ../templates-available/* .
 	else
 		cd "$configDir"
-		ln -sfv "$startDir"/modules-*available "$startDir"/macros-*available "$startDir/core.php" . 
-		mkdir -p modules-enabled macros-enabled
+		ln -sfv "$startDir"/modules-*available "$startDir"/macros-*available "$startDir"/templates-*available "$startDir/core.php" . 
+		mkdir -p modules-enabled macros-enabled templates-enabled
 		cd $binExec
 		ln -sfv "$startDir/$programName" .
 		cd "$configDir/macros-enabled"
