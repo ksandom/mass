@@ -73,8 +73,10 @@ class Hosts extends Module
 					{
 						$iip=(isset($hostDetails->internalIP))?$hostDetails->internalIP:false;
 						$eip=(isset($hostDetails->externalIP))?$hostDetails->externalIP:false;
+						$ifqdn=(isset($hostDetails->internalFQDN))?$hostDetails->internalFQDN:false;
+						$efqdn=(isset($hostDetails->externalFQDN))?$hostDetails->externalFQDN:false;
 						
-						$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip);
+						$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip, 'internalFQDN'=>$ifqdn, 'externalFQDN'=>$efqdn);
 						#echo "$filename: $categoryName, $hostName i=$iip e=$eip\n";
 						//echo "$filename: $categoryName, $hostName: i={$hostDetails['internalIP']} e={$hostDetails['externalIP']}\n";
 					}
