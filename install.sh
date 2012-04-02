@@ -67,6 +67,8 @@ function doInstall
 		ln -sfv "$startDir/$programName" .
 		cd "$configDir/macros-enabled"
 		ln -sf ../macros-available/* .
+		cd "$configDir/templates-enabled"
+		ln -sf ../templates-available/* .
 	fi
 	
 }
