@@ -1,5 +1,5 @@
 <~ macro screen:
-list ~!Global,screen!~
-~~screen -t %hostName% ssh =%externalIP%
+list ^cus.*ae1b;
+~~screen -t %hostName% ssh -v %externalIP%
 
 ~>

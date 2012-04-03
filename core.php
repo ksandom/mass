@@ -114,6 +114,18 @@ class core extends Module
 		return $this->get('Core', 'shared'.$nesting);
 	}
 	
+	function &getParentSharedMemory()
+	{
+		$nesting=$this->get('Core', 'nesting');
+		if ($nesting<1 or !is_numeric($nesting)) $nesting = 1; # TODO check this
+		return $this->get('Core', 'shared'.$nesting);
+	}
+	
+	function makeParentShareMemoryCurrent()
+	{
+		$this->setSharedMemory($this->getParentSharedMemory());
+	}
+	
 	function triggerEvent($argument, $value)
 	{
 		if ($argument and $argument != '#' and $argument != '//')
@@ -173,6 +185,7 @@ class core extends Module
 				$nesting=(is_numeric($nesting))?$nesting+1:1;
 				$this->set('Core', 'nesting', $nesting);
 				
+				$this->makeParentShareMemoryCurrent();
 				
 				# Iterate through the actions to be taken
 				foreach ($this->store['Macros'][$macroName] as $actionItem)
