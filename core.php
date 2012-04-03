@@ -185,7 +185,7 @@ class core extends Module
 				$nesting=(is_numeric($nesting))?$nesting+1:1;
 				$this->set('Core', 'nesting', $nesting);
 				
-				$this->makeParentShareMemoryCurrent();
+				if ($macroName!='default') $this->makeParentShareMemoryCurrent();
 				
 				# Iterate through the actions to be taken
 				foreach ($this->store['Macros'][$macroName] as $actionItem)
