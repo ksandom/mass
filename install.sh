@@ -57,6 +57,8 @@ function doInstall
 		chmod 755 "$bin/$programName"
 		cd "$configDir/macros-enabled"
 		ln -sf ../macros-available/* .
+		cd "$configDir/modules-enabled"
+		ln -sfv ../modules-available/* .
 		cd "$configDir/templates-enabled"
 		ln -sf ../templates-available/* .
 	else
@@ -66,9 +68,11 @@ function doInstall
 		cd $binExec
 		ln -sfv "$startDir/$programName" .
 		cd "$configDir/macros-enabled"
-		ln -sf ../macros-available/* .
+		ln -sfv ../macros-available/* .
+		cd "$configDir/modules-enabled"
+		ln -sfv ../modules-available/* .
 		cd "$configDir/templates-enabled"
-		ln -sf ../templates-available/* .
+		ln -sfv ../templates-available/* .
 	fi
 	
 }
