@@ -64,7 +64,7 @@ function doInstall
 	else
 		cd "$configDir"
 		ln -sfv "$startDir"/modules-*available "$startDir"/macros-*available "$startDir"/templates-*available "$startDir/core.php" . 
-		mkdir -p modules-enabled macros-enabled templates-enabled
+		mkdir -p modules-enabled macros-enabled templates-enabled config
 		cd $binExec
 		ln -sfv "$startDir/$programName" .
 		cd "$configDir/macros-enabled"

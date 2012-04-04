@@ -5,7 +5,7 @@
 
 class Config extends Module
 {
-	private $dataDir=null;
+	private $configDir=null;
 	
 	function __construct()
 	{
@@ -17,6 +17,7 @@ class Config extends Module
 		switch ($event)
 		{
 			case 'init':
+				$this->configDir=$this->core->get('General', 'configDir').'/config';
 				$this->loadConfig();
 				break;
 			case 'followup':
@@ -31,10 +32,20 @@ class Config extends Module
 	
 	function loadConfig()
 	{
+		$configFiles=$this->core->getFileList($this->configDir.'/config');
+		foreach ($configFiles as $filename=>$fullPath)
+		{
+			$filenameParts=explode('.', $filename);
+			$config=json_decode(file_get_contents($fullPath));
+			$this->core->setStore($filenameParts[0], $config);
+		}
 	}
 	
-	function saveStoreEntry()
+	function saveStoreEntry($storeName)
 	{
+		$config=$this->core->getStore($storeName);
+		$fullPath="{$this->configDir}/$storeName.config.json"
+		file_put_contents($fullPath, $config);
 	}
 }
 

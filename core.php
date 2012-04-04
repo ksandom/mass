@@ -185,7 +185,7 @@ class core extends Module
 				$nesting=(is_numeric($nesting))?$nesting+1:1;
 				$this->set('Core', 'nesting', $nesting);
 				
-				if ($macroName!='default') $this->makeParentShareMemoryCurrent();
+				$this->makeParentShareMemoryCurrent();
 				
 				# Iterate through the actions to be taken
 				foreach ($this->store['Macros'][$macroName] as $actionItem)
@@ -221,6 +221,17 @@ class core extends Module
 			$obj=&$this->get('Features', 'help');
 			$obj['obj']->event('help');
 		}
+	}
+	
+	function &getStore($moduleName)
+	{
+		if (isset($this->store[$moduleName])) return $this->store[$moduleName];
+		else return array();
+	}
+	
+	function setStore($moduleName, $contents)
+	{
+		$this->store[$moduleName]=$contents;
 	}
 	
 	function &get($moduleName, $valueName)
