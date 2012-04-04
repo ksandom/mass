@@ -49,7 +49,7 @@ function doInstall
 	if [ "$bin" != '.' ]; then
 		cp -Rv modules-* core.php macros-* "$configDir"
 		cd "$configDir"
-		mkdir -p modules-enabled macros-enabled templates-enabled
+		mkdir -p modules-enabled macros-enabled templates-enabled config
 		cp -Rv $programName "$bin"
 		cd $binExec
 		pwd
