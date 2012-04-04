@@ -24,7 +24,9 @@ class Exec extends Module
 			case 'last':
 				break;
 			case 'exec':
-				$this->exec($this->core->getSharedMemory());
+				$parm=$this->core->get('Global', 'exec');
+				if ($parm) $this->run($parm);
+				else $this->exec($this->core->getSharedMemory());
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
