@@ -35,22 +35,40 @@ class Config extends Module
 		}
 	}
 	
-	function loadStoreEntry($storeName)
+	function loadStoreEntry($storeName, $filename)
+	{
+		$filenameTouse=false;
+		if (file_exists($filename)) $filenameTouse=$filename;
+		elseif (file_exists($this->configDir."/$filename")) $filenameTouse=$this->configDir."/$filename";
+		else
+		{
+			$this->core->complain($this, "Could not find $filename.");
+			return false;
+		}
+		
+		$config=json_decode(file_get_contents($filenameTouse));
+		$this->core->setStore($storeName, $config);
+	}
+	
+	function loadStoreEntryFromFilename($filename)
+	{
+		# expecting storeName.config.json or /path/to/massHome/config/storeName.config.json
+		
+		// Strip off any path that may be there
+		$fullFilenameParts=explode('/', $filename);
+		$noPath=$fullFilenameParts[count($fullFilenameParts)-1];
+		
+		// Strip off just the store name
+		$filenameParts=explode('.', $noPath);
+		$storeName=$filenameParts[0];
+		
+		return $this->loadStoreEntry($storeName, $filename);
+	}
+	
+	function loadStoreEntryFromName($storeName)
 	{
 		$filename=$this->configDir."/$storeName.config.json";
-		if (file_exists($filename))
-		{
-			$config=json_decode(file_get_contents($filename));
-			$this->core->setStore($storeName, $config);
-		}
-	}
-	
-	function loadStoreEntryFromFilename()
-	{
-	}
-	
-	function loadStoreEntryFromName()
-	{
+		return $this->loadStoreEntry($storeName, $filename);
 	}
 
 	function loadConfig()
@@ -58,9 +76,7 @@ class Config extends Module
 		$configFiles=$this->core->getFileList($this->configDir);
 		foreach ($configFiles as $filename=>$fullPath)
 		{
-			$filenameParts=explode('.', $filename);
-			$config=json_decode(file_get_contents($fullPath));
-			$this->core->setStore($filenameParts[0], $config);
+			loadStoreEntry($fullPath, $filenameParts[0]);
 		}
 	}
 	
