@@ -18,6 +18,8 @@ class Config extends Module
 		{
 			case 'init':
 				$this->core->registerFeature($this, array('saveStore'), 'saveStore', 'Save all store values for a particular name. --saveStore=storeName');
+				$this->core->registerFeature($this, array('loadStore'), 'loadStore', 'Load all store values for a particular name. --loadStore=storeName');
+				$this->core->registerFeature($this, array('loadStoreFromFile'), 'loadStoreFromFile', 'Load all store values for a particular name from a file. Note that the file name MUST be in the form storeName.config.json where storeName is the destination name of the store that you want to save. This can be useful for importing config. --loadStoreFromFile=filename');
 
 				$this->configDir=$this->core->get('General', 'configDir').'/config';
 				$this->loadConfig();
@@ -28,6 +30,10 @@ class Config extends Module
 				break;
 			case 'saveStore':
 				$this->saveStoreEntry($this->core->get('Global', 'saveStore'));
+				break;
+			case 'loadStore':
+				break;
+			case 'loadStoreFromFile':
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
