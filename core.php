@@ -32,6 +32,9 @@ class core extends Module
 			case 'init':
 				$this->registerFeature($this, array('get'), 'get', 'Get a value. --get=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('set'), 'set', 'set a value. --set=moduleName'.valueSeparator.'variableName'.valueSeparator.'value');
+				$this->registerFeature($this, array('stashResults'), 'stashResults', 'Put the current result set into a memory slot. --stashResults=moduleName'.valueSeparator.'variableName');
+				$this->registerFeature($this, array('retrieveResults'), 'retrieveResults', 'Retrieve a result set that has been stored. This will replace the current result set with the retrieved one --retrieveResults=moduleName'.valueSeparator.'variableName');
+				$this->registerFeature($this, array('clearResults'), 'clearResults', 'Clear the result set.');
 				$this->registerFeature($this, array('setJson'), 'setJson', 'set a json encoded array as an array. --setJson=moduleName'.valueSeparator.'variableName'.valueSeparator.'jsonValue');
 				$this->registerFeature($this, array('dump'), 'dump', 'Dump internal state.');
 				$this->registerFeature($this, array('ping'), 'ping', 'Useful for debugging.');
@@ -48,6 +51,17 @@ class core extends Module
 			case 'set':
 				$parms=$this->interpretParms($this->get('Global', 'set'));
 				$this->set($parms[0], $parms[1], $parms[2]);
+				break;
+			case 'stashResults':
+				$parms=$this->interpretParms($this->get('Global', 'stashResults'));
+				$this->set($parms[0], $parms[1], $this->core->getSharedMemory());
+				break;
+			case 'retrieveResults':
+				$parms=$this->interpretParms($this->get('Global', 'retrieveResults'));
+				return $this->get($parms[0], $parms[1]);
+				break;
+			case 'clearResults':
+				return array();
 				break;
 			case 'setJson':
 				$parms=$this->interpretParms($this->get('Global', 'setJson'));
