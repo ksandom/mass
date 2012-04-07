@@ -3,13 +3,13 @@
 
 # Manage confiuration
 
-class Config extends Module
+class Data extends Module
 {
 	private $configDir=null;
 	
 	function __construct()
 	{
-		parent::__construct('Config');
+		parent::__construct('Data');
 	}
 	
 	function event($event)
@@ -17,22 +17,30 @@ class Config extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('saveStore'), 'saveStore', 'Save all store values for a particular module name. --saveStore=storeName');
-				$this->core->registerFeature($this, array('loadStore'), 'loadStore', 'Load all store values for a particular module name. --loadStore=storeName');
+				$this->core->registerFeature($this, array('saveStoreToConfig'), 'saveStoreToConfig', 'Save all store values for a particular module name. Will be auto-loaded. --saveStoreToConfig=storeName');
+				$this->core->registerFeature($this, array('loadStoreFromConfig'), 'loadStoreFromConfig', 'Load all store values for a particular module name. --loadStoreFromConfig=storeName');
+				$this->core->registerFeature($this, array('saveStoreToData'), 'saveStoreToData', 'Save all store values for a particular module name. --saveStoreToData=storeName');
+				$this->core->registerFeature($this, array('loadStoreFromData'), 'loadStoreFromData', 'Load all store values for a particular module name. --loadStoreFromData=storeName');
 				$this->core->registerFeature($this, array('loadStoreFromFile'), 'loadStoreFromFile', 'Load all store values for a particular name from a file. Note that the file name MUST be in the form storeName.config.json where storeName is the destination name of the store that you want to save. This can be useful for importing config. --loadStoreFromFile=filename');
 
-				$this->configDir=$this->core->get('General', 'configDir').'/config';
+				$this->configDir=$this->core->get('General', 'configDir');
 				$this->loadConfig();
 				break;
 			case 'followup':
 				break;
 			case 'last':
 				break;
-			case 'saveStore':
-				$this->saveStoreEntry($this->core->get('Global', 'saveStore'));
+			case 'saveStoreToConfig':
+				$this->saveStoreEntry($this->core->get('Global', 'saveStoreToConfig'), 'config');
 				break;
-			case 'loadStore':
-				$this->loadStoreEntryFromName($this->core->get('Global', 'loadStore'));
+			case 'loadStoreFromConfig':
+				$this->loadStoreEntryFromName($this->core->get('Global', 'loadStoreFromConfig'), 'config');
+				break;
+			case 'saveStoreToData':
+				$this->saveStoreEntry($this->core->get('Global', 'saveStoreToData'), 'data');
+				break;
+			case 'loadStoreFromData':
+				$this->loadStoreEntryFromName($this->core->get('Global', 'loadStoreFromData'), 'data');
 				break;
 			case 'loadStoreFromFile':
 				$this->loadStoreEntryFromFilename($this->core->get('Global', 'loadStoreFromFile'));
@@ -43,11 +51,11 @@ class Config extends Module
 		}
 	}
 	
-	function loadStoreEntry($storeName, $filename)
+	function loadStoreEntry($storeName, $filename, $source='config')
 	{
 		$filenameTouse=false;
 		if (file_exists($filename)) $filenameTouse=$filename;
-		elseif (file_exists($this->configDir."/$filename")) $filenameTouse=$this->configDir."/$filename";
+		elseif (file_exists($this->configDir."/$source/$filename")) $filenameTouse=$this->configDir."/$filename";
 		else
 		{
 			$this->core->complain($this, "Could not find $filename.");
@@ -73,32 +81,32 @@ class Config extends Module
 		return $this->loadStoreEntry($storeName, $filename);
 	}
 	
-	function loadStoreEntryFromName($storeName)
+	function loadStoreEntryFromName($storeName, $source='config')
 	{
-		$filename=$this->configDir."/$storeName.config.json";
+		$filename=$this->configDir."/$source/$storeName.$source.json";
 		return $this->loadStoreEntry($storeName, $filename);
 	}
 
 	function loadConfig()
 	{
-		$configFiles=$this->core->getFileList($this->configDir);
+		$configFiles=$this->core->getFileList($this->configDir.'/config');
 		foreach ($configFiles as $filename=>$fullPath)
 		{
 			$this->loadStoreEntryFromFilename($fullPath);
 		}
 	}
 	
-	function saveStoreEntry($storeName)
+	function saveStoreEntry($storeName, $source='config')
 	{
 		if ($config=$this->core->getStoreModule($storeName))
 		{
-			$fullPath="{$this->configDir}/$storeName.config.json";
+			$fullPath="{$this->configDir}/$source/$storeName.$source.json";
 			file_put_contents($fullPath, json_encode($config));
 		}
 	}
 }
 
 $core=core::assert();
-$core->registerModule(new Config());
+$core->registerModule(new Data());
  
 ?>
