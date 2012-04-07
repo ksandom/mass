@@ -54,7 +54,7 @@ class Config extends Module
 			return false;
 		}
 		
-		$config=json_decode(file_get_contents($filenameTouse));
+		$config=json_decode(file_get_contents($filenameTouse), 1);
 		$this->core->setStoreModule($storeName, $config);
 	}
 	
@@ -84,7 +84,7 @@ class Config extends Module
 		$configFiles=$this->core->getFileList($this->configDir);
 		foreach ($configFiles as $filename=>$fullPath)
 		{
-			loadStoreEntry($fullPath, $filenameParts[0]);
+			$this->loadStoreEntryFromFilename($fullPath);
 		}
 	}
 	
@@ -93,7 +93,7 @@ class Config extends Module
 		if ($config=$this->core->getStoreModule($storeName))
 		{
 			$fullPath="{$this->configDir}/$storeName.config.json";
-			file_put_contents($fullPath, $config);
+			file_put_contents($fullPath, json_encode($config));
 		}
 	}
 }

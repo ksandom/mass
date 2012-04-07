@@ -75,6 +75,10 @@ function doInstall
 		ln -sfv ../templates-available/* .
 	fi
 	
+	# First time setup
+	if [ ! -f "$configDir/config/Credentials.config.json" ];then
+		mass --set=Credentials,defaultKey,id_rsa --saveStore=Credentials
+	fi
 }
 
 if [ `id -u` -gt 0 ];then
