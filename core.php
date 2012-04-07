@@ -223,13 +223,13 @@ class core extends Module
 		}
 	}
 	
-	function &getStore($moduleName)
+	function &getStoreModule($moduleName)
 	{
 		if (isset($this->store[$moduleName])) return $this->store[$moduleName];
 		else return array();
 	}
 	
-	function setStore($moduleName, $contents)
+	function setStoreModule($moduleName, $contents)
 	{
 		$this->store[$moduleName]=$contents;
 	}

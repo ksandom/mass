@@ -17,8 +17,8 @@ class Config extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('saveStore'), 'saveStore', 'Save all store values for a particular name. --saveStore=storeName');
-				$this->core->registerFeature($this, array('loadStore'), 'loadStore', 'Load all store values for a particular name. --loadStore=storeName');
+				$this->core->registerFeature($this, array('saveStore'), 'saveStore', 'Save all store values for a particular module name. --saveStore=storeName');
+				$this->core->registerFeature($this, array('loadStore'), 'loadStore', 'Load all store values for a particular module name. --loadStore=storeName');
 				$this->core->registerFeature($this, array('loadStoreFromFile'), 'loadStoreFromFile', 'Load all store values for a particular name from a file. Note that the file name MUST be in the form storeName.config.json where storeName is the destination name of the store that you want to save. This can be useful for importing config. --loadStoreFromFile=filename');
 
 				$this->configDir=$this->core->get('General', 'configDir').'/config';
@@ -32,8 +32,10 @@ class Config extends Module
 				$this->saveStoreEntry($this->core->get('Global', 'saveStore'));
 				break;
 			case 'loadStore':
+				$this->loadStoreEntryFromName($this->core->get('Global', 'loadStore'));
 				break;
 			case 'loadStoreFromFile':
+				$this->loadStoreEntryFromFilename($this->core->get('Global', 'loadStoreFromFile'));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -53,7 +55,7 @@ class Config extends Module
 		}
 		
 		$config=json_decode(file_get_contents($filenameTouse));
-		$this->core->setStore($storeName, $config);
+		$this->core->setStoreModule($storeName, $config);
 	}
 	
 	function loadStoreEntryFromFilename($filename)
@@ -88,9 +90,9 @@ class Config extends Module
 	
 	function saveStoreEntry($storeName)
 	{
-		if ($config=$this->core->getStore($storeName))
+		if ($config=$this->core->getStoreModule($storeName))
 		{
-			$fullPath="{$this->configDir}/$storeName.config.json"
+			$fullPath="{$this->configDir}/$storeName.config.json";
 			file_put_contents($fullPath, $config);
 		}
 	}
