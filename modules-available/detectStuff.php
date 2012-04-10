@@ -17,15 +17,27 @@ class DetectStuff extends Module
 		switch ($event)
 		{
 			case 'init':
+				$this->core->registerFeature($this, array('detect'), 'detectGUITerminal', 'Detect something based on a seed. --detectGUITerminal=ModuleName'.valueSeparator.'seedVariable . See docs/detect.md for more details.');
 				break;
 			case 'followup':
 				break;
 			case 'last':
 				break;
+			case 'detect':
+				$parms=$this->get('Global', 'detect');
+				$this->detectGUITerminal($parms);
+				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
 				break;
 		}
+	}
+	
+	function detect($parms)
+	{
+		$possibilties=$this->core->interpretParms($parms);
+		
+		$search=explode(',', $this->core->get('Terminal', 'search'));
 	}
 }
 
