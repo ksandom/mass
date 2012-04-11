@@ -1,0 +1,19 @@
+# Setup default values;
+
+set Terminal,seed,konsole:xterm;
+
+# Konsole;
+set Terminal,konsoleName,konsole;
+set Terminal,konsoleDescription,KDE's default terminal;
+set Terminal,konsoleGroup,GUI;
+set Terminal,konsoleTest,which konsole;
+set Terminal,konsoleCMD,konsole;
+set Terminal,konsoleParms,-e;
+
+# xterm;
+set Terminal,konsoleName,xterm;
+set Terminal,konsoleDescription,X's default terminal;
+set Terminal,konsoleGroup,GUI;
+set Terminal,konsoleTest,which xterm;
+set Terminal,konsoleCMD,xterm;
+set Terminal,konsoleParms,-e;

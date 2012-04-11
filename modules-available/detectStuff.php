@@ -50,17 +50,18 @@ class DetectStuff extends Module
 		# If we don't know it. Get out early.
 		if (!$this->core->get($moduleName, $seedItem)) return false;
 		
-		$test=$this->core->get($moduleName, $seedItem);
-		if ()
-		{
-			
+		$test=$this->core->get($moduleName, $seedItem."Test");
+		if (exec($test))
+		{ // If the test passes, copy the items across.
+			$groupName=$this->core->get($moduleName, $seedItem."Group");
+			foreach($itemsToGet as $itemName)
+			{
+				$item=$this->core->get($moduleName, $seedItem.$itemName);
+				$this->core->set($moduleName, $groupName.$itemName);
+			}
+			return true;
 		}
-		
-		$items=array();
-		foreach($itemsToGet as $itemName)
-		{
-			
-		}
+		return false;
 	}
 }
 
