@@ -25,8 +25,9 @@ class DetectStuff extends Module
 				break;
 			case 'detect':
 				$parms=$this->core->interpretParms($this->get('Global', 'detect'));
-				$input
-				$this->detect();
+				$input=$this->core->get($parms[0], $parms[1]);
+				$seed=$this->core->interpretParms($input);
+				$this->detect($parms[0], $seed);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -36,6 +37,30 @@ class DetectStuff extends Module
 	
 	function detect($moduleName, $seed)
 	{
+		$itemsToGet=array('Name', 'Description', 'Cmd', 'Parms');
+		
+		foreach ($seed as $seedItem)
+		{
+			if ($this->testSeedItem($moduleName, $seedItem, $itemsToGet)) break;
+		}
+	}
+	
+	function testSeedItem($moduleName, $seedItem, $itemsToGet)
+	{
+		# If we don't know it. Get out early.
+		if (!$this->core->get($moduleName, $seedItem)) return false;
+		
+		$test=$this->core->get($moduleName, $seedItem);
+		if ()
+		{
+			
+		}
+		
+		$items=array();
+		foreach($itemsToGet as $itemName)
+		{
+			
+		}
 	}
 }
 

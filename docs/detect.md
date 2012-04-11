@@ -15,6 +15,5 @@ The selected item will get sent to the same ModuleName as each item with the see
 
 * groupNameName Eg GUIName => `konsole`
 * groupNameDescription Eg GUIDescription => `KDE's native terminal emulator`
-* groupNameTest Eg GUITest => `which konsole`
 * groupNameCmd Eg GUICmd => `konsole`
 * groupNameParms Eg GUIParms => `-e`
