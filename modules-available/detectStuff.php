@@ -24,8 +24,9 @@ class DetectStuff extends Module
 			case 'last':
 				break;
 			case 'detect':
-				$parms=$this->get('Global', 'detect');
-				$this->detectGUITerminal($parms);
+				$parms=$this->core->interpretParms($this->get('Global', 'detect'));
+				$input
+				$this->detect();
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -33,11 +34,8 @@ class DetectStuff extends Module
 		}
 	}
 	
-	function detect($parms)
+	function detect($moduleName, $seed)
 	{
-		$possibilties=$this->core->interpretParms($parms);
-		
-		$search=explode(',', $this->core->get('Terminal', 'search'));
 	}
 }
 
