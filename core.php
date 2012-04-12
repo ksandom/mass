@@ -355,6 +355,11 @@ class core extends Module
 			}
 		}
 	}
+	
+	function now()
+	{
+		return 'I need to implement this!';
+	}
 }
 
 function loadModules(&$core, $sourcePath)

@@ -17,16 +17,16 @@ class DetectStuff extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('detect'), 'detectGUITerminal', 'Detect something based on a seed. --detectGUITerminal=ModuleName'.valueSeparator.'seedVariable . See docs/detect.md for more details.');
+				$this->core->registerFeature($this, array('detect'), 'detect', 'Detect something based on a seed. --detect=ModuleName'.valueSeparator.'seedVariable . See docs/detect.md for more details.');
 				break;
 			case 'followup':
 				break;
 			case 'last':
 				break;
 			case 'detect':
-				$parms=$this->core->interpretParms($this->get('Global', 'detect'));
+				$parms=$this->core->interpretParms($this->core->get('Global', 'detect'));
 				$input=$this->core->get($parms[0], $parms[1]);
-				$seed=$this->core->interpretParms($input);
+				$seed=explode(':', $input);
 				$this->detect($parms[0], $seed);
 				break;
 			default:
@@ -43,22 +43,27 @@ class DetectStuff extends Module
 		{
 			if ($this->testSeedItem($moduleName, $seedItem, $itemsToGet)) break;
 		}
+		
+		$this->core->set($moduleName, 'run', $this->core->now());
 	}
 	
 	function testSeedItem($moduleName, $seedItem, $itemsToGet)
 	{
 		# If we don't know it. Get out early.
-		if (!$this->core->get($moduleName, $seedItem)) return false;
+		if (!$this->core->get($moduleName, $seedItem.'Name')) return false;
 		
 		$test=$this->core->get($moduleName, $seedItem."Test");
-		if (exec($test))
+		$testResult=`$test`;
+		if ($testResult)
 		{ // If the test passes, copy the items across.
 			$groupName=$this->core->get($moduleName, $seedItem."Group");
 			foreach($itemsToGet as $itemName)
 			{
 				$item=$this->core->get($moduleName, $seedItem.$itemName);
-				$this->core->set($moduleName, $groupName.$itemName);
+				$this->core->set($moduleName, $groupName.$itemName, $item);
 			}
+			
+			$this->core->set($moduleName, $groupName.'TestResult', trim($testResult));
 			return true;
 		}
 		return false;

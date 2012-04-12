@@ -1,6 +1,6 @@
 --detect uses a seed within the scope of a module name to run a series of tests eg ExampleModule,seed. A seed looks like this:
 
-    thing1,thing2,thing3
+    thing1:thing2:thing3
 
 One we have that seed, we then look for specific values for each item. For example:
 

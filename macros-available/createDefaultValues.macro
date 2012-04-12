@@ -1,6 +1,6 @@
 # Setup default values;
 
-set Terminal,seed,konsole:xterm;
+set Terminal,seed,konsole:xterm:none;
 
 # Konsole;
 set Terminal,konsoleName,konsole;
@@ -11,9 +11,19 @@ set Terminal,konsoleCMD,konsole;
 set Terminal,konsoleParms,-e;
 
 # xterm;
-set Terminal,konsoleName,xterm;
-set Terminal,konsoleDescription,X's default terminal;
-set Terminal,konsoleGroup,GUI;
-set Terminal,konsoleTest,which xterm;
-set Terminal,konsoleCMD,xterm;
-set Terminal,konsoleParms,-e;
+set Terminal,xtermName,xterm;
+set Terminal,xtermDescription,X's default terminal;
+set Terminal,xtermGroup,GUI;
+set Terminal,xtermTest,which xterm;
+set Terminal,xtermCMD,xterm;
+set Terminal,xtermParms,-e;
+
+# xterm;
+set Terminal,noneName,none;
+set Terminal,noneDescription,No graphical terminal found;
+set Terminal,noneGroup,GUI;
+set Terminal,noneTest,which false;
+set Terminal,noneCMD,false;
+set Terminal,noneParms,;
+
+saveStoreToConfig Terminal
