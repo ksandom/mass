@@ -77,8 +77,12 @@ function doInstall
 	
 	# First time setup
 	if [ ! -f "$configDir/config/Credentials.config.json" ];then
-		mass --set=Credentials,defaultKey,id_rsa --saveStore=Credentials
+		mass --set=Credentials,defaultKey,id_rsa --saveStoreToConfig=Credentials
 	fi
+	
+	# Detect stuff. It should be safe to do this on an existing setup.
+	mass --createDefaultValues
+	mass --detect=Terminal,seed --saveStoreToConfig=Terminal
 }
 
 if [ `id -u` -gt 0 ];then

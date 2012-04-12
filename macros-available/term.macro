@@ -1,9 +1,5 @@
 # Open a terminal to every host in the results;
-# This will implement something like. Note that semicolons have been converted to new lines to prevent borking;
-#   mass --list=cus --toString="konsole -e bash -c 'echo %hostName%;
-# ssh %externalIP%;
-# read' &" --exec;
 
 list ~!Global,term!~;
-toString konsole -e bash -c 'ssh %externalIP%' &;
+toString ~!Terminal,GUICMD!~;
 exec;

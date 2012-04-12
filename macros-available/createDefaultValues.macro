@@ -7,8 +7,7 @@ set Terminal,konsoleName,konsole;
 set Terminal,konsoleDescription,KDE's default terminal;
 set Terminal,konsoleGroup,GUI;
 set Terminal,konsoleTest,which konsole;
-set Terminal,konsoleCMD,konsole;
-set Terminal,konsoleParms,-e;
+set Terminal,konsoleCMD,konsole -e bash -c 'ssh %externalIP%' &;
 
 # xterm;
 set Terminal,xtermName,xterm;
@@ -16,14 +15,12 @@ set Terminal,xtermDescription,X's default terminal;
 set Terminal,xtermGroup,GUI;
 set Terminal,xtermTest,which xterm;
 set Terminal,xtermCMD,xterm;
-set Terminal,xtermParms,-e;
 
-# xterm;
+# No GUI terminal available;
 set Terminal,noneName,none;
 set Terminal,noneDescription,No graphical terminal found;
 set Terminal,noneGroup,GUI;
 set Terminal,noneTest,which false;
 set Terminal,noneCMD,false;
-set Terminal,noneParms,;
 
 saveStoreToConfig Terminal

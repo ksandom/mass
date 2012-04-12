@@ -37,7 +37,7 @@ class DetectStuff extends Module
 	
 	function detect($moduleName, $seed)
 	{
-		$itemsToGet=array('Name', 'Description', 'Cmd', 'Parms');
+		$itemsToGet=array('Name', 'Description', 'CMD');
 		
 		foreach ($seed as $seedItem)
 		{
