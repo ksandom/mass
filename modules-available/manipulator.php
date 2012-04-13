@@ -179,7 +179,7 @@ class Manipulator extends Module
 				$value=(isset($line[$parms[$i]]))?$line[$parms[$i]]:'';
 				if ($value)
 				{
-					$line[$dstVarName]=$value
+					$line[$dstVarName]=$value;
 				}
 			}
 			
