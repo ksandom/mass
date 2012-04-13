@@ -21,6 +21,7 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('f', 'flatten'), 'flatten', 'Flatten an array or arrays into a keyed array of values. --flatten[=limit]. Note that "limit" specifies how far to go into the nesting before simply returning what ever is below.');
 				$this->core->registerFeature($this, array('requireEach'), 'requireEach', 'Require each entry to match this regular expression. --requireEach=regex');
 				$this->core->registerFeature($this, array('requireEntry'), 'requireEntry', 'Require a named entry in each of the root entries. A regular expression can be supplied to provide a more precise match. --requireEntry=entryKey[,regex]');
+				$this->core->registerFeature($this, array('chooseFirst'), 'chooseFirst', 'Choose the first non-empty value and put it into the destination variable. --chooseFirst=dstVarName,srcVarName1,srcVarName2[,srcVarName3[,...]]');
 				break;
 			case 'followup':
 				break;
@@ -37,6 +38,9 @@ class Manipulator extends Module
 				break;
 			case 'flatten':
 				return $this->flatten($this->core->getSharedMemory(), $this->core->get('Global', 'flatten'));
+				break;
+			case 'chooseFirst':
+				return $this->chooseFirst($this->core->getSharedMemory(), $this->core->interpretParms($this->core->get('Global', 'chooseFirst')));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -156,6 +160,32 @@ class Manipulator extends Module
 		}
 		
 		//print_r($output);
+		return $output;
+	}
+	
+	function chooseFirst($input, $parms)
+	{
+		# Choose the first non-empty value and put it into the destination variable. --chooseFirst=dstVarName,srcVarName1,srcVarName2[,srcVarName3[,...]]
+		
+		$dstVarName=$parms[0];
+		$totalParms=count($parms);
+		$output=array();
+		
+		foreach ($input as $line)
+		{
+			//$line[$dstVarName]='unset'; # Do we want this?
+			for ($i=1;$i<$totalParms;$i++)
+			{
+				$value=(isset($line[$parms[$i]]))?$line[$parms[$i]]:'';
+				if ($value)
+				{
+					$line[$dstVarName]=$value
+				}
+			}
+			
+			$output[]=$line;
+		}
+		
 		return $output;
 	}
 }
