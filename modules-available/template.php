@@ -28,7 +28,7 @@ class Template extends Module
 				break;
 			case 'template':
 				#$this->core->setRef('General', 'outputObject', $this);
-				return $this->processTemplate($this->core->get('Global', 'template'));
+				return $this->processTemplateByName($this->core->get('Global', 'template'));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -36,6 +36,14 @@ class Template extends Module
 		}
 	}
 
+	function processTemplateByName($name)
+	{
+		$templateDir=$this->core->get('General', 'configDir').'/templates-enabled';
+		$derivedTemplateName="$templateDir/$name.template";
+		$templateFile=(file_exists($derivedTemplateName))?$derivedTemplateName:$name;
+		return $this->processTemplate($templateFile);
+	}
+	
 	function processTemplate($fileName)
 	{
 		if (file_exists($fileName))
