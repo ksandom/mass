@@ -180,6 +180,7 @@ class Manipulator extends Module
 				if ($value)
 				{
 					$line[$dstVarName]=$value;
+					break;
 				}
 			}
 			

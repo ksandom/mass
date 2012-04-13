@@ -7,21 +7,21 @@ set Terminal,konsoleName,konsole;
 set Terminal,konsoleDescription,KDE's default terminal;
 set Terminal,konsoleGroup,GUI;
 set Terminal,konsoleTest,which konsole;
-set Terminal,konsoleCMD,konsole -e bash -c "ssh %externalIP%" &;
+set Terminal,konsoleCMD,konsole -e bash -c "ssh %IP%" &;
 
 # MacOS X's default terminal. Pretty much any custom terminal except xterm should take precedence over this.;
 set Terminal,mactermName,macterm;
 set Terminal,mactermDescription,The default terminal in Mac OSX
 set Terminal,mactermGroup,GUI;
 set Terminal,mactermTest,which false;
-set Terminal,mactermCMD,echo 'tell app "Terminal" to do script "ssh %externalIP%" | osascript;
+set Terminal,mactermCMD,echo 'tell app "Terminal" to do script "ssh %IP%" | osascript;
 
 # xterm;
 set Terminal,xtermName,xterm;
 set Terminal,xtermDescription,X's default terminal;
 set Terminal,xtermGroup,GUI;
 set Terminal,xtermTest,which xterm;
-set Terminal,xtermCMD,xterm -e bash -c "ssh %externalIP%" &;
+set Terminal,xtermCMD,xterm -e bash -c "ssh %IP%" &;
 
 # No GUI terminal available;
 set Terminal,noneName,none;
