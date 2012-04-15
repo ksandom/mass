@@ -35,7 +35,6 @@ class core extends Module
 				$this->registerFeature($this, array('stashResults'), 'stashResults', 'Put the current result set into a memory slot. --stashResults=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('retrieveResults'), 'retrieveResults', 'Retrieve a result set that has been stored. This will replace the current result set with the retrieved one --retrieveResults=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('getPID'), 'getPID', 'Save the process ID to a variable. --getPID=moduleName'.valueSeparator.'variableName');
-				$this->registerFeature($this, array('clearResults'), 'clearResults', 'Clear the result set.');
 				$this->registerFeature($this, array('setJson'), 'setJson', 'Take a json encoded array from jsonValue and store the arrary in moduleName'.valueSeparator.'variableName. --setJson=moduleName'.valueSeparator.'variableName'.valueSeparator.'jsonValue');
 				$this->registerFeature($this, array('dump'), 'dump', 'Dump internal state.');
 				$this->registerFeature($this, array('ping'), 'ping', 'Useful for debugging.');
@@ -60,9 +59,6 @@ class core extends Module
 			case 'retrieveResults':
 				$parms=$this->interpretParms($this->get('Global', 'retrieveResults'));
 				return $this->get($parms[0], $parms[1]);
-				break;
-			case 'clearResults':
-				return array();
 				break;
 			case 'setJson':
 				$parms=$this->interpretParms($this->get('Global', 'setJson'));

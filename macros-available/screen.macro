@@ -1,0 +1,15 @@
+# Open a screen terminal to every host in the results;
+
+list ~!Global,term!~;
+
+# the internalIP will work if we are connected to a VPN
+chooseFirst IP,externalIP,internalIP;
+
+# TODO make sure template is recieving input correctly
+template screen
+getPID Global,PID
+# TODO implement sendToFile
+sendToFile /tmp/mass-~!Global,PID!~.screen
+
+exec screen -c /tmp/mass-~!Global,PID!~.screen
+exec rm /tmp/mass-~!Global,PID!~.screen
