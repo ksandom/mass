@@ -57,7 +57,9 @@ class core extends Module
 				$this->set($parms[0], $parms[1], $this->core->getSharedMemory());
 				break;
 			case 'retrieveResults':
-				$parms=$this->interpretParms($this->get('Global', 'retrieveResults'));
+				$originalParms=$this->get('Global', 'retrieveResults');
+				$parms=$this->interpretParms($originalParms);
+				$this->requireNumParms($this, 2, $event, $originalParms, $parms);
 				return $this->get($parms[0], $parms[1]);
 				break;
 			case 'setJson':
@@ -132,7 +134,9 @@ class core extends Module
 	{
 		$nesting=$this->get('Core', 'nesting');
 		if ($nesting<1 or !is_numeric($nesting)) $nesting = 1; # TODO check this
-		return $this->get('Core', 'shared'.$nesting);
+		$sharedMemory=&$this->get('Core', 'shared'.$nesting);
+		if (!is_array($sharedMemory)) $sharedMemory=array();
+		return $sharedMemory;
 	}
 	
 	function makeParentShareMemoryCurrent()
@@ -206,8 +210,9 @@ class core extends Module
 				{
 					$returnedValue=$this->triggerEvent($actionItem['name'], $actionItem['value']);
 					$this->setSharedMemory($returnedValue);
+					#echo "$macroName\n";
+					#print_r($returnedValue);
 				}
-				
 				$sharedMemory=&$this->getSharedMemory();
 				
 				# Output our results if we are back to the first level
@@ -335,8 +340,16 @@ class core extends Module
 		$output=($specific)?"$message: $specific":"$message.";
 		if ($obj) $output=$obj->getName().$output;
 		
-		if ($fatal) die($output);
+		if ($fatal) die("$output\n");
 		else echo "$output\n";
+	}
+	
+	function requireNumParms($obj, $numberRequried, $event, $originalParms, $interpretedParms=false)
+	{
+		$parmsToCheck=($interpretedParms)?$interpretedParms:$this->interpretParms($originalParms);
+		$actualParms=count($parmsToCheck);
+		
+		if ($numberRequried>$actualParms) $this->complain($obj, "Required $numberRequried parameters but got $actualParms. Original parms were \"$originalParms\" for", $event, true);
 	}
 	
 	function out($output)

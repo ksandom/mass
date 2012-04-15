@@ -24,7 +24,7 @@ class String extends Module
 				break;
 			case 'last':
 				break;
-			case 'string':
+			case 'singleString':
 				$this->core->setRef('General', 'outputObject', $this);
 				break;
 			default:
@@ -35,8 +35,8 @@ class String extends Module
 	
 	function out($output)
 	{
-		$readyValue=(is_array($output))?$output:array($output);
-		echo json_encode($readyValue);
+		$readyValue=(is_array($output))?implode("\n", $output):$output;
+		echo $readyValue;
 	}
 }
 

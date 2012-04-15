@@ -28,7 +28,7 @@ class Template extends Module
 				break;
 			case 'template':
 				#$this->core->setRef('General', 'outputObject', $this);
-				return $this->processTemplateByName($this->core->get('Global', 'template'));
+				return array($this->processTemplateByName($this->core->get('Global', 'template')));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -81,6 +81,11 @@ class Template extends Module
 		$argument=substr($macroCode, 0, $argumentTerminatorPos);
 		$value=substr($macroCode, $argumentTerminatorPos+1);
 		
+		#echo "blah1\n";
+		#print_r($this->core->getSharedMemory());
+		#$this->core->makeParentShareMemoryCurrent();
+		#print_r($this->core->getSharedMemory());
+		#echo "blah2\n";
 		$result=$this->core->triggerEvent($argument, $value);
 		$finalResult=$this->insertResultIntoTemplate($result, $outputTemplate);
 		
@@ -101,7 +106,6 @@ class Template extends Module
 			}
 			$output.=$templateLine;
 		}
-		
 		return $output;
 	}
 	
