@@ -61,7 +61,8 @@ class Manipulator extends Module
 		{
 			if (is_array($line))
 			{
-				$outputLine=$template;
+				# TODO This is going to have to be improved
+				$outputLine=$this->core->processValue($template);
 				foreach ($line as $key=>$value)
 				{
 					$outputLine=$this->replace($outputLine, "%$key%", $value);
@@ -70,7 +71,7 @@ class Manipulator extends Module
 			}
 			else
 			{
-				$output[]=$this->replace($template, '%value%', $line);
+				$output[]=$this->replace($this->core->processValue($template), '%value%', $line);
 			}
 		}
 		
