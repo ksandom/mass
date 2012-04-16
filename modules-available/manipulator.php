@@ -61,8 +61,9 @@ class Manipulator extends Module
 		{
 			if (is_array($line))
 			{
-				# TODO This is going to have to be improved
+				# TODO It would be nice to make this recursive.
 				$outputLine=$this->core->processValue($template);
+				echo "'$template' -> '$outputLine'\n";
 				foreach ($line as $key=>$value)
 				{
 					$outputLine=$this->replace($outputLine, "%$key%", $value);
