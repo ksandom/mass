@@ -192,6 +192,11 @@ class core extends Module
 
 	}
 	
+	function debugSharedMemory($label='undefined')
+	{
+		echo "debugSharedMemory $label ".count($this->getSharedMemory())."\n";
+	}
+	
 	function &go($macroName='default')
 	{
 		if (isset($this->store['Macros'][$macroName]))

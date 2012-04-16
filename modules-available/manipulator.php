@@ -136,7 +136,7 @@ class Manipulator extends Module
 		$neededKey=$searchParts[0];
 		$neededRegex=(isset($searchParts[1]))?$searchParts[1]:false;
 		
-		print_r($input);
+		//print_r($input);
 		foreach ($input as $line)
 		{
 			if ($neededKey)

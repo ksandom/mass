@@ -102,7 +102,7 @@ class Template extends Module
 			$templateLine=$template;
 			foreach ($inputLine as $lineKey=>$lineValue)
 			{
-				$templateLine=implode($lineValue, explode("%$lineKey%", $templateLine));
+				$templateLine=implode(strval($lineValue), explode("%$lineKey%", $templateLine));
 			}
 			$output.=$templateLine;
 		}
