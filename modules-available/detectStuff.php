@@ -54,6 +54,7 @@ class DetectStuff extends Module
 		
 		$test=$this->core->get($moduleName, $seedItem."Test");
 		$testResult=file_exists($test);
+		echo "$seedItem: '$test'\n";
 		if (!$testResult) $testResult=`$test 2>/dev/null`;
 		
 		if ($testResult)
