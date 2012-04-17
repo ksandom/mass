@@ -53,8 +53,9 @@ class DetectStuff extends Module
 		if (!$this->core->get($moduleName, $seedItem.'Name')) return false;
 		
 		$test=$this->core->get($moduleName, $seedItem."Test");
-		$testResult=`$test`;
-		if (!$testResult) @$testResult=file_exists($test);
+		@$testResult=(file_exists($test));
+		if (!$testResult) $testResult=`$test 2>/dev/null`;
+		
 		if ($testResult)
 		{ // If the test passes, copy the items across.
 			$groupName=$this->core->get($moduleName, $seedItem."Group");
