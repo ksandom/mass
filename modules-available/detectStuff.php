@@ -54,12 +54,12 @@ class DetectStuff extends Module
 		
 		$test=$this->core->get($moduleName, $seedItem."Test");
 		$testResult=file_exists($test);
-		echo "$seedItem: '$test'\n";
+		#echo "$seedItem: '$test'\n";
 		if (!$testResult) $testResult=`$test 2>/dev/null`;
 		
 		if ($testResult)
 		{ // If the test passes, copy the items across.
-			echo "Successed using $moduleName,$seedItem. group=$group \n";
+			#echo "Successed using $moduleName,$seedItem. group=$group \n";
 			foreach($itemsToGet as $itemName)
 			{
 				$item=$this->core->get($moduleName, $seedItem.$itemName);
