@@ -91,7 +91,7 @@ function doInstall
 	
 	# Detect stuff. It should be safe to do this on an existing setup.
 	mass --createDefaultValues
-	mass --detect=Terminal,seed --saveStoreToConfig=Terminal
+	mass --detect=Terminal,seed,GUI --saveStoreToConfig=Terminal
 }
 
 if [ `id -u` -gt 0 ];then

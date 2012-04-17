@@ -17,7 +17,7 @@ class DetectStuff extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('detect'), 'detect', 'Detect something based on a seed. --detect=ModuleName'.valueSeparator.'seedVariable . See docs/detect.md for more details.');
+				$this->core->registerFeature($this, array('detect'), 'detect', 'Detect something based on a seed. --detect=ModuleName'.valueSeparator.'seedVariable,'.valueSeparator.'destinationGroup . See docs/detect.md for more details.');
 				break;
 			case 'followup':
 				break;
@@ -27,7 +27,7 @@ class DetectStuff extends Module
 				$parms=$this->core->interpretParms($this->core->get('Global', 'detect'));
 				$input=$this->core->get($parms[0], $parms[1]);
 				$seed=explode(':', $input);
-				$this->detect($parms[0], $seed);
+				$this->detect($parms[0], $seed, $parms[2]);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -35,19 +35,19 @@ class DetectStuff extends Module
 		}
 	}
 	
-	function detect($moduleName, $seed)
+	function detect($moduleName, $seed, $group)
 	{
 		$itemsToGet=array('Name', 'Description', 'CMD');
 		
 		foreach ($seed as $seedItem)
 		{
-			if ($this->testSeedItem($moduleName, $seedItem, $itemsToGet)) break;
+			if ($this->testSeedItem($moduleName, $seedItem, $itemsToGet, $group)) break;
 		}
 		
 		$this->core->set($moduleName, 'run', $this->core->now());
 	}
 	
-	function testSeedItem($moduleName, $seedItem, $itemsToGet)
+	function testSeedItem($moduleName, $seedItem, $itemsToGet, $group)
 	{
 		# If we don't know it. Get out early.
 		if (!$this->core->get($moduleName, $seedItem.'Name')) return false;
@@ -59,15 +59,14 @@ class DetectStuff extends Module
 		
 		if ($testResult)
 		{ // If the test passes, copy the items across.
-			$groupName=$this->core->get($moduleName, $seedItem."Group");
-			echo "Successed using $moduleName,$seedItem. group=$groupName \n";
+			echo "Successed using $moduleName,$seedItem. group=$group \n";
 			foreach($itemsToGet as $itemName)
 			{
 				$item=$this->core->get($moduleName, $seedItem.$itemName);
-				$this->core->set($moduleName, $groupName.$itemName, $item);
+				$this->core->set($moduleName, $group.$itemName, $item);
 			}
 			
-			$this->core->set($moduleName, $groupName.'TestResult', trim($testResult));
+			$this->core->set($moduleName, $group.'TestResult', trim($testResult));
 			return true;
 		}
 		return false;
