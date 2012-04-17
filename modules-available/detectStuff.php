@@ -60,6 +60,7 @@ class DetectStuff extends Module
 		if ($testResult)
 		{ // If the test passes, copy the items across.
 			$groupName=$this->core->get($moduleName, $seedItem."Group");
+			echo "Successed using $moduleName,$seedItem. group=$groupName \n";
 			foreach($itemsToGet as $itemName)
 			{
 				$item=$this->core->get($moduleName, $seedItem.$itemName);
