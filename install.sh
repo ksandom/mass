@@ -39,7 +39,7 @@ function linkedInstall
 	bin="."
 	binExec=~/bin
 	
-	if [ "`echo $PATH|grep $binExec`" != '' ]; then # A hack for the mac
+	if [ "`echo $PATH|grep $binExec`" == '' ]; then # A hack for the mac
 		binExec=/usr/local/bin
 	fi
 	
