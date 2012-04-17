@@ -1,5 +1,6 @@
 <~ macro screen:
-list ^cus.*ae1b;
-~~screen -t %hostName% ssh -v %externalIP%
+retrieveResults Hosts,sourcelist;
+# ssh -v %externalIP%;
+~~screen -t %hostName% top
 
 ~>

@@ -4,12 +4,13 @@ list ~!Global,term!~;
 
 # the internalIP will work if we are connected to a VPN
 chooseFirst IP,externalIP,internalIP;
+stashResults Screen,sourcelist;
 
 # TODO make sure template is recieving input correctly
 template screen
 getPID Global,PID
 # TODO implement sendToFile
-sendToFile /tmp/mass-~!Global,PID!~.screen
+singleStringNow /tmp/mass-~!Global,PID!~.screen
 
 exec screen -c /tmp/mass-~!Global,PID!~.screen
 exec rm /tmp/mass-~!Global,PID!~.screen
