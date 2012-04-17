@@ -46,6 +46,15 @@ function doInstall
 {
 	startDir=`pwd` # for some reason ~- wasn't working
 	mkdir -p "$configDir/data/hosts" "$binExec" "$bin"
+	
+	echo "Install details:
+	What: $programName
+	Where:
+		config: $configDir
+		bin: $bin
+		binExec: $binExec
+		startDir: $startDir"
+	
 	if [ "$bin" != '.' ]; then
 		cp -Rv modules-* core.php macros-* examples "$configDir"
 		cd "$configDir"
