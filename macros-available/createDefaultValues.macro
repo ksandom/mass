@@ -13,7 +13,7 @@ set Terminal,konsoleCMD,konsole -e bash -c "ssh %IP%" &;
 set Terminal,mactermName,macterm;
 set Terminal,mactermDescription,The default terminal in Mac OSX
 set Terminal,mactermGroup,GUI;
-set Terminal,mactermTest,bash -c 'if [ -d /Applications/Utilities/Terminal.app ];then echo exists;fi';
+set Terminal,mactermTest,/Applications/Utilities/Terminal.app;
 set Terminal,mactermCMD,echo 'tell app "Terminal" to do script "ssh %IP%" | osascript;
 
 # xterm;
