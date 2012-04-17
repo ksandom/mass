@@ -39,6 +39,10 @@ function linkedInstall
 	bin="."
 	binExec=~/bin
 	
+	if [ "`echo $PATH|grep $binExec`" == '' ]; then # A hack for the mac
+		binExec=/usr/local/bin
+	fi
+	
 	doInstall
 }
 
@@ -91,7 +95,7 @@ function doInstall
 	
 	# Detect stuff. It should be safe to do this on an existing setup.
 	mass --createDefaultValues
-	mass --detect=Terminal,seed --saveStoreToConfig=Terminal
+	mass --detect=Terminal,seed,GUI --saveStoreToConfig=Terminal
 }
 
 if [ `id -u` -gt 0 ];then
