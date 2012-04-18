@@ -67,6 +67,12 @@ class CommandLine extends Module
 						$value=substr($arg[$i], $equalsPos+1);
 						$this->core->set('Global', $argument, $value);
 						$this->core->addAction($argument, $value);
+						
+						$valueParts=$this->core->interpretParms($value);
+						foreach ($valueParts as $key=>$parm)
+						{
+							$this->core->set('Global', "$argument-$key", $parm)
+						}
 					}
 					else
 					{
