@@ -63,7 +63,6 @@ class Manipulator extends Module
 			{
 				# TODO It would be nice to make this recursive.
 				$outputLine=$this->core->processValue($template);
-				echo "'$template' -> '$outputLine'\n";
 				foreach ($line as $key=>$value)
 				{
 					$outputLine=$this->replace($outputLine, "%$key%", $value);
