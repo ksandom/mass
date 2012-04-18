@@ -71,7 +71,7 @@ class CommandLine extends Module
 						$valueParts=$this->core->interpretParms($value);
 						foreach ($valueParts as $key=>$parm)
 						{
-							$this->core->set('Global', "$argument-$key", $parm)
+							$this->core->set('Global', "$argument-$key", $parm);
 						}
 					}
 					else

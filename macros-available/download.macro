@@ -1,0 +1,9 @@
+# Download the same file(s) from many servers. --download=hostNameRegex,fullPathToFile,destinationFilename ;
+
+list ~!Global,download-0!~;
+
+# the internalIP will work if we are connected to a VPN;
+chooseFirst IP,externalIP,internalIP;
+
+toString scp %IP%:~!Global,download-1!~ %externalFQDN%.~!Global,download-2!~;
+exec;
