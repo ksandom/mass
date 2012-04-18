@@ -60,7 +60,7 @@ function doInstall
 		startDir: $startDir"
 	
 	if [ "$bin" != '.' ]; then
-		cp -Rv modules-* core.php macros-* examples "$configDir"
+		cp -Rv docs modules-* core.php macros-* examples "$configDir"
 		cd "$configDir"
 		mkdir -p modules-enabled macros-enabled templates-enabled config
 		cp -Rv $programName "$bin"
@@ -76,7 +76,7 @@ function doInstall
 		ln -sf ../templates-available/* .
 	else
 		cd "$configDir"
-		ln -sfv "$startDir"/modules-*available "$startDir"/macros-*available "$startDir"/templates-*available "$startDir/core.php" "$startDir/examples" . 
+		ln -sfv "$startDir"/docs "$startDir"/modules-*available "$startDir"/macros-*available "$startDir"/templates-*available "$startDir/core.php" "$startDir/examples" . 
 		mkdir -p modules-enabled macros-enabled templates-enabled config
 		cd $binExec
 		ln -sfv "$startDir/$programName" .
