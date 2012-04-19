@@ -1,7 +1,7 @@
-# Generate a hosts file that would be used in /etc/hosts eg --hosts=^cus.*;
+# Generate a hosts file that would be used in /etc/hosts eg --hosts=^cus.*
 
-list ~!Global,hosts!~;
-stashResults Hosts,sourcelist;
+list ~!Global,hosts!~
+stashResults Hosts,sourcelist
 
-singleString;
-template hosts;
+singleString
+template hosts

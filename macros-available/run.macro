@@ -1,9 +1,9 @@
-# Open a terminal to every host in the results;
+# Open a terminal to every host in the results
 
-list ~!Global,run!~;
+list ~!Global,run!~
 
-# the internalIP will work if we are connected to a VPN;
-chooseFirst IP,externalIP,internalIP;
+# the internalIP will work if we are connected to a VPN
+chooseFirst IP,externalIP,internalIP
 
-toString ssh %IP% ~!Global,cmd!~ &;
-exec;
+toString ssh %IP% ~!Global,cmd!~ &
+exec

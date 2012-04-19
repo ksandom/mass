@@ -1,18 +1,18 @@
-# Open a screen terminal to every host in the results;
+# Open a screen terminal to every host in the results
 
-getPID Global,PID;
-list ~!Global,screen!~;
-chooseFirst IP,externalIP,internalIP;
+getPID Global,PID
+list ~!Global,screen!~
+chooseFirst IP,externalIP,internalIP
 
-# the internalIP will work if we are connected to a VPN;
-chooseFirst IP,externalIP,internalIP;
-stashResults Screen,sourcelist;
+# the internalIP will work if we are connected to a VPN
+chooseFirst IP,externalIP,internalIP
+stashResults Screen,sourcelist
 
-# TODO make sure template is recieving input correctly;
-template screen;
-singleStringNow /tmp/mass-~!Global,PID!~.screen;
-# singleStringNow;
+# TODO make sure template is recieving input correctly
+template screen
+singleStringNow /tmp/mass-~!Global,PID!~.screen
+# singleStringNow
 
-exec screen -c /tmp/mass-~!Global,PID!~.screen;
-# TODO Removign the file kills the screen session. We need to remove it somehow to get rid of clutter. This needs to be solved.;
-# exec rm /tmp/mass-~!Global,PID!~.screen;
+exec screen -c /tmp/mass-~!Global,PID!~.screen
+# TODO Removign the file kills the screen session. We need to remove it somehow to get rid of clutter. This needs to be solved.
+# exec rm /tmp/mass-~!Global,PID!~.screen

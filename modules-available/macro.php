@@ -18,14 +18,23 @@ class Macro extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('macro'), 'macro', 'Define and run a macro. --macro=macroName:"command1=blah;command2=wheee"');
-				$this->core->registerFeature($this, array('defineMacro'), 'defineMacro', 'Define a macro. --defineMacro=macroName:"command1=blah;command2=wheee"');
+				$this->core->registerFeature($this, array('singleLineMacro'), 'singleLineMacro', 'Define and run a macro. --macro=macroName:"command1=blah;command2=wheee"');
+				$this->core->registerFeature($this, array('macro'), 'macro', 'Define and run a macro. --macro=macroName:"command1=blah\ncommand2=wheee"');
+				$this->core->registerFeature($this, array('defineSingleLineMacro'), 'defineSingleLineMacro', 'Define a macro. --defineMacro=macroName:"command1=blah;command2=wheee"');
+				$this->core->registerFeature($this, array('defineMacro'), 'defineMacro', 'Define a macro. --defineMacro=macroName:"command1=blah\ncommand2=wheee"');
 				$this->core->registerFeature($this, array('runMacro'), 'runMacro', 'Run a macro. --runMacro=macroName');
 				$this->core->registerFeature($this, array('listMacros'), 'listMacros', 'List all macros');
+				break;
+			case 'singleLineMacro':
+				$this->defineMacro($this->core->get('Global', 'macro'), true);
+				return $this->runMacro($this->lastCreatedMacro);
 				break;
 			case 'macro':
 				$this->defineMacro($this->core->get('Global', 'macro'));
 				return $this->runMacro($this->lastCreatedMacro);
+				break;
+			case 'defineSingleLineMacro':
+				$this->defineMacro($this->core->get('Global', 'defineMacro'), true);
 				break;
 			case 'defineMacro':
 				$this->defineMacro($this->core->get('Global', 'defineMacro'));
@@ -46,7 +55,7 @@ class Macro extends Module
 		}
 	}
 	
-	function defineMacro($macro)
+	function defineMacro($macro, $useSemiColon=false)
 	{
 		# Get macroName
 		$endOfName=strPos($macro, ':');
@@ -54,8 +63,17 @@ class Macro extends Module
 		$actualMacro=trim(substr($macro, $endOfName+1));
 		$this->lastCreatedMacro=$macroName;
 		
-		# Strip out new line characters and split into new lines
-		$lines=explode(';', implode('', explode("\n", $actualMacro)));
+		if ($useSemiColon)
+		{
+			# Strip out new line characters and split into lines using ;
+			$lines=explode(';', implode('', explode("\n", $actualMacro)));
+		}
+		else
+		{
+			# Split into lines usong \n
+			$lines=explode("\n", $actualMacro);
+		}
+		
 		foreach ($lines as $line)
 		{
 			$trimmedLine=trim($line);
@@ -108,7 +126,7 @@ class Macro extends Module
 				{
 					$description=substr($contentsParts[0], 2);
 					#$this->core->set('Macro', $macroName, $contents);
-					$this->defineMacro("$macroName:$contents");
+					$this->defineMacro("$macroName:$contents", false);
 					
 					$this->core->registerFeature($this, array($macroName), $macroName, 'Macro: '.$description);
 				}

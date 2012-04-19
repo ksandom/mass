@@ -1,9 +1,9 @@
-# Open a terminal to every host in the results;
+# Open a terminal to every host in the results
 
-list ~!Global,term!~;
+list ~!Global,term!~
 
-# the internalIP will work if we are connected to a VPN;
-chooseFirst IP,externalIP,internalIP;
+# the internalIP will work if we are connected to a VPN
+chooseFirst IP,externalIP,internalIP
 
-toString ~!Terminal,GUICMD!~;
-exec;
+toString ~!Terminal,GUICMD!~
+exec
