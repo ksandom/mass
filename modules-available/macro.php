@@ -112,7 +112,28 @@ class Macro extends Module
 	
 	function loadSavedMacros()
 	{
+		# TODO This is repeated below. It should be done once.
 		$fileList=$this->core->getFileList($this->core->get('General', 'configDir').'/macros-enabled');
+		
+		# Pre-register all macros so that they can be nested without issue.
+		foreach ($fileList as $fileName=>$fullPath)
+		{
+			$nameParts=explode('.', $fileName);
+			if ($nameParts[1]=='macro') // Only invest further time if it actually is a macro.
+			{
+				$macroName=$nameParts[0];
+				$contents=file_get_contents($fullPath);
+				$contentsParts=explode("\n", $contents);
+				if (substr($contentsParts[0], 0, 2)=='# ')
+				{
+					$description=substr($contentsParts[0], 2);
+					$this->core->registerFeature($this, array($macroName), $macroName, 'Macro: '.$description);
+				}
+				else $this->core->complain($this, "$fullPath appears to be a macro, but doesn't have a helpful comment on the first line begining with a # .");
+			}
+		}
+		
+		# Interpret and define all macros.
 		foreach ($fileList as $fileName=>$fullPath)
 		{
 			$nameParts=explode('.', $fileName);
@@ -124,11 +145,7 @@ class Macro extends Module
 				
 				if (substr($contentsParts[0], 0, 2)=='# ')
 				{
-					$description=substr($contentsParts[0], 2);
-					#$this->core->set('Macro', $macroName, $contents);
 					$this->defineMacro("$macroName:$contents", false);
-					
-					$this->core->registerFeature($this, array($macroName), $macroName, 'Macro: '.$description);
 				}
 				else $this->core->complain($this, "$fullPath appears to be a macro, but doesn't have a helpful comment on the first line begining with a # .");
 			}
