@@ -88,6 +88,10 @@ function doInstall
 		ln -sfv ../templates-available/* .
 	fi
 	
+	rm -f "$configDir/macros-enabled/example"*
+	rm -f "$configDir/modules-enabled/example"
+	rm -f "$configDir/templates-enabled/example"
+	
 	# First time setup
 	if [ ! -f "$configDir/config/Credentials.config.json" ];then
 		mass --set=Credentials,defaultKey,id_rsa --saveStoreToConfig=Credentials
