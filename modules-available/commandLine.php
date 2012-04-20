@@ -15,7 +15,7 @@ class CommandLine extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('h', 'help'), 'help', 'Display this help.');
+				$this->core->registerFeature($this, array('h', 'help'), 'help', 'Display this help.', array('user'));
 				$this->core->registerFeature($this, array('printr'), 'printr', 'Print output using the print_r() function. Particularly useful for debugging.');
 				
 				$this->core->setRef('General', 'outputObject', $this);
@@ -67,12 +67,6 @@ class CommandLine extends Module
 						$value=substr($arg[$i], $equalsPos+1);
 						$this->core->set('Global', $argument, $value);
 						$this->core->addAction($argument, $value);
-						
-						$valueParts=$this->core->interpretParms($value);
-						foreach ($valueParts as $key=>$parm)
-						{
-							$this->core->set('Global', "$argument-$key", $parm);
-						}
 					}
 					else
 					{

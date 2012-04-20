@@ -126,8 +126,13 @@ class Macro extends Module
 				$contentsParts=explode("\n", $contents);
 				if (substr($contentsParts[0], 0, 2)=='# ')
 				{
-					$description=substr($contentsParts[0], 2);
-					$this->core->registerFeature($this, array($macroName), $macroName, 'Macro: '.$description);
+					$firstLine=substr($contentsParts[0], 2);
+					$firstLineParts=explode($firstLine);
+					$description=$firstLine;
+					# $description=$firstLineParts[0];
+					$tags=$firstLineParts[1];
+					
+					$this->core->registerFeature($this, array($macroName), $macroName, 'Macro: '.$description, $tags);
 				}
 				else $this->core->complain($this, "$fullPath appears to be a macro, but doesn't have a helpful comment on the first line begining with a # .");
 			}

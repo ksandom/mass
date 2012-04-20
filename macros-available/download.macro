@@ -1,4 +1,4 @@
-# Download the same file(s) from many servers. --download=hostNameRegex,fullPathToFile
+# Download the same file(s) from many servers. --download=hostNameRegex,fullPathToFile ~ user
 
 list ~!Global,download-0!~
 

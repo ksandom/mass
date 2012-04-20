@@ -30,16 +30,15 @@ class core extends Module
 		switch ($event)
 		{
 			case 'init':
+				$this->registerFeature($this, array('registerTags'), 'registerTags', 'Register tags to a feature. --registerTags=featureName'.valueSeparator.'tag1['.valueSeparator.'tag2['.valueSeparator.'tag3'.valueSeparator.'...]]');
 				$this->registerFeature($this, array('get'), 'get', 'Get a value. --get=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('set'), 'set', 'set a value. --set=moduleName'.valueSeparator.'variableName'.valueSeparator.'value');
-				$this->registerFeature($this, array('setDefault'), 'setDefault', "The value that the variable will be set to if it hasn't been set to something else. --setDefault=moduleName".valueSeparator."variableName".valueSeparator."value");
 				$this->registerFeature($this, array('stashResults'), 'stashResults', 'Put the current result set into a memory slot. --stashResults=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('retrieveResults'), 'retrieveResults', 'Retrieve a result set that has been stored. This will replace the current result set with the retrieved one --retrieveResults=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('getPID'), 'getPID', 'Save the process ID to a variable. --getPID=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('setJson'), 'setJson', 'Take a json encoded array from jsonValue and store the arrary in moduleName'.valueSeparator.'variableName. --setJson=moduleName'.valueSeparator.'variableName'.valueSeparator.'jsonValue');
 				$this->registerFeature($this, array('dump'), 'dump', 'Dump internal state.');
 				$this->registerFeature($this, array('ping'), 'ping', 'Useful for debugging.');
-				$this->registerFeature($this, array('echo'), 'echo', 'Display the contents of any parameters given. Useful for debugging.');
 				$this->registerFeature($this, array('#'), '#', 'Comment.');
 				break;
 			case 'followup':
@@ -53,10 +52,6 @@ class core extends Module
 			case 'set':
 				$parms=$this->interpretParms($this->get('Global', 'set'));
 				$this->set($parms[0], $parms[1], $parms[2]);
-				break;
-			case 'setDefault':
-				$parms=$this->interpretParms($this->get('Global', 'setDefault'));
-				if (!$this->get($parms[0], $parms[1])) $this->set($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'stashResults':
 				$parms=$this->interpretParms($this->get('Global', 'stashResults'));
@@ -81,9 +76,6 @@ class core extends Module
 				break;
 			case 'ping':
 				echo "Pong.\n";
-				break;
-			case 'echo':
-				echo $this->get('Global', 'echo')."\n";
 				break;
 			case '#':
 				break;
@@ -323,9 +315,21 @@ class core extends Module
 		return true;
 	}
 	
-	function registerFeature(&$obj, $flags, $name, $description)
+	function registerFeature(&$obj, $flags, $name, $description, $tags=false)
 	{
-		$entry=array('obj'=>&$obj, 'flags'=>$flags, 'name'=>$name, 'description'=>$description);
+		$arrayTags=(is_array($tags))?$tags:explode(',', $tags);
+		if (!count($arrayTags))
+		{
+			$arrayTags[]='undefined';
+		}
+		$arrayTags[]=$name;
+		$arrayTags[]='all';
+		$arrayTags[]=$obj->getName();
+		$this->registerTags($name, $arrayTags);
+		$tagString=implode(',', $arrayTags);
+		
+		# TODO Remove the tag string from descriptoin once we have proper integration with help
+		$entry=array('obj'=>&$obj, 'flags'=>$flags, 'name'=>$name, 'description'=>$description."~ $tagString");
 		foreach ($flags as $flag)
 		{
 			if (!isset($this->store['Features'][$flag]))
@@ -338,6 +342,19 @@ class core extends Module
 				$existingName=$existing['obj']->getName();
 				$this->complain($obj, "Feature $flag has already been registered by $existingName");
 			}
+		}
+	}
+	
+	function registerTags($name, $tags)
+	{
+		$arrayTags=(is_array($tags))?$tags:explode(',', $tags);
+		foreach ($arrayTags as $tag)
+		{
+			$names=$this->get('Tags', $tag);
+			if (!is_array($names)) $names=array();
+			
+			$names[]=$name;
+			$this->set('Tags', $tag, $names);
 		}
 	}
 	

@@ -1,4 +1,4 @@
-# Setup default values
+# Setup default values ~ setup
 
 set Terminal,seed,konsole:macterm:xterm:none
 

@@ -1,4 +1,4 @@
-# Generate a hosts file that would be used in /etc/hosts eg --hosts=^cus.*
+# Generate a hosts file that would be used in /etc/hosts eg --hosts=^cus.* ~ configManagement
 
 list ~!Global,hosts!~
 stashResults Hosts,sourcelist

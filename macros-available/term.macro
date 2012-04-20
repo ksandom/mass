@@ -1,4 +1,4 @@
-# Open a terminal to every host in the results
+# Open a terminal to every host in the results ~ terminal,user
 
 list ~!Global,term!~
 
