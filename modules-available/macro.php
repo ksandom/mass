@@ -127,10 +127,10 @@ class Macro extends Module
 				if (substr($contentsParts[0], 0, 2)=='# ')
 				{
 					$firstLine=substr($contentsParts[0], 2);
-					$firstLineParts=explode($firstLine);
+					$firstLineParts=explode('~', $firstLine);
 					$description=$firstLine;
 					# $description=$firstLineParts[0];
-					$tags=$firstLineParts[1];
+					$tags=(isset($firstLineParts[1]))?trim($firstLineParts[1]):'';
 					
 					$this->core->registerFeature($this, array($macroName), $macroName, 'Macro: '.$description, $tags);
 				}
