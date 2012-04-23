@@ -322,14 +322,14 @@ class core extends Module
 		{
 			$arrayTags[]='undefined';
 		}
-		$arrayTags[]=$name;
+		// $arrayTags[]=$name; # I'm not convinced this is a good item. It means we are going to have a stupid amount of tags that are only used once.
 		$arrayTags[]='all';
 		$arrayTags[]=$obj->getName();
 		$this->registerTags($name, $arrayTags);
 		$tagString=implode(',', $arrayTags);
 		
 		# TODO Remove the tag string from descriptoin once we have proper integration with help
-		$entry=array('obj'=>&$obj, 'flags'=>$flags, 'name'=>$name, 'description'=>$description."~ $tagString");
+		$entry=array('obj'=>&$obj, 'flags'=>$flags, 'name'=>$name, 'description'=>$description." ~ $tagString");
 		foreach ($flags as $flag)
 		{
 			if (!isset($this->store['Features'][$flag]))
@@ -350,11 +350,14 @@ class core extends Module
 		$arrayTags=(is_array($tags))?$tags:explode(',', $tags);
 		foreach ($arrayTags as $tag)
 		{
-			$names=$this->get('Tags', $tag);
-			if (!is_array($names)) $names=array();
-			
-			$names[]=$name;
-			$this->set('Tags', $tag, $names);
+			if ($tag)
+			{
+				$names=$this->get('Tags', $tag);
+				if (!is_array($names)) $names=array();
+				
+				$names[]=$name;
+				$this->set('Tags', $tag, $names);
+			}
 		}
 	}
 	

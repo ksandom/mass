@@ -5,6 +5,9 @@
 
 class CommandLine extends Module
 {
+	private $track=null;
+	private $store=null;
+	
 	function __construct()
 	{
 		parent::__construct('CommandLine');
@@ -15,8 +18,8 @@ class CommandLine extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('h', 'help'), 'help', 'Display this help.', array('user'));
-				$this->core->registerFeature($this, array('printr'), 'printr', 'Print output using the print_r() function. Particularly useful for debugging.');
+				$this->core->registerFeature($this, array('h', 'help'), 'help', 'Display this help. --help[=searchForTag]', array('user'));
+				$this->core->registerFeature($this, array('printr'), 'printr', 'Print output using the print_r() function. Particularly useful for debugging.', array('debug', 'dev'));
 				
 				$this->core->setRef('General', 'outputObject', $this);
 				break;
@@ -26,7 +29,7 @@ class CommandLine extends Module
 				$this->processArgs();
 				break;
 			case 'help':
-				$this->showHelp();
+				$this->showHelp($this->core->get('Global', 'help'));
 				break;
 			case 'printr':
 				$this->core->setRef('General', 'outputObject', $this);
@@ -103,7 +106,29 @@ class CommandLine extends Module
 		}
 	}
 	
-	function showHelp()
+	function showHelp($tags)
+	{
+		$this->track=array();
+		$this->store=$this->core->getStore();
+		
+		if ($tags) $this->showSpecificHelp($tags);
+		else $this->showAllHelp();
+	}
+	
+	function showSpecificHelp($tags)
+	{
+		$tagsArray=$this->core->interpretParms($tags);
+		foreach ($tagsArray as $tag)
+		{
+			foreach ($this->store['Tags'][$tag] as $name)
+			{
+				$details=$this->store['Features'][$name];
+				$this->displayHelpItem($name, $details);
+			}
+		}
+	}
+	
+	function showAllHelp()
 	{
 		$store=$this->core->getStore();
 		$track=array();
@@ -111,21 +136,29 @@ class CommandLine extends Module
 		$programName=$this->core->get('General', 'programName');
 		$description=$this->core->get('General', 'description');
 		echo "Help\n----\n$programName: $description\n\n";
-		foreach ($store['Features'] as $name=>$details)
+		foreach ($this->store['Features'] as $name=>$details)
 		{
-			if (!isset($track[$details['flags'][0]]))
+			$this->displayHelpItem($name, $details);
+		}
+		
+		$allTags=implode(', ', array_keys($this->store['Tags']));
+		echo "\n\nAvailable tags: $allTags\n";
+	}
+	
+	function displayHelpItem($name, $details)
+	{
+		if (!isset($this->track[$details['flags'][0]]))
+		{
+			$this->track[$details['flags'][0]]=true; # Make sure aliases don't cause us to display the same help twice.
+			$visualFlags=array();
+			foreach ($details['flags'] as $flag)
 			{
-				$track[$details['flags'][0]]=true; # Make sure aliases don't cause us to display the same help twice.
-				$visualFlags=array();
-				foreach ($details['flags'] as $flag)
-				{
-					$visualFlags[]=(strlen($flag)==1)?"-$flag":"--$flag";
-				}
-				
-				$finalVisualFlags=implode(', ', $visualFlags);
-				$objName=$details['obj']->getName();
-				echo "$objName: $finalVisualFlags => {$details['description']}\n";
+				$visualFlags[]=(strlen($flag)==1)?"-$flag":"--$flag";
 			}
+			
+			$finalVisualFlags=implode(', ', $visualFlags);
+			$objName=$details['obj']->getName();
+			echo "$objName: $finalVisualFlags => {$details['description']}\n";
 		}
 	}
 	
