@@ -18,9 +18,9 @@ class String extends Module
 		{
 			case 'init':
 				// This isn't ready for usage yet.
-				$this->core->registerFeature($this, array('s', 'singleString'), 'singleString', 'Set final output to send the returned output as one large string. Each entry will be separated by a new line.');
-				$this->core->registerFeature($this, array('stringToFile'), 'stringToFile', 'Send returned output as a string to a file at the end of the processing. Each entry will be separated by a new line. --stringToFile=filename');
-				$this->core->registerFeature($this, array('singleStringNow'), 'singleStringNow', 'Send returned output as a string. Each entry will be separated by a new line. --singleStringNow[=filename] . If filename is omitted, stdout will be used instead.');
+				$this->core->registerFeature($this, array('s', 'singleString'), 'singleString', 'Set final output to send the returned output as one large string. Each entry will be separated by a new line.', array('string'));
+				$this->core->registerFeature($this, array('stringToFile'), 'stringToFile', 'Send returned output as a string to a file at the end of the processing. Each entry will be separated by a new line. --stringToFile=filename', array('string'));
+				$this->core->registerFeature($this, array('singleStringNow'), 'singleStringNow', 'Send returned output as a string. Each entry will be separated by a new line. --singleStringNow[=filename] . If filename is omitted, stdout will be used instead.', array('string'));
 				break;
 			case 'followup':
 				break;

@@ -17,11 +17,11 @@ class Manipulator extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array of arrays into an array of strings. eg --toString="blah file=%hostName% ip=%externalIP%"');
-				$this->core->registerFeature($this, array('f', 'flatten'), 'flatten', 'Flatten an array or arrays into a keyed array of values. --flatten[=limit]. Note that "limit" specifies how far to go into the nesting before simply returning what ever is below.');
-				$this->core->registerFeature($this, array('requireEach'), 'requireEach', 'Require each entry to match this regular expression. --requireEach=regex');
-				$this->core->registerFeature($this, array('requireEntry'), 'requireEntry', 'Require a named entry in each of the root entries. A regular expression can be supplied to provide a more precise match. --requireEntry=entryKey[,regex]');
-				$this->core->registerFeature($this, array('chooseFirst'), 'chooseFirst', 'Choose the first non-empty value and put it into the destination variable. --chooseFirst=dstVarName,srcVarName1,srcVarName2[,srcVarName3[,...]]');
+				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array of arrays into an array of strings. eg --toString="blah file=%hostName% ip=%externalIP%"', array('array', 'string'));
+				$this->core->registerFeature($this, array('f', 'flatten'), 'flatten', 'Flatten an array or arrays into a keyed array of values. --flatten[=limit]. Note that "limit" specifies how far to go into the nesting before simply returning what ever is below.', array('array', 'string'));
+				$this->core->registerFeature($this, array('requireEach'), 'requireEach', 'Require each entry to match this regular expression. --requireEach=regex', array('array'));
+				$this->core->registerFeature($this, array('requireEntry'), 'requireEntry', 'Require a named entry in each of the root entries. A regular expression can be supplied to provide a more precise match. --requireEntry=entryKey[,regex]', array('array'));
+				$this->core->registerFeature($this, array('chooseFirst'), 'chooseFirst', 'Choose the first non-empty value and put it into the destination variable. --chooseFirst=dstVarName,srcVarName1,srcVarName2[,srcVarName3[,...]]', array('array'));
 				break;
 			case 'followup':
 				break;
