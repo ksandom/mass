@@ -108,9 +108,15 @@ if [ `id -u` -gt 0 ];then
 			linkedInstall
 		;;
 		*)
-			echo "This is broken at the moment and is low on my priorities to fix. Feel free to fix it."
-			echo "I suggest that you run './install linked' as this will be most useful to people at the moment."
-			echo "Alternatively you can comment out the exit and roll the dice ;)"
+			echo "User install is broken at the moment and is low on my priorities to fix. Feel free to fix it."
+			echo "In the mean time we'll use the linked install. You can install from another location by simply running $0 from that location at any time."
+			echo
+			echo "Alternatively you can comment out the linkedInstall and exit and roll the dice ;)"
+			echo
+			echo "Continuing with linked install."
+			
+			
+			linkedInstall
 			exit 1
 			userInstall
 		;;
