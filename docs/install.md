@@ -18,7 +18,19 @@ If you run `./install` as a non-root user, mass will only be available to that u
 
 ## 2) Getting data to use
 ### Hosts
+It's important to remember that these sources should only be used periodically and then stored. See sourcesOfData.md for more information.
+
+Here are the sources available right now:
+
+Here are the sources I plan to have available:
+
+* AWS (I'm using a company specific one at the moment. I'll write a generic one when I get a change.)
+* /etc/hosts
+* .ssh/config
+* /etc/ssh/ssh_config
+
 ### Templates
+As of this writing, there are two templates. When ever there are more, they will be made available in the templates-available folder. If you'd like to make your own, see creatingATemplate.md.
 
 # Updating
 Simply do a git pull where ever you checked out the code then run `./install.sh` in the same way you did under the install section.
@@ -28,11 +40,19 @@ Simply do a git pull where ever you checked out the code then run `./install.sh`
 There are two reasons to consider what you want to enable:
 
 1. Everything that is enabled is using memory all the time and takes time to load. Right now things are sufficiently small that this isn't an issue, but it's not hard to imagine this growing to a size where it's worth taking this into account.
-2. In the future there may be alternate versions of the same functionality. Often this functionality will be mutually exclusive, so one will have to be chosen over the other.
+2. In the future there may be alternate versions of the same functionality. Often this functionality will be mutually exclusive, so one will have to be chosen over the other. When this becomes relevant, I'll try to make it as painless as possible.
+
+### Enabling/disabling stuff
+This is as simple as creating a symlink from the appropriate -available/fileName to the appropriate -enabled folder. See *Paths explained futher* below.
 
 ### Macros
+*For now a default install should be fine.*
+
 ### Templates
+*For now a default install should be fine.*
+
 ### Modules
+*For now a default install should be fine.*
 
 ## Enabling or disabling stuff
 It all works like available/enabled system that ubuntu uses via symlinks. You can use `ln -s` to create symlinks in the same way that you'd use cp to copy a file. Please do not simply copy the files as that will make things very hard to diagnose when there are problems.

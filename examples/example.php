@@ -1,6 +1,11 @@
 <?php
 # Copyright (c) 2012, Kevin Sandom under the BSD License. See LICENSE for full details.
 
+# TODO WARNING This example is out of date. It needs to be carefully revised. Below is a list of known shortcomings (there may be mroe), please prepend DONE in front of each item as it gets fixed.
+# * Specifying tags
+# * Double check init levels (init, followup etc)
+# * Any more???
+
 # An example of how to write a module
 
 class Example extends Module
