@@ -42,6 +42,7 @@ There are currerntly two types of variables with very different purposes.
 `%resultKey%` - *reference items within the result of commands you invoke. This is primarily used to retrieve parts of a result.*
 
 Say we typed `mass --list=ex`. We might get a result like this:
+
     # mass --list=ex
     
     0: 
@@ -53,7 +54,7 @@ Say we typed `mass --list=ex`. We might get a result like this:
       internalFQDN: example01-dev.internal.example.com
       externalFQDN: example01-dev.external.example.com
       
-We have an internal IP address, and no external IP address for this result. Often we may want to choose the external one, but in this case we want the internal one. So we can use the `--chooseFirst` feature to set IP to the value we want. Therefore we'd run `--chooseFirst=IP,externalIP,internalIP` which would produce:
+We have an internal IP address, and no external IP address for this result. Often we may want to choose the external one, but in this case we want the internal one. In any case, we want only one. So we can use the `--chooseFirst` feature to set IP to the value we want. Therefore we'd run `--chooseFirst=IP,externalIP,internalIP` which would produce:
       
     # mass --list=ex --chooseFirst=IP,externalIP,internalIP
     
@@ -67,7 +68,7 @@ We have an internal IP address, and no external IP address for this result. Ofte
       externalFQDN: example01-dev.external.example.com
       IP: 192.168.1.10
 
-So you see we have set IP to something, giving preference to externalIP. That's great, but that was all internal via a function; we haven't actually tried retrieving anything from that IP variable yet. Let's create a series of strings which we can later execute like this `--toString="ssh %IP%"` 
+So you see we have set IP to something, giving preference to externalIP, and in this case being set to the internalIP since we don't have a value for the externalIP. That's great, but that was all internal via a function; we haven't actually tried retrieving anything from that IP variable yet. Let's create a series of strings which we can later execute like this `--toString="ssh %IP%"`:
 
     # mass --list=ex --chooseFirst=IP,externalIP,internalIP --toString="ssh %IP%"
     
@@ -78,7 +79,7 @@ For completeness, let's execute that using `--exec`:
     # mass --list=ex --chooseFirst=IP,externalIP,internalIP --toString="ssh %IP%" --exec
     ssh: connect to host 192.168.1.10 port 22: Network is unreachable
 
-As you can see, in my case I'm not connected to a network while I'm writing this. But if I had been, I would have had an interactive ssh session to that server. Also note that this execution is blocking the execution of the next match. So if there are multiple hosts matching our criteria, then the next ssh session would not begin until the current one ends.
+As you can see, in my case I'm not connected to a network while I'm writing this. But if I had been, I would have had an interactive ssh session to that server. Also note that this execution is blocking the execution of the next match. So if there are multiple hosts matching our criteria, then the next ssh session would not begin until the current one ends (which would be fast since this is a fast fail).
 
 TODO write about spawning stuff. In the mean time, take a look at term.macro which shows one way of dealing with this.
 
