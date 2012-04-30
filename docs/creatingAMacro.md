@@ -10,7 +10,7 @@ Note that there are no spaces between the tags, but there are around the `~`.Aft
  * Leave off the `--`
  * Use a space instead of an = to separate the command and the parameters
  
-For example if you were to do `mass --list=db --chooseFirst=IP,externalIP,internalIP` as a macro it would look like:
+For example if you were to do `mass --list=db --chooseFirst=IP,externalIP,internalIP` on the command line, as a macro it would look like:
 
     # List out all database servers setting IP to the value of externalIP, or internalIP if externalIP is not set. ~ dbs,database,user
     
@@ -35,11 +35,11 @@ Say we want to list out all servers that begin with db and continue with what ev
 # Variables
 There are currerntly two types of variables with very different purposes.
 
- * Result variables - %resultKey% - reference items within the result of commands you invoke. This is primarily used to retrieve parts of a result.
- * Store variables - ~!ModuleName,variableName!~ - reference items within the store. This is primarily used for working with configuration (both mass and your macros) and parameters.
+ * Result variables - `%resultKey%` - reference items within the result of commands you invoke. This is primarily used to retrieve parts of a result.
+ * Store variables - `~!ModuleName,variableName!~` - reference items within the store. This is primarily used for working with configuration (both mass and your macros) and parameters.
 
 ## Result variables
-*reference items within the result of commands you invoke. This is primarily used to retrieve parts of a result.*
+`%resultKey%` - *reference items within the result of commands you invoke. This is primarily used to retrieve parts of a result.*
 
 Say we typed `mass --list=ex`. We might get a result like this:
     # mass --list=ex
@@ -83,6 +83,6 @@ As you can see, in my case I'm not connected to a network while I'm writing this
 TODO write about spawning stuff. In the mean time, take a look at term.macro which shows one way of dealing with this.
 
 ## Store variables
-*reference items within the store. This is primarily used for working with configuration (both mass and your macros) and parameters.*
+`~!ModuleName,variableName!~` - *reference items within the store. This is primarily used for working with configuration (both mass and your macros) and parameters.*
 
 TODO write this.
