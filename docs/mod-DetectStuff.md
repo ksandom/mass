@@ -1,3 +1,4 @@
+# --detect
 --detect uses a seed within the scope of a module name to run a series of tests eg ExampleModule,seed. A seed looks like this:
 
     thing1:thing2:thing3
