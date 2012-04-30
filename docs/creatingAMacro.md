@@ -84,6 +84,6 @@ As you can see, in my case I'm not connected to a network while I'm writing this
 TODO write about spawning stuff. In the mean time, take a look at term.macro which shows one way of dealing with this.
 
 ## Store variables
-`~!ModuleName,variableName!~` - *reference items within the store. This is primarily used for working with configuration (both mass and your macros) and parameters.*
+`~!ModuleName,variableName!~` - *reference items within the store. This is primarily used for working with configuration (both mass and macros) and parameters.*
 
 TODO write this.
