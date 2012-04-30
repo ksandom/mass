@@ -1,11 +1,11 @@
 # The basics
 It's really easy!
 
-The first line is a # comment describing the macro with tags related to the macro at the end. The tags are separated from the comment using a ~. It looks like this:
+The first line is a `#` comment describing the macro with tags related to the macro at the end. The tags are separated from the comment using a ~. It looks like this:
 
     # Does something really awesome ~ awesome,lovely,taaaaaag
 
-After that everything is just using the commands you can see when you run `mass --help` with a couple of exceptions:
+Note that there are no spaces between the tags, but there are around the `~`.After that everything is just using the commands you can see when you run `mass --help` with a couple of exceptions:
 
  * Leave off the `--`
  * Use a space instead of an = to separate the command and the parameters
