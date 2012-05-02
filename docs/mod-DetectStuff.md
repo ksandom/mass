@@ -13,6 +13,8 @@ One we have that seed, we then look for specific values for each item. For examp
 
 The selected item will get sent to the same ModuleName as each item with the seedName replaced by the groupName like so:
 
+TODO this example is outdated. Update it. For now check out createDefaultValues.macro for the latest details.
+
 * groupNameName Eg GUIName => `konsole`
 * groupNameDescription Eg GUIDescription => `KDE's native terminal emulator`
 * groupNameCmd Eg GUICmd => `konsole`
