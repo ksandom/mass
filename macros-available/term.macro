@@ -1,8 +1,8 @@
 # Open a terminal to every host in the results ~ terminal,user
 
 list ~!Global,term!~
-# TODO Add a better way of setting cmd.
-resultSet cmd,~!Global,cmd!~
+# TODO Add a store variable equiv of --chooseFirst
+resultSet cmd,~!Global,stray!~
 
 # the internalIP will work if we are connected to a VPN
 chooseFirst IP,externalIP,internalIP

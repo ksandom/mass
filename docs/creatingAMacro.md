@@ -87,3 +87,10 @@ TODO write about spawning stuff. In the mean time, take a look at term.macro whi
 `~!ModuleName,variableName!~` - *reference items within the store. This is primarily used for working with configuration (both mass and macros) and parameters.*
 
 TODO write this.
+
+## The stray variable
+Any parameters passed at the commandline lacking `-` or `--` will show up in ~!Global,stray!~ delimited with spaces (ie you can have lots of them mixed throughout the command line).
+
+It's important to think about whether this is really your best option, as using this in a macro will likely lead to that macro becoming less nestable within other macros. USE WITH CARE.
+
+TODO write an equivilent of --chooseFirst for store variables.

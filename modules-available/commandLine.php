@@ -47,6 +47,7 @@ class CommandLine extends Module
 		#print_r($arg);
 		$max=count($arg);
 		$possibleFlagsRemaining=true;
+		$stray=array();
 		
 		for ($i=1;$i<$max;$i++) # NOTE Chosen for instead of foreach so we can nicely grab/skip the next item while maintaining position
 		{
@@ -93,7 +94,13 @@ class CommandLine extends Module
 					}
 				}
 			}
+			else
+			{
+				$stray[]=$arg[$i];
+			}
 		}
+		
+		$this->core->set('Global', 'stray', implode(' ', $stray));
 	}
 	
 	function setAction($argument)
