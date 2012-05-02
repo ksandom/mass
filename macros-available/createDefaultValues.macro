@@ -6,19 +6,19 @@ set Terminal,seed,konsole:macterm:xterm:none
 set Terminal,konsoleName,konsole
 set Terminal,konsoleDescription,KDE's default terminal
 set Terminal,konsoleTest,which konsole
-set Terminal,konsoleCMD,konsole -e bash -c "ssh %IP%" &
+set Terminal,konsoleCMD,konsole -e bash -c "ssh %IP% %cmd%" &
 
 # MacOS X's default terminal. Pretty much any custom terminal except xterm should take precedence over this.
 set Terminal,mactermName,macterm
 set Terminal,mactermDescription,The default terminal in Mac OSX
 set Terminal,mactermTest,/Applications/Utilities/Terminal.app
-set Terminal,mactermCMD,echo 'tell app "Terminal" to do script "ssh %IP%"' | osascript
+set Terminal,mactermCMD,echo 'tell app "Terminal" to do script "ssh %IP% %cmd%"' | osascript
 
 # xterm;
 set Terminal,xtermName,xterm
 set Terminal,xtermDescription,X's default terminal
 set Terminal,xtermTest,which xterm
-set Terminal,xtermCMD,xterm -e bash -c "ssh %IP%" &
+set Terminal,xtermCMD,xterm -e bash -c "ssh %IP% %cmd%" &
 
 # No GUI terminal available
 set Terminal,noneName,none
