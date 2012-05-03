@@ -6,5 +6,5 @@ resultSet cmd,~!Global,stray!~
 # the internalIP will work if we are connected to a VPN
 chooseFirst IP,externalIP,internalIP
 
-toString ssh %IP% %cmd%
+toString ssh %IP% %cmd% &
 exec
