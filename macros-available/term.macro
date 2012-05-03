@@ -3,6 +3,8 @@
 list ~!Global,term!~
 # TODO Add a store variable equiv of --chooseFirst
 resultSet cmd,~!Global,stray!~
+addSlashes cmd,cmd
+
 
 # the internalIP will work if we are connected to a VPN
 chooseFirst IP,externalIP,internalIP
