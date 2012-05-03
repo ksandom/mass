@@ -2,9 +2,10 @@
 
 list ~!Global,cmd!~
 resultSet cmd,~!Global,stray!~
+addSlashes cmd,cmd
 
 # the internalIP will work if we are connected to a VPN
 chooseFirst IP,externalIP,internalIP
 
-toString ssh %IP% %cmd% &
+toString ssh %IP% "%cmd% | while read in;do echo \"%hostName%: $in\";done" &
 exec
