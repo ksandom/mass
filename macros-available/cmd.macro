@@ -1,0 +1,10 @@
+# Concurrently run a command on every matching server and return the result in the background. --cmd=hostRegex command ~ bg,terminal,user
+
+list ~!Global,cmd!~
+resultSet cmd,~!Global,stray!~
+
+# the internalIP will work if we are connected to a VPN
+chooseFirst IP,externalIP,internalIP
+
+toString ssh %IP% %cmd%
+exec
