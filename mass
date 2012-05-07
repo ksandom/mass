@@ -19,7 +19,7 @@ elseif (file_exists("/usr/bin/.".programName."/core.php"))
 }
 else
 {
-	echo programName.": Could not find installation. Please run install.sh.\n";
+	die (programName.": Could not find installation. Please run install.sh.\n");
 }
 
 include "$configDir/core.php";
