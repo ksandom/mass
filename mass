@@ -13,9 +13,9 @@ if (file_exists("$home/.".programName."/core.php"))
 {
 	$configDir="$home/.".programName;
 }
-elseif (file_exists("/etc/.".programName."/core.php"))
+elseif (file_exists("/usr/bin/.".programName."/core.php"))
 {
-	$configDir="$home/.".programName;
+	$configDir="$etc/.".programName;
 }
 else
 {
