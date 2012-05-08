@@ -21,7 +21,7 @@ class Example extends Module
 		{
 			case 'init':
 				# Declare all your functionality here.
-				$this->core->registerFeature($this, array('e', 'example', 'aFeature'), 'example', 'An example feature.');
+				$this->core->registerFeature($this, array('e', 'example', 'aFeature'), 'example', 'An example feature.', array('user', 'string'));
 					/*
 						Let's explain this one a little further:
 						$this
@@ -38,12 +38,16 @@ class Example extends Module
 						
 						'An example feature.'
 							The description. This will be used when displaying help about the feature. This should be short. If you need to write an essay, it should go in docs/moduleName.md
+							
+						array('user', 'string')
+							'user' and 'string' are tags to make it easier to find things within help.
 					*/
 				break;
 			case 'followup':
 				# Do anything you need to do before the main flow begins, but requires all the other modules to be loaded. IT WILL BE RARE THAT YOU SHOULD USE THIS! An example is commandLine.php which needs all modules to be loaded before it can process arguments that might reference them.
 				break;
 			case 'last':
+				# Do anything you need to do before the main flow begins, but requires all the other modules to be loaded. IT WILL BE RARE THAT YOU SHOULD USE THIS! An example is commandLine.php which needs all modules to be loaded before it can process arguments that might reference them.
 				break;
 			case 'example':
 				return $this->aFeature();
