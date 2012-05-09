@@ -26,10 +26,21 @@ function rootInstall
 {
 	echo "Root install chosen"
 	configDir="/etc/$programName"
-	bin="/usr/bin/$programName"
+	bin="/usr/bin"
 	binExec=/usr/bin
+	installType='cp'
 	
 	doInstall
+}
+
+function checkPrereqs
+{
+	for prereq in php;do
+		if ! which $prereq; then
+			echo "Could not find $prereq in \$PATH" >&2
+			exit 1
+		fi
+	done
 }
 
 function linkedInstall
@@ -38,6 +49,7 @@ function linkedInstall
 	configDir=~/.$programName
 	bin="."
 	binExec=~/bin
+	installType='ln'
 	
 	if [ "`echo $PATH|grep $binExec`" == '' ]; then # A hack for the mac
 		binExec=/usr/local/bin
@@ -51,53 +63,67 @@ function doInstall
 	startDir=`pwd` # for some reason ~- wasn't working
 	mkdir -p "$configDir/data/hosts" "$binExec" "$bin"
 	
+	checkPrereqs
+	
 	echo "Install details:
 	What: $programName
 	Where:
 		config: $configDir
 		bin: $bin
 		binExec: $binExec
-		startDir: $startDir"
+		startDir: $startDir
+		installType: $installType"
 	
-	if [ "$bin" != '.' ]; then
+	if [ "$installType" == 'cp' ]; then
+		echo -e "\n# Copying available stuff"
 		cp -Rv docs modules-* core.php macros-* examples "$configDir"
+		
+		echo -e "\n# Setting up remaining directory structure"
 		cd "$configDir"
 		mkdir -p modules-enabled macros-enabled templates-enabled config
-		cp -Rv $programName "$bin"
+		
+		echo -e "\n# Making the thing runnable"
 		cd $binExec
-		pwd
-		ln -sfv "$bin/$programName" .
+		cp -Rv "$startDir/$programName" "$bin"
 		chmod 755 "$bin/$programName"
-		cd "$configDir/macros-enabled"
-		ln -sf ../macros-available/* .
-		cd "$configDir/modules-enabled"
-		ln -sfv ../modules-available/* .
-		cd "$configDir/templates-enabled"
-		ln -sf ../templates-available/* .
+		
+		for thing in macros modules templates;do
+			echo -e "\n# Sorting out $thing available/enabled"
+			cd "$configDir/$thing-enabled"
+			ln -sf ../$thing-available/* .
+		done
 	else
 		cd "$configDir"
+		
+		echo -e "\n# Linking like there's no tomorrow."
 		ln -sfv "$startDir"/docs "$startDir"/modules-*available "$startDir"/macros-*available "$startDir"/templates-*available "$startDir/core.php" "$startDir/examples" . 
+		
+		echo -e "\n# Setting up remaining directory structure"
 		mkdir -p modules-enabled macros-enabled templates-enabled config
+		
+		echo -e "\n# Making the thing runnable"
 		cd $binExec
 		ln -sfv "$startDir/$programName" .
-		cd "$configDir/macros-enabled"
-		ln -sfv ../macros-available/* .
-		cd "$configDir/modules-enabled"
-		ln -sfv ../modules-available/* .
-		cd "$configDir/templates-enabled"
-		ln -sfv ../templates-available/* .
+		
+		for thing in macros modules templates;do
+			echo -e "\n# Sorting out $thing available/enabled"
+			cd "$configDir/$thing-enabled"
+			ln -sf ../$thing-available/* .
+		done
 	fi
 	
+	echo -e "\n# Cleanup"
 	rm -f "$configDir/macros-enabled/example"*
 	rm -f "$configDir/modules-enabled/example"
 	rm -f "$configDir/templates-enabled/example"
 	
-	# First time setup
 	if [ ! -f "$configDir/config/Credentials.config.json" ];then
+		echo -e "\n# First time setup"
 		mass --set=Credentials,defaultKey,id_rsa --saveStoreToConfig=Credentials
 	fi
 	
-	# Detect stuff. It should be safe to do this on an existing setup.
+	# It should be safe to do this on an existing setup.
+	echo -e "\n# Detecting stuff"
 	mass --createDefaultValues
 	mass --detect=Terminal,seed,GUI --saveStoreToConfig=Terminal
 }

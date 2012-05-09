@@ -13,13 +13,13 @@ if (file_exists("$home/.".programName."/core.php"))
 {
 	$configDir="$home/.".programName;
 }
-elseif (file_exists("/etc/.".programName."/core.php"))
+elseif (file_exists("/etc/".programName."/core.php"))
 {
-	$configDir="$home/.".programName;
+	$configDir="/etc/".programName;
 }
 else
 {
-	echo programName.": Could not find installation. Please run install.sh.\n";
+	die (programName.": Could not find installation. Please run install.sh.\n");
 }
 
 include "$configDir/core.php";
