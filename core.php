@@ -200,6 +200,7 @@ class core extends Module
 	
 	function &go($macroName='default')
 	{
+		$emptyResult=null;
 		if (isset($this->store['Macros'][$macroName]))
 		{
 			if (count($this->store['Macros'][$macroName]))
@@ -235,16 +236,19 @@ class core extends Module
 			}
 			else
 			{
-				$this->complain(null, "hmmmm, I don't think you asked me to do anything...");
+				$this->complain($this, "hmmmm, I don't think you asked me to do anything...");
 				$obj=&$this->get('Features', 'help');
 				$obj['obj']->event('help');
+				return $emptyResult;
 			}
 		}
 		else
 		{
-			$this->complain(null, "Could not find macro '$macroName'. This can happen if you haven't asked me to do anything.");
+			$this->complain($this, "Could not find macro '$macroName'. This can happen if you haven't asked me to do anything.");
+			
 			$obj=&$this->get('Features', 'help');
 			$obj['obj']->event('help');
+			return $emptyResult;
 		}
 	}
 	
