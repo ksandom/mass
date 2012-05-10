@@ -3,6 +3,13 @@
 
 # Adds the ability to put conditions into macros
 
+/*
+	There are essentially two variants with one alias and each having their not equivilent
+		* ifResultExists
+		* ifNotEmptyResult ifResult <-- Most of the time you'll want this one
+
+*/
+
 class Condition extends Module
 {
 	function __construct()
@@ -15,17 +22,26 @@ class Condition extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('notIfResult'), 'notIfResult', "Will run the specified command if we don't have a result from something that had previously run. Note that is different from and empty result. --notIfResult=\"command[ arguments]\" .", array('language'));
-				$this->core->registerFeature($this, array('ifResult'), 'ifResult', '--ifNoResult="command[ arguments]" .', array('language'));
-				$this->core->registerFeature($this, array('notIfEmptyResult'), 'notIfEmptyResult', '--notIfEmptyResult="command[ arguments]" .', array('language'));
-				$this->core->registerFeature($this, array('ifEmptyResult'), 'ifEmptyResult', '--ifEmptyResult="command[ arguments]" .', array('language'));
+				$this->core->registerFeature($this, array('notIfResultExists'), 'notIfResultExists', "Will run the specified command if we don't have a result from something that had previously run. Note that is different from and empty result. --notIfResultExists=\"command[ arguments]\" .", array('language'));
+				$this->core->registerFeature($this, array('ifResultExists'), 'ifResultExists', '--ifResultExists="command[ arguments]" .', array('language'));
+				$this->core->registerFeature($this, array('ifResult', 'notIfEmptyResult'), 'notIfEmptyResult', '--notIfEmptyResult="command[ arguments]" .', array('language'));
+				$this->core->registerFeature($this, array('notIfResult', 'ifEmptyResult'), 'ifEmptyResult', '--ifEmptyResult="command[ arguments]" .', array('language'));
 				break;
 			case 'followup':
 				break;
 			case 'last':
 				break;
-			case 'ifNoResult':
-				return $this->ifResult($this->core->getSharedMemory(), $this->core->get('Global', 'ifNoResult'), true);
+			case 'notIfResultExists':
+				return $this->ifResultExists($this->core->getSharedMemory(), $this->core->get('Global', 'notIfResultExists'), false);
+				break;
+			case 'ifResultExists':
+				return $this->ifResultExists($this->core->getSharedMemory(), $this->core->get('Global', 'ifResultExists'), true);
+				break;
+			case 'notIfEmptyResult':
+				return $this->ifNotEmptyResult($this->core->getSharedMemory(), $this->core->get('Global', 'notIfEmptyResult'), true);
+				break;
+			case 'ifEmptyResult':
+				return $this->ifNotEmptyResult($this->core->getSharedMemory(), $this->core->get('Global', 'ifResult'), false);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -33,10 +49,31 @@ class Condition extends Module
 		}
 	}
 
-	function ifesult(&$input, $parms, $match=true)
+	function ifResultExists(&$input, $parms, $match=true)
 	{
-		if (($input) == $match)
-		return $result;
+		if ((is_array($input)) == $match)
+		{
+			takeAction($input, $parms);
+		}
+		else return false
+	}
+
+	function ifNotEmptyResult(&$input, $parms, $match=true)
+	{
+		if ((is_array($input) and count($input)) == $match)
+		{
+			$keys=array_keys($intput);
+			if ($input[$keys[0]])
+			{
+				takeAction($input, $parms);
+			}
+		}
+		else return false
+	}
+	
+	function takeAction(&$input, $parms)
+	{
+		# TODO Kevin: Do this. It should trigger an event on the core.
 	}
 }
 
