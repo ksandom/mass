@@ -14,7 +14,7 @@ class Condition extends Module
 {
 	function __construct()
 	{
-		parent::__construct('Example');
+		parent::__construct('Condition');
 	}
 	
 	function event($event)
@@ -53,9 +53,9 @@ class Condition extends Module
 	{
 		if ((is_array($input)) == $match)
 		{
-			takeAction($input, $parms);
+			$this->takeAction($input, $parms);
 		}
-		else return false
+		else return false;
 	}
 
 	function ifNotEmptyResult(&$input, $parms, $match=true)
@@ -65,15 +65,17 @@ class Condition extends Module
 			$keys=array_keys($intput);
 			if ($input[$keys[0]])
 			{
-				takeAction($input, $parms);
+				$this->takeAction($input, $parms);
 			}
 		}
-		else return false
+		else return false;
 	}
 	
 	function takeAction(&$input, $parms)
 	{
 		# TODO Kevin: Do this. It should trigger an event on the core.
+		$parmParts=$this->core->splitOnceOn(' ', $parms);
+		return $this->core->triggerEvent($parmParts[0], $parmParts[1]);
 	}
 }
 

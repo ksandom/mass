@@ -160,6 +160,22 @@ class core extends Module
 		return false;
 	}
 	
+	function splitOnceOn($needle, $haystack)
+	{
+		echo "h='$haystack'";
+		if ($pos=strpos($haystack, $needle))
+		{
+			$first=substr($haystack, 0, $pos);
+			$remaining=substr($haystack, $pos+strlen($needle));
+			
+			echo "f='$first' r='$remaining'\n";
+			
+			return array($first, $remaining);
+		}
+		else return array($haystack, '');
+
+	}
+	
 	function processValue($value)
 	{ // Substitute in an variables
 		$output=$value;
