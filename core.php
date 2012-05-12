@@ -37,8 +37,9 @@ class core extends Module
 				$this->registerFeature($this, array('retrieveResults'), 'retrieveResults', 'Retrieve a result set that has been stored. This will replace the current result set with the retrieved one --retrieveResults=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('getPID'), 'getPID', 'Save the process ID to a variable. --getPID=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('setJson'), 'setJson', 'Take a json encoded array from jsonValue and store the arrary in moduleName'.valueSeparator.'variableName. --setJson=moduleName'.valueSeparator.'variableName'.valueSeparator.'jsonValue');
-				$this->registerFeature($this, array('dump'), 'dump', 'Dump internal state.');
-				$this->registerFeature($this, array('ping'), 'ping', 'Useful for debugging.');
+				$this->registerFeature($this, array('dump'), 'dump', 'Dump internal state.', array('debug', 'dev'));
+				$this->registerFeature($this, array('debug'), 'debug', 'Send parameters to stdout. --debug=debugLevel,outputText eg --debug=0,StuffToWriteOut . DebugLevel is not implemented yet, but 0 will be "always", and above that will only show as the verbosity level is incremented with -v or --verbose.', array('debug', 'dev'));
+				$this->registerFeature($this, array('ping'), 'ping', 'Useful for debugging.', array('debug', 'dev'));
 				$this->registerFeature($this, array('#'), '#', 'Comment.');
 				break;
 			case 'followup':
@@ -70,6 +71,12 @@ class core extends Module
 				break;
 			case 'dump':
 				return $this->dumpState();
+				break;
+			case 'debug':
+				$originalParms=$this->get('Global', 'debug');
+				$parms=$this->interpretParms($originalParms);
+				$this->requireNumParms($this, 2, $event, $originalParms, $parms);
+				$this->debug($parms[0], $parms[1]);
 				break;
 			case 'getPID':
 				$this->getPID($this->interpretParms($this->get('Global', 'getPID')));
@@ -212,6 +219,11 @@ class core extends Module
 	function debugSharedMemory($label='undefined')
 	{
 		echo "debugSharedMemory $label ".count($this->getSharedMemory())."\n";
+	}
+	
+	function debug($verbosityLevel, $output)
+	{
+		echo "[debug$verbosityLevel]: $output\n";
 	}
 	
 	function &go($macroName='default')
