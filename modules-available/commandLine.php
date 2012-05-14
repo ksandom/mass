@@ -119,7 +119,14 @@ class CommandLine extends Module
 		$this->store=$this->core->getStore();
 		
 		if ($tags) $this->showSpecificHelp($tags);
-		else $this->showAllHelp();
+		#else $this->showAllHelp();
+		else 
+		{
+			$this->showSpecificHelp('user');
+			$allTags=implode(', ', array_keys($this->store['Tags']));
+			echo "\n\nShowing taks for \"user\". \nAvailable tags: $allTags\n";
+		}
+
 	}
 	
 	function showSpecificHelp($tags)
@@ -147,9 +154,6 @@ class CommandLine extends Module
 		{
 			$this->displayHelpItem($name, $details);
 		}
-		
-		$allTags=implode(', ', array_keys($this->store['Tags']));
-		echo "\n\nAvailable tags: $allTags\n";
 	}
 	
 	function displayHelpItem($name, $details)
