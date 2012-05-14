@@ -41,7 +41,7 @@ class Condition extends Module
 				return $this->ifNotEmptyResult($this->core->getSharedMemory(), $this->core->get('Global', 'notIfEmptyResult'), true);
 				break;
 			case 'ifEmptyResult':
-				return $this->ifNotEmptyResult($this->core->getSharedMemory(), $this->core->get('Global', 'ifResult'), false);
+				return $this->ifNotEmptyResult($this->core->getSharedMemory(), $this->core->get('Global', 'ifEmptyResult'), false);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -60,21 +60,32 @@ class Condition extends Module
 
 	function ifNotEmptyResult(&$input, $parms, $match=true)
 	{
-		if ((is_array($input) and count($input)) == $match)
+		$matchValue=($match)?'true':'false';
+		
+		$matched=false;
+		
+		if (is_array($input) and count($input))
 		{
-			# TODO There is an error in the above logic with the below logic. Above may work, but the below needs to be appropriate to the input...
+			// This is to make sure that the first value is of significance. ie not empty.
 			$keys=array_keys($input);
-			if ($input[$keys[0]])
-			{
-				$this->takeAction($input, $parms);
-			}
+			if (($input[$keys[0]])) $matched=true;
 		}
-		else return false;
+		
+		if ($matched == $match) $result=$this->takeAction($input, $parms);
+		else $result=false;
+		
+		# TODO The problem is actually with the results getting lost between calls.
+		
+		if (is_bool($result)) echo "isbool\n";
+		if (is_null($result)) echo "isnull\n";
+		
+		print_r(array('input'=>$input, 'parms'=>$parms, 'match'=>$match, 'matched'=>$matched, 'result'=>$result));
+		
+		return $result;
 	}
 	
 	function takeAction(&$input, $parms)
 	{
-		# TODO Kevin: Do this. It should trigger an event on the core.
 		$parmParts=$this->core->splitOnceOn(' ', $parms);
 		return $this->core->triggerEvent($parmParts[0], $parmParts[1]);
 	}
