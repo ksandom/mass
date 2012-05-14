@@ -124,7 +124,7 @@ class CommandLine extends Module
 		{
 			$this->showSpecificHelp('user');
 			$allTags=implode(', ', array_keys($this->store['Tags']));
-			echo "\n\nShowing taks for \"user\". \nAvailable tags: $allTags\n";
+			echo "\n\nShowing tags for \"user\". \nAvailable tags: $allTags\n";
 		}
 
 	}
