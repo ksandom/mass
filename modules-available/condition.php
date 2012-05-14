@@ -62,7 +62,8 @@ class Condition extends Module
 	{
 		if ((is_array($input) and count($input)) == $match)
 		{
-			$keys=array_keys($intput);
+			# TODO There is an error in the above logic with the below logic. Above may work, but the below needs to be appropriate to the input...
+			$keys=array_keys($input);
 			if ($input[$keys[0]])
 			{
 				$this->takeAction($input, $parms);

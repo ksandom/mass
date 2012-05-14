@@ -134,11 +134,15 @@ class CommandLine extends Module
 		$tagsArray=$this->core->interpretParms($tags);
 		foreach ($tagsArray as $tag)
 		{
-			foreach ($this->store['Tags'][$tag] as $name)
+			if (isset($this->store['Tags'][$tag]))
 			{
-				$details=$this->store['Features'][$name];
-				$this->displayHelpItem($name, $details);
+				foreach ($this->store['Tags'][$tag] as $name)
+				{
+					$details=$this->store['Features'][$name];
+					$this->displayHelpItem($name, $details);
+				}
 			}
+			else $this->core->complain($this, "Couldn't find tag.", $tag);
 		}
 	}
 	

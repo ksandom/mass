@@ -169,13 +169,10 @@ class core extends Module
 	
 	function splitOnceOn($needle, $haystack)
 	{
-		echo "h='$haystack'";
 		if ($pos=strpos($haystack, $needle))
 		{
 			$first=substr($haystack, 0, $pos);
 			$remaining=substr($haystack, $pos+strlen($needle));
-			
-			echo "f='$first' r='$remaining'\n";
 			
 			return array($first, $remaining);
 		}
