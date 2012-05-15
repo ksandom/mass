@@ -121,10 +121,11 @@ class core extends Module
 		return $this->getFileList($path);
 	}
 	
-	function setSharedMemory(&$value)
+	function setSharedMemory(&$value, $src='unknown')
 	{
 		if ($value!=null and $value!==false)
 		{
+			$this->debugSharedMemory("setSharedMemory $src");
 			$nesting=$this->get('Core', 'nesting');
 			$this->setRef('Core', 'shared'.$nesting, $value);
 			return true;
@@ -135,6 +136,7 @@ class core extends Module
 	function &getSharedMemory()
 	{
 		$nesting=$this->get('Core', 'nesting');
+		echo "getSharedMemory $nesting/\n";
 		return $this->get('Core', 'shared'.$nesting);
 	}
 	
