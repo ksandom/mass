@@ -17,6 +17,7 @@ class core extends Module
 		$this->module=array();
 		
 		parent::__construct('Core');
+		$this->set('Core', 'serial', intval(rand()));
 		$this->registerModule(&$this);
 	}
 	
@@ -125,7 +126,8 @@ class core extends Module
 	{
 		if ($value!=null and $value!==false)
 		{
-			$this->debugSharedMemory("setSharedMemory $src");
+			$serial=$this->get('Core', 'serial');
+			$this->debugSharedMemory("setSharedMemory $src/$serial");
 			$nesting=$this->get('Core', 'nesting');
 			$this->setRef('Core', 'shared'.$nesting, $value);
 			return true;
@@ -136,21 +138,28 @@ class core extends Module
 	function &getSharedMemory()
 	{
 		$nesting=$this->get('Core', 'nesting');
-		echo "getSharedMemory $nesting/\n";
+		$serial=$this->get('Core', 'serial');
+		$sharedMemoryDiag=count($this->get('Core', 'shared'.$nesting));
+		echo "getSharedMemory $nesting/$sharedMemoryDiag/$serial\n";
+		#print_r($this->get('Core', 'shared'.$nesting));
 		return $this->get('Core', 'shared'.$nesting);
 	}
 	
 	function &getParentSharedMemory()
 	{
 		$nesting=$this->get('Core', 'nesting');
+		$serial=$this->get('Core', 'serial');
 		if ($nesting<1 or !is_numeric($nesting)) $nesting = 1; # TODO check this
 		$sharedMemory=&$this->get('Core', 'shared'.$nesting);
 		if (!is_array($sharedMemory)) $sharedMemory=array();
+		$sharedMemoryDiag=count($sharedMemory);
+		echo "getParentSharedMemory $nesting/$sharedMemoryDiag/$serial\n";
 		return $sharedMemory;
 	}
 	
 	function makeParentShareMemoryCurrent()
 	{
+		echo "makeParentShareMemoryCurrent/\n";
 		$this->setSharedMemory($this->getParentSharedMemory());
 	}
 	
