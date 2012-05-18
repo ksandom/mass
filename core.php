@@ -10,6 +10,7 @@ class core extends Module
 	private $store;
 	private $module;
 	private static $singleton;
+	private $verbosity=0;
 	
 	function __construct()
 	{
@@ -40,6 +41,7 @@ class core extends Module
 				$this->registerFeature($this, array('setJson'), 'setJson', 'Take a json encoded array from jsonValue and store the arrary in moduleName'.valueSeparator.'variableName. --setJson=moduleName'.valueSeparator.'variableName'.valueSeparator.'jsonValue');
 				$this->registerFeature($this, array('dump'), 'dump', 'Dump internal state.', array('debug', 'dev'));
 				$this->registerFeature($this, array('debug'), 'debug', 'Send parameters to stdout. --debug=debugLevel,outputText eg --debug=0,StuffToWriteOut . DebugLevel is not implemented yet, but 0 will be "always", and above that will only show as the verbosity level is incremented with -v or --verbose.', array('debug', 'dev'));
+				$this->registerFeature($this, array('verbose', 'v'), 'verbose', 'Increment/set the verbosity. --verbose[=verbosityLevel] where verbosityLevel is an integer starting from 0 (default)', array('debug', 'dev'));
 				$this->registerFeature($this, array('ping'), 'ping', 'Useful for debugging.', array('debug', 'dev'));
 				$this->registerFeature($this, array('#'), '#', 'Comment.');
 				break;
@@ -77,7 +79,11 @@ class core extends Module
 				$originalParms=$this->get('Global', 'debug');
 				$parms=$this->interpretParms($originalParms);
 				$this->requireNumParms($this, 2, $event, $originalParms, $parms);
-				$this->debug($parms[0], $parms[1]);
+				return $this->debug($parms[0], $parms[1]);
+				break;
+			case 'verbose':
+				$original=$this->get('Global', 'verbose');
+				$this->verbosity($original);
 				break;
 			case 'getPID':
 				$this->getPID($this->interpretParms($this->get('Global', 'getPID')));
@@ -124,10 +130,15 @@ class core extends Module
 	
 	function setSharedMemory(&$value, $src='unknown')
 	{
-		if ($value!=null and $value!==false)
+		$this->debug(5, "bbbbba $value");
+		if (is_array($value)) # ($value!=null and $value!==false)
 		{
-			$serial=$this->get('Core', 'serial');
-			$this->debugSharedMemory("setSharedMemory $src/$serial");
+			if ($this->isVerboseEnough(5))
+			{
+				$this->debug(5, "bbbbba--- ");
+				$serial=$this->get('Core', 'serial');
+				$this->debugSharedMemory("setSharedMemory $src/$serial");
+			}
 			$nesting=$this->get('Core', 'nesting');
 			$this->setRef('Core', 'shared'.$nesting, $value);
 			return true;
@@ -138,28 +149,34 @@ class core extends Module
 	function &getSharedMemory()
 	{
 		$nesting=$this->get('Core', 'nesting');
-		$serial=$this->get('Core', 'serial');
 		$sharedMemoryDiag=count($this->get('Core', 'shared'.$nesting));
-		echo "getSharedMemory $nesting/$sharedMemoryDiag/$serial\n";
-		#print_r($this->get('Core', 'shared'.$nesting));
+		if ($this->isVerboseEnough(5))
+		{
+			$serial=$this->get('Core', 'serial');
+			echo "getSharedMemory $nesting/$sharedMemoryDiag/$serial\n";
+			#print_r($this->get('Core', 'shared'.$nesting));
+		}
 		return $this->get('Core', 'shared'.$nesting);
 	}
 	
 	function &getParentSharedMemory()
 	{
 		$nesting=$this->get('Core', 'nesting');
-		$serial=$this->get('Core', 'serial');
 		if ($nesting<1 or !is_numeric($nesting)) $nesting = 1; # TODO check this
 		$sharedMemory=&$this->get('Core', 'shared'.$nesting);
 		if (!is_array($sharedMemory)) $sharedMemory=array();
-		$sharedMemoryDiag=count($sharedMemory);
-		echo "getParentSharedMemory $nesting/$sharedMemoryDiag/$serial\n";
+		if ($this->isVerboseEnough(5))
+		{
+			$serial=$this->get('Core', 'serial');
+			$sharedMemoryDiag=count($sharedMemory);
+			echo "getParentSharedMemory $nesting/$sharedMemoryDiag/$serial\n";
+		}
 		return $sharedMemory;
 	}
 	
 	function makeParentShareMemoryCurrent()
 	{
-		echo "makeParentShareMemoryCurrent/\n";
+		$this->debug(5, "makeParentShareMemoryCurrent/");
 		$this->setSharedMemory($this->getParentSharedMemory());
 	}
 	
@@ -231,7 +248,25 @@ class core extends Module
 	
 	function debug($verbosityLevel, $output)
 	{
-		echo "[debug$verbosityLevel]: $output\n";
+		if ($this->isVerboseEnough($verbosityLevel))
+		{
+			echo "[debug$verbosityLevel]: $output\n";
+			# return false;
+		}
+	}
+	
+	function isVerboseEnough($verbosityLevel=0)
+	{
+		return ($this->verbosity >= $verbosityLevel);
+	}
+	
+	function verbosity($level=0)
+	{
+		if (is_numeric($level)) $newlevel=intval($level);
+		else
+		{
+			$this->verbosity=$this->verbosity+1;
+		}
 	}
 	
 	function &go($macroName='default')
@@ -251,8 +286,12 @@ class core extends Module
 				# Iterate through the actions to be taken
 				foreach ($this->store['Macros'][$macroName] as $actionItem)
 				{
+					# TODO debugging looks like this isn't the problem, yet I think it is
+					$this->debug(5, "aaaa0 ".count($this->getSharedMemory()));
 					$returnedValue=$this->triggerEvent($actionItem['name'], $actionItem['value']);
+					$this->debug(5, "aaaaa ".count($this->getSharedMemory()));
 					$this->setSharedMemory($returnedValue);
+					$this->debug(5, "aaaab ".count($this->getSharedMemory()));
 					#echo "$macroName\n";
 					#print_r($returnedValue);
 				}
@@ -301,6 +340,7 @@ class core extends Module
 	
 	function &get($moduleName, $valueName)
 	{
+		$this->debug(5,"get($moduleName, $valueName)");
 		#print_r($this->store);
 		#echo "m=$moduleName, v=$valueName\n";
 		if (isset($this->store[$moduleName]))
@@ -320,6 +360,7 @@ class core extends Module
 	
 	function set($moduleName, $valueName, $args)
 	{ // set a variable for a module
+		$this->debug(5,"set($moduleName, $valueName, $args)");
 		if (!isset($this->store[$moduleName])) $this->store[$moduleName]=array();
 		
 		$this->store[$moduleName][$valueName]=$args;
@@ -327,6 +368,8 @@ class core extends Module
 
 	function setRef($moduleName, $valueName, &$args)
 	{ // set a variable for a module
+		$argString=(is_string($args))?$argString:'[non-string]';
+		$this->debug(5,"setRef($moduleName, $valueName, $argString)");
 		if (!isset($this->store[$moduleName])) $this->store[$moduleName]=array();
 		
 		$this->store[$moduleName][$valueName]=&$args;
@@ -334,6 +377,7 @@ class core extends Module
 	
 	function getStore()
 	{ # Note that this returns a COPY of the store. It is not intended as a way of modifying the store.
+		$this->debug(5,"getStore()");
 		return $this->store;
 	}
 

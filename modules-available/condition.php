@@ -58,7 +58,7 @@ class Condition extends Module
 		else return false;
 	}
 
-	function ifNotEmptyResult(&$input, $parms, $match=true)
+	function ifNotEmptyResult($input, $parms, $match=true)
 	{
 		$matchValue=($match)?'true':'false';
 		
@@ -71,20 +71,27 @@ class Condition extends Module
 			if (($input[$keys[0]])) $matched=true;
 		}
 		
-		if ($matched == $match) $result=$this->takeAction($input, $parms);
+		if ($matched == $match) $result=$this->takeAction($parms);
 		else $result=false;
 		
 		# TODO The problem is actually with the results getting lost between calls.
 		
-		if (is_bool($result)) echo "isbool\n";
-		if (is_null($result)) echo "isnull\n";
-		
-		print_r(array('input'=>$input, 'parms'=>$parms, 'match'=>$match, 'matched'=>$matched, 'result'=>$result));
+		if ($this->core->isVerboseEnough(5))
+		{
+			if (is_bool($result)) echo "isbool\n";
+			if (is_null($result)) echo "isnull\n";
+			if (is_array($result)) echo "isarray\n";
+			
+			print_r(array('input'=>$input, 'parms'=>$parms, 'match'=>$match, 'matched'=>$matched, 'result'=>$result));
+			
+			if (is_array($result)) echo "result isarray\n";
+			else echo "result isnotarray\n";
+		}
 		
 		return $result;
 	}
 	
-	function takeAction(&$input, $parms)
+	function takeAction($parms)
 	{
 		$parmParts=$this->core->splitOnceOn(' ', $parms);
 		return $this->core->triggerEvent($parmParts[0], $parmParts[1]);
