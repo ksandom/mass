@@ -27,7 +27,8 @@ class Hosts extends Module
 				
 				$this->core->set('Hosts', 'hostDefinitions', $allHostDefinitions);
 				
-				$this->core->registerFeature($this, array('l', 'list'), 'list', 'List/Search host entries.');
+				$this->core->registerFeature($this, array('l', 'list'), 'list', 'List/Search host entries.', array('user'));
+				$this->core->registerFeature($this, array('importFromHostsFile'), 'importFromHostsFile', 'Import host entries from a hosts file.', array('import'));
 				break;
 			case 'followup':
 				break;
@@ -35,6 +36,9 @@ class Hosts extends Module
 				break;
 			case 'list':
 				return $this->listHosts();
+				break;
+			case 'importFromHostsFile':
+				return $this->importFromHostsFile();
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -86,7 +90,37 @@ class Hosts extends Module
 		
 		return $output;
 	}
-
+	
+	
+	
+	function importFromHostsFile()
+	{
+		if (file_exists('/etc/hosts'))
+		{
+			if ($contents=file_get_contents('/etc/hosts')) return $this->processHostsFile($contents);
+			else $this->core->complain($this, "Didn't get any contents from /etc/hosts. Permissions?");
+		}
+		else $this->core->complain($this, "Could not find /etc/hosts. Are you on a real computer?");
+	}
+	
+	function processHostsFile($fileContents)
+	{
+		# TODO make this work for more types of host file
+		/*
+			This is a first stab at reading the hosts file. Feel free to add your own situations, but please keep it generic enough that it doesn't break the common situations.
+		*/
+		
+		$output=array();
+		$lines=explode("\n", $fileContents);
+		foreach ($lines as $line)
+		{
+			$lineOutput=array();
+			$lineOutput['originalLine']=$line;
+			$output[]=$lineOutput;
+		}
+		
+		return $output;
+	}
 }
 
 $core=core::assert();

@@ -71,21 +71,29 @@ class Condition extends Module
 			if (($input[$keys[0]])) $matched=true;
 		}
 		
+		/*
+			The problem:
+				The non-return of a result is replacing a legitimate result. ie when one if condition runs, the dataset isn't available to the second condition.
+				
+				I can hack around the problem by returning the input with the appropriate failure here, but the problem is not here and should not be solved here. It's somewhere around something calling this.
+		*/
 		if ($matched == $match) $result=$this->takeAction($parms);
-		else $result=false;
+		# TODO device if this should stay or not once the problem is solved.
+		else $result=$input;
+		#else $result=false;
 		
 		# TODO The problem is actually with the results getting lost between calls.
 		
 		if ($this->core->isVerboseEnough(5))
 		{
-			if (is_bool($result)) echo "isbool\n";
-			if (is_null($result)) echo "isnull\n";
-			if (is_array($result)) echo "isarray\n";
+			if (is_bool($input)) $inputType="isbool";
+			if (is_null($input)) $inputType="isnull";
+			if (is_array($input)) $inputType="isarray";
+			if (is_array($input)) $resultType="isarray";
+			else $resultType="isnotarray";
 			
-			print_r(array('input'=>$input, 'parms'=>$parms, 'match'=>$match, 'matched'=>$matched, 'result'=>$result));
+			print_r(array('inputType'=>$inputType, 'input'=>$input, 'parms'=>$parms, 'match'=>$match, 'matched'=>$matched, 'resultType'=>$resultType, 'result'=>$result));
 			
-			if (is_array($result)) echo "result isarray\n";
-			else echo "result isnotarray\n";
 		}
 		
 		return $result;
