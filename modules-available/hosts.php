@@ -114,9 +114,25 @@ class Hosts extends Module
 		$lines=explode("\n", $fileContents);
 		foreach ($lines as $line)
 		{
-			$lineOutput=array();
-			$lineOutput['originalLine']=$line;
-			$output[]=$lineOutput;
+			$trimmedLine=trim($line);
+			if ($trimmedLine)
+			{
+				if (substr($trimmedLine,0, 1)!='#')
+				{
+					$lineOutput=array();
+					# TODO one of the ranges of regex functions is deprecated. Check this isn't one.
+					$line=preg_replace('/\ +/', "\t", $line);
+					
+					$parts=explode("\t", $line);
+					
+					$lineOutput['ip']=$parts[0];
+					$lineOutput['hostname']=$parts[1];
+					
+					# TODO remove this when finished
+					$lineOutput['originalLine']=$line;
+					$output[]=$lineOutput;
+				}
+			}
 		}
 		
 		return $output;
