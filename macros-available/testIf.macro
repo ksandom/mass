@@ -1,0 +1,5 @@
+# Test the if features ~ test
+
+list master-ae1c
+ifResult debug 0,whee
+notIfResult debug 0,woooo
