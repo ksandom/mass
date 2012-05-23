@@ -142,7 +142,7 @@ class Hosts extends Module
 						{
 							if (!(isset($lineOutput['hostnameMap'][$parts[$i]])) and $parts[$i]!=$lineOutput['hostname'] and (trim($parts[$i])))
 							{
-								$lineOutput['hostnameMap'][$parts[$i]]=true;
+								$lineOutput['hostnameMap'][$parts[$i]]=$parts[$i];
 								$lineOutput['hostnameCount']++;
 								$lineOutput['hostname'.$lineOutput['hostnameCount']]=$parts[$i];
 							}
