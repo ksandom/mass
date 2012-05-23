@@ -119,18 +119,37 @@ class Hosts extends Module
 			{
 				if (substr($trimmedLine,0, 1)!='#')
 				{
-					$lineOutput=array();
 					# TODO one of the ranges of regex functions is deprecated. Check this isn't one.
 					$line=preg_replace('/\ +/', "\t", $line);
+					$line=preg_replace('/\#.*$/', "\t", $line);
 					
 					$parts=explode("\t", $line);
-					
-					$lineOutput['ip']=$parts[0];
-					$lineOutput['hostname']=$parts[1];
-					
-					# TODO remove this when finished
-					$lineOutput['originalLine']=$line;
-					$output[]=$lineOutput;
+					$numberOfParts=count($parts);
+					if ($numberOfParts>1)
+					{
+						$lineOutput=(isset($output[$parts[1]]))?$output[$parts[1]]:array();
+						if (!isset($lineOutput['hostnameMap']))
+						{
+							$lineOutput['hostnameMap']=array();
+							$lineOutput['hostnameCount']=0;
+						}
+						
+						$ipKey=(strpos($parts[0], '.'))?'internalIP':'internalIPv6';
+						$lineOutput[$ipKey]=$parts[0];
+						$lineOutput['hostname']=$parts[1];
+						
+						for ($i=0; $i<$numberOfParts; $i++)
+						{
+							if (!(isset($lineOutput['hostnameMap'][$parts[$i]])))
+							{
+								$lineOutput['hostnameMap'][$parts[$i]]=true;
+								$lineOutput['hostnameCount']++;
+								$lineOutput['hostname'.$lineOutput['hostnameCount']]=$parts[$i];
+							}
+						}
+						
+						$output[$lineOutput['hostname']]=$lineOutput;
+					}
 				}
 			}
 		}
