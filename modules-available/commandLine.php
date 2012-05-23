@@ -185,14 +185,13 @@ class CommandLine extends Module
 		}
 		else
 		{
+			$derivedPrefix=($prefix or is_numeric($prefix))?"$prefix: ":'';
 			if (is_string($output)) 
 			{
-				$derivedPrefix=($prefix or is_numeric($prefix))?"$prefix: ":'';
 				echo "$indent$derivedPrefix$output\n";
 			}
 			elseif (is_array($output))
 			{
-				$derivedPrefix=($prefix!==false)?"$prefix: ":'';
 				echo "$indent$derivedPrefix\n";
 				foreach ($output as $key=>$value)
 				{
@@ -203,18 +202,15 @@ class CommandLine extends Module
 			{
 				if ($prefix)
 				{
-					$derivedPrefix=($prefix!==false)?"$prefix: ":'';
 					echo "$indent{$derivedPrefix}NULL\n";
 				}
 			}
 			elseif (is_numeric($output))
 			{
-				$derivedPrefix=($prefix!==false)?"$prefix: ":'';
 				echo "$indent{$derivedPrefix}$output\n";
 			}
 			elseif (is_bool($output))
 			{
-				$derivedPrefix=($prefix!==false)?"$prefix: ":'';
 				$display=($output)?'True':'False';
 				echo "$indent{$derivedPrefix}$display\n";
 			}
