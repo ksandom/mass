@@ -207,6 +207,17 @@ class CommandLine extends Module
 					echo "$indent{$derivedPrefix}NULL\n";
 				}
 			}
+			elseif (is_numeric($output))
+			{
+				$derivedPrefix=($prefix!==false)?"$prefix: ":'';
+				echo "$indent{$derivedPrefix}$output\n";
+			}
+			elseif (is_bool($output))
+			{
+				$derivedPrefix=($prefix!==false)?"$prefix: ":'';
+				$display=($output)?'True':'False';
+				echo "$indent{$derivedPrefix}$display\n";
+			}
 			else
 			{
 				echo "$indent{$prefix}: I can't display this data type yet.\n";
