@@ -1,0 +1,7 @@
+# Open a terminal to every host in the results ~ terminal,user
+
+list ~!Global,term!~
+# TODO Add a store variable equiv of --chooseFirst
+
+toString ~!Terminal,GUICMD!~
+exec
