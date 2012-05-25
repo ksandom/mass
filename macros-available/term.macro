@@ -1,5 +1,4 @@
 # Open a terminal to every host in the results with inline syntax. NOTE This will replace --term when it's finished ~ terminal,user
 
-
 toString ~!Terminal,GUICMD!~
 exec
