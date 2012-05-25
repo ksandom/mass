@@ -1,11 +1,5 @@
 # Open a terminal to every host in the results with inline syntax. NOTE This will replace --term when it's finished ~ terminal,user
 
-resultSet cmd,~!Global,stray!~
-addSlashes cmd,cmd
-
-
-# the internalIP will work if we are connected to a VPN
-chooseFirst IP,externalIP,internalIP
 
 toString ~!Terminal,GUICMD!~
 exec

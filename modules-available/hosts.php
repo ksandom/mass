@@ -27,14 +27,14 @@ class Hosts extends Module
 				
 				$this->core->set('Hosts', 'hostDefinitions', $allHostDefinitions);
 				
-				$this->core->registerFeature($this, array('l', 'list'), 'list', 'List/Search host entries.', array('user'));
+				$this->core->registerFeature($this, array('searchOld'), 'searchOld', 'Deprecated. List/Search host entries. ', array('user', 'deprecated'));
 				$this->core->registerFeature($this, array('importFromHostsFile'), 'importFromHostsFile', 'Import host entries from a hosts file.', array('import'));
 				break;
 			case 'followup':
 				break;
 			case 'last':
 				break;
-			case 'list':
+			case 'searchOld':
 				return $this->listHosts();
 				break;
 			case 'importFromHostsFile':
@@ -65,7 +65,7 @@ class Hosts extends Module
 	{
 		$output=array();
 		
-		$search=$this->core->get('Global', 'list');
+		$search=$this->core->get('Global', 'searchOld');
 		$allHostDefinitions=$this->core->get('Hosts', 'hostDefinitions');
 		foreach ($allHostDefinitions as $filename=>$fileDetails)
 		{
