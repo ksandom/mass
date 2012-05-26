@@ -32,7 +32,7 @@ class Template extends Module
 				break;
 			case 'template':
 				#$this->core->setRef('General', 'outputObject', $this);
-				return array($this->processTemplateByName($this->core->get('Global', 'template')));
+				return array($this->processTemplateByName($this->core->get('Global', 'template'), $this->core->getSharedMemory()));
 				break;
 			case 'templateOut':
 				$this->core->setRef('General', 'outputObject', $this);
@@ -86,7 +86,7 @@ class Template extends Module
 			$macroCode='';
 			$outputTemplate=substr($macro, 1);
 			
-			$result=($input)?$input:$this->core->getSharedMemory();
+			$result=$input;
 		}
 		else
 		{ // Traditional embedded macro
