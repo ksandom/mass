@@ -112,15 +112,19 @@ class Template extends Module
 	function insertResultIntoTemplate($input, $template)
 	{
 		$output='';
-		foreach ($input as $inputLine)
+		if ($input)
 		{
-			$templateLine=$template;
-			foreach ($inputLine as $lineKey=>$lineValue)
+			foreach ($input as $inputLine)
 			{
-				$templateLine=implode(strval($lineValue), explode("%$lineKey%", $templateLine));
+				$templateLine=$template;
+				foreach ($inputLine as $lineKey=>$lineValue)
+				{
+					$templateLine=implode(strval($lineValue), explode("%$lineKey%", $templateLine));
+				}
+				$output.=$templateLine;
 			}
-			$output.=$templateLine;
 		}
+		else $output=$input;
 		return $output;
 	}
 	
