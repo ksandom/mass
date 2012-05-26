@@ -1,14 +1,7 @@
 # Open a screen terminal to every host in the results ~ terminal,user
 
 getPID Global,PID
-list ~!Global,screen!~
-chooseFirst IP,externalIP,internalIP
 
-# the internalIP will work if we are connected to a VPN
-chooseFirst IP,externalIP,internalIP
-stashResults Screen,sourcelist
-
-# TODO make sure template is recieving input correctly
 template screen
 singleStringNow /tmp/mass-~!Global,PID!~.screen
 
