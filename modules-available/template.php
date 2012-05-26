@@ -4,12 +4,15 @@
 # Takes a template and outputs stuff based on queries within the template
 
 define ('templateMacroBegin', '<~');
+define ('templateOnlyBegin', '<~~');
 define ('templateMacroEnd', '~>');
 define ('templateMacroTransition', '~~');
 
 
 class Template extends Module
 {
+	private $templateOut=false;
+	
 	function __construct()
 	{
 		parent::__construct('Template');
@@ -20,7 +23,8 @@ class Template extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('template'), 'template', 'Specify a file to use as a template.');
+				$this->core->registerFeature($this, array('template'), 'template', 'Specify a templte to use to display the output. This will replace the result with an array containing a single string. --template=templateName . eg --template=screen');
+				$this->core->registerFeature($this, array('templateOut'), 'templateOut', 'Use a template to display the output before '.programName.' terminates. --templateOut=templateName . eg --templateOut=screen');
 				break;
 			case 'followup':
 				break;
@@ -30,21 +34,25 @@ class Template extends Module
 				#$this->core->setRef('General', 'outputObject', $this);
 				return array($this->processTemplateByName($this->core->get('Global', 'template')));
 				break;
+			case 'templateOut':
+				$this->core->setRef('General', 'outputObject', $this);
+				$this->templateOut=$this->core->get('Global', 'templateOut');
+				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
 				break;
 		}
 	}
 
-	function processTemplateByName($name)
+	function processTemplateByName($name, $input=false)
 	{
 		$templateDir=$this->core->get('General', 'configDir').'/templates-enabled';
 		$derivedTemplateName="$templateDir/$name.template";
 		$templateFile=(file_exists($derivedTemplateName))?$derivedTemplateName:$name;
-		return $this->processTemplate($templateFile);
+		return $this->processTemplate($templateFile, $input);
 	}
 	
-	function processTemplate($fileName)
+	function processTemplate($fileName, $input=false)
 	{
 		if (file_exists($fileName))
 		{
@@ -52,7 +60,7 @@ class Template extends Module
 			
 			while (strpos($contents, templateMacroBegin)!==false)
 			{
-				$contents=$this->findAndRunMacro($contents);
+				$contents=$this->findAndRunMacro($contents, $input);
 			}
 			
 			return $contents;
@@ -60,9 +68,10 @@ class Template extends Module
 		else $this->core->complain($this, "Could not find file $fileName");
 	}
 	
-	function findAndRunMacro($contents)
+	function findAndRunMacro($contents, $input=false)
 	{
 		$begin=strpos($contents, templateMacroBegin);
+		$beginTemplateOnly=strpos($contents, templateOnlyBegin);
 		$end=strpos($contents, templateMacroEnd);
 		$transition=strpos($contents, templateMacroTransition);
 		
@@ -72,21 +81,27 @@ class Template extends Module
 		$macroLength=$end-$begin-strlen(templateMacroBegin)-strlen(templateMacroEnd);
 		$macro=substr($contents, $begin+strlen(templateMacroBegin)+1, $macroLength);
 		
-		$parts=explode(templateMacroTransition, $macro);
+		if ($begin==$beginTemplateOnly)
+		{ // Just take input from the resultset
+			$macroCode='';
+			$outputTemplate=substr($macro, 1);
+			
+			$result=($input)?$input:$this->core->getSharedMemory();
+		}
+		else
+		{ // Traditional embedded macro
+			$parts=explode(templateMacroTransition, $macro);
+			
+			$macroCode=$parts[0];
+			$outputTemplate=$parts[1];
+			
+			$argumentTerminatorPos=strpos($macroCode, ' ');
+			$argument=substr($macroCode, 0, $argumentTerminatorPos);
+			$value=substr($macroCode, $argumentTerminatorPos+1);
+			
+			$result=$this->core->triggerEvent($argument, $value);
+		}
 		
-		$macroCode=$parts[0];
-		$outputTemplate=$parts[1];
-		
-		$argumentTerminatorPos=strpos($macroCode, ' ');
-		$argument=substr($macroCode, 0, $argumentTerminatorPos);
-		$value=substr($macroCode, $argumentTerminatorPos+1);
-		
-		#echo "blah1\n";
-		#print_r($this->core->getSharedMemory());
-		#$this->core->makeParentShareMemoryCurrent();
-		#print_r($this->core->getSharedMemory());
-		#echo "blah2\n";
-		$result=$this->core->triggerEvent($argument, $value);
 		$finalResult=$this->insertResultIntoTemplate($result, $outputTemplate);
 		
 		$contents=$before.$finalResult.$after;
@@ -111,7 +126,11 @@ class Template extends Module
 	
 	function out($output)
 	{
-		echo "template. This module isn't designed to be used this way. So if you reading this, something went wrong. Here's the output: $output";
+		if (is_string($output)) echo "template: Unexpected string=\"$output\"\n";
+		else
+		{
+			echo $this->processTemplateByName($this->templateOut, $output);
+		}
 	}
 }
 
