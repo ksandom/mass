@@ -212,7 +212,7 @@ class core extends Module
 	{ // Substitute in an variables
 		$output=$value;
 		
-		while (strpos($output, '~!')!==false)
+		while (strpos($output, storeValueBegin)!==false)
 		{
 			$startPos=strpos($output, storeValueBegin)+2;
 			$endPos=strpos($output, storeValueEnd);
