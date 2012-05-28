@@ -8,9 +8,9 @@ chooseFirst IP,externalIP,internalIP
 stashResults Download,sourcelist
 
 retrieveResults Download,sourcelist
-toString mkdir -p %externalFQDN%
+toString mkdir -p ~%externalFQDN%~
 exec
 
 retrieveResults Download,sourcelist
-toString scp -r %IP%:~!Global,download-1!~ %externalFQDN%
+toString scp -r %IP%:~!Global,download-1!~ ~%externalFQDN%~
 exec

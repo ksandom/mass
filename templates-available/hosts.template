@@ -2,12 +2,12 @@
 <~ macro generateInternalHosts:
 retrieveResults Hosts,sourcelist
 requireEntry internalIP
-~~%internalIP%	%hostName% %internalFQDN%
+~~~%internalIP%~	~%hostName%~ ~%internalFQDN%~
 
 ~>
 <~ macro generateExternalHosts:
 retrieveResults Hosts,sourcelist
 requireEntry externalIP
-~~%externalIP%	%hostName% %externalFQDN%
+~~~%externalIP%~	~%hostName%~ ~%externalFQDN%~
 
 ~>

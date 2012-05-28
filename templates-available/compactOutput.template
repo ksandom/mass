@@ -1,0 +1,7 @@
+Found hosts
+
+<~~ ~%categoryName%~/~%hostName%~ - Using ~%IP%~
+	external:	~%externalFQDN%~ (~%externalIP%~)
+	internal:	~%internalFQDN%~ (~%internalIP%~)
+
+~>
