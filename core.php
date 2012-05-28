@@ -5,6 +5,9 @@ define('valueSeparator', ',');
 define('storeValueBegin', '~!');
 define('storeValueEnd', '!~');
 
+define('resultVarBegin', '~%');
+define('resultVarEnd', '%~');
+
 class core extends Module
 {
 	private $store;
@@ -34,6 +37,7 @@ class core extends Module
 			case 'init':
 				$this->registerFeature($this, array('registerTags'), 'registerTags', 'Register tags to a feature. --registerTags=featureName'.valueSeparator.'tag1['.valueSeparator.'tag2['.valueSeparator.'tag3'.valueSeparator.'...]]');
 				$this->registerFeature($this, array('get'), 'get', 'Get a value. --get=moduleName'.valueSeparator.'variableName', array('storeVars'));
+				$this->registerFeature($this, array('getToResult'), 'getToResult', 'Get a value and put it in an array so we can do stuff with it. --getToResult=moduleName'.valueSeparator.'variableName', array('storeVars'));
 				$this->registerFeature($this, array('set'), 'set', 'set a value. --set=moduleName'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
 				$this->registerFeature($this, array('setIfNotSet', 'setDefault'), 'setIfNotSet', 'set a value if none has been set. --setIfNotSet=moduleName'.valueSeparator.'variableName'.valueSeparator.'defaultValue', array('storeVars'));
 				$this->registerFeature($this, array('stashResults'), 'stashResults', 'Put the current result set into a memory slot. --stashResults=moduleName'.valueSeparator.'variableName');
@@ -50,9 +54,13 @@ class core extends Module
 				break;
 			case 'last':
 				break;
-			case 'get':
+			case 'get': # TODO Is this still useful?
 				$parms=$this->interpretParms($this->get('Global', 'get'));
 				return $this->get($parms[0], $parms[1]);
+				break;
+			case 'getToResult':
+				$parms=$this->interpretParms($this->get('Global', 'getToResult'));
+				return array($this->get($parms[0], $parms[1]));
 				break;
 			case 'set':
 				$parms=$this->interpretParms($this->get('Global', 'set'));

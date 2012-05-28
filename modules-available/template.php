@@ -8,10 +8,6 @@ define ('templateOnlyBegin', '<~~');
 define ('templateMacroEnd', '~>');
 define ('templateMacroTransition', '~~');
 
-define('resultVarBegin', '~%');
-define('resultVarEnd', '%~');
-
-
 class Template extends Module
 {
 	private $templateOut=false;

@@ -1,9 +1,6 @@
 <?php
 # Copyright (c) 2012, Kevin Sandom under the BSD License. See LICENSE for full details.
 
-define('resultVarBegin', '~%');
-define('resultVarEnd', '%~');
-
 # Manipulate output
 class Manipulator extends Module
 {
