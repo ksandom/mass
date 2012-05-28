@@ -33,8 +33,9 @@ class core extends Module
 		{
 			case 'init':
 				$this->registerFeature($this, array('registerTags'), 'registerTags', 'Register tags to a feature. --registerTags=featureName'.valueSeparator.'tag1['.valueSeparator.'tag2['.valueSeparator.'tag3'.valueSeparator.'...]]');
-				$this->registerFeature($this, array('get'), 'get', 'Get a value. --get=moduleName'.valueSeparator.'variableName');
-				$this->registerFeature($this, array('set'), 'set', 'set a value. --set=moduleName'.valueSeparator.'variableName'.valueSeparator.'value');
+				$this->registerFeature($this, array('get'), 'get', 'Get a value. --get=moduleName'.valueSeparator.'variableName', array('storeVars'));
+				$this->registerFeature($this, array('set'), 'set', 'set a value. --set=moduleName'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
+				$this->registerFeature($this, array('setIfNotSet', 'setDefault'), 'setIfNotSet', 'set a value if none has been set. --setIfNotSet=moduleName'.valueSeparator.'variableName'.valueSeparator.'defaultValue', array('storeVars'));
 				$this->registerFeature($this, array('stashResults'), 'stashResults', 'Put the current result set into a memory slot. --stashResults=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('retrieveResults'), 'retrieveResults', 'Retrieve a result set that has been stored. This will replace the current result set with the retrieved one --retrieveResults=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('getPID'), 'getPID', 'Save the process ID to a variable. --getPID=moduleName'.valueSeparator.'variableName');
@@ -57,8 +58,16 @@ class core extends Module
 				$parms=$this->interpretParms($this->get('Global', 'set'));
 				$this->set($parms[0], $parms[1], $parms[2]);
 				break;
+			case 'setIfNotSet':
+				$originalParms=$this->get('Global', 'stashResults');
+				$parms=$this->interpretParms($originalParms);
+				$this->requireNumParms($this, 2, $event, $originalParms, $parms);
+				$this->setIfNotSet($parms[0], $parms[1], $parms[2]);
+				break;
 			case 'stashResults':
-				$parms=$this->interpretParms($this->get('Global', 'stashResults'));
+				$originalParms=$this->get('Global', 'stashResults');
+				$parms=$this->interpretParms($originalParms);
+				$this->requireNumParms($this, 2, $event, $originalParms, $parms);
 				$this->set($parms[0], $parms[1], $this->core->getSharedMemory());
 				break;
 			case 'retrieveResults':
@@ -356,6 +365,15 @@ class core extends Module
 		}
 		
 		return $result;
+	}
+	
+	function setIfNotSet($moduleName, $valueName, $value)
+	{
+		$shouldSet=false;
+		if (!isset($this->store[$moduleName])) $shouldSet=true;
+		elseif (!isset($this->store[$moduleName][$valueName])) $shouldSet=true;
+		
+		if ($shouldSet) $this->set($moduleName, $valueName, $value);
 	}
 	
 	function set($moduleName, $valueName, $args)
