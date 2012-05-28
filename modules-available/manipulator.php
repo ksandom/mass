@@ -1,8 +1,10 @@
 <?php
 # Copyright (c) 2012, Kevin Sandom under the BSD License. See LICENSE for full details.
 
-# Manipulate output
+define('resultVarBegin', '~%');
+define('resultVarEnd', '%~');
 
+# Manipulate output
 class Manipulator extends Module
 {
 	private $dataDir=null;
@@ -77,13 +79,13 @@ class Manipulator extends Module
 				$outputLine=$this->core->processValue($template);
 				foreach ($line as $key=>$value)
 				{
-					$outputLine=$this->replace($outputLine, "%$key%", $value);
+					$outputLine=$this->replace($outputLine, resultVarBegin."$key".resultVarEnd, $value);
 				}
 				$output[]=$outputLine;
 			}
 			else
 			{
-				$output[]=$this->replace($this->core->processValue($template), '%value%', $line);
+				$output[]=$this->replace($this->core->processValue($template), resultVarBegin.'value'.resultVarEnd, $line);
 			}
 		}
 		

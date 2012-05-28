@@ -8,6 +8,9 @@ define ('templateOnlyBegin', '<~~');
 define ('templateMacroEnd', '~>');
 define ('templateMacroTransition', '~~');
 
+define('resultVarBegin', '~%');
+define('resultVarEnd', '%~');
+
 
 class Template extends Module
 {
@@ -119,7 +122,7 @@ class Template extends Module
 				$templateLine=$template;
 				foreach ($inputLine as $lineKey=>$lineValue)
 				{
-					$templateLine=implode(strval($lineValue), explode("%$lineKey%", $templateLine));
+					$templateLine=implode(strval($lineValue), explode(resultVarBegin."$lineKey".resultVarEnd, $templateLine));
 				}
 				$output.=$templateLine;
 			}
