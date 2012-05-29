@@ -8,6 +8,22 @@ define('storeValueEnd', '!~');
 define('resultVarBegin', '~%');
 define('resultVarEnd', '%~');
 
+define('resultVarsDefaultMaxRecusion', 50); // Prevent a stack overflow. We could go many times deeper than this, but if we get this far, sompething is very likely wrong.
+define('resultVarsDefaultRecusionWarn', 25); // If we get to this many (arbitrary) levels of recusion, something is probably wrong
+define('resultVarsDefaultWarnDebugLevel', 2);
+define('resultVarsDefaultSevereDebugLevel', 1);
+
+
+/*
+	Debug levele
+		0 Default - Don't use this normally
+		1 Important
+		2 Warning
+		3 Good to know
+		4 
+		5 Mother in law
+*/
+
 class core extends Module
 {
 	private $store;
@@ -241,6 +257,17 @@ class core extends Module
 			$output=implode($varValue, explode(storeValueBegin.$varDef.storeValueEnd, $output));
 		}
 		
+		return $output;
+	}
+	
+	function processSingleResult($input)
+	{
+		for ($i=0;$i<50;$i++)
+		{
+			
+			
+			# iterate through array
+		}
 		return $output;
 	}
 	
