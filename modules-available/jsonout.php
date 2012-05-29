@@ -23,6 +23,7 @@ class JsonOut extends Module
 				break;
 			case 'json':
 				$this->core->setRef('General', 'outputObject', $this);
+				return $this->core->getSharedMemory(); # TODO Fix this!
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
