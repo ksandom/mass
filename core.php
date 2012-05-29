@@ -83,7 +83,7 @@ class core extends Module
 				$this->set($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'setIfNotSet':
-				$originalParms=$this->get('Global', 'stashResults');
+				$originalParms=$this->get('Global', 'setIfNotSet');
 				$parms=$this->interpretParms($originalParms);
 				$this->requireNumParms($this, 2, $event, $originalParms, $parms);
 				$this->setIfNotSet($parms[0], $parms[1], $parms[2]);
