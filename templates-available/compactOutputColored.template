@@ -1,0 +1,7 @@
+Found hosts
+
+<~~ ~!Codes,blue!~~%categoryName%~/~!Codes,default!~~%hostName%~ (~!Codes,cyan!~~%IP%~~!Codes,default!~)
+  external: ~%externalFQDN%~ (~%externalIP%~)
+  internal: ~%internalFQDN%~ (~%internalIP%~)
+
+~>

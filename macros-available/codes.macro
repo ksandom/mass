@@ -56,25 +56,37 @@ class Codes extends Module
 	
 	function loadColorCodes()
 	{
-		// Dark
-		$this->core->set('Codes', '', "black");
-		$this->core->set('Codes', '', "red");
-		$this->core->set('Codes', '', "green");
-		$this->core->set('Codes', '', "yellow");
-		$this->core->set('Codes', '', "blue");
-		$this->core->set('Codes', '', "magenta");
-		$this->core->set('Codes', '', "cyan");
-		$this->core->set('Codes', '', "white");
+		$shortNamesBelongTo='dark';
 		
-		// Bright
-		$this->core->set('Codes', '', "brightBlack");
-		$this->core->set('Codes', '', "brightRed");
-		$this->core->set('Codes', '', "brightGreen");
-		$this->core->set('Codes', '', "brightYellow");
-		$this->core->set('Codes', '', "brightBlue");
-		$this->core->set('Codes', '', "brightMagenta");
-		$this->core->set('Codes', '', "brightCyan");
-		$this->core->set('Codes', '', "brightWhite");
+		$deck=array(
+			0=>'dark', 
+			1=>'bright');
+			
+		$color=array(
+			30=>'Black',
+			31=>'Red',
+			32=>'Green',
+			33=>'Yellow',
+			34=>'Blue',
+			35=>'Purple',
+			36=>'Cyan',
+			37=>'White');
+		
+		foreach ($deck as $deckKey=>$deckName)
+		{
+			foreach ($color as $colorKey=>$colorName)
+			{
+				$colorCode="[\e[$deckKey:$colorKey]";
+				$this->core->set('Codes', "$deck$color", $colorCode);
+				
+				if ($deck==$shortNamesBelongTo)
+				{ // give short names to the lover deck
+					$shortname=strtolower($colorName);
+					$this->core->set('Codes', "$deck$color", $colorCode);
+				}
+			}
+		}
+		
 		
 		$this->core->set('Codes', 'testColor', "This shows that the color codes have been loaded.");
 	}
