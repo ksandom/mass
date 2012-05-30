@@ -1,0 +1,86 @@
+<?php
+# Copyright (c) 2012, Kevin Sandom under the BSD License. See LICENSE for full details.
+
+# Provides terminal codes
+
+class Codes extends Module
+{
+	function __construct()
+	{
+		parent::__construct('Codes');
+	}
+	
+	function event($event)
+	{
+		switch ($event)
+		{
+			case 'init':
+				$this->loadCodes();
+				break;
+			case 'followup':
+				break;
+			case 'last':
+				break;
+			default:
+				$this->core->complain($this, 'Unknown event', $event);
+				break;
+		}
+	}
+	
+	function loadCodes()
+	{
+		$this->loadControlCodes();
+		$this->loadColorCodes();
+	}
+	
+	function loadControlCodes()
+	{
+		$this->core->set('Codes', 'esc', "\e");
+		#$this->core->set('Codes', '', "");
+		#$this->core->set('Codes', '', "");
+		#$this->core->set('Codes', '', "");
+		#$this->core->set('Codes', '', "");
+		#$this->core->set('Codes', '', "");
+		#$this->core->set('Codes', '', "");
+		#$this->core->set('Codes', '', "");
+		#$this->core->set('Codes', '', "");
+		#$this->core->set('Codes', '', "");
+		#$this->core->set('Codes', '', "");
+		#$this->core->set('Codes', '', "");
+		#$this->core->set('Codes', '', "");
+		#$this->core->set('Codes', '', "");
+		#$this->core->set('Codes', '', "");
+		
+		$this->core->set('Codes', 'testControl', "This shows that the control codes have been loaded.");
+	}
+	
+	function loadColorCodes()
+	{
+		// Dark
+		$this->core->set('Codes', '', "black");
+		$this->core->set('Codes', '', "red");
+		$this->core->set('Codes', '', "green");
+		$this->core->set('Codes', '', "yellow");
+		$this->core->set('Codes', '', "blue");
+		$this->core->set('Codes', '', "magenta");
+		$this->core->set('Codes', '', "cyan");
+		$this->core->set('Codes', '', "white");
+		
+		// Bright
+		$this->core->set('Codes', '', "brightBlack");
+		$this->core->set('Codes', '', "brightRed");
+		$this->core->set('Codes', '', "brightGreen");
+		$this->core->set('Codes', '', "brightYellow");
+		$this->core->set('Codes', '', "brightBlue");
+		$this->core->set('Codes', '', "brightMagenta");
+		$this->core->set('Codes', '', "brightCyan");
+		$this->core->set('Codes', '', "brightWhite");
+		
+		$this->core->set('Codes', 'testColor', "This shows that the color codes have been loaded.");
+	}
+}
+
+$core=core::assert();
+$core->registerModule(new Codes());
+ 
+?>
