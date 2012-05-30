@@ -50,6 +50,8 @@ class Codes extends Module
 		#$this->core->set('Codes', '', "");
 		#$this->core->set('Codes', '', "");
 		#$this->core->set('Codes', '', "");
+		
+		$this->core->set('Codes', 'testControl', "This shows that the control codes have been loaded.");
 	}
 	
 	function loadColorCodes()
@@ -68,6 +70,8 @@ class Codes extends Module
 		#$this->core->set('Codes', '', "");
 		#$this->core->set('Codes', '', "");
 		#$this->core->set('Codes', '', "");
+		
+		$this->core->set('Codes', 'testcolor', "This shows that the color codes have been loaded.");
 	}
 }
 
