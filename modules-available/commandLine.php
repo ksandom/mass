@@ -123,6 +123,7 @@ class CommandLine extends Module
 	{
 		$this->track=array();
 		$this->store=$this->core->getStore();
+		$this->assertCodes();
 		
 		if ($tags) $this->showSpecificHelp($tags);
 		#else $this->showAllHelp();
@@ -130,7 +131,7 @@ class CommandLine extends Module
 		{
 			$this->showSpecificHelp('user');
 			$allTags=implode(', ', array_keys($this->store['Tags']));
-			echo "\n\nShowing tags for \"user\". \nAvailable tags: $allTags\n";
+			echo "\n\n{$this->codes['default']}Showing tags for \"{$this->codes['brightWhite']}user{$this->codes['default']}\". \n{$this->codes['green']}Available tags: {$this->codes['default']}$allTags{$this->codes['default']}\n";
 		}
 
 	}
@@ -179,7 +180,17 @@ class CommandLine extends Module
 			
 			$finalVisualFlags=implode(', ', $visualFlags);
 			$objName=$details['obj']->getName();
-			echo "$objName: $finalVisualFlags => {$details['description']}\n";
+			
+			$this->assertCodes();
+			echo "{$this->codes['brightBlack']}$objName: {$this->codes['default']}$finalVisualFlags {$this->codes['brightBlack']}=> {$this->codes['cyan']}{$details['description']}{$this->codes['default']}\n";
+		}
+	}
+	
+	function assertCodes()
+	{
+		if (!$this->codes)
+		{
+			$this->codes=$this->core->getModulesStore('Codes');
 		}
 	}
 	
@@ -191,10 +202,7 @@ class CommandLine extends Module
 		}
 		else
 		{
-			if (!$this->codes)
-			{
-				$this->codes=$this->core->getModulesStore('Codes');
-			}
+			$this->assertCodes();
 			
 			$derivedPrefix=($prefix or is_numeric($prefix))?"$prefix{$this->codes['default']}: ":'';
 			if (is_string($output)) 
@@ -229,6 +237,8 @@ class CommandLine extends Module
 			{
 				echo "$indent{$this->codes['red']}{$prefix}{$this->codes['default']}: {$this->codes['brightBlack']}I can't display this data type yet.{$this->codes['default']}\n";
 			}
+			
+			echo "{$this->codes['default']}";
 		}
 	}
 }
