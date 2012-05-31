@@ -433,6 +433,12 @@ class core extends Module
 		$this->debug(5,"getStore()");
 		return $this->store;
 	}
+	
+	function getModulesStore($moduleName)
+	{
+		if (!isset($this->store[$moduleName])) return false;
+		return $this->store[$moduleName];
+	}
 
 	function run($moduleName, $function, $args=null)
 	{ // Run code of a module

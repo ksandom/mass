@@ -7,6 +7,7 @@ class CommandLine extends Module
 {
 	private $track=null;
 	private $store=null;
+	private $codes=false;
 	
 	function __construct()
 	{
@@ -185,14 +186,19 @@ class CommandLine extends Module
 		}
 		else
 		{
-			$derivedPrefix=($prefix or is_numeric($prefix))?"$prefix: ":'';
+			if (!$this->codes)
+			{
+				$this->codes=$this->core->getModulesStore('Codes');
+			}
+			
+			$derivedPrefix=($prefix or is_numeric($prefix))?"$prefix{$this->codes['default']}: ":'';
 			if (is_string($output)) 
 			{
-				echo "$indent$derivedPrefix$output\n";
+				echo "$indent{$this->codes['green']}$derivedPrefix$output\n";
 			}
 			elseif (is_array($output))
 			{
-				echo "$indent$derivedPrefix\n";
+				echo "$indent{$this->codes['cyan']}$derivedPrefix\n";
 				foreach ($output as $key=>$value)
 				{
 					$this->out($value, $indent.'  ', "$key");
@@ -202,21 +208,21 @@ class CommandLine extends Module
 			{
 				if ($prefix)
 				{
-					echo "$indent{$derivedPrefix}NULL\n";
+					echo "$indent{$this->codes['purple']}{$derivedPrefix}NULL\n";
 				}
 			}
 			elseif (is_numeric($output))
 			{
-				echo "$indent{$derivedPrefix}$output\n";
+				echo "$indent{$this->codes['purple']}{$derivedPrefix}$output\n";
 			}
 			elseif (is_bool($output))
 			{
 				$display=($output)?'True':'False';
-				echo "$indent{$derivedPrefix}$display\n";
+				echo "$indent{$this->codes['purple']}{$derivedPrefix}$display\n";
 			}
 			else
 			{
-				echo "$indent{$prefix}: I can't display this data type yet.\n";
+				echo "$indent{$this->codes['red']}{$prefix}{$this->codes['default']}: {$this->codes['brightBlack']}I can't display this data type yet.{$this->codes['default']}\n";
 			}
 		}
 	}
