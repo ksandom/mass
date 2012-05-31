@@ -21,6 +21,7 @@ class CommandLine extends Module
 			case 'init':
 				$this->core->registerFeature($this, array('h', 'help'), 'help', 'Display this help. --help[=searchForTag]', array('user'));
 				$this->core->registerFeature($this, array('printr'), 'printr', 'Print output using the print_r() function. Particularly useful for debugging.', array('debug', 'dev'));
+				$this->core->registerFeature($this, array('nested'), 'nested', 'Print output using a simple nested format. Particularly useful for debugging.', array('debug', 'dev'));
 				
 				$this->core->setRef('General', 'outputObject', $this);
 				break;
@@ -35,6 +36,10 @@ class CommandLine extends Module
 			case 'printr':
 				$this->core->setRef('General', 'outputObject', $this);
 				$this->core->set('General', 'outputStyle', 'printr');
+				break;
+			case 'nested':
+				$this->core->setRef('General', 'outputObject', $this);
+				$this->core->set('General', 'outputStyle', 'nested');
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);

@@ -16,10 +16,19 @@ class Codes extends Module
 		{
 			case 'init':
 				$this->loadCodes();
+				$this->core->registerFeature($this, array('color', 'c'), 'color', 'Turn on colored output.', array('userExtra'));
+				$this->core->registerFeature($this, array('nocolor', 'b'), 'nocolor', 'Turn off colored output.', array('userExtra'));
+
 				break;
 			case 'followup':
 				break;
 			case 'last':
+				break;
+			case 'color':
+				$this->loadColorCodes(true);
+				break;
+			case 'nocolor':
+				$this->loadColorCodes(false);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -54,7 +63,7 @@ class Codes extends Module
 		$this->core->set('Codes', 'testControl', "This shows that the control codes have been loaded.");
 	}
 	
-	function loadColorCodes()
+	function loadColorCodes($useColor=true)
 	{
 		$shortNamesBelongTo='dark';
 		
@@ -76,7 +85,7 @@ class Codes extends Module
 		{
 			foreach ($color as $colorKey=>$colorName)
 			{
-				$colorCode="\033[$deckKey;{$colorKey}m";
+				$colorCode=($useColor)?"\033[$deckKey;{$colorKey}m":'';
 				$this->core->set('Codes', "$deckName$colorName", $colorCode);
 				
 				if ($deckName==$shortNamesBelongTo)
@@ -87,7 +96,8 @@ class Codes extends Module
 			}
 		}
 		
-		$this->core->set('Codes', 'default', "\033[0;37m");
+		$colorCode=($useColor)?"\033[0;37m":'';
+		$this->core->set('Codes', 'default', $colorCode);
 		
 		$this->core->set('Codes', 'testColor', "This shows that the color codes have been loaded.");
 	}
