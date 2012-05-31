@@ -1,7 +1,0 @@
-Found hosts
-
-<~~ ~!Codes,blue!~~%categoryName%~/~!Codes,default!~~%hostName%~ (~!Codes,cyan!~~%IP%~~!Codes,default!~)
-  ~!Codes,brightBlack!~external: ~!Codes,green!~~%externalFQDN%~ ~!Codes,default!~(~!Codes,cyan!~~%externalIP%~~!Codes,default!~)
-  ~!Codes,brightBlack!~internal: ~!Codes,green!~~%internalFQDN%~ ~!Codes,default!~(~!Codes,cyan!~~%internalIP%~~!Codes,default!~)
-
-~>
