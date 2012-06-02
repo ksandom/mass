@@ -33,3 +33,9 @@ set Terminal,noneTest,
 set Terminal,noneCMD,false
 
 saveStoreToConfig Terminal
+
+
+# Set default settings
+setDefault Settings,backgroundTasks,&
+saveStoreToConfig Settings
+
