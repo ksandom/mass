@@ -6,25 +6,25 @@ set Terminal,seed,konsole:gnome-terminal:macterm:xterm:none
 set Terminal,konsoleName,konsole
 set Terminal,konsoleDescription,KDE's default terminal
 set Terminal,konsoleTest,which konsole
-set Terminal,konsoleCMD,konsole -e bash -c "ssh ~%IP%~ ~%cmd%~" &
+set Terminal,konsoleCMD,konsole -e bash -c "ssh -t ~%IP%~ ~%cmd%~" &
 
 # Gnome-terminal - Gnome/Unity's default terminal
 set Terminal,gnome-terminalName,konsole
 set Terminal,gnome-terminalDescription,KDE's default terminal
 set Terminal,gnome-terminalTest,which gnome-terminal
-set Terminal,gnome-terminalCMD,gnome-terminal -e "bash -c \"ssh ~%IP%~ ~%cmd%~\"" &
+set Terminal,gnome-terminalCMD,gnome-terminal -e "bash -c \"ssh -t ~%IP%~ ~%cmd%~\"" &
 
 # MacOS X's default terminal. Pretty much any custom terminal except xterm should take precedence over this.
 set Terminal,mactermName,macterm
 set Terminal,mactermDescription,The default terminal in Mac OSX
 set Terminal,mactermTest,/Applications/Utilities/Terminal.app
-set Terminal,mactermCMD,echo 'tell app "Terminal" to do script "ssh ~%IP%~ ~%cmd%~"' | osascript
+set Terminal,mactermCMD,echo 'tell app "Terminal" to do script "ssh -t ~%IP%~ ~%cmd%~"' | osascript
 
 # xterm;
 set Terminal,xtermName,xterm
 set Terminal,xtermDescription,X's default terminal
 set Terminal,xtermTest,which xterm
-set Terminal,xtermCMD,xterm -e bash -c "ssh ~%IP%~ ~%cmd%~" &
+set Terminal,xtermCMD,xterm -e bash -c "ssh -t ~%IP%~ ~%cmd%~" &
 
 # No GUI terminal available
 set Terminal,noneName,none

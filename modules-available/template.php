@@ -24,6 +24,7 @@ class Template extends Module
 			case 'init':
 				$this->core->registerFeature($this, array('template'), 'template', 'Specify a templte to use to display the output. This will replace the result with an array containing a single string. --template=templateName . eg --template=screen');
 				$this->core->registerFeature($this, array('templateOut'), 'templateOut', 'Use a template to display the output before '.programName.' terminates. --templateOut=templateName . eg --templateOut=screen');
+				$this->core->registerFeature($this, array('noTemplateOut'), 'noTemplateOut', 'Do not allow futue --templateOutIfNotSet to be set. It will not have effect if one has already been set.');
 				$this->core->registerFeature($this, array('templateOutIfNotSet'), 'templateOutIfNotSet', "Same as --templateOut, but will only be set if it hasn't been already.");
 				break;
 			case 'followup':
@@ -37,13 +38,24 @@ class Template extends Module
 			case 'templateOut':
 				$this->core->setRef('General', 'outputObject', $this);
 				$this->templateOut=$this->core->get('Global', 'templateOut');
+				$this->core->debug(4, "--templateOut: set \$this->templateOut to {$this->templateOut}.");
+				break;
+			case 'noTemplateOut':
+				if (!$this->templateOut)
+				{
+					$this->templateOut=$this->core->get('Global', 'dontset');
+					$this->core->debug(4, "Disabled --templateOutIfNotSet");
+				}
 				break;
 			case 'templateOutIfNotSet':
 				if (!$this->templateOut)
 				{
+					$this->core->debug(4, "--templateOutIfNotSet: \$this->templateOut is {$this->templateOut}.");
 					$this->core->setRef('General', 'outputObject', $this);
 					$this->templateOut=$this->core->get('Global', 'templateOutIfNotSet');
+					$this->core->debug(4, "--templateOutIfNotSet: set \$this->templateOut to {$this->templateOut}.");
 				}
+				else $this->core->debug(4, "--templateOutIfNotSet: \$this->templateOut has already been set.");
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);

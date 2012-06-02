@@ -220,8 +220,14 @@ class core extends Module
 			$obj=&$this->core->get('Features', $argument);
 			if (is_array($obj))
 			{
-				$this->set('Global', $obj['name'], $this->processValue($value));
-				return $obj['obj']->event($obj['name']);
+				$valueIn=$this->processValue($value);
+				$this->set('Global', $obj['name'], $valueIn);
+				$result=$obj['obj']->event($obj['name']);
+				
+				$indentation=str_repeat('  ', $this->get('Core', 'nesting'));
+				$resultCount=count($result);
+				$this->debug(3, "INVOKE {$indentation}{$obj['name']} value={$value}, valueIn=$valueIn resultCount=$resultCount");
+				return $result;
 			}
 			else $this->complain(null, "Could not find a module to match '$argument'", 'triggerEvent');
 		}
@@ -294,7 +300,11 @@ class core extends Module
 	{
 		if ($this->isVerboseEnough($verbosityLevel))
 		{
-			echo "[debug$verbosityLevel]: $output\n";
+			$title="debug$verbosityLevel";
+			# TODO These lookups can be optimized!
+			$code=$this->get('Codes', $title, false);
+			$default=$this->get('Codes', 'default', false);
+			echo "[$code$title$default]: $output\n";
 			# return false;
 		}
 	}
@@ -382,9 +392,9 @@ class core extends Module
 		$this->store[$moduleName]=$contents;
 	}
 	
-	function &get($moduleName, $valueName)
+	function &get($moduleName, $valueName, $debug=true)
 	{
-		$this->debug(5,"get($moduleName, $valueName)");
+		if ($debug) $this->debug(5,"get($moduleName, $valueName)");
 		#print_r($this->store);
 		#echo "m=$moduleName, v=$valueName\n";
 		if (isset($this->store[$moduleName]))

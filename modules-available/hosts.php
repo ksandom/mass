@@ -128,27 +128,27 @@ class Hosts extends Module
 					if ($numberOfParts>1)
 					{
 						$lineOutput=(isset($output[$parts[1]]))?$output[$parts[1]]:array();
-						if (!isset($lineOutput['hostnameMap']))
+						if (!isset($lineOutput['hostNameMap']))
 						{
-							$lineOutput['hostnameMap']=array();
-							$lineOutput['hostnameCount']=0;
+							$lineOutput['hostNameMap']=array();
+							$lineOutput['hostNameCount']=0;
 						}
 						
 						$ipKey=(strpos($parts[0], '.'))?'internalIP':'internalIPv6';
 						$lineOutput[$ipKey]=$parts[0];
-						$lineOutput['hostname']=$parts[1];
+						$lineOutput['hostName']=$parts[1];
 						
 						for ($i=0; $i<$numberOfParts; $i++)
 						{
-							if (!(isset($lineOutput['hostnameMap'][$parts[$i]])) and $parts[$i]!=$lineOutput['hostname'] and (trim($parts[$i])))
+							if (!(isset($lineOutput['hostNameMap'][$parts[$i]])) and $parts[$i]!=$lineOutput['hostName'] and (trim($parts[$i])))
 							{
-								$lineOutput['hostnameMap'][$parts[$i]]=$parts[$i];
-								$lineOutput['hostnameCount']++;
-								$lineOutput['hostname'.$lineOutput['hostnameCount']]=$parts[$i];
+								$lineOutput['hostNameMap'][$parts[$i]]=$parts[$i];
+								$lineOutput['hostNameCount']++;
+								$lineOutput['hostName'.$lineOutput['hostNameCount']]=$parts[$i];
 							}
 						}
 						
-						$output[$lineOutput['hostname']]=$lineOutput;
+						$output[$lineOutput['hostName']]=$lineOutput;
 					}
 				}
 			}

@@ -40,6 +40,7 @@ class Codes extends Module
 	{
 		$this->loadControlCodes();
 		$this->loadColorCodes();
+		$this->loadDefaultAliases();
 	}
 	
 	function loadControlCodes()
@@ -100,6 +101,21 @@ class Codes extends Module
 		$this->core->set('Codes', 'default', $colorCode);
 		
 		$this->core->set('Codes', 'testColor', "This shows that the color codes have been loaded.");
+	}
+	
+	function loadDefaultAliases()
+	{
+		$this->core->set('Codes', 'debug5', $this->core->get('Codes', 'brightCyan'));
+		$this->core->set('Codes', 'debug4', $this->core->get('Codes', 'cyan'));
+		$this->core->set('Codes', 'debug3', $this->core->get('Codes', 'green'));
+		$this->core->set('Codes', 'debug2', $this->core->get('Codes', 'yellow'));
+		$this->core->set('Codes', 'debug1', $this->core->get('Codes', 'red'));
+		$this->core->set('Codes', 'debug0', $this->core->get('Codes', 'brightRed'));
+		
+		$this->core->set('Codes', 'debug6', $this->core->get('Codes', 'brightBlue'));
+		$this->core->set('Codes', 'debug7', $this->core->get('Codes', 'brightBlue'));
+		$this->core->set('Codes', 'debug8', $this->core->get('Codes', 'brightBlue'));
+		$this->core->set('Codes', 'debug9', $this->core->get('Codes', 'brightBlue'));
 	}
 }
 
