@@ -1,9 +1,4 @@
-# Download the same file(s) from many servers. --download=hostNameRegex,fullPathToFile ~ user
-
-list ~!Global,download-0!~
-
-# the internalIP will work if we are connected to a VPN
-chooseFirst IP,externalIP,internalIP
+# Download the same file(s) from many servers. --list[=hostRegex] --download=fullPathToFile~ user
 
 stashResults Download,sourcelist
 
@@ -12,5 +7,5 @@ toString mkdir -p ~%externalFQDN%~
 exec
 
 retrieveResults Download,sourcelist
-toString scp -r ~%IP%~:~!Global,download-1!~ ~%externalFQDN%~
+toString scp -r ~%IP%~:~!Global,download!~ ~%externalFQDN%~
 exec
