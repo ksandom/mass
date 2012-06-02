@@ -105,12 +105,12 @@ class Codes extends Module
 	
 	function loadDefaultAliases()
 	{
-		$this->core->set('Codes', 'debug5', $this->core->get('Codes', 'brightCyan'));
-		$this->core->set('Codes', 'debug4', $this->core->get('Codes', 'cyan'));
-		$this->core->set('Codes', 'debug3', $this->core->get('Codes', 'green'));
-		$this->core->set('Codes', 'debug2', $this->core->get('Codes', 'yellow'));
-		$this->core->set('Codes', 'debug1', $this->core->get('Codes', 'red'));
-		$this->core->set('Codes', 'debug0', $this->core->get('Codes', 'brightRed'));
+		$this->core->set('Codes', 'debug0', $this->core->get('Codes', 'brightBlack'));
+		$this->core->set('Codes', 'debug1', $this->core->get('Codes', 'brightRed'));
+		$this->core->set('Codes', 'debug2', $this->core->get('Codes', 'red'));
+		$this->core->set('Codes', 'debug3', $this->core->get('Codes', 'yellow'));
+		$this->core->set('Codes', 'debug4', $this->core->get('Codes', 'green'));
+		$this->core->set('Codes', 'debug5', $this->core->get('Codes', 'cyan'));
 		
 		$this->core->set('Codes', 'debug6', $this->core->get('Codes', 'brightBlue'));
 		$this->core->set('Codes', 'debug7', $this->core->get('Codes', 'brightBlue'));

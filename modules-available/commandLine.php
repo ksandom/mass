@@ -182,7 +182,7 @@ class CommandLine extends Module
 			$objName=$details['obj']->getName();
 			
 			$this->assertCodes();
-			echo "{$this->codes['brightBlack']}$objName: {$this->codes['cyan']}$finalVisualFlags {$this->codes['brightBlack']}=> {$this->codes['default']}{$details['description']}{$this->codes['default']}\n";
+			echo "{$this->codes['brightBlack']}$objName: {$this->codes['cyan']}$finalVisualFlags {$this->codes['brightBlack']}=> {$this->codes['default']}{$details['description']}{$this->codes['default']} ~ {$this->codes['green']}{$details['tagString']}{$this->codes['default']}\n";
 		}
 	}
 	
