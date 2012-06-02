@@ -1,11 +1,5 @@
-# Concurrently run a command on every matching server and return the result in the background. --cmd=hostRegex command ~ bg,terminal,user
+# Concurrently run a command on every matching server and return the result in the background. --list[=hostRegex] --cmd command ~ bg,terminal,user
 
-list ~!Global,cmd!~
-resultSet cmd,~!Global,stray!~
-addSlashes cmd,cmd
-
-# the internalIP will work if we are connected to a VPN
-chooseFirst IP,externalIP,internalIP
-
+debug 0,Spawning commands in background
 toString ssh ~%IP%~ '~%cmd%~ | while read in;do echo "~%hostName%~: $in";done' >&2 &
 exec
