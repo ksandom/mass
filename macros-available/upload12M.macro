@@ -1,0 +1,11 @@
+# 1-to-many upload a single file the listed servers. --list[=hostRegex] --upload12M=fullPathToFileOnTheServer ~ user
+
+stashResults Download,sourcelist
+
+retrieveResults Download,sourcelist
+toString mkdir -p ~%externalFQDN%~
+exec
+
+retrieveResults Download,sourcelist
+toString scp -r `echo ~!Global,upload12M!~|sed 's/.*\///'` ~%IP%~:~!Global,upload12M!~ >&2 ~!Settings,backgroundTasks!~
+exec

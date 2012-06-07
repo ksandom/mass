@@ -1,0 +1,11 @@
+# Many to many upload the file(s) dowloaded using --download to the correct servers. --list[=hostRegex] --uploadM2M=fullPathToFileOnTheServer ~ user
+
+stashResults Download,sourcelist
+
+retrieveResults Download,sourcelist
+toString mkdir -p ~%externalFQDN%~
+exec
+
+retrieveResults Download,sourcelist
+toString scp -r ~%externalFQDN%~/`echo ~!Global,uploadM2M!~|sed 's/.*\///'` ~%IP%~:~!Global,uploadM2M!~ >&2 ~!Settings,backgroundTasks!~
+exec

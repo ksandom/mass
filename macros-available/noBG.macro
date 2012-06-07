@@ -1,0 +1,3 @@
+# Don't background/run in parrallel. ~ user
+
+set Settings,backgroundTasks,
