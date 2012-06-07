@@ -16,10 +16,14 @@ class JsonOut extends Module
 		{
 			case 'init':
 				$this->core->registerFeature($this, array('j', 'json'), 'json', 'Send returned output as a json array.');
+				$this->core->registerFeature($this, array('toJson'), 'toJson', 'Put the results into a json array in the result array to be used with something like --singleStringNow.');
 				break;
 			case 'followup':
 				break;
 			case 'last':
+				break;
+			case 'toJson':
+				return array(json_encode($this->core->getSharedMemory()));
 				break;
 			case 'json':
 				$this->core->setRef('General', 'outputObject', $this);
