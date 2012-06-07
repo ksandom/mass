@@ -27,12 +27,9 @@ class Hosts extends Module
 				break;
 			case 'searchOld':
 				return $this->oldListHosts();
-<<<<<<< HEAD
-=======
 				break;
 			case 'reloadOldStyleHosts':
 				return $this->loadOldStyleHostDefinitions();
->>>>>>> kevdev
 				break;
 			case 'importFromHostsFile':
 				return $this->importFromHostsFile();
@@ -58,11 +55,7 @@ class Hosts extends Module
 		}
 	}
 	
-<<<<<<< HEAD
-	function oldListHosts()
-=======
 	function assertOldStyleHostDefinitionsLoaded()
->>>>>>> kevdev
 	{
 		if (!$this->core->get('Hosts', 'hostDefinitions')) 
 		{
