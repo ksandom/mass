@@ -35,7 +35,7 @@ class Hosts extends Module
 			case 'last':
 				break;
 			case 'searchOld':
-				return $this->listHosts();
+				return $this->oldListHosts();
 				break;
 			case 'importFromHostsFile':
 				return $this->importFromHostsFile();
@@ -61,7 +61,7 @@ class Hosts extends Module
 		}
 	}
 	
-	function listHosts()
+	function oldListHosts()
 	{
 		$output=array();
 		
@@ -71,27 +71,28 @@ class Hosts extends Module
 		{
 			foreach ($fileDetails as $categoryName=>$categoryDetails)
 			{
-				foreach ($categoryDetails as $hostName=>$hostDetails)
-				{
-					if ($this->hostMatches($hostDetails, $search))
-					{
-						$iip=(isset($hostDetails->internalIP))?$hostDetails->internalIP:false;
-						$eip=(isset($hostDetails->externalIP))?$hostDetails->externalIP:false;
-						$ifqdn=(isset($hostDetails->internalFQDN))?$hostDetails->internalFQDN:false;
-						$efqdn=(isset($hostDetails->externalFQDN))?$hostDetails->externalFQDN:false;
-						
-						$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip, 'internalFQDN'=>$ifqdn, 'externalFQDN'=>$efqdn);
-						#echo "$filename: $categoryName, $hostName i=$iip e=$eip\n";
-						//echo "$filename: $categoryName, $hostName: i={$hostDetails['internalIP']} e={$hostDetails['externalIP']}\n";
-					}
-				}
+				$this->processCategory($output, $search, $categoryDetails, $filename, $categoryName);
 			}
 		}
 		
 		return $output;
 	}
 	
-	
+	function processCategory(&$output, $search, $categoryDetails, $filename, $categoryName='unknown')
+	{
+		foreach ($categoryDetails as $hostName=>$hostDetails)
+		{
+			if ($this->hostMatches($hostDetails, $search))
+			{
+				$iip=(isset($hostDetails->internalIP))?$hostDetails->internalIP:false;
+				$eip=(isset($hostDetails->externalIP))?$hostDetails->externalIP:false;
+				$ifqdn=(isset($hostDetails->internalFQDN))?$hostDetails->internalFQDN:false;
+				$efqdn=(isset($hostDetails->externalFQDN))?$hostDetails->externalFQDN:false;
+				
+				$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip, 'internalFQDN'=>$ifqdn, 'externalFQDN'=>$efqdn);
+			}
+		}
+	}
 	
 	function importFromHostsFile()
 	{
