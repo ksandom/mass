@@ -17,25 +17,19 @@ class Hosts extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->dataDir=$this->core->get('General', 'configDir').'/data';
-				$hostFiles=$this->core->getFileList($this->dataDir.'/hosts');
-				$allHostDefinitions=array();
-				foreach ($hostFiles as $filename=>$hostFile)
-				{
-					$allHostDefinitions[$filename]=json_decode(file_get_contents($hostFile));
-				}
-				
-				$this->core->set('Hosts', 'hostDefinitions', $allHostDefinitions);
-				
 				$this->core->registerFeature($this, array('searchOld'), 'searchOld', 'Deprecated. List/Search host entries. ', array('user', 'deprecated'));
 				$this->core->registerFeature($this, array('importFromHostsFile'), 'importFromHostsFile', 'Import host entries from a hosts file.', array('import'));
+				$this->core->registerFeature($this, array('reloadOldStyleHosts'), 'reloadOldStyleHosts', 'Import host entries from a hosts file.', array('hosts', 'src'));
 				break;
 			case 'followup':
 				break;
 			case 'last':
 				break;
 			case 'searchOld':
-				return $this->listHosts();
+				return $this->oldListHosts();
+				break;
+			case 'reloadOldStyleHosts':
+				return $this->loadOldStyleHostDefinitions();
 				break;
 			case 'importFromHostsFile':
 				return $this->importFromHostsFile();
@@ -61,8 +55,32 @@ class Hosts extends Module
 		}
 	}
 	
-	function listHosts()
+	function assertOldStyleHostDefinitionsLoaded()
 	{
+		if (!$this->core->get('Hosts', 'hostDefinitions')) 
+		{
+			$this->loadOldStyleHostDefinitions();
+			$this->core->debug(4, "assertOldStyleHostDefinitionsLoaded: Loaded definitions.");
+		}
+		else $this->core->debug(4, "assertOldStyleHostDefinitionsLoaded: Already loaded.");
+	}
+	
+	function loadOldStyleHostDefinitions()
+	{
+		$this->dataDir=$this->core->get('General', 'configDir').'/data';
+		$hostFiles=$this->core->getFileList($this->dataDir.'/hosts');
+		$allHostDefinitions=array();
+		foreach ($hostFiles as $filename=>$hostFile)
+		{
+			$allHostDefinitions[$filename]=json_decode(file_get_contents($hostFile));
+		}
+		
+		$this->core->set('Hosts', 'hostDefinitions', $allHostDefinitions);
+	}
+	
+	function oldListHosts()
+	{
+		$this->assertOldStyleHostDefinitionsLoaded();
 		$output=array();
 		
 		$search=$this->core->get('Global', 'searchOld');
@@ -71,27 +89,28 @@ class Hosts extends Module
 		{
 			foreach ($fileDetails as $categoryName=>$categoryDetails)
 			{
-				foreach ($categoryDetails as $hostName=>$hostDetails)
-				{
-					if ($this->hostMatches($hostDetails, $search))
-					{
-						$iip=(isset($hostDetails->internalIP))?$hostDetails->internalIP:false;
-						$eip=(isset($hostDetails->externalIP))?$hostDetails->externalIP:false;
-						$ifqdn=(isset($hostDetails->internalFQDN))?$hostDetails->internalFQDN:false;
-						$efqdn=(isset($hostDetails->externalFQDN))?$hostDetails->externalFQDN:false;
-						
-						$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip, 'internalFQDN'=>$ifqdn, 'externalFQDN'=>$efqdn);
-						#echo "$filename: $categoryName, $hostName i=$iip e=$eip\n";
-						//echo "$filename: $categoryName, $hostName: i={$hostDetails['internalIP']} e={$hostDetails['externalIP']}\n";
-					}
-				}
+				$this->processCategory($output, $search, $categoryDetails, $filename, $categoryName);
 			}
 		}
 		
 		return $output;
 	}
 	
-	
+	function processCategory(&$output, $search, $categoryDetails, $filename, $categoryName='unknown')
+	{
+		foreach ($categoryDetails as $hostName=>$hostDetails)
+		{
+			if ($this->hostMatches($hostDetails, $search))
+			{
+				$iip=(isset($hostDetails->internalIP))?$hostDetails->internalIP:false;
+				$eip=(isset($hostDetails->externalIP))?$hostDetails->externalIP:false;
+				$ifqdn=(isset($hostDetails->internalFQDN))?$hostDetails->internalFQDN:false;
+				$efqdn=(isset($hostDetails->externalFQDN))?$hostDetails->externalFQDN:false;
+				
+				$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip, 'internalFQDN'=>$ifqdn, 'externalFQDN'=>$efqdn);
+			}
+		}
+	}
 	
 	function importFromHostsFile()
 	{
