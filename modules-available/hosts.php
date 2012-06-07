@@ -17,18 +17,9 @@ class Hosts extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->dataDir=$this->core->get('General', 'configDir').'/data';
-				$hostFiles=$this->core->getFileList($this->dataDir.'/hosts');
-				$allHostDefinitions=array();
-				foreach ($hostFiles as $filename=>$hostFile)
-				{
-					$allHostDefinitions[$filename]=json_decode(file_get_contents($hostFile));
-				}
-				
-				$this->core->set('Hosts', 'hostDefinitions', $allHostDefinitions);
-				
 				$this->core->registerFeature($this, array('searchOld'), 'searchOld', 'Deprecated. List/Search host entries. ', array('user', 'deprecated'));
 				$this->core->registerFeature($this, array('importFromHostsFile'), 'importFromHostsFile', 'Import host entries from a hosts file.', array('import'));
+				$this->core->registerFeature($this, array('reloadOldStyleHosts'), 'reloadOldStyleHosts', 'Import host entries from a hosts file.', array('hosts', 'src'));
 				break;
 			case 'followup':
 				break;
@@ -36,6 +27,12 @@ class Hosts extends Module
 				break;
 			case 'searchOld':
 				return $this->oldListHosts();
+<<<<<<< HEAD
+=======
+				break;
+			case 'reloadOldStyleHosts':
+				return $this->loadOldStyleHostDefinitions();
+>>>>>>> kevdev
 				break;
 			case 'importFromHostsFile':
 				return $this->importFromHostsFile();
@@ -61,8 +58,36 @@ class Hosts extends Module
 		}
 	}
 	
+<<<<<<< HEAD
+	function oldListHosts()
+=======
+	function assertOldStyleHostDefinitionsLoaded()
+>>>>>>> kevdev
+	{
+		if (!$this->core->get('Hosts', 'hostDefinitions')) 
+		{
+			$this->loadOldStyleHostDefinitions();
+			$this->core->debug(4, "assertOldStyleHostDefinitionsLoaded: Loaded definitions.");
+		}
+		else $this->core->debug(4, "assertOldStyleHostDefinitionsLoaded: Already loaded.");
+	}
+	
+	function loadOldStyleHostDefinitions()
+	{
+		$this->dataDir=$this->core->get('General', 'configDir').'/data';
+		$hostFiles=$this->core->getFileList($this->dataDir.'/hosts');
+		$allHostDefinitions=array();
+		foreach ($hostFiles as $filename=>$hostFile)
+		{
+			$allHostDefinitions[$filename]=json_decode(file_get_contents($hostFile));
+		}
+		
+		$this->core->set('Hosts', 'hostDefinitions', $allHostDefinitions);
+	}
+	
 	function oldListHosts()
 	{
+		$this->assertOldStyleHostDefinitionsLoaded();
 		$output=array();
 		
 		$search=$this->core->get('Global', 'searchOld');

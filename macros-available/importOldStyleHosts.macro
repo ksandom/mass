@@ -1,0 +1,8 @@
+# Import old style hosts to new style ~ import
+
+exec mkdir -p ~!General,hostsDir!~
+
+# Just get everything we can from the old style database
+searchOld
+toJson
+singleStringNow ~!General,hostsDir!~/importedFromOldStyle.1lHosts.json

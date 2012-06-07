@@ -483,6 +483,7 @@ class core extends Module
 		
 		# TODO Remove the tag string from descriptoin once we have proper integration with help
 		$entry=array('obj'=>&$obj, 'flags'=>$flags, 'name'=>$name, 'description'=>$description, 'tagString'=>$tagString);
+		
 		foreach ($flags as $flag)
 		{
 			if (!isset($this->store['Features'][$flag]))
