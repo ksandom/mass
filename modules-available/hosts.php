@@ -17,13 +17,17 @@ class Hosts extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('searchOld'), 'searchOld', 'Deprecated. List/Search host entries. ', array('user', 'deprecated'));
+				$this->core->registerFeature($this, array('search'), 'search', 'List/Search host entries. ', array('user', 'search'));
+				$this->core->registerFeature($this, array('searchOld'), 'searchOld', 'Deprecated. List/Search host entries. ', array('user', 'deprecated', 'search'));
 				$this->core->registerFeature($this, array('importFromHostsFile'), 'importFromHostsFile', 'Import host entries from a hosts file.', array('import'));
 				$this->core->registerFeature($this, array('reloadOldStyleHosts'), 'reloadOldStyleHosts', 'Import host entries from a hosts file.', array('hosts', 'src'));
 				break;
 			case 'followup':
 				break;
 			case 'last':
+				break;
+			case 'search':
+				return $this->listHosts();
 				break;
 			case 'searchOld':
 				return $this->oldListHosts();
@@ -55,36 +59,53 @@ class Hosts extends Module
 		}
 	}
 	
-	function assertOldStyleHostDefinitionsLoaded()
+	function assertHostDefinitionsLoaded($folderName='1LayerHosts', $destination="hostDefinitions")
 	{
-		if (!$this->core->get('Hosts', 'hostDefinitions')) 
+		if (!$this->core->get('Hosts', $destination)) 
 		{
-			$this->loadOldStyleHostDefinitions();
-			$this->core->debug(4, "assertOldStyleHostDefinitionsLoaded: Loaded definitions.");
+			$this->core->debug(4, "assertHostDefinitionsLoaded: Need to load $destination.");
+			$this->loadHostDefinitions($folderName, $destination);
 		}
-		else $this->core->debug(4, "assertOldStyleHostDefinitionsLoaded: Already loaded.");
+		else $this->core->debug(4, "assertHostDefinitionsLoaded: NO need to load $destination.");
 	}
 	
-	function loadOldStyleHostDefinitions()
+	function loadHostDefinitions($folderName='1LayerHosts', $destination="hostDefinitions")
 	{
 		$this->dataDir=$this->core->get('General', 'configDir').'/data';
-		$hostFiles=$this->core->getFileList($this->dataDir.'/hosts');
+		$hostFiles=$this->core->getFileList($this->dataDir."/$folderName");
 		$allHostDefinitions=array();
+		$this->core->debug(4, "loadHostDefinitions: Loading folder $folderName into $destination.");
 		foreach ($hostFiles as $filename=>$hostFile)
 		{
 			$allHostDefinitions[$filename]=json_decode(file_get_contents($hostFile));
+			$this->core->debug(5, "loadHostDefinitions: Loaded $hostFile.");
 		}
 		
-		$this->core->set('Hosts', 'hostDefinitions', $allHostDefinitions);
+		$this->core->set('Hosts', $destination, $allHostDefinitions);
 	}
-	
+
+	function listHosts()
+	{
+		$this->assertHostDefinitionsLoaded();
+		$output=array();
+		
+		$search=$this->core->get('Global', 'search');
+		$allHostDefinitions=$this->core->get('Hosts', 'hostDefinitions');
+		foreach ($allHostDefinitions as $filename=>$fileDetails)
+		{
+			$this->processCategory($output, $search, $fileDetails, $filename, 'default');
+		}
+		
+		return $output;
+	}
+
 	function oldListHosts()
 	{
-		$this->assertOldStyleHostDefinitionsLoaded();
+		$this->assertHostDefinitionsLoaded('hosts', 'oldStyleHostDefinitions');
 		$output=array();
 		
 		$search=$this->core->get('Global', 'searchOld');
-		$allHostDefinitions=$this->core->get('Hosts', 'hostDefinitions');
+		$allHostDefinitions=$this->core->get('Hosts', 'oldStyleHostDefinitions');
 		foreach ($allHostDefinitions as $filename=>$fileDetails)
 		{
 			foreach ($fileDetails as $categoryName=>$categoryDetails)
