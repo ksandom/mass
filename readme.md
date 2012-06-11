@@ -7,7 +7,7 @@ is a modularised script for managing several nodes of a cluster. Open individual
 
 # Important updates
 
-* As of ______ (on master) result variable syntax has changed from %varName% to ~%varName%~. See docs/changes/0000-x-resultVarSyntax.md
+* As of June 7th (on master) result variable syntax has changed from %varName% to ~%varName%~. See docs/changes/0000-x-resultVarSyntax.md
 
 # Install
 See docs/install.md
