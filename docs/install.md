@@ -24,13 +24,17 @@ Here are the sources available right now:
 
 Here are the sources I plan to have available:
 
-* AWS (I'm using a company specific one at the moment. I'll write a generic one when I get a change.)
+* AWS (I'm using a company specific one at the moment. I'll write a generic one when I get a chance.)
 * /etc/hosts
 * .ssh/config
 * /etc/ssh/ssh_config
 
 ### Templates
 As of this writing, there are two templates. When ever there are more, they will be made available in the templates-available folder. If you'd like to make your own, see creatingATemplate.md.
+
+# Getting started with mass
+
+See gettingStarted.md in the mean time do `mass --help` which will display the features that are most likely useful to someone starting out with mass.
 
 # Updating
 Simply do a git pull where ever you checked out the code then run `./install.sh` in the same way you did under the install section.
