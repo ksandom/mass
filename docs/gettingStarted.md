@@ -1,3 +1,21 @@
+# The basics from a user perspective
+
+## Searching hosts
+
+## Taking action
+
+## Getting help
+
+Typing `mass` by itself will complain that you didn't ask it to do anything and then display the help that you would get if you had typed `mass --help`.
+
+NOTE In the future `--help` may not be the default action, so if you want help it is a good idea to specify it with `--help`.
+
+You can get more specific help by specifying a tag. These are listed at the bottom of the help output if you haven't specified any. Tags begining with a capital letter are Modules. Typing one of those will give you all the commands for that module.
+
+## Getting data to use
+
+See install.md. If you are using a company specific install, this is probably done for you.
+
 # The basics under the hood
 
 Mass works using a bus/resultset for features to communicate with each other. Generally you:
