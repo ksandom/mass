@@ -1,4 +1,4 @@
-# 1-to-many upload a single file to the listed servers. --list[=hostRegex] --upload12M=fullPathToFileOnTheServer ~ user
+# 1-to-many upload a single file to the listed servers. --list[=hostRegex] --upload12M=fullPathToFileOnTheServer ~ user,files
 
 stashResults Download,sourcelist
 
