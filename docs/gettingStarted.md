@@ -4,7 +4,7 @@
 
 `mass --list=db` lists all hosts with db in their name.
 
-`mass --list=^db.*live` lists all hosts whose name begins with db and has live somewhere in the name.
+`mass --list=^db.*live` lists all hosts whose name begins with db and has live somewhere in the name. It's a regex.
 
 `mass --list` lists eeeeeeeverything. You probably won't want this option very often, but it's useful when working with imports and exports.
 
@@ -20,6 +20,7 @@
 
 `mass --list=^db.*live --upload=/tmp my.cnf` uploads my.cnf to /tmp on every matching host.
 
+There's so much more to mass than this. And so much more that it will be. Take a look at `mass --help=all` to get an idea of what's coming.
 
 ## Getting help
 
