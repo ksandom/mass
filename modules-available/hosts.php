@@ -17,8 +17,8 @@ class Hosts extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('search'), 'search', 'List/Search host entries. ', array('user', 'search'));
-				$this->core->registerFeature($this, array('searchOld'), 'searchOld', 'Deprecated. List/Search host entries. ', array('user', 'deprecated', 'search'));
+				$this->core->registerFeature($this, array('search'), 'search', 'List/Search host entries. ', array('search'));
+				$this->core->registerFeature($this, array('searchOld'), 'searchOld', 'Deprecated. List/Search host entries. ', array('deprecated', 'search'));
 				$this->core->registerFeature($this, array('importFromHostsFile'), 'importFromHostsFile', 'Import host entries from a hosts file.', array('import'));
 				$this->core->registerFeature($this, array('reloadOldStyleHosts'), 'reloadOldStyleHosts', 'Import host entries from a hosts file.', array('hosts', 'src'));
 				break;
