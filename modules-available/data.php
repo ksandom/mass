@@ -22,6 +22,7 @@ class Data extends Module
 				$this->core->registerFeature($this, array('saveStoreToData'), 'saveStoreToData', 'Save all store values for a particular module name. --saveStoreToData=storeName');
 				$this->core->registerFeature($this, array('loadStoreFromData'), 'loadStoreFromData', 'Load all store values for a particular module name. --loadStoreFromData=storeName');
 				$this->core->registerFeature($this, array('loadStoreFromFile'), 'loadStoreFromFile', 'Load all store values for a particular name from a file. Note that the file name MUST be in the form storeName.config.json where storeName is the destination name of the store that you want to save. This can be useful for importing config. --loadStoreFromFile=filename');
+				$this->core->registerFeature($this, array('saveStoreToFile'), 'saveStoreToFile', 'Save all store values for a particular module name to a file. This can be useful for exporting data to other applications. --saveStoreToFile=ModuleName,fullPathToFilename');
 
 				$this->configDir=$this->core->get('General', 'configDir');
 				$this->loadConfig();
@@ -44,6 +45,10 @@ class Data extends Module
 				break;
 			case 'loadStoreFromFile':
 				$this->loadStoreEntryFromFilename($this->core->get('Global', 'loadStoreFromFile'));
+				break;
+			case 'saveStoreToFile':
+				# TODO finish this. See help for details of how it will fit together.
+				$this->saveStoreEntryToFilename($this->core->get('Global', 'saveStoreToFile'));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
