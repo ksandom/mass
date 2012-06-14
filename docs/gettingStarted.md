@@ -2,7 +2,24 @@
 
 ## Searching hosts
 
+`mass --list=db` lists all hosts with db in their name.
+
+`mass --list=^db.*live` lists all hosts whose name begins with db and has live somewhere in the name.
+
+`mass --list` lists eeeeeeeverything. You probably won't want this option very often, but it's useful when working with imports and exports.
+
 ## Taking action
+
+`mass --list=^db.*live --term` opens a terminal to each host.
+
+`mass --list=^db.*live --screen` creates a screen session on your local machine with a ssh connection to each host in it's own screen window.
+
+`mass --list=^db.*live --download=/etc/my.cnf` downloads /etc/my.cnf into a folder named by hostname for every matching host. Now checkout --uploadM2M!
+
+`mass --list=^db.*live --uploadM2M=/tmp/my.cnf` uploads the my.cnf for each host to /tmp/my.cnf on each server.
+
+`mass --list=^db.*live --upload=/tmp my.cnf` uploads my.cnf to /tmp on every matching host.
+
 
 ## Getting help
 
