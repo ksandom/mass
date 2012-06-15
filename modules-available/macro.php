@@ -121,7 +121,10 @@ class Macro extends Module
 		
 		foreach ($input as $key=>$in)
 		{
-			$output[$key]=$this->core->triggerEvent($macroName, $macroParms);
+			# TODO set Result module
+			# I don't think I need this $output[$key]=
+			$this->core->triggerEvent($macroName, $macroParms);
+			# TODO return Result
 		}
 		
 		return $output;
