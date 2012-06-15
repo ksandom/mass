@@ -24,6 +24,7 @@ class Macro extends Module
 				$this->core->registerFeature($this, array('defineMacro'), 'defineMacro', 'Define a macro. --defineMacro=macroName:"command1=blah\ncommand2=wheee"');
 				$this->core->registerFeature($this, array('runMacro'), 'runMacro', 'Run a macro. --runMacro=macroName');
 				$this->core->registerFeature($this, array('listMacros'), 'listMacros', 'List all macros');
+				$this->core->registerFeature($this, array('loopMacro'), 'loopMacro', 'Use a macro to loop through a resultSet. The current iteration of the resultSet is accessed via STORE variables under the modulename Result. See loopMacro.md for more information. --loopMacro=macroName[,parametersForTheMacro]');
 				break;
 			case 'singleLineMacro':
 				$this->defineMacro($this->core->get('Global', 'macro'), true);
@@ -44,6 +45,8 @@ class Macro extends Module
 			case 'listMacros':
 				return $this->listMacros();
 				break;
+			case 'loopMacro':
+				return $this->loopMacro($this->core->getSharedMemory(), $this->core->get('Global', 'loopMacro'));
 			case 'followup':
 				$this->loadSavedMacros();
 				break;
@@ -107,6 +110,20 @@ class Macro extends Module
 		{
 			$output[]=$macroName;
 		}
+		return $output;
+	}
+	
+	function loopMacro($input, $paramaters)
+	{
+		$macroName=$paramaters; # TODO This needs to be updated to take only the first parm
+		$macroParms=''; # TODO do this
+		$output=array();
+		
+		foreach ($input as $key=>$in)
+		{
+			$output[$key]=$this->core->triggerEvent($macroName, $macroParms);
+		}
+		
 		return $output;
 	}
 	
