@@ -115,16 +115,31 @@ class Macro extends Module
 	
 	function loopMacro($input, $paramaters)
 	{
-		$macroName=$paramaters; # TODO This needs to be updated to take only the first parm
-		$macroParms=''; # TODO do this
 		$output=array();
+		$firstComma=strpos($paramaters, ',');
+		if ($firstComma!==false)
+		{
+			$macroName=substr($paramaters, 0, $firstComma);
+			$macroParms=substr($paramaters, $firstComma+1);;
+		}
+		else
+		{ // We haven't been passed any custom variables
+			$macroName=$paramaters;
+			$macroParms='';
+		}
+		
+		if (!$macroName)
+		{
+			$this->core->complain($this, "No macro specified.");
+			return false;
+		}
 		
 		foreach ($input as $key=>$in)
 		{
-			# TODO set Result module
-			# I don't think I need this $output[$key]=
+			$this->core->debug(5, "loopMacro iterated for key $key");
+			$this->core->setStoreModule('Result', $in);
 			$this->core->triggerEvent($macroName, $macroParms);
-			# TODO return Result
+			$output[$key]=$this->core->getStoreModule('Result');
 		}
 		
 		return $output;
