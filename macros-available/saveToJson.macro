@@ -1,0 +1,4 @@
+# Save results to a json file --saveToJson=fullPathToJson The General,configDir store variable will probably be useful to you. ~ file,export,data
+
+toJson
+singleStringNow ~!Global,saveToJson!~
