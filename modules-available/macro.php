@@ -24,6 +24,7 @@ class Macro extends Module
 				$this->core->registerFeature($this, array('defineMacro'), 'defineMacro', 'Define a macro. --defineMacro=macroName:"command1=blah\ncommand2=wheee"');
 				$this->core->registerFeature($this, array('runMacro'), 'runMacro', 'Run a macro. --runMacro=macroName');
 				$this->core->registerFeature($this, array('listMacros'), 'listMacros', 'List all macros');
+				$this->core->registerFeature($this, array('loopMacro'), 'loopMacro', 'Use a macro to loop through a resultSet. The current iteration of the resultSet is accessed via STORE variables under the modulename Result. See loopMacro.md for more information. --loopMacro=macroName[,parametersForTheMacro]');
 				break;
 			case 'singleLineMacro':
 				$this->defineMacro($this->core->get('Global', 'macro'), true);
@@ -44,6 +45,8 @@ class Macro extends Module
 			case 'listMacros':
 				return $this->listMacros();
 				break;
+			case 'loopMacro':
+				return $this->loopMacro($this->core->getSharedMemory(), $this->core->get('Global', 'loopMacro'));
 			case 'followup':
 				$this->loadSavedMacros();
 				break;
@@ -107,6 +110,38 @@ class Macro extends Module
 		{
 			$output[]=$macroName;
 		}
+		return $output;
+	}
+	
+	function loopMacro($input, $paramaters)
+	{
+		$output=array();
+		$firstComma=strpos($paramaters, ',');
+		if ($firstComma!==false)
+		{
+			$macroName=substr($paramaters, 0, $firstComma);
+			$macroParms=substr($paramaters, $firstComma+1);;
+		}
+		else
+		{ // We haven't been passed any custom variables
+			$macroName=$paramaters;
+			$macroParms='';
+		}
+		
+		if (!$macroName)
+		{
+			$this->core->complain($this, "No macro specified.");
+			return false;
+		}
+		
+		foreach ($input as $key=>$in)
+		{
+			$this->core->debug(5, "loopMacro iterated for key $key");
+			$this->core->setStoreModule('Result', $in);
+			$this->core->triggerEvent($macroName, $macroParms);
+			$output[$key]=$this->core->getStoreModule('Result');
+		}
+		
 		return $output;
 	}
 	
