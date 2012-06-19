@@ -163,12 +163,18 @@ class core extends Module
 	
 	function setSharedMemory(&$value, $src='unknown')
 	{
-		$this->debug(5, "bbbbba $value");
+		$this->debug(5, "setSharedMemory(value=$value, src=$src)");
 		if (is_array($value)) # ($value!=null and $value!==false)
 		{
 			if ($this->isVerboseEnough(5))
 			{
-				$this->debug(5, "bbbbba--- ");
+				$numberOfEntries=count($value);
+				$this->debug(5, "setSharedMemory(value=$value($numberOfEntries), src=$src) - is_array == true. VALUE WWILL BE SET");
+				if ($this->isVerboseEnough(6)) 
+				{
+					print_r($value);
+					$this->debug(6, "setSharedMemory(value=$value($numberOfEntries), src=$src) - exiting from var dump.");
+				}
 				$serial=$this->get('Core', 'serial');
 				$this->debugSharedMemory("setSharedMemory $src/$serial");
 			}
@@ -344,9 +350,9 @@ class core extends Module
 					# TODO debugging looks like this isn't the problem, yet I think it is
 					$this->debug(5, "aaaa0 ".count($this->getSharedMemory()));
 					$returnedValue=$this->triggerEvent($actionItem['name'], $actionItem['value']);
-					$this->debug(5, "aaaaa ".count($this->getSharedMemory()));
+					$this->debug(5, "Number of entries in shared memory before set inside $macroName: ".count($this->getSharedMemory()));
 					$this->setSharedMemory($returnedValue);
-					$this->debug(5, "aaaab ".count($this->getSharedMemory()));
+					$this->debug(5, "Number of entries in shared memory after set inside $macroName: ".count($this->getSharedMemory()));
 					#echo "$macroName\n";
 					#print_r($returnedValue);
 				}
