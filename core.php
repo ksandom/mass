@@ -220,13 +220,14 @@ class core extends Module
 			$obj=&$this->core->get('Features', $argument);
 			if (is_array($obj))
 			{
+				$indentation=str_repeat('  ', $this->get('Core', 'nesting'));
 				$valueIn=$this->processValue($value);
+				$this->debug(3, "INVOKE-Enter {$indentation}{$obj['name']} value={$value}, valueIn=$valueIn ");
 				$this->set('Global', $obj['name'], $valueIn);
 				$result=$obj['obj']->event($obj['name']);
 				
-				$indentation=str_repeat('  ', $this->get('Core', 'nesting'));
 				$resultCount=count($result);
-				$this->debug(3, "INVOKE {$indentation}{$obj['name']} value={$value}, valueIn=$valueIn resultCount=$resultCount");
+				$this->debug(4, "INVOKE-Exit  {$indentation}{$obj['name']} value={$value}, valueIn=$valueIn resultCount=$resultCount");
 				return $result;
 			}
 			else $this->complain(null, "Could not find a module to match '$argument'", 'triggerEvent');
