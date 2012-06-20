@@ -1,5 +1,7 @@
 # Test the if features ~ test
 
+# TODO There is still a problem here
+
 list master-ae1c
 ifResult debug 0,whee
 notIfResult debug 0,woooo
