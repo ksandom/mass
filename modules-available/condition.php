@@ -79,7 +79,7 @@ class Condition extends Module
 		*/
 		if ($matched == $match) $result=$this->takeAction($parms);
 		# TODO device if this should stay or not once the problem is solved.
-		else $result=$input;
+		//else $result=$input;
 		#else $result=false;
 		
 		# TODO The problem is actually with the results getting lost between calls.

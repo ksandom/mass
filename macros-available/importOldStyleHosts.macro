@@ -4,6 +4,4 @@ exec mkdir -p ~!General,hostsDir!~
 
 # Just get everything we can from the old style database
 searchOld
-# saveToJson ~!General,hostsDir!~/importedFromOldStyle.1lHosts.json
-toJson
-singleStringNow ~!General,hostsDir!~/importedFromOldStyle.1lHosts.json
+saveToJson ~!General,hostsDir!~/importedFromOldStyle.1lHosts.json

@@ -1,11 +1,12 @@
 # Download the same file(s) from many servers. --list[=hostRegex] --download=fullPathToFileOnTheServer ~ user
 
-stashResults Download,sourcelist
+# TODO check this still works
+# stashResults Download,sourcelist
 
-retrieveResults Download,sourcelist
+# retrieveResults Download,sourcelist
 toString mkdir -p ~%externalFQDN%~
 exec
 
-retrieveResults Download,sourcelist
+# retrieveResults Download,sourcelist
 toString scp -r ~%IP%~:~!Global,download!~ ~%externalFQDN%~ >&2 ~!Settings,backgroundTasks!~
 exec

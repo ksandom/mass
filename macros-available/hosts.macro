@@ -1,5 +1,6 @@
 # Generate a hosts file that would be used in /etc/hosts eg --hosts=^cus.* ~ configManagement
 
+# TODO This is getting some blank results coming out of the template. Investigate why.
 list ~!Global,hosts!~
 stashResults Hosts,sourcelist
 

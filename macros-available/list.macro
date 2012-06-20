@@ -10,6 +10,3 @@ addSlashes cmd,cmd
 # the internalIP will work if we are connected to a VPN
 chooseFirst IP,externalIP,internalIP
 # chooseFirst FQDN,externalFQDN,internalFQDN
-
-stashResults List,results
-retrieveResults List,results

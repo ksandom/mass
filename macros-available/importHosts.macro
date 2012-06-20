@@ -2,8 +2,5 @@
 
 importFromHostsFile
 
-# TODO Chose a better module name for this. I'm pretty sure I made a general purpose scratch area for this type of thing.
-stashResults Import,processedHostsInput
-
 # save store to data
-
+saveToJson ~!General,configDir!~/data/1LayerHosts/importedFromETCHosts.json
