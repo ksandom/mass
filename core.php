@@ -192,7 +192,7 @@ class core extends Module
 		if ($this->isVerboseEnough(5))
 		{
 			$serial=$this->get('Core', 'serial');
-			echo "getSharedMemory $nesting/$sharedMemoryDiag/$serial\n";
+			$this->debug(5, "getSharedMemory $nesting/$sharedMemoryDiag/$serial");
 			#print_r($this->get('Core', 'shared'.$nesting));
 		}
 		return $this->get('Core', 'shared'.$nesting);
@@ -201,14 +201,18 @@ class core extends Module
 	function &getParentSharedMemory()
 	{
 		$nesting=$this->get('Core', 'nesting');
+		$nesting--; # TODO Check this. Adding this fixes the shared memory loss. MEMORY BUG
 		if ($nesting<1 or !is_numeric($nesting)) $nesting = 1; # TODO check this
 		$sharedMemory=&$this->get('Core', 'shared'.$nesting);
-		if (!is_array($sharedMemory)) $sharedMemory=array();
+		
+		# NOTE I think this is the source of the bug that has been kicking my arse! MEMORY BUG
+		#if (!is_array($sharedMemory)) $sharedMemory=array();
+		
 		if ($this->isVerboseEnough(5))
 		{
 			$serial=$this->get('Core', 'serial');
 			$sharedMemoryDiag=count($sharedMemory);
-			echo "getParentSharedMemory $nesting/$sharedMemoryDiag/$serial\n";
+			$this->debug(5, "getParentSharedMemory $nesting/$sharedMemoryDiag/$serial");
 		}
 		return $sharedMemory;
 	}
@@ -229,6 +233,13 @@ class core extends Module
 				$indentation=str_repeat('  ', $this->get('Core', 'nesting'));
 				$valueIn=$this->processValue($value);
 				$this->debug(3, "INVOKE-Enter {$indentation}{$obj['name']} value={$value}, valueIn=$valueIn ");
+				
+				if ($this->isVerboseEnough(5))
+				{
+					$shareCount=count($this->getSharedMemory());
+					$this->debug(5,"Shared memory currently $shareCount");
+				}
+				
 				$this->set('Global', $obj['name'], $valueIn);
 				$result=$obj['obj']->event($obj['name']);
 				
@@ -342,13 +353,15 @@ class core extends Module
 				$nesting=(is_numeric($nesting))?$nesting+1:1;
 				$this->set('Core', 'nesting', $nesting);
 				
+				$this->debug(5, "Incremented nesting to $nesting");
+				
 				$this->makeParentShareMemoryCurrent();
 				
 				# Iterate through the actions to be taken
 				foreach ($this->store['Macros'][$macroName] as $actionItem)
 				{
 					# TODO debugging looks like this isn't the problem, yet I think it is
-					$this->debug(5, "aaaa0 ".count($this->getSharedMemory()));
+					$this->debug(5, "Number of entries in shared memory before invoking {$actionItem['name']}  ".count($this->getSharedMemory()));
 					$returnedValue=$this->triggerEvent($actionItem['name'], $actionItem['value']);
 					$this->debug(5, "Number of entries in shared memory before set inside $macroName: ".count($this->getSharedMemory()));
 					$this->setSharedMemory($returnedValue);
@@ -367,6 +380,7 @@ class core extends Module
 				# Set the shared memory back to the previous nesting level
 				$nesting--;
 				$this->set('Core', 'nesting', $nesting);
+				$this->debug(5, "Decremented nesting to $nesting");
 				
 				return $sharedMemory;
 			}
