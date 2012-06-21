@@ -86,10 +86,10 @@ class Condition extends Module
 		
 		if ($this->core->isVerboseEnough(5))
 		{
-			if (is_bool($input)) $inputType="isbool";
-			if (is_null($input)) $inputType="isnull";
-			if (is_array($input)) $inputType="isarray";
-			if (is_array($input)) $resultType="isarray";
+			if (is_bool($result)) $inputType="isbool";
+			if (is_null($result)) $inputType="isnull";
+			if (is_array($result)) $inputType="isarray";
+			if (is_array($result)) $resultType="isarray";
 			else $resultType="isnotarray";
 			
 			print_r(array('inputType'=>$inputType, 'input'=>$input, 'parms'=>$parms, 'match'=>$match, 'matched'=>$matched, 'resultType'=>$resultType, 'result'=>$result));

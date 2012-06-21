@@ -2,6 +2,6 @@
 
 # TODO There is still a problem here
 
-list master-ae1c
+list db.*staging
 ifResult debug 0,whee
 notIfResult debug 0,woooo

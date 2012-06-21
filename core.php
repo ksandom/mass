@@ -112,7 +112,7 @@ class core extends Module
 				$originalParms=$this->get('Global', 'debug');
 				$parms=$this->interpretParms($originalParms);
 				$this->requireNumParms($this, 2, $event, $originalParms, $parms);
-				return $this->debug($parms[0], $parms[1]);
+				$this->debug($parms[0], $parms[1]);
 				break;
 			case 'verbose':
 				$original=$this->get('Global', 'verbose');
@@ -201,9 +201,9 @@ class core extends Module
 	function &getParentSharedMemory()
 	{
 		$nesting=$this->get('Core', 'nesting');
-		$nesting--; # TODO Check this. Adding this fixes the shared memory loss. MEMORY BUG
-		if ($nesting<1 or !is_numeric($nesting)) $nesting = 1; # TODO check this
-		$sharedMemory=&$this->get('Core', 'shared'.$nesting);
+		$nestingSrc=$nesting-1; # TODO Check this. Adding this fixes the shared memory loss. MEMORY BUG
+		if ($nestingSrc<1 or !is_numeric($nestingSrc)) $nestingSrc = 1; # TODO check this
+		$sharedMemory=&$this->get('Core', 'shared'.$nestingSrc);
 		
 		# NOTE I think this is the source of the bug that has been kicking my arse! MEMORY BUG
 		#if (!is_array($sharedMemory)) $sharedMemory=array();
@@ -212,7 +212,7 @@ class core extends Module
 		{
 			$serial=$this->get('Core', 'serial');
 			$sharedMemoryDiag=count($sharedMemory);
-			$this->debug(5, "getParentSharedMemory $nesting/$sharedMemoryDiag/$serial");
+			$this->debug(5, "getParentSharedMemory $nestingSrc->$nesting/$sharedMemoryDiag/$serial");
 		}
 		return $sharedMemory;
 	}
