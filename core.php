@@ -167,19 +167,19 @@ class core extends Module
 		$this->debug(5, "setSharedMemory(value=$value, src=$src)");
 		if (is_array($value)) # ($value!=null and $value!==false)
 		{
+			$nesting=$this->get('Core', 'nesting');
 			if ($this->isVerboseEnough(5))
 			{
 				$numberOfEntries=count($value);
-				$this->debug(5, "setSharedMemory(value=$value($numberOfEntries), src=$src) - is_array == true. VALUE WWILL BE SET");
+				$this->debug(5, "setSharedMemory(value=$value($numberOfEntries), src=$src)/$nesting - is_array == true. VALUE WILL BE SET");
 				if ($this->isVerboseEnough(6)) 
 				{
 					print_r($value);
-					$this->debug(6, "setSharedMemory(value=$value($numberOfEntries), src=$src) - exiting from var dump.");
+					$this->debug(6, "setSharedMemory(value=$value($numberOfEntries), src=$src)/$nesting - exiting from var dump.");
 				}
 				$serial=$this->get('Core', 'serial');
 				$this->debugSharedMemory("setSharedMemory $src/$serial");
 			}
-			$nesting=$this->get('Core', 'nesting');
 			$this->setRef('Core', 'shared'.$nesting, $value);
 			return true;
 		}
@@ -193,7 +193,7 @@ class core extends Module
 		if ($this->isVerboseEnough(5))
 		{
 			$serial=$this->get('Core', 'serial');
-			$this->debug(5, "getSharedMemory $nesting/$sharedMemoryDiag/$serial");
+			$this->debug(5, "getSharedMemory/$nesting count=$sharedMemoryDiag serial=$serial");
 			#print_r($this->get('Core', 'shared'.$nesting));
 		}
 		return $this->get('Core', 'shared'.$nesting);
@@ -239,7 +239,8 @@ class core extends Module
 				if ($this->isVerboseEnough(5))
 				{
 					$shareCount=count($this->getSharedMemory());
-					$this->debug(5,"Shared memory currently $shareCount");
+					$this->debug(5,"Shared memory currently count $shareCount");
+					$this->debugSharedMemory($obj['name']);
 				}
 				
 				$this->set('Global', $obj['name'], $valueIn);
@@ -250,7 +251,8 @@ class core extends Module
 					$resultCount=count($result);
 					$nesting=$this->get('Core', 'nesting');
 					$isArray=is_array($result)?'True':'False';;
-					$this->debug(4, "INVOKE-Exit  {$indentation}{$obj['name']}/$nesting value={$value}, valueIn=$valueIn resultCount=$resultCount is_array=$isArray");
+					$this->debug(4, "INVOKE-Exit  {$indentation}{$obj['name']}/$nesting value={$value}, valueIn=$valueIn resultCount=$resultCount is_array=$isArray smCount=".$this->getSharedMemoryCount());
+					$this->debugSharedMemory($obj['name']);
 				}
 				return $result;
 			}
@@ -318,7 +320,12 @@ class core extends Module
 	
 	function debugSharedMemory($label='undefined')
 	{
-		echo "debugSharedMemory $label ".count($this->getSharedMemory())."\n";
+		$nesting=$this->get('Core', 'nesting');
+		for ($i=$nesting;$i>-1;$i--)
+		{
+			$sharedMemory=$this->get('Core', 'shared'.$i);
+			$this->debug(3, "debugSharedMemory $label/$i count=".count($sharedMemory));
+		}
 	}
 	
 	function debug($verbosityLevel, $output)
@@ -366,8 +373,13 @@ class core extends Module
 		$nesting=(is_numeric($srcNesting))?$srcNesting-1:1;
 		if ($nesting<1) $nesting=1;
 		$this->set('Core', 'nesting', $nesting);
-		$this->debug(5, "Decremented nesting to $nesting");
+		$this->debug(5, "Decremented nesting to $nesting count=".$this->getSharedMemoryCount());
 		return $nesting;
+	}
+	
+	function getSharedMemoryCount()
+	{
+		return count($this->getSharedMemory());
 	}
 	
 	function &go($macroName='default')
@@ -383,12 +395,20 @@ class core extends Module
 				# Iterate through the actions to be taken
 				foreach ($this->store['Macros'][$macroName] as $actionItem)
 				{
-					# TODO debugging looks like this isn't the problem, yet I think it is
-					$this->debug(5, "Number of entries in shared memory before invoking {$actionItem['name']}  ".count($this->getSharedMemory()));
+					$nesting=$this->get('Core', 'nesting');
+					$this->debug(5, "ITER $macroName/$nesting - {$actionItem['name']}: Result count before invoking=".count($this->getSharedMemory()));
+					$this->debugSharedMemory("$macroName - {$actionItem['name']}");
+					
+					# TODO The problem happens somewhere between here...
 					$returnedValue=$this->triggerEvent($actionItem['name'], $actionItem['value']);
-					$this->debug(5, "Number of entries in shared memory before set inside $macroName: ".count($this->getSharedMemory()));
+					# and here
+					
+					$this->debugSharedMemory("$macroName - {$actionItem['name']}");
+					
+					$nesting=$this->get('Core', 'nesting');
+					$this->debug(5, "ITER $macroName/$nesting - {$actionItem['name']}: Restult count before set=".count($this->getSharedMemory()));
 					$this->setSharedMemory($returnedValue);
-					$this->debug(5, "Number of entries in shared memory after set inside $macroName: ".count($this->getSharedMemory()));
+					$this->debug(5, "ITER $macroName/$nesting - {$actionItem['name']}: Result count after set=".count($this->getSharedMemory()));
 					#echo "$macroName\n";
 					#print_r($returnedValue);
 				}

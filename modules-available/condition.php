@@ -102,6 +102,8 @@ class Condition extends Module
 			
 		}
 		
+		
+		$this->core->debug(5, "ifNotEmptyResult: Just about to return. Count=".$this->core->getSharedMemoryCount());
 		return $result;
 	}
 	
