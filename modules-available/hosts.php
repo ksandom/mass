@@ -52,9 +52,9 @@ class Hosts extends Module
 		{
 			#echo "detail $key\n";
 			#if (strpos($detail, $search)!==false)
-			$this->core->debug(5, "search=\"$search\", detail=\"$detail\"");
 			if (preg_match('/'.$search.'/', $detail))
 			{
+				$this->core->debug(5, "Matched search=\"$search\", detail=\"$detail\"");
 				return true;
 			}
 		}

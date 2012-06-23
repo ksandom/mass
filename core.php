@@ -113,6 +113,7 @@ class core extends Module
 				$parms=$this->interpretParms($originalParms);
 				$this->requireNumParms($this, 2, $event, $originalParms, $parms);
 				$this->debug($parms[0], $parms[1]);
+				return false;
 				break;
 			case 'verbose':
 				$original=$this->get('Global', 'verbose');
@@ -232,7 +233,8 @@ class core extends Module
 			{
 				$indentation=str_repeat('  ', $this->get('Core', 'nesting'));
 				$valueIn=$this->processValue($value);
-				$this->debug(3, "INVOKE-Enter {$indentation}{$obj['name']} value={$value}, valueIn=$valueIn ");
+				$nesting=$this->get('Core', 'nesting'); # TODO This might be better moved so it is only executed with it is needed.
+				$this->debug(3, "INVOKE-Enter {$indentation}{$obj['name']}/$nesting value={$value}, valueIn=$valueIn");
 				
 				if ($this->isVerboseEnough(5))
 				{
@@ -243,8 +245,13 @@ class core extends Module
 				$this->set('Global', $obj['name'], $valueIn);
 				$result=$obj['obj']->event($obj['name']);
 				
-				$resultCount=count($result);
-				$this->debug(4, "INVOKE-Exit  {$indentation}{$obj['name']} value={$value}, valueIn=$valueIn resultCount=$resultCount");
+				if ($this->isVerboseEnough(4))
+				{
+					$resultCount=count($result);
+					$nesting=$this->get('Core', 'nesting');
+					$isArray=is_array($result)?'True':'False';;
+					$this->debug(4, "INVOKE-Exit  {$indentation}{$obj['name']}/$nesting value={$value}, valueIn=$valueIn resultCount=$resultCount is_array=$isArray");
+				}
 				return $result;
 			}
 			else $this->complain(null, "Could not find a module to match '$argument'", 'triggerEvent');
@@ -341,6 +348,28 @@ class core extends Module
 		}
 	}
 	
+	
+	function incrementNesting()
+	{
+		# TODO Check: There may need to be some cleaning done here!
+		$srcNesting=$this->get('Core', 'nesting');
+		$nesting=(is_numeric($srcNesting))?$srcNesting+1:1;
+		$this->set('Core', 'nesting', $nesting);
+		$this->debug(5, "Incremented nesting to $nesting");
+		$this->makeParentShareMemoryCurrent();
+		return $nesting;
+	}
+	
+	function decrementNesting()
+	{
+		$srcNesting=$this->get('Core', 'nesting');
+		$nesting=(is_numeric($srcNesting))?$srcNesting-1:1;
+		if ($nesting<1) $nesting=1;
+		$this->set('Core', 'nesting', $nesting);
+		$this->debug(5, "Decremented nesting to $nesting");
+		return $nesting;
+	}
+	
 	function &go($macroName='default')
 	{
 		$emptyResult=null;
@@ -349,13 +378,7 @@ class core extends Module
 			if (count($this->store['Macros'][$macroName]))
 			{
 				# Set our shared memory location (this allows us to run macros within macros)
-				$nesting=$this->get('Core', 'nesting');
-				$nesting=(is_numeric($nesting))?$nesting+1:1;
-				$this->set('Core', 'nesting', $nesting);
-				
-				$this->debug(5, "Incremented nesting to $nesting");
-				
-				$this->makeParentShareMemoryCurrent();
+				$nesting=$this->incrementNesting();
 				
 				# Iterate through the actions to be taken
 				foreach ($this->store['Macros'][$macroName] as $actionItem)
@@ -378,9 +401,7 @@ class core extends Module
 				}
 				
 				# Set the shared memory back to the previous nesting level
-				$nesting--;
-				$this->set('Core', 'nesting', $nesting);
-				$this->debug(5, "Decremented nesting to $nesting");
+				$this->decrementNesting();
 				
 				return $sharedMemory;
 			}

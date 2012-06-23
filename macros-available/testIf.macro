@@ -2,6 +2,10 @@
 
 # TODO There is still a problem here
 
+ifResult debug 0,Test 1: Got a result - incorrect
+notIfResult debug 0,Test 1: NO result - correct
+
+
 list db.*staging
-ifResult debug 0,whee
-notIfResult debug 0,woooo
+ifResult debug 0,Test 2: Got a result - correct
+notIfResult debug 0,Test 2: NO result - incorrect

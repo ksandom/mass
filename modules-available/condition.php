@@ -63,6 +63,7 @@ class Condition extends Module
 		$matchValue=($match)?'true':'false';
 		
 		$matched=false;
+		$result=false;
 		
 		if (is_array($input) and count($input))
 		{
@@ -77,7 +78,12 @@ class Condition extends Module
 				
 				I can hack around the problem by returning the input with the appropriate failure here, but the problem is not here and should not be solved here. It's somewhere around something calling this.
 		*/
-		if ($matched == $match) $result=$this->takeAction($parms);
+		if ($matched == $match)
+		{
+			$this->core->incrementNesting();
+			$result=$this->takeAction($parms);
+			$this->core->decrementNesting();
+		}
 		# TODO device if this should stay or not once the problem is solved.
 		//else $result=$input;
 		#else $result=false;
