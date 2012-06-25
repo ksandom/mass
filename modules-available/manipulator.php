@@ -203,7 +203,7 @@ class Manipulator extends Module
 		return $output;
 	}
 	
-	function resultSet($input, $key, $value) # TODO check if & is required
+	function resultSet($input, $key, $value)
 	{
 		$output=$input;
 		foreach ($output as &$line)
