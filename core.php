@@ -238,8 +238,6 @@ class core extends Module
 				
 				if ($this->isVerboseEnough(5))
 				{
-					$shareCount=count($this->getSharedMemory());
-					$this->debug(5,"Shared memory currently count $shareCount");
 					$this->debugSharedMemory($obj['name']);
 				}
 				
@@ -254,6 +252,7 @@ class core extends Module
 					$this->debug(4, "INVOKE-Exit  {$indentation}{$obj['name']}/$nesting value={$value}, valueIn=$valueIn resultCount=$resultCount is_array=$isArray smCount=".$this->getSharedMemoryCount());
 					$this->debugSharedMemory($obj['name']);
 				}
+				$this->debug(3,'GOT HERE');
 				return $result;
 			}
 			else $this->complain(null, "Could not find a module to match '$argument'", 'triggerEvent');
@@ -321,10 +320,11 @@ class core extends Module
 	function debugSharedMemory($label='undefined')
 	{
 		$nesting=$this->get('Core', 'nesting');
+		$serial=$this->get('Core', 'serial');
 		for ($i=$nesting;$i>-1;$i--)
 		{
 			$sharedMemory=$this->get('Core', 'shared'.$i);
-			$this->debug(3, "debugSharedMemory $label/$i count=".count($sharedMemory));
+			$this->debug(3, "debugSharedMemory $label/$i count=".count($sharedMemory)." serial=$serial");
 		}
 	}
 	
@@ -402,6 +402,7 @@ class core extends Module
 					# TODO The problem happens somewhere between here...
 					$returnedValue=$this->triggerEvent($actionItem['name'], $actionItem['value']);
 					# and here
+					$this->debug(5,"GOT HERE ALSO");
 					
 					$this->debugSharedMemory("$macroName - {$actionItem['name']}");
 					
@@ -412,7 +413,7 @@ class core extends Module
 					#echo "$macroName\n";
 					#print_r($returnedValue);
 				}
-				$sharedMemory=&$this->getSharedMemory();
+				$sharedMemory=$this->getSharedMemory();
 				
 				# Output our results if we are back to the first level
 				if ($nesting==1)
