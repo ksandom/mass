@@ -131,16 +131,19 @@ class Template extends Module
 	function insertResultIntoTemplate($input, $template)
 	{
 		$output='';
-		if ($input)
+		if (is_array($input))
 		{
 			foreach ($input as $inputLine)
 			{
-				$templateLine=$template;
-				foreach ($inputLine as $lineKey=>$lineValue)
+				if (is_array($inputLine))
 				{
-					$templateLine=implode(strval($lineValue), explode(resultVarBegin."$lineKey".resultVarEnd, $templateLine));
+					$templateLine=$template;
+					foreach ($inputLine as $lineKey=>$lineValue)
+					{
+						$templateLine=implode(strval($lineValue), explode(resultVarBegin."$lineKey".resultVarEnd, $templateLine));
+					}
+					$output.=$this->core->processValue($templateLine);
 				}
-				$output.=$this->core->processValue($templateLine);
 			}
 		}
 		else $output=$input;
