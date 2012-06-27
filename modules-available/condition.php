@@ -63,7 +63,7 @@ class Condition extends Module
 		$matchValue=($match)?'true':'false';
 		
 		$matched=false;
-		$result=false;
+		$result=(workAroundIfBug)?$input:false; // See doc/bugs/ifBug.md
 		
 		if (is_array($input) and count($input))
 		{

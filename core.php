@@ -13,6 +13,8 @@ define('resultVarsDefaultRecusionWarn', 25); // If we get to this many (arbitrar
 define('resultVarsDefaultWarnDebugLevel', 2);
 define('resultVarsDefaultSevereDebugLevel', 1);
 
+define('workAroundIfBug', true); // See doc/bugs/ifBug.md
+
 
 /*
 	Debug levele
@@ -400,7 +402,8 @@ class core extends Module
 					$this->debugSharedMemory("$macroName - {$actionItem['name']}");
 					
 					# TODO The problem happens somewhere between here...
-					$returnedValue=$this->triggerEvent($actionItem['name'], $actionItem['value']);
+					$returnedValue1=$this->triggerEvent($actionItem['name'], $actionItem['value']);
+					if (is_array($returnedValue1)) $returnedValue=$returnedValue1;
 					# and here
 					$this->debug(5,"GOT HERE ALSO");
 					
