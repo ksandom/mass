@@ -20,8 +20,8 @@ class CommandLine extends Module
 		{
 			case 'init':
 				$this->core->registerFeature($this, array('h', 'help'), 'help', 'Display this help. --help[=searchForTag]', array('user'));
-				$this->core->registerFeature($this, array('printr'), 'printr', 'Print output using the print_r() function. Particularly useful for debugging.', array('debug', 'dev'));
-				$this->core->registerFeature($this, array('nested'), 'nested', 'Print output using a simple nested format. Particularly useful for debugging.', array('debug', 'dev'));
+				$this->core->registerFeature($this, array('printr', 'print_r'), 'printr', 'Print output using the print_r() function. Particularly useful for debugging.', array('debug', 'dev', 'output'));
+				$this->core->registerFeature($this, array('nested'), 'nested', 'Print output using a simple nested format. Particularly useful for debugging.', array('debug', 'dev', 'output'));
 				
 				$this->core->setRef('General', 'outputObject', $this);
 				break;
