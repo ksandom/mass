@@ -92,7 +92,18 @@ class Macro extends Module
 				$value='';
 			}
 			
-			if ($argument and $argument!='#') $this->core->addAction($argument, $value, $macroName);
+			switch ($argument)
+			{
+				case '#':
+					break;
+				case '#onDefine':
+					$parts=$this->core->splitOnceOn(' ', $value);
+					$this->core->triggerEvent($parts[0], $parts[1]);
+					break;
+				default:
+					$this->core->addAction($argument, $value, $macroName);
+					break;
+			}
 		}
 	}
 	
