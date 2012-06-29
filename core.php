@@ -54,6 +54,7 @@ class core extends Module
 		{
 			case 'init':
 				$this->registerFeature($this, array('registerTags'), 'registerTags', 'Register tags to a feature. --registerTags=featureName'.valueSeparator.'tag1['.valueSeparator.'tag2['.valueSeparator.'tag3'.valueSeparator.'...]]');
+				#$this->registerFeature($this, array('aliasFeature'), 'aliasFeature', 'Create an alias for a feature. Eg aliasing --help to -h and -h1 would be done by --aliasFeature=help'.valueSeparator.'h'.valueSeparator.'h1');
 				# $this->registerFeature($this, array('get'), 'get', 'Get a value. --get=moduleName'.valueSeparator.'variableName', array('storeVars'));
 				$this->registerFeature($this, array('getToResult', 'get'), 'getToResult', 'Get a value and put it in an array so we can do stuff with it. --getToResult=moduleName'.valueSeparator.'variableName', array('storeVars'));
 				$this->registerFeature($this, array('set'), 'set', 'set a value. --set=moduleName'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
@@ -75,6 +76,14 @@ class core extends Module
 			#case 'get': # TODO Is this still useful?
 			#	$parms=$this->interpretParms($this->get('Global', 'get'));
 			#	return $this->get($parms[0], $parms[1]);
+			#	break;
+			
+			# TODO Oops! Somehow I missed this. It should use already existing functionality.
+			#case 'registerTags':
+			#	break;
+			#case 'aliasFeature':
+			#	$parms=$this->interpretParms($this->get('Global', 'aliasFeature'));
+			#	$this->aliasFeature($parms[0], $parms);
 			#	break;
 			case 'getToResult':
 				$parms=$this->interpretParms($this->get('Global', 'getToResult'));
@@ -536,6 +545,7 @@ class core extends Module
 	
 	function registerFeature(&$obj, $flags, $name, $description, $tags=false)
 	{
+		$this->core->debug(4, "registerFeature name=$name, tags=$tags");
 		$arrayTags=(is_array($tags))?$tags:explode(',', $tags);
 		if (!count($arrayTags))
 		{
@@ -564,6 +574,26 @@ class core extends Module
 			}
 		}
 	}
+	
+	#function aliasFeature($feature, $flags)
+	#{
+	#	$entry=&$this->get('Features', $flag);
+	#	foreach ($flags as $flag)
+	#	{
+	#		if (!isset($this->store['Features'][$flag]))
+	#		{
+	#			$this->setRef('Features', $flag, $entry);
+	#		}
+	#		elseif ($flag==$feature)
+	#		{}
+	#		else
+	#		{
+	#			$existing=$this->get('Features', $flag);
+	#			$existingName=$existing['obj']->getName();
+	#			$this->complain($obj, "Feature $flag has already been registered by $existingName");
+	#		}
+	#	}
+	#}
 	
 	function registerTags($name, $tags)
 	{

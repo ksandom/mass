@@ -95,9 +95,11 @@ class Macro extends Module
 			switch ($argument)
 			{
 				case '#':
+				case '':
 					break;
 				case '#onDefine':
 					$parts=$this->core->splitOnceOn(' ', $value);
+					$this->core->debug(3, "#onDefine {$parts[0]}={$parts[1]}");
 					$this->core->triggerEvent($parts[0], $parts[1]);
 					break;
 				default:
