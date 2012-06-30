@@ -577,12 +577,12 @@ class core extends Module
 	
 	function aliasFeature($feature, $flags)
 	{
-		# TODO this isn't right... Check what flags should actually be.
-		$entry=&$this->get('Features', $flags);
+		$entry=&$this->get('Features', $feature);
 		foreach ($flags as $flag)
 		{
 			if (!isset($this->store['Features'][$flag]))
 			{
+				$this->core->debug(4, "Aliasing $flag => $feature");
 				$this->setRef('Features', $flag, $entry);
 			}
 			elseif ($flag==$feature)

@@ -1,0 +1,4 @@
+# test aliasing ~ test
+#onDefine aliasFeature testAlias,@
+
+debug 0,sucess!

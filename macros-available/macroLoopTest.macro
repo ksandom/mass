@@ -1,0 +1,4 @@
+# MacroLoopTest ~ test
+
+debug 0,Got inside the test
+set Result,IP,heeeeey~!Globals,macroLoopTest!~
