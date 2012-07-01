@@ -19,7 +19,8 @@ class CommandLine extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('h', 'help'), 'help', 'Display this help. --help[=searchForTag]', array('user'));
+				$this->core->registerFeature($this, array('oldHelp'), 'oldHelp', 'Deprecated. Display this help. --oldHelp[=searchForTag]', array('deprecated'));
+				$this->core->registerFeature($this, array('searchHelp'), 'searchHelp', 'Search tags for help. Will return an array that can be used in a template. --searchHelp[=searchForTag]', array('help'));
 				$this->core->registerFeature($this, array('printr', 'print_r'), 'printr', 'Print output using the print_r() function. Particularly useful for debugging.', array('debug', 'dev', 'output'));
 				$this->core->registerFeature($this, array('nested'), 'nested', 'Print output using a simple nested format. Particularly useful for debugging.', array('debug', 'dev', 'output'));
 				
@@ -32,6 +33,9 @@ class CommandLine extends Module
 				break;
 			case 'help':
 				$this->showHelp($this->core->get('Global', 'help'));
+				break;
+			case 'searchHelp':
+				return $this->searchHelp($this->core->get('Global', 'searchHelp'));
 				break;
 			case 'printr':
 				$this->core->setRef('General', 'outputObject', $this);
@@ -119,8 +123,43 @@ class CommandLine extends Module
 		}
 	}
 	
-	function showHelp($tags)
+	function searchHelp($tags)
 	{
+		$output=array();
+		$this->store=$this->core->getStore();
+		
+		if ($tags) $tagsArray=$this->core->interpretParms($tags);
+		else $tagsArray=array('user');
+		
+		foreach ($tagsArray as $tag)
+		{
+			if (isset($this->store['Tags'][$tag]))
+			{
+				foreach ($this->store['Tags'][$tag] as $name)
+				{
+					$details=$this->store['Features'][$name];
+					$details['name']=$name;
+					$details['matchedTag']=$tag;
+					$details['moduleName']=$details['obj']->getName();
+					
+					$visualFlags=array();
+					foreach ($details['flags'] as $flag)
+					{
+						$visualFlags[]=(strlen($flag)==1)?"-$flag":"--$flag";
+					}
+					$details['commandLineFlags']=implode(', ', $visualFlags);
+					
+					$output[]=$details;
+				}
+			}
+			else $this->core->complain($this, "Couldn't find tag.", $tag);
+		}
+		
+		return $output;
+	}
+	
+	function showHelp($tags)
+	{ // Deprecated
 		$this->track=array();
 		$this->store=$this->core->getStore();
 		$this->assertCodes();
@@ -133,11 +172,10 @@ class CommandLine extends Module
 			$allTags=implode(', ', array_keys($this->store['Tags']));
 			echo "\n\n{$this->codes['default']}Showing tags for \"{$this->codes['brightWhite']}user{$this->codes['default']}\". \n{$this->codes['green']}Available tags: {$this->codes['default']}$allTags{$this->codes['default']}\n";
 		}
-
 	}
 	
 	function showSpecificHelp($tags)
-	{
+	{ // Deprecated
 		$tagsArray=$this->core->interpretParms($tags);
 		foreach ($tagsArray as $tag)
 		{
@@ -154,7 +192,7 @@ class CommandLine extends Module
 	}
 	
 	function showAllHelp()
-	{
+	{ // Deprecated
 		$store=$this->core->getStore();
 		$track=array();
 		
@@ -168,7 +206,7 @@ class CommandLine extends Module
 	}
 	
 	function displayHelpItem($name, $details)
-	{
+	{ // Deprecated
 		if (!isset($this->track[$details['flags'][0]]))
 		{
 			$this->track[$details['flags'][0]]=true; # Make sure aliases don't cause us to display the same help twice.

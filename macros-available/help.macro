@@ -1,0 +1,5 @@
+# Display this help ~ user
+#onDefine aliasFeature help,h
+
+templateOut help
+searchHelp ~!Global,help!~

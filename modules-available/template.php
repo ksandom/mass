@@ -140,7 +140,12 @@ class Template extends Module
 					$templateLine=$template;
 					foreach ($inputLine as $lineKey=>$lineValue)
 					{
+						if (!is_object($lineValue))
+						{
+						$this->core->debug(4, "Template: lineKey=$lineKey, inputLine=$inputLine");
 						$templateLine=implode(strval($lineValue), explode(resultVarBegin."$lineKey".resultVarEnd, $templateLine));
+						}
+						else $this->core->debug(4, "Template: lineKey=$lineKey, inputLine=OBJECT-skipped");
 					}
 					$output.=$this->core->processValue($templateLine);
 				}
