@@ -1,0 +1,5 @@
+# Run a command/terminal on each host consecutively on each matching host. --list[=hostRegex] --inline [command] ~ bg,terminal,user
+#onDefine aliasFeature inline,i
+
+toString ssh ~%IP%~ '~%cmd%~'
+exec
