@@ -1,4 +1,4 @@
-# Import old style hosts to new style ~ import
+# Import old style hosts to new style. Not many people will need to use this! ~ import
 
 exec mkdir -p ~!General,hostsDir!~
 
