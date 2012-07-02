@@ -6,18 +6,18 @@
 /*
 	intended use:
 		fiCreate sshConfig
-		fiNewRecordOn keep,^Host .*
+		fiNewRecordOn sshConfig,keep,^Host .*
 		
-		fiRuleDefine host,^Host (.*)$
-		fiRuleMap host,1,hostname
+		fiRuleDefine sshConfig,host,^Host (.*)$
+		fiRuleMap sshConfig,host,1,hostname
 		
-		fiRuleDefine hostname,^Hostname (.*)$
-		fiRuleMap hostname,1,externalFQDN
+		fiRuleDefine sshConfig,hostname,^Hostname (.*)$
+		fiRuleMap sshConfig,hostname,1,externalFQDN
 		
-		fiRuleDefine key,^IdentityFile (.*)$
-		fiRuleMap key,1,key
+		fiRuleDefine sshConfig,key,^IdentityFile (.*)$
+		fiRuleMap sshConfig,key,1,key
 		
-		fiGo
+		fiGo sshConfig
 */
 
 class FlexiImport extends Module
@@ -32,14 +32,24 @@ class FlexiImport extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('fiCreate'), 'fiCreate', "Create a named flexiImport set.", array('import'));
-				$this->core->registerFeature($this, array('fiDelete'), 'fiDelete', "Delete a named flexiImport set.", array('import'));
-				$this->core->registerFeature($this, array('fiRuleDefine'), 'fiRuleDefine', "", array('import'));
-				$this->core->registerFeature($this, array('fiRuleMap'), 'fiRuleMap', "", array('import'));
-				$this->core->registerFeature($this, array('fiGo'), 'fiGo', "", array('import'));
+				$this->core->registerFeature($this, array('fiCreate'), 'fiCreate', "Create a named flexiImport set. See docs/importUsingFlexiImport.md", array('import'));
+				$this->core->registerFeature($this, array('fiDelete'), 'fiDelete', "Delete a named flexiImport set. See docs/importUsingFlexiImport.md", array('import'));
+				$this->core->registerFeature($this, array('fiRuleDefine'), 'fiRuleDefine', "Use a regular expression to pull out relevant parts of a matching line. See docs/importUsingFlexiImport.md", array('import'));
+				$this->core->registerFeature($this, array('fiRuleMap'), 'fiRuleMap', "Map the output of --fiRuleDefine. See docs/importUsingFlexiImport.md", array('import'));
+				$this->core->registerFeature($this, array('fiGo'), 'fiGo', "Run a named FlexiImport set on the current resultSet. See docs/importUsingFlexiImport.md", array('import'));
 
 				break;
-			case 'followup':
+			case 'fiCreate':
+				break;
+			case 'fiDelete':
+				break;
+			case 'fiRuleDefine':
+				break;
+			case 'fiRuleMap':
+				break;
+			case 'fiRuleMap':
+				break;
+			case 'fiGo':
 				break;
 			case 'last':
 				break;
