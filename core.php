@@ -634,7 +634,27 @@ class core extends Module
 		$parmsToCheck=($interpretedParms)?$interpretedParms:$this->interpretParms($originalParms);
 		$actualParms=count($parmsToCheck);
 		
-		if ($numberRequried>$actualParms) $this->complain($obj, "Required $numberRequried parameters but got $actualParms. Original parms were \"$originalParms\" for", $event, true);
+		if ($numberRequried>$actualParms) 
+		{
+			$this->complain($obj, "Required $numberRequried parameters but got $actualParms. Original parms were \"$originalParms\" for", $event, true);
+			return true;
+		}
+		else return false;
+	}
+	
+	function requireNumParmsOrComplain($obj, $featureName, $numberRequried)
+	{
+		$originalParms=$this->get('Global', $featureName);
+		$interpretedParms=$this->interpretParms($originalParms);
+		
+		if ($this->requireNumParms($obj, $numberRequried, $featureName, $originalParms, $interpretedParms))
+		{
+			# TODO finish this
+		}
+		else
+		{
+			# TODO finish this
+		}
 	}
 	
 	function out($output)

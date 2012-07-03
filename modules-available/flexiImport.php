@@ -40,16 +40,19 @@ class FlexiImport extends Module
 
 				break;
 			case 'fiCreate':
+				return $this->fiCreate($this->core->get('Global', 'fiCreate'));
 				break;
 			case 'fiDelete':
+				return $this->fiDelete();
 				break;
 			case 'fiRuleDefine':
+				return $this->fiRuleDefine();
 				break;
 			case 'fiRuleMap':
-				break;
-			case 'fiRuleMap':
+				return $this->fiRuleMap();
 				break;
 			case 'fiGo':
+				return $this->fiGo();
 				break;
 			case 'last':
 				break;
@@ -58,7 +61,26 @@ class FlexiImport extends Module
 				break;
 		}
 	}
-
+	
+	function fiCreate()
+	{
+	}
+	
+	function fiDelete()
+	{
+	}
+	
+	function fiRuleDefine()
+	{
+	}
+	
+	function fiRuleMap()
+	{
+	}
+	
+	function fiGo()
+	{
+	}
 }
 
 $core=core::assert();
