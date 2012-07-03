@@ -40,6 +40,8 @@ class FlexiImport extends Module
 
 				break;
 			case 'fiCreate':
+				$parms=$this->core->interpretParms($originalParms);
+				$this->core->requireNumParms($this, 2, $event, $originalParms, $parms);
 				return $this->fiCreate($this->core->get('Global', 'fiCreate'));
 				break;
 			case 'fiDelete':
