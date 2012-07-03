@@ -34,18 +34,20 @@ class FlexiImport extends Module
 			case 'init':
 				$this->core->registerFeature($this, array('fiCreate'), 'fiCreate', "Create a named flexiImport set. See docs/importUsingFlexiImport.md", array('import'));
 				$this->core->registerFeature($this, array('fiDelete'), 'fiDelete', "Delete a named flexiImport set. See docs/importUsingFlexiImport.md", array('import'));
+				$this->core->registerFeature($this, array('fiNewRecordOn'), 'fiNewRecordOn', "Use a regular to define when a new logical record begins. You can either discard or keep the match to be matched on ifRuleDefines. Se docs/importUsingFlexiImport.md", array('import'));
 				$this->core->registerFeature($this, array('fiRuleDefine'), 'fiRuleDefine', "Use a regular expression to pull out relevant parts of a matching line. See docs/importUsingFlexiImport.md", array('import'));
 				$this->core->registerFeature($this, array('fiRuleMap'), 'fiRuleMap', "Map the output of --fiRuleDefine. See docs/importUsingFlexiImport.md", array('import'));
 				$this->core->registerFeature($this, array('fiGo'), 'fiGo', "Run a named FlexiImport set on the current resultSet. See docs/importUsingFlexiImport.md", array('import'));
 
 				break;
 			case 'fiCreate':
-				$parms=$this->core->interpretParms($originalParms);
-				$this->core->requireNumParms($this, 2, $event, $originalParms, $parms);
-				return $this->fiCreate($this->core->get('Global', 'fiCreate'));
+				if ($parms=$this->core->getRequireNumParmsOrComplain($this, $event, 2)) return $this->fiCreate();
 				break;
 			case 'fiDelete':
 				return $this->fiDelete();
+				break;
+			case 'fiNewRecordOn':
+				return $this->fiNewRecordOn();
 				break;
 			case 'fiRuleDefine':
 				return $this->fiRuleDefine();
@@ -58,6 +60,8 @@ class FlexiImport extends Module
 				break;
 			case 'last':
 				break;
+			case 'followup':
+				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
 				break;
@@ -66,22 +70,32 @@ class FlexiImport extends Module
 	
 	function fiCreate()
 	{
+		# fiCreate sshConfig
 	}
 	
 	function fiDelete()
+	{ # TODO Low priority
+		# fiDelete sshConfig
+	}
+	
+	function fiNewRecordOn()
 	{
+		# fiNewRecordOn sshConfig,keep,^Host .*
 	}
 	
 	function fiRuleDefine()
 	{
+		# fiRuleDefine sshConfig,host,^Host (.*)$
 	}
 	
 	function fiRuleMap()
 	{
+		# fiRuleMap sshConfig,host,1,hostname
 	}
 	
 	function fiGo()
 	{
+		# fiGo sshConfig
 	}
 }
 

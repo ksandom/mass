@@ -622,11 +622,11 @@ class core extends Module
 	
 	function complain($obj, $message, $specific='', $fatal=false)
 	{
-		$output=($specific)?"$message: $specific":"$message.";
-		if ($obj) $output=$obj->getName().$output;
+		$output=($specific)?"$message \"$specific\"":"$message.";
+		if ($obj) $output=$obj->getName().': '.$output;
 		
 		if ($fatal) die("$output\n");
-		else echo "$output\n";
+		else $this->debug(0, "$output");
 	}
 	
 	function requireNumParms($obj, $numberRequried, $event, $originalParms, $interpretedParms=false)
@@ -649,11 +649,11 @@ class core extends Module
 		
 		if ($this->requireNumParms($obj, $numberRequried, $featureName, $originalParms, $interpretedParms))
 		{
-			# TODO finish this
+			return $interpretedParms;
 		}
 		else
 		{
-			# TODO finish this
+			return false;
 		}
 	}
 	
