@@ -642,7 +642,7 @@ class core extends Module
 		else return false;
 	}
 	
-	function requireNumParmsOrComplain($obj, $featureName, $numberRequried)
+	function getRequireNumParmsOrComplain($obj, $featureName, $numberRequried)
 	{
 		$originalParms=$this->get('Global', $featureName);
 		$interpretedParms=$this->interpretParms($originalParms);
