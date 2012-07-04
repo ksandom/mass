@@ -41,22 +41,22 @@ class FlexiImport extends Module
 
 				break;
 			case 'fiCreate':
-				if ($parms=$this->core->getRequireNumParmsOrComplain($this, $event, 2)) return $this->fiCreate();
+				if ($parms=$this->core->getRequireNumParmsOrComplain($this, $event, 1)) return $this->fiCreate($parms[0]);
 				break;
 			case 'fiDelete':
-				return $this->fiDelete();
+				if ($parms=$this->core->getRequireNumParmsOrComplain($this, $event, 1)) return $this->fiDelete($parms[0]);
 				break;
 			case 'fiNewRecordOn':
-				return $this->fiNewRecordOn();
+				if ($parms=$this->core->getRequireNumParmsOrComplain($this, $event, 3)) return $this->fiNewRecordOn($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'fiRuleDefine':
-				return $this->fiRuleDefine();
+				if ($parms=$this->core->getRequireNumParmsOrComplain($this, $event, 3)) return $this->fiRuleDefine($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'fiRuleMap':
-				return $this->fiRuleMap();
+				if ($parms=$this->core->getRequireNumParmsOrComplain($this, $event, 4)) return $this->fiRuleMap($parms[0], $parms[1], $parms[2], $parms[3]);
 				break;
 			case 'fiGo':
-				return $this->fiGo();
+				if ($parms=$this->core->getRequireNumParmsOrComplain($this, $event, 1)) return $this->fiGo($parms[0]);
 				break;
 			case 'last':
 				break;
