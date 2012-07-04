@@ -4,7 +4,7 @@ Results get lost after the second `ifResult` in testIf.macro.
 
 # Status
 
-Active. Currently being worked around using `workAroundIfBug` defined in core.php.
+Testing. It appears to be solved. Giving it a decent chance to re-manifest before cleaning up.
 
 # Details
 
@@ -27,3 +27,16 @@ The first one is just before the return of `triggerEvent`, the second line is ju
 
 Next you'll see `[debug3]: debugSharedMemory testIf - notIfEmptyResult/2` and the count is now 1. It should be 4.
 
+## Solution
+
+There were two parts to the problem:
+
+* The "memory bug" where I had forgotten to decrement the nesting in getParentSharedMemory()
+* The issue described above where the shared memory had the correct data before exiting triggerEvent(), but lost it once back inside go(), directly after the return. I have yet to understand this, but putting it inside a condition that only sets the return value of go() if the value is !==false fixes it. I suspect this is a problem with PHP optimization.
+
+## Cleanup
+
+* A work-around was made: `workAroundIfBug` defined in core.php.
+* Several ->debug lines. Some of these (particularly "GOT HERE") will need to either be changed to something more meaningful, or removed.
+* Some debugging is invasive to performance. Either remove it, or make it only run once the appropriate level of verbosity is reached.
+* TODO comments
