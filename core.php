@@ -63,6 +63,7 @@ class core extends Module
 				$this->registerFeature($this, array('retrieveResults'), 'retrieveResults', 'Retrieve a result set that has been stored. This will replace the current result set with the retrieved one --retrieveResults=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('getPID'), 'getPID', 'Save the process ID to a variable. --getPID=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('setJson'), 'setJson', 'Take a json encoded array from jsonValue and store the arrary in moduleName'.valueSeparator.'variableName. --setJson=moduleName'.valueSeparator.'variableName'.valueSeparator.'jsonValue');
+				$this->registerFeature($this, array('outNow'), 'outNow', 'Execute the output now.', array('dev'));
 				$this->registerFeature($this, array('dump'), 'dump', 'Dump internal state.', array('debug', 'dev'));
 				$this->registerFeature($this, array('debug'), 'debug', 'Send parameters to stdout. --debug=debugLevel,outputText eg --debug=0,StuffToWriteOut . DebugLevel is not implemented yet, but 0 will be "always", and above that will only show as the verbosity level is incremented with -v or --verbose.', array('debug', 'dev'));
 				$this->registerFeature($this, array('verbose', 'v'), 'verbose', 'Increment/set the verbosity. --verbose[=verbosityLevel] where verbosityLevel is an integer starting from 0 (default)', array('debug', 'dev'));
@@ -135,6 +136,9 @@ class core extends Module
 				break;
 			case 'ping':
 				echo "Pong.\n";
+				break;
+			case 'outNow':
+				$this->out($this->getSharedMemory());
 				break;
 			case '#':
 				break;
@@ -441,8 +445,8 @@ class core extends Module
 			else
 			{
 				$this->complain($this, "hmmmm, I don't think you asked me to do anything...");
-				$obj=&$this->get('Features', 'help');
-				$obj['obj']->event('help');
+				$obj=&$this->get('Features', 'helpDefault');
+				$obj['obj']->event('helpDefault');
 				return $emptyResult;
 			}
 		}
@@ -450,8 +454,8 @@ class core extends Module
 		{
 			$this->complain($this, "Could not find macro '$macroName'. This can happen if you haven't asked me to do anything.");
 			
-			$obj=&$this->get('Features', 'help');
-			$obj['obj']->event('help');
+			$obj=&$this->get('Features', 'helpDefault');
+			$obj['obj']->event('helpDefault');
 			return $emptyResult;
 		}
 	}

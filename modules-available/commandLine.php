@@ -21,6 +21,7 @@ class CommandLine extends Module
 			case 'init':
 				$this->core->registerFeature($this, array('oldHelp'), 'oldHelp', 'Deprecated. Display this help. --oldHelp[=searchForTag]', array('deprecated'));
 				$this->core->registerFeature($this, array('searchHelp'), 'searchHelp', 'Search tags for help. Will return an array that can be used in a template. --searchHelp[=searchForTag]', array('help'));
+				$this->core->registerFeature($this, array('getTags'), 'getTags', 'List available tags', array('help'));
 				$this->core->registerFeature($this, array('printr', 'print_r'), 'printr', 'Print output using the print_r() function. Particularly useful for debugging.', array('debug', 'dev', 'output'));
 				$this->core->registerFeature($this, array('nested'), 'nested', 'Print output using a simple nested format. Particularly useful for debugging.', array('debug', 'dev', 'output'));
 				
@@ -36,6 +37,9 @@ class CommandLine extends Module
 				break;
 			case 'searchHelp':
 				return $this->searchHelp($this->core->get('Global', 'searchHelp'));
+				break;
+			case 'getTags':
+				return $this->getTags($this->core->get('Global', 'getTags'));
 				break;
 			case 'printr':
 				$this->core->setRef('General', 'outputObject', $this);
@@ -142,6 +146,7 @@ class CommandLine extends Module
 					$details['matchedTag']=$tag;
 					$details['moduleName']=$details['obj']->getName();
 					
+					
 					$visualFlags=array();
 					foreach ($details['flags'] as $flag)
 					{
@@ -156,6 +161,12 @@ class CommandLine extends Module
 		}
 		
 		return $output;
+	}
+	
+	function getTags()
+	{
+		$this->store=$this->core->getStore();
+		return array_keys($this->store['Tags']);
 	}
 	
 	function showHelp($tags)

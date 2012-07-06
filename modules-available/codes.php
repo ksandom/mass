@@ -68,9 +68,20 @@ class Codes extends Module
 	{
 		$shortNamesBelongTo='dark';
 		
+		/* Useful links
+			http://www.termsys.demon.co.uk/vtansi.htm
+			http://www.frexx.de/xterm-256-notes/
+			http://tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html
+		*/
+		
 		$deck=array(
-			0=>'dark', 
+			0=>'dark', // Potentially this should be reset....
 			1=>'bright');
+			#2=>'', potentiall this should replace 0
+			#4=>'underscore',
+			#5=>'blink',
+			#7=>'reverse',
+			#8=>'hidden');
 			
 		$color=array(
 			30=>'Black',

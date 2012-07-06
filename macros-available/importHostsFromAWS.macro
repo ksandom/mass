@@ -1,0 +1,10 @@
+# Import all running hosts from AWS --importHostsFromAWS=awsKey,awsSecret ~ import,NOTREADY
+
+# TODO rethink this, it may be better to store it internally in the AWS module to prevent harvesting.
+set AWS,key,~!Global,importHostsFromAWS0!~
+set AWS,secret,~!Global,importHostsFromAWS1!~
+
+AWSGetRegions
+stashResults AWS,regions
+
+
