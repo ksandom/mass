@@ -97,7 +97,7 @@ class Codes extends Module
 			}
 		}
 		
-		$colorCode=($useColor)?"\033[0;37m":'';
+		$colorCode=($useColor)?"\033[0;0m":'';
 		$this->core->set('Codes', 'default', $colorCode);
 		
 		$this->core->set('Codes', 'testColor', "This shows that the color codes have been loaded.");
