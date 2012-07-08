@@ -1,0 +1,3 @@
+# Get back the last results from a --list. Useful when having finished doing some maniplipulation and want to go in a different direction. ~ dev
+
+retrieveResults List,results
