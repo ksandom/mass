@@ -1,10 +1,7 @@
-# Import all running hosts from AWS --importHostsFromAWS=awsKey,awsSecret ~ import,NOTREADY
+# Import all running hosts from AWS --importHostsFromAWS use --AWSSaveCred to set the credentials ~ import,alpha,AWS
 
-# TODO rethink this, it may be better to store it internally in the AWS module to prevent harvesting.
-set AWS,key,~!Global,importHostsFromAWS0!~
-set AWS,secret,~!Global,importHostsFromAWS1!~
+# loadStoreFromData AWSCreds
+# AWSSetCred AWSCreds,dev
 
-AWSGetRegions
-stashResults AWS,regions
-
-
+AWSGetHosts
+saveToJson ~!General,configDir!~/data/1LayerHosts/dev.json

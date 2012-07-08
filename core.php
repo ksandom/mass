@@ -641,9 +641,9 @@ class core extends Module
 		if ($numberRequried>$actualParms) 
 		{
 			$this->complain($obj, "Required $numberRequried parameters but got $actualParms. Original parms were \"$originalParms\" for", $event, true);
-			return true;
+			return false;
 		}
-		else return false;
+		else return true;
 	}
 	
 	function getRequireNumParmsOrComplain($obj, $featureName, $numberRequried)
