@@ -2,3 +2,4 @@
 
 toString ~!Terminal,GUICMD!~
 exec
+getLastList
