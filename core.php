@@ -96,7 +96,7 @@ class core extends Module
 				$this->set($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'setArray':
-				$parms=$this->interpretParms($this->get('Global', 'set'), 2, false);
+				$parms=$this->interpretParms($this->get('Global', 'setArray'), 2, false);
 				$this->set($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'setIfNotSet':
@@ -171,6 +171,7 @@ class core extends Module
 			{
 				if (isset($parts[$i]))
 				{
+					# $this->core->debug(2, "interpretParms: Added main part $i => {$parts[$i]}");
 					$output[]=$parts[$i];
 				}
 				else return $output;
@@ -181,7 +182,8 @@ class core extends Module
 			
 			for ($j=$i;$j<$stop;$j++)
 			{
-				$outputParts[]=$parts[$i];
+				$outputParts[]=$parts[$j];
+				# $this->core->debug(2, "interpretParms: Added remaining part $j => {$parts[$j]}");
 			}
 			
 			# Reassemble=true sets a string. False sets an array.
