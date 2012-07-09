@@ -2,5 +2,6 @@
 
 # Note that dev is the only account name that can be used at the moment.
 
-set AWSCreds,~!Global,AWSSaveCred-0!~,~!Global,AWSSaveCred1!~,~!Global,AWSSaveCred2!~
+loadStoreFromData AWSCreds
+set AWSCreds,~!Global,AWSSaveCred!~
 saveStoreToData AWSCreds
