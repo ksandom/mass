@@ -91,7 +91,11 @@ class core extends Module
 				return array($this->get($parms[0], $parms[1]));
 				break;
 			case 'set':
-				$parms=$this->interpretParms($this->get('Global', 'set'));
+				$parms=$this->interpretParms($this->get('Global', 'set'), 2, true);
+				$this->set($parms[0], $parms[1], $parms[2]);
+				break;
+			case 'setArray':
+				$parms=$this->interpretParms($this->get('Global', 'set'), 2, false);
 				$this->set($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'setIfNotSet':
@@ -154,9 +158,37 @@ class core extends Module
 		return self::$singleton;
 	}
 	
-	function interpretParms($parms)
+	function interpretParms($parms, $limit=0, $reassemble=true)
 	{
-		return explode(valueSeparator, $parms);
+		$parts=explode(valueSeparator, $parms);
+		
+		if ($limit)
+		{
+			# Return the split array, but once we reach the limit, dump any remaining parms into one remaining parm
+			$output=array();
+			for ($i=0;$i<$limit;$i++)
+			{
+				if (isset($parts[$i]))
+				{
+					$output[]=$parts[$i];
+				}
+				else return $output;
+			}
+			
+			$outputParts=array();
+			$stop=count($parts)
+			
+			for ($j=$i;$j<$stop;$j++)
+			{
+				$outputParts[]=$parts[$i];
+			}
+			
+			# Reassemble=true sets a string. False sets an array.
+			if ($reassemble) $output[]=implode(valueSeparator, $outputParts);
+			else $output[]=$outputParts;
+			return $output;
+		}
+		else return $parts;
 	}
 	
 	function getFileList($path)
