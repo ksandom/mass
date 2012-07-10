@@ -60,6 +60,8 @@ class core extends Module
 				$this->registerFeature($this, array('set'), 'set', 'set a value. All remaining values after the destination go into a string. --set=moduleName'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
 				$this->registerFeature($this, array('setArray'), 'setArray', 'set a value. All remaining values after the destination go into an array. --set=moduleName'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
 				$this->registerFeature($this, array('setIfNotSet', 'setDefault'), 'setIfNotSet', 'set a value if none has been set. --setIfNotSet=moduleName'.valueSeparator.'variableName'.valueSeparator.'defaultValue', array('storeVars'));
+				$this->registerFeature($this, array('getStore'), 'getStore', 'Get an entire store into the result set. --getStore=moduleNam', array('storeVars', 'store', 'dev'));
+				$this->registerFeature($this, array('setStore'), 'setStore', 'Set an entire store to the current state of the result set. --setStore=moduleName', array('storeVars', 'store', 'dev'));
 				$this->registerFeature($this, array('stashResults'), 'stashResults', 'Put the current result set into a memory slot. --stashResults=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('retrieveResults'), 'retrieveResults', 'Retrieve a result set that has been stored. This will replace the current result set with the retrieved one --retrieveResults=moduleName'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('getPID'), 'getPID', 'Save the process ID to a variable. --getPID=moduleName'.valueSeparator.'variableName');
@@ -104,6 +106,12 @@ class core extends Module
 				$parms=$this->interpretParms($originalParms);
 				$this->requireNumParms($this, 2, $event, $originalParms, $parms);
 				$this->setIfNotSet($parms[0], $parms[1], $parms[2]);
+				break;
+			case 'getStore':
+				return $this->getModulesStore($this->get('Global', 'getStore'));
+				break;
+			case 'setStore':
+				$this->setModulesStore($this->get('Global', 'setStore'));
 				break;
 			case 'stashResults':
 				$originalParms=$this->get('Global', 'stashResults');
@@ -564,6 +572,11 @@ class core extends Module
 		return $this->store[$moduleName];
 	}
 
+	function setModulesStore($moduleName)
+	{
+		$this->store[$moduleName]=$this->getSharedMemory();
+	}
+	
 	function run($moduleName, $function, $args=null)
 	{ // Run code of a module
 	}
