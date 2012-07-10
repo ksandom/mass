@@ -108,10 +108,10 @@ class core extends Module
 				$this->setIfNotSet($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'getStore':
-				return $this->getModulesStore($this->get('Global', 'getStore'));
+				return $this->getStoreModule($this->get('Global', 'getStore'));
 				break;
 			case 'setStore':
-				$this->setModulesStore($this->get('Global', 'setStore'));
+				$this->setStoreModule($this->get('Global', 'setStore'), $this->getSharedMemory());
 				break;
 			case 'stashResults':
 				$originalParms=$this->get('Global', 'stashResults');
@@ -564,21 +564,6 @@ class core extends Module
 	{ # Note that this returns a COPY of the store. It is not intended as a way of modifying the store.
 		$this->debug(5,"getStore()");
 		return $this->store;
-	}
-	
-	function getModulesStore($moduleName)
-	{
-		if (!isset($this->store[$moduleName])) return false;
-		return $this->store[$moduleName];
-	}
-
-	function setModulesStore($moduleName)
-	{
-		$this->store[$moduleName]=$this->getSharedMemory();
-	}
-	
-	function run($moduleName, $function, $args=null)
-	{ // Run code of a module
 	}
 	
 	function registerModule(&$obj)

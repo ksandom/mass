@@ -147,19 +147,24 @@ class Macro extends Module
 			return false;
 		}
 		
-		foreach ($input as $key=>$in)
+		if (is_array($input))
 		{
-			$this->core->debug(5, "loopMacro iterated for key $key");
-			if (is_array($in)) $this->core->setStoreModule('Result', $in);
-			else
+			foreach ($input as $key=>$in)
 			{
-				$this->core->setStoreModule('Result', array());
-				$this->core->set('Result', 'line', $in);
+				$this->core->debug(5, "loopMacro iterated for key $key");
+				if (is_array($in)) $this->core->setStoreModule('Result', $in);
+				else
+				{
+					$this->core->setStoreModule('Result', array());
+					$this->core->set('Result', 'line', $in);
+				}
+				$this->core->set('Result', 'key', $key);
+				
+				$this->core->triggerEvent($macroName, $macroParms);
+				$output[$key]=$this->core->getStoreModule('Result');
 			}
-			
-			$this->core->triggerEvent($macroName, $macroParms);
-			$output[$key]=$this->core->getStoreModule('Result');
 		}
+		else $this->core->debug(5, "loopMacro: No input!");
 		
 		return $output;
 	}

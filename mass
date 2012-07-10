@@ -34,11 +34,6 @@ $core->set('General', 'description', $description);
 $core->setRef('CommandLine', 'arguments', $argv);
 loadModules($core, "$configDir/modules-enabled");
 
-$core->run('Hosts', 'load', "$configDir/data/hosts");
-$core->run('CommandLine', 'processArgs');
-
 $core->go();
-
-#$core->dumpState();
 
 ?>

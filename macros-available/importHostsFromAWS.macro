@@ -1,7 +1,9 @@
 # Import all running hosts from AWS --importHostsFromAWS use --AWSSaveCred to set the credentials ~ import,alpha,AWS
+#onDefine aliasFeature importHostsFromAWS,awsimport
 
-# loadStoreFromData AWSCreds
-# AWSSetCred AWSCreds,dev
+loadStoreFromData AWSCreds
+getStore AWSCreds
 
-AWSGetHosts
-saveToJson ~!General,configDir!~/data/1LayerHosts/dev.json
+notIfResult debug 0,No Accounts created. Please use --AWSSaveCred to define some.
+
+loopMacro importHostsFromAWSAccount

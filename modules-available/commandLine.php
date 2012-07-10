@@ -239,7 +239,7 @@ class CommandLine extends Module
 	{
 		if (!$this->codes)
 		{
-			$this->codes=$this->core->getModulesStore('Codes');
+			$this->codes=$this->core->getStoreModule('Codes');
 		}
 	}
 	
