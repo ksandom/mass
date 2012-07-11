@@ -1,0 +1,7 @@
+# Internal to --importHostsFromAWS ~ alpha,AWS
+
+loadStoreFromData AWSCreds
+AWSSetCred ~!Result,line!~
+
+AWSGetHosts
+saveToJson ~!General,configDir!~/data/1LayerHosts/~!Result,key!~.json
