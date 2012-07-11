@@ -158,23 +158,36 @@ class AWS extends Module
 						{
 							$host[$key]=$arraySet;
 						}
-						unset($host[instancesSet]);
+						unset($host['instancesSet']);
 						
 						# Get the name tag
 						# TODO It looks like there is a key problem, so this may break when there is more than one tag. Test this.
-						foreach ($item['instancesSet']['item']['tagSet'] as $tag) 
+						$tagKeys=array_keys($host['tagSet']);
+						if (is_numeric($tagKeys[0]))
 						{
-							if (isset($tag['key']))
+							foreach ($host['tagSet'] as $tagKey=>$tag) 
 							{
-								if ($tag['key']=='Name')
+								if (isset($tag['key']))
 								{
-									$name=$tag['value'];
-									$this->core->debug(3, "AWSGetHostsForAllRegions: Found $name");
+									if ($tag['key']=='Name')
+									{
+										$name=$tag['value'];
+										$this->core->debug(3, "AWSGetHostsForAllRegions: Found $name");
+									}
+									else $this->core->debug(3, "AWSGetHostsForAllRegions: not found");
 								}
-								else $this->core->debug(3, "AWSGetHostsForAllRegions: not found");
+								else $this->core->debug(3, "AWSGetHostsForAllRegions: Got unexpected value. # TODO investigate this further.");
 							}
-							else $this->core->debug(3, "AWSGetHostsForAllRegions: Got unexpected value. # TODO investigate this further.");
 						}
+						else
+						{
+							if ($host['tagSet']['item']['key']=='Name')
+							{
+								$name=$host['tagSet']['item']['value'];
+							}
+						}
+						
+						$host['hostname']=$name; # TODO check this!
 						
 						# Re-map a couple of keys, then remove them so people don't use them creating non-portable code.
 						if (isset($item['instancesSet']['item']['ipAddress']))
