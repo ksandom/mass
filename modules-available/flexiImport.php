@@ -74,7 +74,7 @@ class FlexiImport extends Module
 		if (!$this->core->get('FlexiImport', $name))
 		{
 			$this->debug(4, "FlexiImport: Created import set $name");
-			$this->core->set('FlexiImport', $name, array())
+			$this->core->set('FlexiImport', $name, array());
 		}
 		else $this->core->complain($this, "Set already exists.", $name);
 	}

@@ -2,7 +2,7 @@
 
 templateOutIfNotSet compactOutput
 
-# search search ~!Global,list!~
+search search ~!Global,list!~
 notIfResult searchOld ~!Global,list!~
 
 resultSet cmd,~!Global,stray!~

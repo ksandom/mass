@@ -152,6 +152,14 @@ class AWS extends Module
 					#die();
 					if (is_array($item) && isset($item['instancesSet']['item']['tagSet']['item']))
 					{
+						# Make the structure more useful.
+						$host=$item;
+						foreach ($item['instancesSet']['item'] as $key=>$arraySet) 
+						{
+							$host[$key]=$arraySet;
+						}
+						unset($host[instancesSet]);
+						
 						# Get the name tag
 						# TODO It looks like there is a key problem, so this may break when there is more than one tag. Test this.
 						foreach ($item['instancesSet']['item']['tagSet'] as $tag) 
@@ -168,25 +176,23 @@ class AWS extends Module
 							else $this->core->debug(3, "AWSGetHostsForAllRegions: Got unexpected value. # TODO investigate this further.");
 						}
 						
-						$host=$item; # This will probably be vastly cut down once we know what we want.
-						
 						# Re-map a couple of keys, then remove them so people don't use them creating non-portable code.
 						if (isset($item['instancesSet']['item']['ipAddress']))
 						{
-							$host['$externalIP']=$item['instancesSet']['item']['ipAddress'];
+							$host['externalIP']=$item['instancesSet']['item']['ipAddress'];
 							unset($item['instancesSet']['item']['ipAddress']);
 						}
-						else $host['$externalIP']='';
+						else $host['externalIP']='';
 						
 						if (isset($item['instancesSet']['item']['privateIpAddress']))
 						{
-							$host['$internalIP']=$item['instancesSet']['item']['privateIpAddress'];
+							$host['internalIP']=$item['instancesSet']['item']['privateIpAddress'];
 							unset($item['instancesSet']['item']['privateIpAddress']);
 							$output[]=$host;
 						}
 						elseif ($includePoweredOffInstances) 
 						{
-							$host['$internalIP']='';
+							$host['internalIP']='';
 							$output[]=$host;
 						}
 					}
