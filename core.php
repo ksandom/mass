@@ -284,14 +284,27 @@ class core extends Module
 	
 	function triggerEvent($argument, $value)
 	{
+		$nesting=$this->get('Core', 'nesting');
+		if ($argument=='	')
+		{
+			$argument=$this->get('Core', 'lastArgument'.$nesting);
+			$lastValue=$this->get('Core', 'lastValue'.$nesting);
+			$value=($lastValue)?$lastValue.','.$value:$value;
+		}
+		else
+		{
+			$this->set('Core', 'lastArgument'.$nesting, $argument);
+			$this->set('Core', 'lastValue'.$nesting, $value);
+		}
+		
 		if ($argument and $argument != '#' and $argument != '//')
 		{ // Only process non-white space
 			$obj=&$this->core->get('Features', $argument);
 			if (is_array($obj))
 			{
-				$indentation=str_repeat('  ', $this->get('Core', 'nesting'));
+				$indentation=str_repeat('  ', $nesting);
 				$valueIn=$this->processValue($value);
-				$nesting=$this->get('Core', 'nesting'); # TODO This might be better moved so it is only executed with it is needed.
+				
 				$this->debug(3, "INVOKE-Enter {$indentation}{$obj['name']}/$nesting value={$value}, valueIn=$valueIn");
 				
 				if ($this->isVerboseEnough(5))

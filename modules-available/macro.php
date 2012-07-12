@@ -102,6 +102,11 @@ class Macro extends Module
 					$this->core->debug(3, "#onDefine {$parts[0]}={$parts[1]}");
 					$this->core->triggerEvent($parts[0], $parts[1]);
 					break;
+				case '	': # Indentation
+					/*
+						think about this more
+					*/
+					break;
 				default:
 					$this->core->addAction($argument, $value, $macroName);
 					break;
