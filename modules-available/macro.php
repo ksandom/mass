@@ -80,36 +80,40 @@ class Macro extends Module
 		foreach ($lines as $line)
 		{
 			$trimmedLine=trim($line);
-			$endOfArgument=strPos($trimmedLine, ' ');
-			if ($endOfArgument)
+			if (substr($trimmedLine, 0, 1)!='	')
 			{
-				$argument=trim(substr($line, 0, $endOfArgument));
-				$value=trim(substr($line, $endOfArgument+1));
+				$endOfArgument=strPos($trimmedLine, ' ');
+				if ($endOfArgument)
+				{
+					$argument=trim(substr($line, 0, $endOfArgument));
+					$value=trim(substr($line, $endOfArgument+1));
+				}
+				else
+				{
+					$argument=$trimmedLine;
+					$value='';
+				}
+				
+				switch ($argument)
+				{
+					case '#':
+					case '':
+						break;
+					case '#onDefine':
+						$parts=$this->core->splitOnceOn(' ', $value);
+						$this->core->debug(3, "#onDefine {$parts[0]}={$parts[1]}");
+						$this->core->triggerEvent($parts[0], $parts[1]);
+						break;
+					default:
+						$this->core->addAction($argument, $value, $macroName);
+						break;
+				}
 			}
 			else
 			{
-				$argument=$trimmedLine;
-				$value='';
-			}
-			
-			switch ($argument)
-			{
-				case '#':
-				case '':
-					break;
-				case '#onDefine':
-					$parts=$this->core->splitOnceOn(' ', $value);
-					$this->core->debug(3, "#onDefine {$parts[0]}={$parts[1]}");
-					$this->core->triggerEvent($parts[0], $parts[1]);
-					break;
-				case '	': # Indentation
-					/*
-						think about this more
-					*/
-					break;
-				default:
-					$this->core->addAction($argument, $value, $macroName);
-					break;
+				$remaining=substr($trimmedLine, 1);
+				$remaining=str_replace($remaining, '	', '	 ');
+				$this->core->addAction('	', $remaining, $macroName);
 			}
 		}
 	}

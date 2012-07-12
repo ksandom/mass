@@ -71,7 +71,8 @@ class core extends Module
 				$this->registerFeature($this, array('debug'), 'debug', 'Send parameters to stdout. --debug=debugLevel,outputText eg --debug=0,StuffToWriteOut . DebugLevel is not implemented yet, but 0 will be "always", and above that will only show as the verbosity level is incremented with -v or --verbose.', array('debug', 'dev'));
 				$this->registerFeature($this, array('verbose', 'v'), 'verbose', 'Increment/set the verbosity. --verbose[=verbosityLevel] where verbosityLevel is an integer starting from 0 (default)', array('debug', 'dev'));
 				$this->registerFeature($this, array('ping'), 'ping', 'Useful for debugging.', array('debug', 'dev'));
-				$this->registerFeature($this, array('#'), '#', 'Comment.');
+				$this->registerFeature($this, array('#'), '#', 'Comment.', array('systemInternal'));
+				$this->registerFeature($this, array('	'), '	', 'Internally used for nesting.', array('systemInternal'));
 				break;
 			case 'followup':
 				break;
@@ -295,6 +296,7 @@ class core extends Module
 		{
 			$this->set('Core', 'lastArgument'.$nesting, $argument);
 			$this->set('Core', 'lastValue'.$nesting, $value);
+			# TODO implement the inverse of this: clean up the current level when exiting the nesting level.
 		}
 		
 		if ($argument and $argument != '#' and $argument != '//')
