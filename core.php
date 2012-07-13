@@ -296,7 +296,6 @@ class core extends Module
 		{
 			$this->set('Core', 'lastArgument'.$nesting, $argument);
 			$this->set('Core', 'lastValue'.$nesting, $value);
-			# TODO implement the inverse of this: clean up the current level when exiting the nesting level.
 		}
 		
 		if ($argument and $argument != '#' and $argument != '//')
