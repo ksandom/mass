@@ -112,6 +112,7 @@ class Hosts extends Module
 		{
 			foreach ($fileDetails as $categoryName=>$categoryDetails)
 			{
+				#$this->core->debug(1, "categoryName is $categoryName");
 				$this->processCategory($output, $search, $categoryDetails, $filename, $categoryName);
 			}
 		}
@@ -121,17 +122,25 @@ class Hosts extends Module
 	
 	function processCategory(&$output, $search, $categoryDetails, $filename, $categoryName='unknown')
 	{
-		foreach ($categoryDetails as $hostName=>$hostDetails)
+		if ($categoryDetails)
 		{
-			if ($this->hostMatches($hostDetails, $search))
+			$this->core->debug(5, "processCategory: categoryDetails is ".gettype($categoryDetails));
+			foreach ($categoryDetails as $hostName=>$hostDetails)
 			{
-				$iip=(isset($hostDetails->internalIP))?$hostDetails->internalIP:false;
-				$eip=(isset($hostDetails->externalIP))?$hostDetails->externalIP:false;
-				$ifqdn=(isset($hostDetails->internalFQDN))?$hostDetails->internalFQDN:false;
-				$efqdn=(isset($hostDetails->externalFQDN))?$hostDetails->externalFQDN:false;
-				
-				$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip, 'internalFQDN'=>$ifqdn, 'externalFQDN'=>$efqdn);
+				if ($this->hostMatches($hostDetails, $search))
+				{
+					$iip=(isset($hostDetails->internalIP))?$hostDetails->internalIP:false;
+					$eip=(isset($hostDetails->externalIP))?$hostDetails->externalIP:false;
+					$ifqdn=(isset($hostDetails->internalFQDN))?$hostDetails->internalFQDN:false;
+					$efqdn=(isset($hostDetails->externalFQDN))?$hostDetails->externalFQDN:false;
+					
+					$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip, 'internalFQDN'=>$ifqdn, 'externalFQDN'=>$efqdn);
+				}
 			}
+		}
+		else
+		{
+			$this->core->debug(1, "processCategory: categoryDetails is ".gettype($categoryDetails).". This might be a problem. Here is other stuff we know: file=$filename, cat=$categoryName, search=$search");
 		}
 	}
 	
