@@ -443,6 +443,10 @@ class core extends Module
 	function decrementNesting()
 	{
 		$srcNesting=$this->get('Core', 'nesting');
+		
+		$this->delete('Core', 'lastArgument'.$srcNesting);
+		$this->delete('Core', 'lastValue'.$srcNesting);
+		
 		$nesting=(is_numeric($srcNesting))?$srcNesting-1:1;
 		if ($nesting<1) $nesting=1;
 		$this->set('Core', 'nesting', $nesting);
@@ -542,6 +546,7 @@ class core extends Module
 				$result=null;
 			}
 		}
+		else
 		{
 			$result=null;
 		}
@@ -573,6 +578,20 @@ class core extends Module
 		if (!isset($this->store[$moduleName])) $this->store[$moduleName]=array();
 		
 		$this->store[$moduleName][$valueName]=&$args;
+	}
+	
+	function delete($moduleName, $valueName)
+	{
+		if (isset($this->store[$moduleName]))
+		{
+			if (isset($this->store[$moduleName][$valueName])) 
+			{
+				unset($this->store[$moduleName][$valueName]);
+				$this->debug(5,"delete($moduleName, $valueName) - deleted");
+			}
+			else  $this->debug(5,"delete($moduleName, $valueName) - valueName not found");
+		}
+		else $this->debug(5,"delete($moduleName, $valueName) - moduleName not found");
 	}
 	
 	function getStore()
