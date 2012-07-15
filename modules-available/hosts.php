@@ -54,9 +54,22 @@ class Hosts extends Module
 			{
 				if (preg_match('/'.$search.'/', $detail) or !$search)
 				{
-					$this->core->debug(5, "Matched search=\"$search\", detail=\"$detail\"");
+					$this->core->debug(5, "hostMatches: Matched search=\"$search\", detail=\"$detail\"");
 					return true;
 				}
+				else
+				{
+					$this->core->debug(3, "hostMatches: Did not match on search=$search key=$key value=$detail");
+				}
+			}
+			elseif(is_array($detail))
+			{
+				$this->core->debug(3, "hostMatches: Nested into array key=$key");
+				if ($this->hostMatches($detail, $search)) return true;
+			}
+			else
+			{
+				$this->core->debug(5, "hostMatches: What is this? key=$key type=".gettype($detail));
 			}
 		}
 	}
@@ -76,11 +89,11 @@ class Hosts extends Module
 		$this->dataDir=$this->core->get('General', 'configDir').'/data';
 		$hostFiles=$this->core->getFileList($this->dataDir."/$folderName");
 		$allHostDefinitions=array();
-		$this->core->debug(4, "loadHostDefinitions: Loading folder $folderName into $destination.");
+		$this->core->debug(3, "loadHostDefinitions: Loading folder $folderName into $destination.");
 		foreach ($hostFiles as $filename=>$hostFile)
 		{
 			$allHostDefinitions[$filename]=json_decode(file_get_contents($hostFile));
-			$this->core->debug(5, "loadHostDefinitions: Loaded $hostFile.");
+			$this->core->debug(4, "loadHostDefinitions:   Loaded $hostFile into $destination.");
 		}
 		
 		$this->core->set('Hosts', $destination, $allHostDefinitions);
@@ -95,6 +108,7 @@ class Hosts extends Module
 		$allHostDefinitions=$this->core->get('Hosts', 'hostDefinitions');
 		foreach ($allHostDefinitions as $filename=>$fileDetails)
 		{
+			$this->core->debug(4, "listHosts: $filename");
 			$this->processCategory($output, $search, $fileDetails, $filename, 'default');
 		}
 		
@@ -112,7 +126,6 @@ class Hosts extends Module
 		{
 			foreach ($fileDetails as $categoryName=>$categoryDetails)
 			{
-				#$this->core->debug(1, "categoryName is $categoryName");
 				$this->processCategory($output, $search, $categoryDetails, $filename, $categoryName);
 			}
 		}
@@ -133,9 +146,11 @@ class Hosts extends Module
 					$eip=(isset($hostDetails->externalIP))?$hostDetails->externalIP:false;
 					$ifqdn=(isset($hostDetails->internalFQDN))?$hostDetails->internalFQDN:false;
 					$efqdn=(isset($hostDetails->externalFQDN))?$hostDetails->externalFQDN:false;
+					if (is_numeric($hostName) and isset($hostDetails->hostname)) $hostName=$hostDetails->hostname;
 					
 					$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip, 'internalFQDN'=>$ifqdn, 'externalFQDN'=>$efqdn);
 				}
+				else $this->core->debug(4, "Did not match $hostName");
 			}
 		}
 		else
