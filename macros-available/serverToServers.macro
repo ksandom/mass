@@ -1,0 +1,11 @@
+# Copy files from one server to many ~ user
+
+stashResults ServerToServers,sourcelist
+
+# retrieveResults Download,sourcelist
+# toString mkdir -p ~%externalFQDN%~
+# exec
+
+# retrieveResults Download,sourcelist
+# toString scp -r ~%IP%~:~!Global,download!~ ~%externalFQDN%~ >&2 ~!Settings,backgroundTasks!~
+# exec
