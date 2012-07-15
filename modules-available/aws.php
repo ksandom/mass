@@ -190,6 +190,18 @@ class AWS extends Module
 						$host['hostname']=$name; # TODO check this!
 						
 						# Re-map a couple of keys, then remove them so people don't use them creating non-portable code.
+						if (isset($item['instancesSet']['item']['privateDnsName']))
+						{
+							$host['internalFQDN']=$item['instancesSet']['item']['privateDnsName'];
+						}
+						else $host['internalFQDN']='';
+						
+						if (isset($item['instancesSet']['item']['privateDnsName']))
+						{
+							$host['externalFQDN']=$item['instancesSet']['item']['dnsName'];
+						}
+						else $host['externalFQDN']='';
+						
 						if (isset($item['instancesSet']['item']['ipAddress']))
 						{
 							$host['externalIP']=$item['instancesSet']['item']['ipAddress'];
