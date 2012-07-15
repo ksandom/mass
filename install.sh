@@ -58,6 +58,35 @@ function linkedInstall
 	doInstall
 }
 
+function cleanEnabled
+{
+	testDir="$2"
+	testFunction="$1"
+	
+	cd "$testDir"
+	for item in *;do
+		if ! $testFunction "$item"; then
+			echo "$item is no longer present. Disabling."
+			cd "$testDir"
+			rm "$item"
+		fi
+	done
+}
+
+function testEnabledFile
+{
+	item="$1"
+	cat "$item" 2>&1 > /dev/null
+	return $?
+}
+
+function testEnabledDirectory
+{
+	item="$1"
+	cd "$item" 2>&1 > /dev/null
+	return $?
+}
+
 function doInstall
 {
 	startDir=`pwd` # for some reason ~- wasn't working
@@ -76,11 +105,11 @@ function doInstall
 	
 	if [ "$installType" == 'cp' ]; then
 		echo -e "\n# Copying available stuff"
-		cp -Rv docs modules-* core.php macros-* examples "$configDir"
+		cp -Rv docs modules-* core.php macros-* packages-* examples "$configDir"
 		
 		echo -e "\n# Setting up remaining directory structure"
 		cd "$configDir"
-		mkdir -p modules-enabled macros-enabled templates-enabled config
+		mkdir -p modules-enabled macros-enabled templates-enabled packages-enabled config
 		
 		echo -e "\n# Making the thing runnable"
 		cd $binExec
@@ -96,7 +125,7 @@ function doInstall
 		cd "$configDir"
 		
 		echo -e "\n# Linking like there's no tomorrow."
-		ln -sfv "$startDir"/docs "$startDir"/modules-*available "$startDir"/macros-*available "$startDir"/templates-*available "$startDir/core.php" "$startDir/examples" . 
+		ln -sfv "$startDir"/docs "$startDir"/modules-*available "$startDir"/macros-*available "$startDir"/templates-*available "$startDir/core.php" "$startDir/examples" "$startDir"/packages-*available . 
 		
 		echo -e "\n# Setting up remaining directory structure"
 		mkdir -p modules-enabled macros-enabled templates-enabled config
@@ -107,8 +136,18 @@ function doInstall
 		
 		for thing in macros modules templates;do
 			echo -e "\n# Sorting out $thing available/enabled"
+			mkdir -p "$configDir/$thing-enabled"
 			cd "$configDir/$thing-enabled"
 			ln -sf ../$thing-available/* .
+			cleanEnabled testEnabledFile "$configDir/$thing-enabled"
+		done
+		
+		for thing in packages;do
+			echo -e "\n# Sorting out $thing available/enabled"
+			mkdir -p "$configDir/$thing-enabled"
+			cd "$configDir/$thing-enabled"
+			ln -sf ../$thing-available/* .
+			cleanEnabled testEnabledDirectory "$configDir/$thing-enabled"
 		done
 	fi
 	
