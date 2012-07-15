@@ -1,0 +1,7 @@
+# Like --list but sets From,results for use in other macros ~ condament
+
+list ~!Global,from!~
+stashResults From,results
+set Global,message,- from
+outNow
+unsetTemplateOut

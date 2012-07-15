@@ -25,6 +25,7 @@ class Template extends Module
 				$this->core->registerFeature($this, array('template'), 'template', 'Specify a templte to use to display the output. This will replace the result with an array containing a single string. --template=templateName . eg --template=screen');
 				$this->core->registerFeature($this, array('templateOut'), 'templateOut', 'Use a template to display the output before '.programName.' terminates. --templateOut=templateName . eg --templateOut=screen');
 				$this->core->registerFeature($this, array('noTemplateOut'), 'noTemplateOut', 'Do not allow futue --templateOutIfNotSet to be set. It will not have effect if one has already been set.');
+				$this->core->registerFeature($this, array('unsetTemplateOut'), 'unsetTemplateOut', 'Unset the current templateOut. This disables the output, but allows --templateOutIfNotSet to be used again.');
 				$this->core->registerFeature($this, array('templateOutIfNotSet'), 'templateOutIfNotSet', "Same as --templateOut, but will only be set if it hasn't been already.");
 				break;
 			case 'followup':
@@ -57,6 +58,9 @@ class Template extends Module
 				}
 				else $this->core->debug(4, "--templateOutIfNotSet: \$this->templateOut has already been set.");
 				break;
+			case 'unsetTemplateOut':
+				$this->templateOut=false;
+				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
 				break;
@@ -82,7 +86,7 @@ class Template extends Module
 				$contents=$this->findAndRunMacro($contents, $input);
 			}
 			
-			return $contents;
+			return $this->core->processValue($contents);
 		}
 		else $this->core->complain($this, "Could not find file $fileName");
 	}

@@ -1,4 +1,4 @@
-Found hosts
+Found hosts ~!Global,message!~
 
 <~~ ~!Codes,blue!~~%categoryName%~/ ~!Codes,default!~~%hostName%~ (~!Codes,cyan!~~%IP%~~!Codes,default!~)
   ~!Codes,brightBlack!~external: ~!Codes,green!~~%externalFQDN%~ ~!Codes,default!~(~!Codes,cyan!~~%externalIP%~~!Codes,default!~)
