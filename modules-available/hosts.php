@@ -147,6 +147,7 @@ class Hosts extends Module
 					$ifqdn=(isset($hostDetails->internalFQDN))?$hostDetails->internalFQDN:false;
 					$efqdn=(isset($hostDetails->externalFQDN))?$hostDetails->externalFQDN:false;
 					if (is_numeric($hostName) and isset($hostDetails->hostname)) $hostName=$hostDetails->hostname;
+					if (is_numeric($hostName) and isset($hostDetails->hostName)) $hostName=$hostDetails->hostName;
 					
 					$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip, 'internalFQDN'=>$ifqdn, 'externalFQDN'=>$efqdn);
 				}
@@ -197,24 +198,24 @@ class Hosts extends Module
 						if (!isset($lineOutput['hostNameMap']))
 						{
 							$lineOutput['hostNameMap']=array();
-							$lineOutput['hostNameCount']=0;
+							$lineOutput['hostnameCount']=0;
 						}
 						
 						$ipKey=(strpos($parts[0], '.'))?'internalIP':'internalIPv6';
 						$lineOutput[$ipKey]=$parts[0];
-						$lineOutput['hostName']=$parts[1];
+						$lineOutput['hostname']=$parts[1];
 						
 						for ($i=0; $i<$numberOfParts; $i++)
 						{
-							if (!(isset($lineOutput['hostNameMap'][$parts[$i]])) and $parts[$i]!=$lineOutput['hostName'] and (trim($parts[$i])))
+							if (!(isset($lineOutput['hostnameMap'][$parts[$i]])) and $parts[$i]!=$lineOutput['hostname'] and (trim($parts[$i])))
 							{
-								$lineOutput['hostNameMap'][$parts[$i]]=$parts[$i];
-								$lineOutput['hostNameCount']++;
-								$lineOutput['hostName'.$lineOutput['hostNameCount']]=$parts[$i];
+								$lineOutput['hostnameMap'][$parts[$i]]=$parts[$i];
+								$lineOutput['hostnameCount']++;
+								$lineOutput['hostname'.$lineOutput['hostnameCount']]=$parts[$i];
 							}
 						}
 						
-						$output[$lineOutput['hostName']]=$lineOutput;
+						$output[$lineOutput['hostname']]=$lineOutput;
 					}
 				}
 			}
