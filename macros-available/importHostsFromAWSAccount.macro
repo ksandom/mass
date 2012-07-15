@@ -3,5 +3,6 @@
 loadStoreFromData AWSCreds
 AWSSetCred ~!Result,line!~
 
+AWSCloseConnection
 AWSGetHosts
 saveToJson ~!General,configDir!~/data/1LayerHosts/~!Result,key!~.json

@@ -3,7 +3,7 @@
 templateOutIfNotSet compactOutput
 
 search ~!Global,list!~
-# notIfResult searchOld ~!Global,list!~
+notIfResult searchOld ~!Global,list!~
 
 resultSet cmd,~!Global,stray!~
 addSlashes cmd,cmd

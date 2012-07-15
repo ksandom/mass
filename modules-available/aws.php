@@ -35,6 +35,8 @@ class AWS extends Module
 				$this->core->registerFeature($this, array('AWSGetRegions'), 'AWSGetRegions', "Get the AWS regions", array('import'));
 				$this->core->registerFeature($this, array('AWSGetHosts'), 'AWSGetHosts', "Get all running AWS instances", array('import'));
 				$this->core->registerFeature($this, array('AWSGetAllHosts'), 'AWSGetAllHosts', "Get all AWS instances (even powered off ones). More often than not, you probably want --AWSGetInstances.", array('import'));
+				$this->core->registerFeature($this, array('AWSCloseConnection'), 'AWSCloseConnection', "Close any open connections to AWS so that a new one can be created.", array('import'));
+				break;
 				break;
 			case 'AWSSetCred':
 				if ($parms=$this->core->getRequireNumParmsOrComplain($this, $event, 2)) $this->AWSSetCred($parms[0], $parms[1]);
@@ -48,6 +50,8 @@ class AWS extends Module
 			case 'AWSGetAllHosts':
 				return $this->AWSGetHostsForAllRegions(true);
 				break;
+			case 'AWSCloseConnection':
+				$this->AWSCloseConnection();
 			case 'last':
 				break;
 			case 'followup':
@@ -80,6 +84,11 @@ class AWS extends Module
 			$this->core->debug(3, "Connecting to AWS without credentials");
 			$this->ec2Connection = new AmazonEC2();
 		}
+	}
+	
+	function AWSCloseConnection()
+	{
+		$this->ec2Connection=null;
 	}
 	
 	function AWSAssertConnection()
@@ -121,6 +130,7 @@ class AWS extends Module
 		$this->core->debug(3, "AWSGetHostsForAllRegions: Ready to find hosts");
 		
 		$output=array();
+		$this->AWSAssertConnection();
 		
 		# Loop through each region
 		foreach ($regions as $region)
@@ -181,9 +191,12 @@ class AWS extends Module
 						}
 						else
 						{
-							if ($host['tagSet']['item']['key']=='Name')
+							if (isset($host['tagSet']['item']['key']))
 							{
-								$name=$host['tagSet']['item']['value'];
+								if ($host['tagSet']['item']['key']=='Name')
+								{
+									$name=$host['tagSet']['item']['value'];
+								}
 							}
 						}
 						
