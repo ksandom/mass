@@ -13,6 +13,8 @@ exec
 
 # Upload
 retrieveResults To,results
-toString scp -r ~!ServerToServers,tmp!~ ~%IP%~:~!Global,serverToServers!~ >&2 ~!Settings,backgroundTasks!~
+# For now, don't background as we want to clean up the tmp directory afterwards ~!Settings,backgroundTasks!~
+toString scp -r ~!ServerToServers,tmp!~/* ~%IP%~:`echo ~!Global,serverToServers!~|sed 's/\/.*$//g'` >&2 
 exec
 
+exec rm -Rf ~!ServerToServers,tmp!~
