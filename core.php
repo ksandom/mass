@@ -69,7 +69,8 @@ class core extends Module
 				$this->registerFeature($this, array('outNow'), 'outNow', 'Execute the output now.', array('dev'));
 				$this->registerFeature($this, array('dump'), 'dump', 'Dump internal state.', array('debug', 'dev'));
 				$this->registerFeature($this, array('debug'), 'debug', 'Send parameters to stdout. --debug=debugLevel,outputText eg --debug=0,StuffToWriteOut . DebugLevel is not implemented yet, but 0 will be "always", and above that will only show as the verbosity level is incremented with -v or --verbose.', array('debug', 'dev'));
-				$this->registerFeature($this, array('verbose', 'v'), 'verbose', 'Increment/set the verbosity. --verbose[=verbosityLevel] where verbosityLevel is an integer starting from 0 (default)', array('debug', 'dev'));
+				$this->registerFeature($this, array('verbose', 'v', 'verbosity'), 'verbose', 'Increment/set the verbosity. --verbose[=verbosityLevel] where verbosityLevel is an integer starting from 0 (default)', array('debug', 'dev'));
+				$this->registerFeature($this, array('V'), 'V', 'Decrement verbosity.', array('debug', 'dev'));
 				$this->registerFeature($this, array('ping'), 'ping', 'Useful for debugging.', array('debug', 'dev'));
 				$this->registerFeature($this, array('#'), '#', 'Comment.', array('systemInternal'));
 				$this->registerFeature($this, array('	'), '	', 'Internally used for nesting.', array('systemInternal'));
@@ -144,6 +145,9 @@ class core extends Module
 			case 'verbose':
 				$original=$this->get('Global', 'verbose');
 				$this->verbosity($original);
+				break;
+			case 'V':
+				$this->verbosity('-');
 				break;
 			case 'getPID':
 				$this->getPID($this->interpretParms($this->get('Global', 'getPID')));
@@ -420,10 +424,23 @@ class core extends Module
 	
 	function verbosity($level=0)
 	{
-		if (is_numeric($level)) $newlevel=intval($level);
+		if (is_numeric($level))
+		{
+			$this->verbosity=intval($level);
+			$verbosityName=$this->get('Verbosity', $this->verbosity);
+			$this->core->debug($this->verbosity, "verbosity: Set verbosity to \"$verbosityName\" ({$this->verbosity})");
+		}
+		elseif ($level=='-')
+		{
+			$this->verbosity=$this->verbosity-1;
+			$verbosityName=$this->get('Verbosity', $this->verbosity);
+			$this->core->debug($this->verbosity, "verbosity: Decremented verbosity to \"$verbosityName\" ({$this->verbosity})");
+		}
 		else
 		{
 			$this->verbosity=$this->verbosity+1;
+			$verbosityName=$this->get('Verbosity', $this->verbosity);
+			$this->core->debug($this->verbosity, "verbosity: Incremented verbosity to \"$verbosityName\" ({$this->verbosity})");
 		}
 	}
 	
