@@ -1,11 +1,18 @@
-# Copy files from one server to many ~ user
+# Copy files from one server to many. eg --from=server01 --to=server.* --serverToServers=/tmp/awesomeFile ~ user
 
-stashResults ServerToServers,sourcelist
+# TODO make this unique so that multiple calls can work concurrently.
+set ServerToServers,tmp,/tmp/serverToServers
 
-# retrieveResults Download,sourcelist
-# toString mkdir -p ~%externalFQDN%~
-# exec
+# Download
+retrieveResults From,results
+exec mkdir -p ~!ServerToServers,tmp!~
 
-# retrieveResults Download,sourcelist
-# toString scp -r ~%IP%~:~!Global,download!~ ~%externalFQDN%~ >&2 ~!Settings,backgroundTasks!~
-# exec
+# Do not background this as the upload relies on this having completed.
+toString scp -r ~%IP%~:~!Global,serverToServers!~ ~!ServerToServers,tmp!~ >&2
+exec
+
+# Upload
+retrieveResults To,results
+toString scp -r ~!ServerToServers,tmp!~ ~%IP%~:~!Global,serverToServers!~ >&2 ~!Settings,backgroundTasks!~
+exec
+

@@ -77,18 +77,25 @@ class Template extends Module
 	
 	function processTemplate($fileName, $input=false)
 	{
-		if (file_exists($fileName))
+		if ($fileName)
 		{
-			$contents=file_get_contents($fileName);
-			
-			while (strpos($contents, templateMacroBegin)!==false)
+			if (file_exists($fileName))
 			{
-				$contents=$this->findAndRunMacro($contents, $input);
+				$contents=file_get_contents($fileName);
+				
+				while (strpos($contents, templateMacroBegin)!==false)
+				{
+					$contents=$this->findAndRunMacro($contents, $input);
+				}
+				
+				return $this->core->processValue($contents);
 			}
-			
-			return $this->core->processValue($contents);
+			else $this->core->complain($this, "Could not find file $fileName");
 		}
-		else $this->core->complain($this, "Could not find file $fileName");
+		else
+		{
+			$this->core->debug(1, "processTemplate: fileName was empty. This is probably intentinoal. If not, check that the variable has been resolved as expected.");
+		}
 	}
 	
 	function findAndRunMacro($contents, $input=false)
