@@ -3,6 +3,11 @@
 
 # Manage mass packages
 
+/* This is needed since most of the stuff in this module gets processed before the command line parameters can be processed to set the verbosity.
+Set to 0 to show debugging.
+Set to 4 normally.
+*/
+define('packageVerbosity', 0); 
 
 class Packages extends Module
 {
@@ -36,24 +41,42 @@ class Packages extends Module
 		$list=$this->core->getFileList($packageEnabledDir);
 		foreach ($list as $filename)
 		{
-			$this->core->debug(0, "loadEnabledPackages: Loaded $filename");
+			# TODO The paths need to be taken into account so that enabled/avaiable will be able to co-exist without duplicates
+			$this->core->debug(packageVerbosity, "loadEnabledPackages: $filename - loading");
+			$this->loadPackage($filename);
 		}
-	}
-	
-	function loadPackages()
-	{
 	}
 	
 	function loadPackage($packageName)
 	{
 		if (!isset($this->loadedPackages[$packageName]))
 		{
+			# TODO when the path is altered, this will need to be updated
+			$packageParts=$this->core->getFileList($packageName);
 			
+			foreach ($packageParts as $packagePart)
+			{
+				$this->core->debug(packageVerbosity, "loadEnabledPackages: $packageName   Processing $packagePart");
+				$this->loadComponent($packagePart);
+			}
 		}
 		else
 		{
-			$this->core->debug(1, "loadPackage: $packageName is already loaded.");
+			$this->core->debug(packageVerbosity, "loadPackage: $packageName is already loaded.");
 		}
+	}
+	
+	function loadComponent($filename)
+	{
+		if (is_file($filename))
+		{
+			$this->core->debug(packageVerbosity, "loadEnabledPackages:      File $filename");
+		}
+		else
+		{
+			$this->core->debug(packageVerbosity, "loadEnabledPackages:      Not doing anything with directories yet $filename");
+		}
+		
 	}
 }
 
