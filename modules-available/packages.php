@@ -56,7 +56,6 @@ class Packages extends Module
 			
 			foreach ($packageParts as $packagePart)
 			{
-				$this->core->debug(packageVerbosity, "loadEnabledPackages: $packageName   Processing $packagePart");
 				$this->loadComponent($packagePart);
 			}
 		}
@@ -70,11 +69,43 @@ class Packages extends Module
 	{
 		if (is_file($filename))
 		{
-			$this->core->debug(packageVerbosity, "loadEnabledPackages:      File $filename");
+			#packageComponents
+			$filenameParts=explode('.', $filename);
+			$numParts=count($filenameParts);
+			$lastPos=($numParts>1)?$numParts-1:0;
+			
+			/*
+				private $packageComponents=array(
+				'md'=>'Documentation',
+				'php'=>'Module',
+				'module'=>'Module',
+				'macro'=>'Macro',
+				'template'=>'Template',
+				);
+			*/
+			
+			switch ($filenameParts[$lastPos])
+			{
+				case 'md':
+					$this->core->debug(packageVerbosity, "loadPackage: $filename Documentation should be in it's packages /doc folder.");
+					break;
+				case 'php':
+				case 'module':
+					$this->core->debug(packageVerbosity, "loadPackage: $filename Module.");
+					break;
+				case 'macro':
+					$this->core->debug(packageVerbosity, "loadPackage: $filename Macro.");
+					break;
+				case 'template':
+					$this->core->debug(packageVerbosity, "loadPackage: $filename Template.");
+					break;
+			}
+			
+			$this->core->debug(packageVerbosity, "loadEnabledPackages:   File $filename");
 		}
 		else
 		{
-			$this->core->debug(packageVerbosity, "loadEnabledPackages:      Not doing anything with directories yet $filename");
+			$this->core->debug(packageVerbosity, "loadEnabledPackages:   Not doing anything with directories yet $filename");
 		}
 		
 	}
