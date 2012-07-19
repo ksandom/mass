@@ -206,12 +206,21 @@ class core extends Module
 	function getFileList($path)
 	{
 		# TODO This can be done much better internally in PHP
-		$output=array();
-		$files=explode("\n", `ls -1 $path`);
-		foreach ($files as $file)
+		if (is_file($path))
 		{
-			$trimmedFile=trim($file);
-			if ($trimmedFile) $output[$trimmedFile]="$path/$trimmedFile";
+			$pathParts=explode('/', $path);
+			$fileName=$pathParts[count($pathParts)-1];
+			$output=array($fileName=>$path);
+		}
+		else
+		{
+			$output=array();
+			$files=explode("\n", `ls -1 $path`);
+			foreach ($files as $file)
+			{
+				$trimmedFile=trim($file);
+				if ($trimmedFile) $output[$trimmedFile]="$path/$trimmedFile";
+			}
 		}
 		return $output;
 	}
@@ -579,6 +588,16 @@ class core extends Module
 		$this->store[$moduleName][$valueName]=&$args;
 	}
 	
+	function addItemsToAnArray($moduleName, $valueName, $items)
+	{
+		$currentList=$this->get($moduleName, $valueName);
+		if (is_array($currentList)) $output=array_merge($currentList, $items);
+		else $output=$items;
+		
+		$this->set($moduleName, $valueName, $output);
+		return $output;
+	}
+	
 	function delete($moduleName, $valueName)
 	{
 		if (isset($this->store[$moduleName]))
@@ -755,7 +774,7 @@ class core extends Module
 	}
 }
 
-function loadModules(&$core, $sourcePath)
+function loadModules(&$core, $sourcePath, $callInits=true)
 {
 	foreach ($core->getModules($sourcePath) as $path)
 	{
@@ -763,7 +782,14 @@ function loadModules(&$core, $sourcePath)
 		if (file_exists($path))
 		{
 			#echo "Loading $path\n";
-			include ($path);
+			$filenameParts=explode('.', $path);
+			$numParts=count($filenameParts);
+			$lastPos=($numParts>1)?$numParts-1:0;
+			
+			if ($filenameParts[$lastPos]=='php'or $filenameParts[$lastPos]=='module')
+			{
+				include ($path);
+			}
 		}
 		else
 		{
@@ -771,9 +797,12 @@ function loadModules(&$core, $sourcePath)
 		}
 	}
 	
-	$core->callInits(); // Basic init only
-	$core->callInits('followup'); // Any action that needs to be taken once all modules are loaded.
-	$core->callInits('last'); // Any action that needs to be taken once all modules are loaded.
+	if ($callInits)
+	{
+		$core->callInits(); // Basic init only
+		$core->callInits('followup'); // Any action that needs to be taken once all modules are loaded.
+		$core->callInits('last'); // Any action that needs to be taken once all modules are loaded.
+	}
 }
 
 

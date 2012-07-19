@@ -54,9 +54,9 @@ class Packages extends Module
 			# TODO when the path is altered, this will need to be updated
 			$packageParts=$this->core->getFileList($packageName);
 			
-			foreach ($packageParts as $packagePart)
+			foreach ($packageParts as $filename=>$fullPath)
 			{
-				$this->loadComponent($packagePart);
+				$this->loadComponent($filename, $fullPath);
 			}
 		}
 		else
@@ -65,9 +65,9 @@ class Packages extends Module
 		}
 	}
 	
-	function loadComponent($filename)
+	function loadComponent($filename, $fullPath)
 	{
-		if (is_file($filename))
+		if (is_file($fullPath))
 		{
 			#packageComponents
 			$filenameParts=explode('.', $filename);
@@ -91,10 +91,13 @@ class Packages extends Module
 					break;
 				case 'php':
 				case 'module':
-					$this->core->debug(packageVerbosity, "loadPackage: $filename Module.");
+					$this->core->debug(packageVerbosity, "loadPackage: $filename Module. ($fullPath)");
+				# TODO make sure init gets called on modules loaded from here. All other stages like followup should happen automatically as they have not happened yet.
+					loadModules($this->core, $fullPath, false);
 					break;
 				case 'macro':
 					$this->core->debug(packageVerbosity, "loadPackage: $filename Macro.");
+					$this->core->addItemsToAnArray('Core', 'macrosToLoad', array($filename=>$fullPath));
 					break;
 				case 'template':
 					$this->core->debug(packageVerbosity, "loadPackage: $filename Template.");
