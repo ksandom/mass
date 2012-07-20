@@ -704,7 +704,7 @@ class core extends Module
 	
 	function callInits($event='init')
 	{
-		# TODO The initMap is not working. Symptom: the Packages module (and potentially others) gets inited twice
+		# TODO The initMap is not working. Symptom: the Packages module (and potentially others) get inited twice. I've worked around this by putting in a condition around the $callInits variable in the loadModules function. This situation arises when calling loadModules from the packages.php module. 
 		if (!isset($this->initMap[$event])) $this->initMap[$event]=array();
 		foreach ($this->module as $name=>&$obj)
 		{
