@@ -32,6 +32,7 @@ class core extends Module
 	private $module;
 	private static $singleton;
 	private $verbosity=0;
+	private $initMap=array();
 	
 	function __construct()
 	{
@@ -703,9 +704,15 @@ class core extends Module
 	
 	function callInits($event='init')
 	{
+		# TODO The initMap is not working. Symptom: the Packages module (and potentially others) gets inited twice
+		if (!isset($this->initMap[$event])) $this->initMap[$event]=array();
 		foreach ($this->module as $name=>&$obj)
 		{
-			$obj->event($event);
+			if (!isset($this->initMap[$event][$name]))
+			{
+				$obj->event($event);
+				$this->initMap[$event][$name]=true;
+			}
 		}
 	}
 	

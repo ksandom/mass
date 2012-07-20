@@ -92,7 +92,6 @@ class Packages extends Module
 				case 'php':
 				case 'module':
 					$this->core->debug(packageVerbosity, "loadPackage: $filename Module. ($fullPath)");
-				# TODO make sure init gets called on modules loaded from here. All other stages like followup should happen automatically as they have not happened yet.
 					loadModules($this->core, $fullPath, false);
 					break;
 				case 'macro':
