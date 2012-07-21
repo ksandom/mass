@@ -67,9 +67,9 @@ function cleanEnabled
 	for item in *;do
 		if ! $testFunction "$item"; then
 			echo "$item is no longer present. Disabling."
-			cd "$testDir"
 			rm "$item"
 		fi
+		cd "$testDir"
 	done
 }
 
