@@ -22,12 +22,12 @@ It's important to remember that these sources should only be used periodically a
 
 Here are the sources available right now:
 
-Here are the sources I plan to have available:
+Here are the sources I plan to have available --help=import:
 
-* AWS (I'm using a company specific one at the moment. I'll write a generic one when I get a chance.)
-* /etc/hosts
-* .ssh/config
-* /etc/ssh/ssh_config
+* AWS --help=AWS
+* /etc/hosts --help=Hosts --importFromHostsFile
+* .ssh/config # TODO
+* /etc/ssh/ssh_config # TODO
 
 ### Templates
 As of this writing, there are two templates. When ever there are more, they will be made available in the templates-available folder. If you'd like to make your own, see creatingATemplate.md.
