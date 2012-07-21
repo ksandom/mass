@@ -78,14 +78,10 @@ class Template extends Module
 
 	function processTemplateByName($name, $input=false)
 	{
-		# TODO Double check and tidy this.
 		$derivedTemplateName="$name.template";
 		$list=$this->core->get('Core', 'templatesToLoad');
 		if (isset($list[$derivedTemplateName])) $templateFile=$list[$derivedTemplateName];
-		else
-		{
-			$templateFile=(file_exists($derivedTemplateName))?$derivedTemplateName:$name;
-		}
+		else $templateFile=(file_exists($derivedTemplateName))?$derivedTemplateName:$name;
 		
 		return $this->processTemplate($templateFile, $input);
 	}

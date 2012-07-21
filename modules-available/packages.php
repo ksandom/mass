@@ -7,7 +7,7 @@
 Set to 0 to show debugging.
 Set to 4 normally.
 */
-define('packageVerbosity', 0); 
+define('packageVerbosity', 4); 
 
 class Packages extends Module
 {
