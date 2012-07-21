@@ -35,6 +35,20 @@ set Terminal,noneCMD,false
 saveStoreToConfig Terminal
 
 
+# Set verbosity names
+set Verbosity,0,The strong silent type
+set Verbosity,1,Information
+set Verbosity,2,Verbose Information
+set Verbosity,3,Debug1
+set Verbosity,4,Debug2
+set Verbosity,5,Mother in law
+set Verbosity,6,Grains of sand on the beach
+set Verbosity,7,Atoms in the universe
+set Verbosity,8,Words can not describe how verbose this is
+
+saveStoreToConfig Verbosity
+
+
 # Set default settings
 setDefault Settings,backgroundTasks,&
 saveStoreToConfig Settings

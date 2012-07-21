@@ -157,7 +157,6 @@ class Manipulator extends Module
 				{
 					if ($neededRegex)
 					{
-						echo "search=$neededRegex key=$neededKey\n";
 						if (preg_match('/'.$neededRegex.'/', $line[$neededKey])) $output[]=$line;
 					}
 					else $output[]=$line;
