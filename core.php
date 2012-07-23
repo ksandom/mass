@@ -297,7 +297,7 @@ class core extends Module
 		$this->setSharedMemory($this->getParentSharedMemory());
 	}
 	
-	function triggerEvent($argument, $value)
+	function callFeature($argument, $value)
 	{
 		$nesting=$this->get('Core', 'nesting');
 		if ($argument=='	')
@@ -341,7 +341,7 @@ class core extends Module
 				$this->debug(3,'GOT HERE');
 				return $result;
 			}
-			else $this->complain(null, "Could not find a module to match '$argument'", 'triggerEvent');
+			else $this->complain(null, "Could not find a module to match '$argument'", 'callFeature');
 		}
 		return false;
 	}
@@ -503,7 +503,7 @@ class core extends Module
 					$this->debugSharedMemory("$macroName - {$actionItem['name']}");
 					
 					# TODO The problem happens somewhere between here...
-					$returnedValue1=$this->triggerEvent($actionItem['name'], $actionItem['value']);
+					$returnedValue1=$this->callFeature($actionItem['name'], $actionItem['value']);
 					if (is_array($returnedValue1)) $returnedValue=$returnedValue1;
 					# and here
 					$this->debug(5,"GOT HERE ALSO");

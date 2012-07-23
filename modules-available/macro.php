@@ -102,7 +102,7 @@ class Macro extends Module
 					case '#onDefine':
 						$parts=$this->core->splitOnceOn(' ', $value);
 						$this->core->debug(3, "#onDefine {$parts[0]}={$parts[1]}");
-						$this->core->triggerEvent($parts[0], $parts[1]);
+						$this->core->callFeature($parts[0], $parts[1]);
 						break;
 					default:
 						$this->core->addAction($argument, $value, $macroName);
@@ -169,7 +169,7 @@ class Macro extends Module
 				}
 				$this->core->set('Result', 'key', $key);
 				
-				$this->core->triggerEvent($macroName, $macroParms);
+				$this->core->callFeature($macroName, $macroParms);
 				$output[$key]=$this->core->getStoreModule('Result');
 			}
 		}

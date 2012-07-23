@@ -110,7 +110,7 @@ class Condition extends Module
 	function takeAction($parms)
 	{
 		$parmParts=$this->core->splitOnceOn(' ', $parms);
-		return $this->core->triggerEvent($parmParts[0], $parmParts[1]);
+		return $this->core->callFeature($parmParts[0], $parmParts[1]);
 	}
 }
 

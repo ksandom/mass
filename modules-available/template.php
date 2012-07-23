@@ -140,7 +140,7 @@ class Template extends Module
 			$argument=substr($macroCode, 0, $argumentTerminatorPos);
 			$value=substr($macroCode, $argumentTerminatorPos+1);
 			
-			$result=$this->core->triggerEvent($argument, $value);
+			$result=$this->core->callFeature($argument, $value);
 		}
 		
 		$finalResult=$this->insertResultIntoTemplate($result, $outputTemplate);
