@@ -27,6 +27,8 @@ class Template extends Module
 				$this->core->registerFeature($this, array('noTemplateOut'), 'noTemplateOut', 'Do not allow futue --templateOutIfNotSet to be set. It will not have effect if one has already been set.');
 				$this->core->registerFeature($this, array('unsetTemplateOut'), 'unsetTemplateOut', 'Unset the current templateOut. This disables the output, but allows --templateOutIfNotSet to be used again.');
 				$this->core->registerFeature($this, array('templateOutIfNotSet'), 'templateOutIfNotSet', "Same as --templateOut, but will only be set if it hasn't been already.");
+				
+				$this->loadEnabledTenmplates();
 				break;
 			case 'followup':
 				break;
@@ -66,12 +68,21 @@ class Template extends Module
 				break;
 		}
 	}
+	
+	function loadEnabledTenmplates()
+	{
+		$templateDir=$this->core->get('General', 'configDir').'/templates-enabled';
+		$list=$this->core->getFileList($templateDir);
+		$this->core->addItemsToAnArray('Core', 'templatesToLoad', $list);
+	}
 
 	function processTemplateByName($name, $input=false)
 	{
-		$templateDir=$this->core->get('General', 'configDir').'/templates-enabled';
-		$derivedTemplateName="$templateDir/$name.template";
-		$templateFile=(file_exists($derivedTemplateName))?$derivedTemplateName:$name;
+		$derivedTemplateName="$name.template";
+		$list=$this->core->get('Core', 'templatesToLoad');
+		if (isset($list[$derivedTemplateName])) $templateFile=$list[$derivedTemplateName];
+		else $templateFile=(file_exists($derivedTemplateName))?$derivedTemplateName:$name;
+		
 		return $this->processTemplate($templateFile, $input);
 	}
 	

@@ -7,7 +7,7 @@
 Set to 0 to show debugging.
 Set to 4 normally.
 */
-define('packageVerbosity', 0); 
+define('packageVerbosity', 4); 
 
 class Packages extends Module
 {
@@ -74,16 +74,6 @@ class Packages extends Module
 			$numParts=count($filenameParts);
 			$lastPos=($numParts>1)?$numParts-1:0;
 			
-			/*
-				private $packageComponents=array(
-				'md'=>'Documentation',
-				'php'=>'Module',
-				'module'=>'Module',
-				'macro'=>'Macro',
-				'template'=>'Template',
-				);
-			*/
-			
 			switch ($filenameParts[$lastPos])
 			{
 				case 'md':
@@ -100,6 +90,7 @@ class Packages extends Module
 					break;
 				case 'template':
 					$this->core->debug(packageVerbosity, "loadPackage: $filename Template.");
+					$this->core->addItemsToAnArray('Core', 'templatesToLoad', array($filename=>$fullPath));
 					break;
 			}
 			
