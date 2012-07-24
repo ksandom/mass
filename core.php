@@ -185,6 +185,8 @@ class core extends Module
 			return false;
 		}
 		
+		for ($i=$partsCount;$i<$limit;$i++) $parts[$i]=false;
+		
 		if ($limit)
 		{
 			# Return the split array, but once we reach the limit, dump any remaining parms into one remaining parm
