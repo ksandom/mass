@@ -97,11 +97,11 @@ class core extends Module
 				return array($this->get($parms[0], $parms[1]));
 				break;
 			case 'set':
-				$parms=$this->interpretParms($this->get('Global', 'set'), 2, true);
+				$parms=$this->interpretParms($this->get('Global', 'set'), 2, 2, true);
 				$this->set($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'setArray':
-				$parms=$this->interpretParms($this->get('Global', 'setArray'), 2, false);
+				$parms=$this->interpretParms($this->get('Global', 'setArray'), 2, 2, false);
 				$this->set($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'setIfNotSet':
@@ -173,9 +173,17 @@ class core extends Module
 		return self::$singleton;
 	}
 	
-	function interpretParms($parms, $limit=0, $reassemble=true)
+	function interpretParms($parms, $limit=0, $require=null, $reassemble=true)
 	{
+		if ($require===null) $require=$limit;
 		$parts=explode(valueSeparator, $parms);
+		$partsCount=count($parts);
+		
+		if ($partsCount<$require)
+		{
+			$this->debug(0, "Expected $require parameters, but got $partsCount. Bad things could happen if execution continues.");
+			return false;
+		}
 		
 		if ($limit)
 		{
