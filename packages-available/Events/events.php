@@ -17,7 +17,7 @@ class Events extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('registerEvent'), 'registerEvent', "Register a feature to be executed when a particular event is triggered. --registerEvent=ModuleName,eventName,featureName,featureValue", array());
+				$this->core->registerFeature($this, array('registerEvent'), 'registerEvent', "Register a feature to be executed when a particular event is triggered. --registerEvent=ModuleName,eventName,featureName[,featureValue]", array());
 				$this->core->registerFeature($this, array('triggerEvent'), 'triggerEvent', "Trigger an event. --triggerEvent=ModuleName,eventName", array());
 				break;
 			case 'followup':
@@ -25,10 +25,12 @@ class Events extends Module
 			case 'last':
 				break;
 			case 'registerEvent':
-				$parms=$this->interpretParms($this->get('Global', 'registerEvent'), 4, 3, true);
+				$parms=$this->core->interpretParms($this->core->get('Global', 'registerEvent'), 4, 3, true);
+				$this->registerForEvent($parms[0], $parms[1], $parms[2], $parms[3]);
 				break;
 			case 'triggerEvent':
-				$parms=$this->interpretParms($this->get('Global', 'triggerEvent'), 2, 2, true);
+				$parms=$this->core->interpretParms($this->core->get('Global', 'triggerEvent'), 2, 2, true);
+				$this->triggerEvent($parms[0], $parms[1]);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -42,7 +44,7 @@ class Events extends Module
 		if (!isset($priorityGroups[$priority])) $priorityGroups[$priority]=array();
 		$priorityGroups[$priority][]=array('featureName'=>$featureName, 'featureValue'=>$featureValue);
 		
-		$this->debug(3, "Registered \"$featureName $featureValue\" to event \"$moduleName, $eventName\" at priority $priority.");
+		$this->core->debug(3, "Registered \"$featureName $featureValue\" to event \"$moduleName, $eventName\" at priority $priority.");
 		$this->core->set($moduleName, $eventName, $priorityGroups);
 	}
 	
@@ -60,7 +62,7 @@ class Events extends Module
 	function triggerEvent($moduleName, $eventName)
 	{
 		$priorityGroups=$this->core->get($moduleName, $eventName);
-		if (is_array($eventees) && count($priorityGroup)>0)
+		if (is_array($priorityGroups) && count($priorityGroups)>0)
 		{
 			foreach ($priorityGroups as $priority=>$priorityGroup)
 			{
@@ -75,12 +77,12 @@ class Events extends Module
 					}
 					
 					$sharedMemory=$this->core->getSharedMemory();
-					$this->decrementNesting();
+					$this->core->decrementNesting();
 					return $sharedMemory;
 				}
 				else
 				{
-					$this->debug(4, "Removing priority group $priority from event \"$moduleName, $eventName\" as it has no eventees.");
+					$this->core->debug(4, "Removing priority group $priority from event \"$moduleName, $eventName\" as it has no eventees.");
 					unset($priorityGroups['priority']);
 					
 					# This is potentially inefficient. But there would have to be a LOT of priority groups for it to matter. If it becomes an issue, set a flag and do it at the end.
@@ -92,11 +94,11 @@ class Events extends Module
 		{
 			if (is_array($eventees))
 			{
-				$this->debug(4, "Event \"$moduleName, $eventName\" triggered, but there were no eventee priority groups. This means there are no registered eventees.");
+				$this->core->debug(4, "Event \"$moduleName, $eventName\" triggered, but there were no eventee priority groups. This means there are no registered eventees.");
 			}
 			else
 			{
-			$this->debug(4, "Event \"$moduleName, $eventName\" triggered, but there were no eventee priority groups. This means there are no registered eventees.");
+			$this->core->debug(4, "Event \"$moduleName, $eventName\" triggered, but there were no eventee priority groups. This means there are no registered eventees.");
 			}
 		}
 	}
