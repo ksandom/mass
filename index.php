@@ -31,8 +31,8 @@ $core->set('General', 'configDir', $configDir);
 $core->set('General', 'hostsDir', "$configDir/data/1LayerHosts");
 $core->set('General', 'programName', programName);
 $core->set('General', 'description', $description);
-include ($configDir.'/interfaces/commandLine.php');
-$core->setRef('CommandLine', 'arguments', $argv);
+include ($configDir.'/interfaces/basicWeb.php');
+$core->setRef('BasicWeb', 'arguments', $_REQUEST);
 loadModules($core, "$configDir/modules-enabled");
 
 $core->go();

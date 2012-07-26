@@ -15,7 +15,7 @@ class JsonOut extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('j', 'json'), 'json', 'Send returned output as a json array.', array('json'));
+				$this->core->registerFeature($this, array('j', 'json'), 'json', 'Send returned output as a json array.', array('json', 'output'));
 				$this->core->registerFeature($this, array('toJson'), 'toJson', 'Put the results into a json array in the result array to be used with something like --singleStringNow.', array('json'));
 				break;
 			case 'followup':
