@@ -1,29 +1,12 @@
-#!/usr/bin/php
 <?php
 # Copyright (c) 2012, Kevin Sandom under the BSD License. See LICENSE for full details.
  
 define('programName', 'mass');
 $description="A commandline tool/API for doing awesome stuff on many nodes of a cluster.";
 
-# Find home
-$home=trim(`echo \$HOME`); # TODO There is a better way than this!
-
-# Find bzse
-if (file_exists("$home/.".programName."/core.php"))
-{
-	$configDir="$home/.".programName;
-}
-elseif (file_exists("/etc/".programName."/core.php"))
-{
-	$configDir="/etc/".programName;
-}
-else
-{
-	die (programName.": Could not find installation. Please run install.sh.\n");
-}
+$configDir=getcwd();
 
 include "$configDir/core.php";
-
 
 # initiate core
 $core=core::assert();

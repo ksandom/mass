@@ -35,8 +35,9 @@ class BasicWeb extends Module
 	function processArgs()
 	{
 		# TODO Make this work for BasicWeb
-		$arg=&$this->core->get('CommandLine', 'arguments');
-		#print_r($arg);
+		$arg=&$this->core->get('BasicWeb', 'arguments');
+		print_r($arg);
+		die();
 		$max=count($arg);
 		$possibleFlagsRemaining=true;
 		$stray=array();
