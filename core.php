@@ -34,10 +34,12 @@ class core extends Module
 	private $verbosity=0;
 	private $initMap=array();
 	
-	function __construct()
+	function __construct($verbosity=0)
 	{
 		$this->store=array();
 		$this->module=array();
+		
+		$this->verbosity=$verbosity;
 		
 		parent::__construct('Core');
 		$this->set('Core', 'serial', intval(rand()));
@@ -167,9 +169,9 @@ class core extends Module
 		}
 	}
 
-	public static function assert()
+	public static function assert($verbosity=0)
 	{
-		if (!self::$singleton) self::$singleton=new core();
+		if (!self::$singleton) self::$singleton=new core($verbosity);
 		return self::$singleton;
 	}
 	
@@ -432,7 +434,8 @@ class core extends Module
 			# TODO These lookups can be optimized!
 			$code=$this->get('Codes', $title, false);
 			$default=$this->get('Codes', 'default', false);
-			echo "[$code$title$default]: $output\n";
+			$eol=$this->get('General', 'EOL'); # TODO This can be improved
+			echo "[$code$title$default]: $output$eol";
 			# return false;
 		}
 	}

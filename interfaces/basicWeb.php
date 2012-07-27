@@ -19,6 +19,12 @@ class BasicWeb extends Module
 		switch ($event)
 		{
 			case 'init':
+				# TODO Think of a better way to do this, as it's not needed for the web interface.
+				$this->core->registerFeature($this, array('oldHelp'), 'oldHelp', 'Place holder', array('placeholder'));
+				$this->core->registerFeature($this, array('searchHelp'), 'searchHelp', 'Place holder', array('placeholder'));
+				$this->core->registerFeature($this, array('getTags'), 'getTags', 'Place holder', array('placeholder'));
+				$this->core->registerFeature($this, array('printr', 'print_r'), 'printr', 'Place holder', array('placeholder'));
+
 				break;
 			case 'followup':
 				break;
@@ -34,66 +40,12 @@ class BasicWeb extends Module
 	
 	function processArgs()
 	{
-		# TODO Make this work for BasicWeb
 		$arg=&$this->core->get('BasicWeb', 'arguments');
-		print_r($arg);
-		die();
-		$max=count($arg);
-		$possibleFlagsRemaining=true;
-		$stray=array();
-		
-		for ($i=1;$i<$max;$i++) # NOTE Chosen for instead of foreach so we can nicely grab/skip the next item while maintaining position
+		$this->core->addAction('json', '');
+		foreach ($arg as $argument=>$value)
 		{
-			$length=strlen($arg[$i]);
-			if ($arg[$i][0]=='-' and $possibleFlagsRemaining)
-			{ # The argument begins with - or --
-				if ($arg[$i]=='-')
-				{ // illegal
-					die ("Found a stray '-'. Perhaps you meant '--' ?\n");
-				}
-				elseif ($arg[$i]=='--')
-				{ // End of flags
-					$possibleFlagsRemaining=false;
-				}
-				elseif ($arg[$i][1]=='-')
-				{ // Double dash parameter
-					if (strpos($arg[$i], '='))
-					{
-						$equalsPos=strpos($arg[$i], '=');
-						$argument=substr($arg[$i], 2, $equalsPos-2);
-						$value=substr($arg[$i], $equalsPos+1);
-						$this->core->set('Global', $argument, $value);
-						$this->core->addAction($argument, $value);
-					}
-					else
-					{
-						$argument=substr($arg[$i], 2);
-						$this->core->addAction($argument);
-					}
-					
-					# take action on argument
-					//$this->setAction($argument);
-				}
-				else
-				{ // Single dash parameter
-					# take each parm
-					$singleMax=strlen($arg[$i]);
-					for ($char=1;$char<$singleMax;$char++)
-					{
-						# take action
-						$single=substr($arg[$i], $char, 1);
-						//$this->setAction($single);
-						$this->core->addAction($single);
-					}
-				}
-			}
-			else
-			{
-				$stray[]=$arg[$i];
-			}
+			$this->core->addAction($argument, $value);
 		}
-		
-		$this->core->set('Global', 'stray', implode(' ', $stray));
 	}
 	
 	function setAction($argument)

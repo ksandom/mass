@@ -10,6 +10,7 @@ include "$configDir/core.php";
 
 # initiate core
 $core=core::assert();
+$core->set('General', 'EOL', '<BR>');
 $core->set('General', 'configDir', $configDir);
 $core->set('General', 'hostsDir', "$configDir/data/1LayerHosts");
 $core->set('General', 'programName', programName);
