@@ -20,10 +20,12 @@ class AWS extends Module
 	private $ec2Connection=null;
 	private $awsKey=null;
 	private $awsSecret=null;
+	private $foundLibrary;
 	
 	function __construct()
 	{
 		parent::__construct('AWS');
+		$this->foundLibrary=file_exists(AWSLibrary);;
 	}
 	
 	function event($event)
@@ -39,19 +41,27 @@ class AWS extends Module
 				break;
 				break;
 			case 'AWSSetCred':
-				if ($parms=$this->core->getRequireNumParmsOrComplain($this, $event, 2)) $this->AWSSetCred($parms[0], $parms[1]);
+				if ($this->hasLibrary())
+				{
+					if ($parms=$this->core->getRequireNumParmsOrComplain($this, $event, 2)) $this->AWSSetCred($parms[0], $parms[1]);
+				}
+				else $this->warn();
 				break;
 			case 'AWSGetRegions':
-				return $this->AWSGetRegions();
+				if ($this->hasLibrary()) return $this->AWSGetRegions();
+				else $this->warn();
 				break;
 			case 'AWSGetHosts':
-				return $this->AWSGetHostsForAllRegions();
+				if ($this->hasLibrary()) return $this->AWSGetHostsForAllRegions();
+				else $this->warn();
 				break;
 			case 'AWSGetAllHosts':
-				return $this->AWSGetHostsForAllRegions(true);
+				if ($this->hasLibrary()) return $this->AWSGetHostsForAllRegions(true);
+				else $this->warn();
 				break;
 			case 'AWSCloseConnection':
-				$this->AWSCloseConnection();
+				if ($this->hasLibrary()) $this->AWSCloseConnection();
+				else $this->warn();
 			case 'last':
 				break;
 			case 'followup':
@@ -60,6 +70,16 @@ class AWS extends Module
 				$this->core->complain($this, 'Unknown event', $event);
 				break;
 		}
+	}
+	
+	function hasLibrary()
+	{
+		return $this->foundLibrary;
+	}
+	
+	function warn()
+	{
+		$this->core->debug(0, "The AWS PHP library doesn't appear to be installed. I tried to find it at ".AWSLibrary);
 	}
 	
 	function AWSSetCred($key, $secret)
@@ -249,13 +269,10 @@ class AWS extends Module
 	}
 }
 
-if (file_exists(AWSLibrary))
+if (@include_once(AWSLibrary))
 {
-	if (@include_once(AWSLibrary))
-	{
-		$core=core::assert();
-		$core->registerModule(new AWS());
-	}
+	$core=core::assert();
+	$core->registerModule(new AWS());
 }
  
 ?>
