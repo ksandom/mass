@@ -19,12 +19,6 @@ class BasicWeb extends Module
 		switch ($event)
 		{
 			case 'init':
-				# TODO Think of a better way to do this, as it's not needed for the web interface.
-				$this->core->registerFeature($this, array('oldHelp'), 'oldHelp', 'Place holder', array('placeholder'));
-				$this->core->registerFeature($this, array('searchHelp'), 'searchHelp', 'Place holder', array('placeholder'));
-				$this->core->registerFeature($this, array('getTags'), 'getTags', 'Place holder', array('placeholder'));
-				$this->core->registerFeature($this, array('printr', 'print_r'), 'printr', 'Place holder', array('placeholder'));
-
 				break;
 			case 'followup':
 				break;
