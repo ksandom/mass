@@ -13,3 +13,5 @@ chooseFirst IP,externalIP,internalIP
 # chooseFirst FQDN,externalFQDN,internalFQDN
 
 stashResults List,results
+
+triggerEvent List,finished

@@ -17,14 +17,14 @@ class Events extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('registerEvent'), 'registerEvent', "Register a feature to be executed when a particular event is triggered. --registerEvent=ModuleName,eventName,featureName[,featureValue]", array());
+				$this->core->registerFeature($this, array('registerForEvent'), 'registerForEvent', "Register a feature to be executed when a particular event is triggered. --registerEvent=ModuleName,eventName,featureName[,featureValue]", array());
 				$this->core->registerFeature($this, array('triggerEvent'), 'triggerEvent', "Trigger an event. --triggerEvent=ModuleName,eventName", array());
 				break;
 			case 'followup':
 				break;
 			case 'last':
 				break;
-			case 'registerEvent':
+			case 'registerForEvent':
 				$parms=$this->core->interpretParms($this->core->get('Global', 'registerEvent'), 4, 3, true);
 				$this->registerForEvent($parms[0], $parms[1], $parms[2], $parms[3]);
 				break;
