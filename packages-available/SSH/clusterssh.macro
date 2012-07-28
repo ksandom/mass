@@ -3,5 +3,6 @@
 
 outNow
 template clusterssh
+cleanUnresolvedResultVars
 exec
 null

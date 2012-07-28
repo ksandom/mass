@@ -8,13 +8,15 @@ retrieveResults From,results
 exec mkdir -p ~!ServerToServers,tmp!~
 
 # Do not background this as the upload relies on this having completed.
-toString scp -r ~%IP%~:~!Global,serverToServers!~ ~!ServerToServers,tmp!~ >&2
+toString scp ~%auth%~ -r ~%userAt%~~%IP%~:~!Global,serverToServers!~ ~!ServerToServers,tmp!~ >&2
+cleanUnresolvedResultVars
 exec
 
 # Upload
 retrieveResults To,results
 # For now, don't background as we want to clean up the tmp directory afterwards ~!Settings,backgroundTasks!~
-toString scp -r ~!ServerToServers,tmp!~/* ~%IP%~:`echo ~!Global,serverToServers!~|sed 's/\/.*$//g'` >&2 
+toString scp ~%auth%~ -r ~!ServerToServers,tmp!~/* ~%IP%~:`echo ~!Global,serverToServers!~|sed 's/\/.*$//g'` >&2 
+cleanUnresolvedResultVars
 exec
 
 exec rm -Rf ~!ServerToServers,tmp!~

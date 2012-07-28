@@ -1,4 +1,5 @@
 # 1-to-many upload a single file to the listed servers. --list[=hostRegex] --upload12M=fullPathToFileOnTheServer ~ user,files
 
-toString scp -r `echo ~!Global,upload12M!~|sed 's/.*\///'` ~%IP%~:~!Global,upload12M!~ >&2 ~!Settings,backgroundTasks!~
+toString scp ~%auth%~ -r `echo ~!Global,upload12M!~|sed 's/.*\///'` ~%IP%~:~!Global,upload12M!~ >&2 ~!Settings,backgroundTasks!~
+cleanUnresolvedResultVars
 exec

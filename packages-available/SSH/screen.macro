@@ -3,6 +3,7 @@
 getPID Global,PID
 
 template screen
+cleanUnresolvedResultVars
 singleStringNow /tmp/mass-~!Global,PID!~.screen
 
 exec screen -c /tmp/mass-~!Global,PID!~.screen

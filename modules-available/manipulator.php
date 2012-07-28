@@ -23,6 +23,8 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('chooseFirst'), 'chooseFirst', 'Choose the first non-empty value and put it into the destination variable. --chooseFirst=dstVarName,srcVarName1,srcVarName2[,srcVarName3[,...]]', array('array', 'result'));
 				$this->core->registerFeature($this, array('resultSet'), 'resultSet', 'Set a value in each result item. --setResult=dstVarName,value . Note that this has no counter part as you can already retrieve results with %varName% and many to one would be purely random.', array('array', 'result'));
 				$this->core->registerFeature($this, array('addSlashes'), 'addSlashes', 'Put extra backslashes before certain characters to escape them to allow nesting of quoted strings. --addSlashes=srcVar,dstVar', array('array', 'escaping', 'result'));
+				$this->core->registerFeature($this, array('cleanUnresolvedResultVars'), 'cleanUnresolvedResultVars', 'Clean out any result variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
+				#$this->core->registerFeature($this, array('cleanUnresolvedStoreVars'), 'cleanUnresolvedStoreVars', 'Clean out any store variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
 				break;
 			case 'followup':
 				break;
@@ -47,6 +49,9 @@ class Manipulator extends Module
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', 'resultSet'));
 				$this->core->requireNumParms($this, 2, $event, $originalParms, $parms);
 				return $this->resultSet($this->core->getSharedMemory(), $parms[0], $parms[1]);
+				break;
+			case 'cleanUnresolvedResultVars':
+				return $this->cleanUnresolvedVars($this->core->getSharedMemory(), resultVarBegin, resultVarEnd);
 				break;
 			case 'addSlashes':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', 'addSlashes'));
@@ -87,6 +92,33 @@ class Manipulator extends Module
 		}
 		
 		return $output;
+	}
+	
+	function cleanUnresolvedVars($input, $begin, $end)
+	{
+		if (is_array($input))
+		{
+			$output=array();
+			foreach ($input as $key=>$value) $output[$key]=$this->cleanUnresolvedVars($value, $begin, $end);
+			return $output;
+		}
+		else
+		{
+			return $this->cleanUnresolvedVarsFromString($input, $begin, $end);
+		}
+		
+		
+	}
+	
+	function cleanUnresolvedVarsFromString($input, $begin, $end)
+	{
+		$start=strpos($input, $begin);
+		$finish=strpos($input, $end)+strlen($end);
+		$termite=substr($input, $start, $finish-$start);
+		$output=$this->replace($input, $termite, '');
+		
+		if (strpos($output, $begin)!==false) return $this->cleanUnresolvedVarsFromString($output, $begin, $end);
+		else return $output;
 	}
 	
 	function flatten($input, $limit, $nesting=0)
