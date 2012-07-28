@@ -3,6 +3,6 @@
 stashResults Download,sourcelist
 
 retrieveResults Download,sourcelist
-toString scp ~%auth%~ -r ~!Global,stray!~ ~%IP%~:~!Global,upload!~ >&2 ~!Settings,backgroundTasks!~
+toString scp ~%scpExtra%~ ~%auth%~ -r ~!Global,stray!~ ~%IP%~:~!Global,upload!~ >&2 ~!Settings,backgroundTasks!~
 cleanUnresolvedResultVars
 exec

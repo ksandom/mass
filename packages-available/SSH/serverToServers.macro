@@ -15,7 +15,7 @@ exec
 # Upload
 retrieveResults To,results
 # For now, don't background as we want to clean up the tmp directory afterwards ~!Settings,backgroundTasks!~
-toString scp ~%auth%~ -r ~!ServerToServers,tmp!~/* ~%IP%~:`echo ~!Global,serverToServers!~|sed 's/\/.*$//g'` >&2 
+toString scp ~%scpExtra%~ ~%auth%~ -r ~!ServerToServers,tmp!~/* ~%IP%~:`echo ~!Global,serverToServers!~|sed 's/\/.*$//g'` >&2 
 cleanUnresolvedResultVars
 exec
 
