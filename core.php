@@ -183,7 +183,7 @@ class core extends Module
 		
 		if ($partsCount<$require)
 		{
-			$this->debug(0, "Expected $require parameters, but got $partsCount. Bad things could happen if execution continues.");
+			$this->debug(0, "Expected $require parameters, but got $partsCount. Bad things could happen if execution continues. Parms=$parms");
 			return false;
 		}
 		

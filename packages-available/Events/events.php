@@ -25,12 +25,12 @@ class Events extends Module
 			case 'last':
 				break;
 			case 'registerForEvent':
-				$parms=$this->core->interpretParms($this->core->get('Global', 'registerEvent'), 4, 3, true);
+				$parms=$this->core->interpretParms($this->core->get('Global', 'registerForEvent'), 4, 3, true);
 				$this->registerForEvent($parms[0], $parms[1], $parms[2], $parms[3]);
 				break;
 			case 'triggerEvent':
 				$parms=$this->core->interpretParms($this->core->get('Global', 'triggerEvent'), 2, 2, true);
-				$this->triggerEvent($parms[0], $parms[1]);
+				return $this->triggerEvent($parms[0], $parms[1]);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -73,7 +73,7 @@ class Events extends Module
 					foreach ($priorityGroup as $eventee)
 					{
 						$result=$this->core->callFeature($eventee['featureName'], $eventee['featureValue']);
-						$this->core->setSharedMemory($returnedValue);
+						$this->core->setSharedMemory($result);
 					}
 					
 					$sharedMemory=$this->core->getSharedMemory();
@@ -92,7 +92,7 @@ class Events extends Module
 		}
 		else
 		{
-			if (is_array($eventees))
+			if (is_array($priorityGroups))
 			{
 				$this->core->debug(4, "Event \"$moduleName, $eventName\" triggered, but there were no eventee priority groups. This means there are no registered eventees.");
 			}
