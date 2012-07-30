@@ -1,0 +1,5 @@
+# Set personal credentials ~ personal
+#onDefine registerForEvent List,finished,personal
+
+resultSet userAt,ksandom@
+resultSet auth,-i ~/.ssh/id_rsa
