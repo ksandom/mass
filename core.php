@@ -350,7 +350,6 @@ class core extends Module
 					$this->debug(4, "INVOKE-Exit  {$indentation}{$obj['name']}/$nesting value={$value}, valueIn=$valueIn resultCount=$resultCount is_array=$isArray smCount=".$this->getSharedMemoryCount());
 					$this->debugSharedMemory($obj['name']);
 				}
-				$this->debug(3,'GOT HERE');
 				return $result;
 			}
 			else $this->complain(null, "Could not find a module to match '$argument'", 'callFeature');
@@ -390,7 +389,7 @@ class core extends Module
 		return $output;
 	}
 	
-	function processSingleResult($input)
+	function processSingleResult($input) # TODO This looks like it might not be relevant any more. 2012-07-30
 	{
 		for ($i=0;$i<50;$i++)
 		{
@@ -434,7 +433,7 @@ class core extends Module
 			# TODO These lookups can be optimized!
 			$code=$this->get('Codes', $title, false);
 			$default=$this->get('Codes', 'default', false);
-			$eol=$this->get('General', 'EOL'); # TODO This can be improved
+			$eol=$this->get('General', 'EOL', false); # TODO This can be improved
 			echo "[$code$title$default]: $output$eol";
 			# return false;
 		}
@@ -462,7 +461,7 @@ class core extends Module
 		else
 		{
 			$this->verbosity=$this->verbosity+1;
-			$verbosityName=$this->get('Verbosity', $this->verbosity);
+			$verbosityName=$this->get('Verbosity', $this->verbosity, false);
 			$this->core->debug($this->verbosity, "verbosity: Incremented verbosity to \"$verbosityName\" ({$this->verbosity})");
 		}
 	}
@@ -574,7 +573,7 @@ class core extends Module
 	
 	function &get($moduleName, $valueName, $debug=true)
 	{
-		if ($debug) $this->debug(5,"get($moduleName, $valueName)");
+		if ($debug) $this->debug(5,"get($moduleName, $valueName, false)");
 		#print_r($this->store);
 		#echo "m=$moduleName, v=$valueName\n";
 		if (isset($this->store[$moduleName]))

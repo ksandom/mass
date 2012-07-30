@@ -84,7 +84,7 @@ class AWS extends Module
 	
 	function AWSSetCred($key, $secret)
 	{
-		$this->core->debug(3, "Setting AWS credentials to key=$key secret=$secret");
+		$this->core->debug(3, "Setting AWS credentials to key=$key secret=*hidden*");
 		$this->awsKey=$key;
 		$this->awsSecret=$secret;
 	}
@@ -96,7 +96,7 @@ class AWS extends Module
 		
 		if ($key and $secret)
 		{
-			$this->core->debug(3, "Connecting to AWS with key=$key secret=$secret");
+			$this->core->debug(2, "Connecting to AWS with key=$key secret=*hidden*");
 			$this->ec2Connection = new AmazonEC2(array('key'=>$key, 'secret'=>$secret));
 		}
 		else
