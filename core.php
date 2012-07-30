@@ -43,7 +43,7 @@ class core extends Module
 		
 		parent::__construct('Core');
 		$this->set('Core', 'serial', intval(rand()));
-		$this->registerModule(&$this);
+		$this->registerModule($this);
 	}
 	
 	public function dumpState()
