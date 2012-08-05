@@ -19,7 +19,9 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array of arrays into an array of strings. eg --toString="blah file=%hostName% ip=%externalIP%"', array('array', 'string'));
 				$this->core->registerFeature($this, array('f', 'flatten'), 'flatten', 'Flatten an array or arrays into a keyed array of values. --flatten[=limit]. Note that "limit" specifies how far to go into the nesting before simply returning what ever is below.', array('array', 'string'));
 				$this->core->registerFeature($this, array('requireEach'), 'requireEach', 'Require each entry to match this regular expression. --requireEach=regex', array('array', 'result'));
-				$this->core->registerFeature($this, array('requireEntry'), 'requireEntry', 'Require a named entry in each of the root entries. A regular expression can be supplied to provide a more precise match. --requireEntry=entryKey[,regex]', array('array', 'result'));
+				$this->core->registerFeature($this, array('requireItem'), 'requireItem', 'Require a named entry in each of the root entries. A regular expression can be supplied to provide a more precise match. --requireItem=entryKey[,regex]', array('array', 'result'));
+				$this->core->registerFeature($this, array('manipulateEach'), 'manipulateEach', 'Call a feature for each entry in the result set that contains an item matching this regular expression. --manipulateEach=regex,feature featureParameters', array('array', 'result'));
+				$this->core->registerFeature($this, array('manipulateItem'), 'manipulateItem', 'Call a feature for each entry that contains an item explicity matching the one specified. --requireEntry=entryKey,regex,feature, featureParameters', array('array', 'result'));
 				$this->core->registerFeature($this, array('chooseFirst'), 'chooseFirst', 'Choose the first non-empty value and put it into the destination variable. --chooseFirst=dstVarName,srcVarName1,srcVarName2[,srcVarName3[,...]]', array('array', 'result'));
 				$this->core->registerFeature($this, array('resultSet'), 'resultSet', 'Set a value in each result item. --setResult=dstVarName,value . Note that this has no counter part as you can already retrieve results with %varName% and many to one would be purely random.', array('array', 'result'));
 				$this->core->registerFeature($this, array('addSlashes'), 'addSlashes', 'Put extra backslashes before certain characters to escape them to allow nesting of quoted strings. --addSlashes=srcVar,dstVar', array('array', 'escaping', 'result'));
@@ -33,8 +35,8 @@ class Manipulator extends Module
 			case 'requireEach':
 				return $this->requireEach($this->core->getSharedMemory(), $this->core->get('Global', 'requireEach'));
 				break;
-			case 'requireEntry':
-				return $this->requireEntry($this->core->getSharedMemory(), $this->core->get('Global', 'requireEntry'));
+			case 'requireItem':
+				return $this->requireEntry($this->core->getSharedMemory(), $this->core->get('Global', 'requireItem'));
 				break;
 			case 'toString':
 				return $this->toString($this->core->getSharedMemory(), $this->core->get('Global', 'toString'));
