@@ -38,6 +38,14 @@ class Manipulator extends Module
 			case 'requireItem':
 				return $this->requireEntry($this->core->getSharedMemory(), $this->core->get('Global', 'requireItem'));
 				break;
+			case 'manipulateEach':
+				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateEach'), 3, 2);
+				return $this->requireEach($this->core->getSharedMemory(), $parms[0], $parms[1], $parms[2]);
+				break;
+			case 'manipulateItem':
+				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateItem'), 3, 2);
+				return $this->requireEntry($this->core->getSharedMemory(), $parms[0], $parms[1], $parms[2]);
+				break;
 			case 'toString':
 				return $this->toString($this->core->getSharedMemory(), $this->core->get('Global', 'toString'));
 				break;
@@ -161,6 +169,8 @@ class Manipulator extends Module
 	private function requireEach($input, $search)
 	{
 		$output=array();
+		if (!is_array($input)) return $output;
+		
 		foreach ($input as $line)
 		{
 			if (is_string($line))
@@ -178,6 +188,7 @@ class Manipulator extends Module
 	private function requireEntry($input, $search)
 	{
 		$output=array();
+		if (!is_array($input)) return $output;
 		$searchParts=explode(',', $search);
 		$neededKey=$searchParts[0];
 		$neededRegex=(isset($searchParts[1]))?$searchParts[1]:false;
