@@ -21,7 +21,7 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('requireEach'), 'requireEach', 'Require each entry to match this regular expression. --requireEach=regex', array('array', 'result'));
 				$this->core->registerFeature($this, array('requireItem'), 'requireItem', 'Require a named entry in each of the root entries. A regular expression can be supplied to provide a more precise match. --requireItem=entryKey[,regex]', array('array', 'result'));
 				$this->core->registerFeature($this, array('manipulateEach'), 'manipulateEach', 'Call a feature for each entry in the result set that contains an item matching this regular expression. --manipulateEach=regex,feature featureParameters', array('array', 'result'));
-				$this->core->registerFeature($this, array('manipulateItem'), 'manipulateItem', 'Call a feature for each entry that contains an item explicity matching the one specified. --requireEntry=entryKey,regex,feature, featureParameters', array('array', 'result'));
+				$this->core->registerFeature($this, array('manipulateItem'), 'manipulateItem', 'Call a feature for each entry that contains an item explicity matching the one specified. --requireEntry=entryKey,regex,feature featureParameters', array('array', 'result'));
 				$this->core->registerFeature($this, array('chooseFirst'), 'chooseFirst', 'Choose the first non-empty value and put it into the destination variable. --chooseFirst=dstVarName,srcVarName1,srcVarName2[,srcVarName3[,...]]', array('array', 'result'));
 				$this->core->registerFeature($this, array('resultSet'), 'resultSet', 'Set a value in each result item. --setResult=dstVarName,value . Note that this has no counter part as you can already retrieve results with %varName% and many to one would be purely random.', array('array', 'result'));
 				$this->core->registerFeature($this, array('addSlashes'), 'addSlashes', 'Put extra backslashes before certain characters to escape them to allow nesting of quoted strings. --addSlashes=srcVar,dstVar', array('array', 'escaping', 'result'));
@@ -36,14 +36,15 @@ class Manipulator extends Module
 				return $this->requireEach($this->core->getSharedMemory(), $this->core->get('Global', 'requireEach'));
 				break;
 			case 'requireItem':
-				return $this->requireEntry($this->core->getSharedMemory(), $this->core->get('Global', 'requireItem'));
+				$parms=$this->core->interpretParms($this->core->get('Global', 'requireItem'), 2, 1);
+				return $this->requireEntry($this->core->getSharedMemory(), $parms[0], $parms[1]);
 				break;
 			case 'manipulateEach':
-				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateEach'), 3, 2);
-				return $this->requireEach($this->core->getSharedMemory(), $parms[0], $parms[1], $parms[2]);
+				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateEach'), 2, 2);
+				return $this->requireEach($this->core->getSharedMemory(), $parms[0], $parms[1]);
 				break;
 			case 'manipulateItem':
-				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateItem'), 3, 2);
+				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateItem'), 3, 3);
 				return $this->requireEntry($this->core->getSharedMemory(), $parms[0], $parms[1], $parms[2]);
 				break;
 			case 'toString':
@@ -166,6 +167,14 @@ class Manipulator extends Module
 		}
 	}
 	
+	private function mixResults($matching, $notMatching, $feature)
+	{
+		$featureParts=$this->core->splitOnceOn(' ', $feature);
+		$processed=$this->core->callFeatureWithDataset($featureParts[0], $featureParts[1], $this->core->getSharedMemory());
+		
+		return array_merge($processed, $notMatching);
+	}
+	
 	private function requireEach($input, $search)
 	{
 		$output=array();
@@ -185,15 +194,13 @@ class Manipulator extends Module
 		return $output;
 	}
 	
-	private function requireEntry($input, $search)
+	private function requireEntry($input, $neededKey, $neededRegex, $feature=false)
 	{
-		$output=array();
-		if (!is_array($input)) return $output;
-		$searchParts=explode(',', $search);
-		$neededKey=$searchParts[0];
-		$neededRegex=(isset($searchParts[1]))?$searchParts[1]:false;
+		$outputMatch=array();
+		$outputNoMatch=array();
 		
-		//print_r($input);
+		if (!is_array($input)) return $output;
+		
 		foreach ($input as $line)
 		{
 			if ($neededKey)
@@ -202,22 +209,26 @@ class Manipulator extends Module
 				{
 					if ($neededRegex)
 					{
-						if (preg_match('/'.$neededRegex.'/', $line[$neededKey])) $output[]=$line;
+						if (preg_match('/'.$neededRegex.'/', $line[$neededKey])) $outputMatch[]=$line;
+						else $outputNoMatch[]=$line;
 					}
-					else $output[]=$line;
+					else $outputMatch[]=$line;
 				}
+				else $outputNoMatch[]=$line;
 			}
 			else
 			{
 				if (is_array($line))
 				{
-					if (count($this->requireEach($line, $neededRegex))) $output[]=$line;
+					if (count($this->requireEach($line, $neededRegex))) $outputMatch[]=$line;
+					else $outputNoMatch[]=$line;
 				}
+				else $outputNoMatch[]=$line;
 			}
 		}
 		
-		//print_r($output);
-		return $output;
+		if ($feature) return $this->mixResults($outputMatch, $outputNoMatch, $feature);
+		else return $outputMatch;
 	}
 	
 	function chooseFirst($input, $parms)

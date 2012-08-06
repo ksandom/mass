@@ -309,6 +309,16 @@ class core extends Module
 		$this->setSharedMemory($this->getParentSharedMemory());
 	}
 	
+	function callFeatureWithDataset($argument, $value, $dataset)
+	{
+		# TODO implement this
+		// Increment nesting
+		// set sharedmemory to dataset
+		// call feature
+		// Decrement nesting (WITHOUT pulling the sharedMemory)
+		return $dataset;
+	}
+	
 	function callFeature($argument, $value)
 	{
 		$nesting=$this->get('Core', 'nesting');
