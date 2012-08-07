@@ -40,11 +40,11 @@ class Manipulator extends Module
 				return $this->requireEntry($this->core->getSharedMemory(), $parms[0], $parms[1]);
 				break;
 			case 'manipulateEach':
-				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateEach'), 2, 2);
+				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateEach'), 1, 2);
 				return $this->requireEach($this->core->getSharedMemory(), $parms[0], $parms[1]);
 				break;
 			case 'manipulateItem':
-				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateItem'), 3, 3);
+				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateItem'), 2, 3);
 				return $this->requireEntry($this->core->getSharedMemory(), $parms[0], $parms[1], $parms[2]);
 				break;
 			case 'toString':
@@ -184,6 +184,8 @@ class Manipulator extends Module
 		
 		foreach ($input as $key=>$line)
 		{
+			$processed=false;
+			
 			if (is_string($line))
 			{
 				if (preg_match('/'.$search.'/', $line))
@@ -195,14 +197,16 @@ class Manipulator extends Module
 			elseif (is_array($line))
 			{ # TODO make this work recursively
 				foreach ($line as $subline)
-					{
+				{
+					$matched=false;
 					if (preg_match('/'.$search.'/', $subline))
 					{
 						$outputMatch[]=$line;
+						$matched=true;
 						break;
 					}
-					else $outputNoMatch[]=$line;
 				}
+				if (!$matched) $outputNoMatch[]=$line;
 			}
 			else $outputNoMatch[]=$line;
 		}

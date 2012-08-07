@@ -183,7 +183,7 @@ class core extends Module
 		
 		if ($partsCount<$require)
 		{
-			$this->debug(0, "Expected $require parameters, but got $partsCount. Bad things could happen if execution continues. Parms=$parms");
+			$this->debug(0, "Expected $require parameters, but got $partsCount. Bad things could happen if execution had been allowed to continue. Parms=$parms");
 			return false;
 		}
 		
@@ -319,11 +319,11 @@ class core extends Module
 		$this->setSharedMemory($dataset);
 		
 		// call feature
-		$this->callFeature($argument, $value);
+		$output=$this->callFeature($argument, $value);
 		
 		// Decrement nesting (WITHOUT pulling the sharedMemory)
 		$this->decrementNesting();
-		return $dataset;
+		return $output;
 	}
 	
 	function callFeature($argument, $value)
