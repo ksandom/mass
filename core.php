@@ -613,7 +613,8 @@ class core extends Module
 	
 	function set($moduleName, $valueName, $args)
 	{ // set a variable for a module
-		$this->debug(5,"set($moduleName, $valueName, $args)");
+		$argsDisplay=(is_array($args))?'Array':$args;
+		$this->debug(5,"set($moduleName, $valueName, $argsDisplay)");
 		if (!isset($this->store[$moduleName])) $this->store[$moduleName]=array();
 		
 		$this->store[$moduleName][$valueName]=$args;
