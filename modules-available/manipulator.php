@@ -182,7 +182,7 @@ class Manipulator extends Module
 		$outputNoMatch=array();
 		if (!is_array($input)) return $output;
 		
-		foreach ($input as $line)
+		foreach ($input as $key=>$line)
 		{
 			if (is_string($line))
 			{
@@ -191,6 +191,18 @@ class Manipulator extends Module
 					$outputMatch[]=$line;
 				}
 				else $outputNoMatch[]=$line;
+			}
+			elseif (is_array($line))
+			{ # TODO make this work recursively
+				foreach ($line as $subline)
+					{
+					if (preg_match('/'.$search.'/', $subline))
+					{
+						$outputMatch[]=$line;
+						break;
+					}
+					else $outputNoMatch[]=$line;
+				}
 			}
 			else $outputNoMatch[]=$line;
 		}
