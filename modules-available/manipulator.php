@@ -170,14 +170,16 @@ class Manipulator extends Module
 	private function mixResults($matching, $notMatching, $feature)
 	{
 		$featureParts=$this->core->splitOnceOn(' ', $feature);
-		$processed=$this->core->callFeatureWithDataset($featureParts[0], $featureParts[1], $this->core->getSharedMemory());
+		$processed=$this->core->callFeatureWithDataset($featureParts[0], $featureParts[1], $matching);
 		
 		return array_merge($processed, $notMatching);
 	}
 	
-	private function requireEach($input, $search)
+	private function requireEach($input, $search, $feature=false)
 	{
-		$output=array();
+		//print_r($input);
+		$outputMatch=array();
+		$outputNoMatch=array();
 		if (!is_array($input)) return $output;
 		
 		foreach ($input as $line)
@@ -186,12 +188,15 @@ class Manipulator extends Module
 			{
 				if (preg_match('/'.$search.'/', $line))
 				{
-					$output[]=$line;
+					$outputMatch[]=$line;
 				}
+				else $outputNoMatch[]=$line;
 			}
+			else $outputNoMatch[]=$line;
 		}
 		
-		return $output;
+		if ($feature) return $this->mixResults($outputMatch, $outputNoMatch, $feature);
+		else return $outputMatch;
 	}
 	
 	private function requireEntry($input, $neededKey, $neededRegex, $feature=false)

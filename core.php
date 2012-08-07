@@ -313,9 +313,16 @@ class core extends Module
 	{
 		# TODO implement this
 		// Increment nesting
+		$this->incrementNesting();
+		
 		// set sharedmemory to dataset
+		$this->setSharedMemory($dataset);
+		
 		// call feature
+		$this->callFeature($argument, $value);
+		
 		// Decrement nesting (WITHOUT pulling the sharedMemory)
+		$this->decrementNesting();
 		return $dataset;
 	}
 	
