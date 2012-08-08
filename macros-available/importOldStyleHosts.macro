@@ -4,4 +4,6 @@ exec mkdir -p ~!General,hostsDir!~
 
 # Just get everything we can from the old style database
 searchOld
+triggerEvent Import,readyForManipulations
+
 saveToJson ~!General,hostsDir!~/importedFromOldStyle.1lHosts.json
