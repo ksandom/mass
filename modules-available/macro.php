@@ -186,6 +186,8 @@ class Macro extends Module
 		# Pre-register all macros so that they can be nested without issue.
 		foreach ($fileList as $fileName=>$fullPath)
 		{
+			if($fileName=='*') break;
+			
 			$nameParts=explode('.', $fileName);
 			if ($nameParts[1]=='macro') // Only invest further time if it actually is a macro.
 			{
@@ -208,6 +210,8 @@ class Macro extends Module
 		# Interpret and define all macros.
 		foreach ($fileList as $fileName=>$fullPath)
 		{
+			if($fileName=='*') break;
+			
 			$nameParts=explode('.', $fileName);
 			if ($nameParts[1]=='macro') // Only invest further time if it actually is a macro.
 			{
