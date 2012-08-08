@@ -682,7 +682,7 @@ class core extends Module
 	
 	function registerFeature(&$obj, $flags, $name, $description, $tags=false)
 	{
-		$this->core->debug(4, "registerFeature name=$name, tags=$tags");
+		$this->core->debug(4, "registerFeature name=$name");
 		$arrayTags=(is_array($tags))?$tags:explode(',', $tags);
 		if (!count($arrayTags))
 		{
