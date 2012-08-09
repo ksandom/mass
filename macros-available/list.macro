@@ -12,6 +12,7 @@ addSlashes cmd,cmd
 chooseFirst IP,externalIP,internalIP
 # chooseFirst FQDN,externalFQDN,internalFQDN
 
+triggerEvent List,finished
+
 stashResults List,results
 
-triggerEvent List,finished
