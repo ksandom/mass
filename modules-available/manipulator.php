@@ -112,7 +112,8 @@ class Manipulator extends Module
 		
 		foreach ($input as $key=>$value)
 		{
-			$outputLine=$this->replace($outputLine, resultVarBegin."$key".resultVarEnd, $value);
+			if (!is_array($value)) $outputLine=$this->replace($outputLine, resultVarBegin."$key".resultVarEnd, $value);
+			else $this->core->debug(3, "processResultVarsInString: value for key $key is an array, so the replace has not been attempted.");
 		}
 		
 		return $outputLine;
