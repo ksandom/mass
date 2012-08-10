@@ -107,6 +107,7 @@ class Manipulator extends Module
 	
 	function processResultVarsInString($input, $string)
 	{
+		# TODO This really needs to recursively go through the result set since it can be nested.
 		$outputLine=$string;;
 		
 		foreach ($input as $key=>$value)
