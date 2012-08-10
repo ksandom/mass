@@ -92,7 +92,7 @@ class Manipulator extends Module
 				$outputLine=$this->core->processValue($template);
 				foreach ($line as $key=>$value)
 				{
-					$outputLine=$this->replace($outputLine, resultVarBegin."$key".resultVarEnd, $value);
+					$outputLine=$this->processResultVarsInString($line, $outputLine);
 				}
 				$output[]=$outputLine;
 			}
@@ -103,6 +103,18 @@ class Manipulator extends Module
 		}
 		
 		return $output;
+	}
+	
+	function processResultVarsInString($input, $string)
+	{
+		$outputLine=$string;;
+		
+		foreach ($input as $key=>$value)
+		{
+			$outputLine=$this->replace($outputLine, resultVarBegin."$key".resultVarEnd, $value);
+		}
+		
+		return $outputLine;
 	}
 	
 	function cleanUnresolvedVars($input, $begin, $end)
@@ -284,7 +296,9 @@ class Manipulator extends Module
 		$output=$input;
 		foreach ($output as &$line)
 		{
-			$line[$key]=$value;
+			# TODO There is something wrong happening here.
+			$line[$key]=$this->processResultVarsInString($line, $value);
+			#$line[$key]=$value;
 		}
 		
 		return $output;
