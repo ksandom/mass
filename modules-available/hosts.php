@@ -124,9 +124,12 @@ class Hosts extends Module
 		$allHostDefinitions=$this->core->get('Hosts', 'oldStyleHostDefinitions');
 		foreach ($allHostDefinitions as $filename=>$fileDetails)
 		{
-			foreach ($fileDetails as $categoryName=>$categoryDetails)
+			if ($fileDetails)
 			{
-				$this->processCategory($output, $search, $categoryDetails, $filename, $categoryName);
+				foreach ($fileDetails as $categoryName=>$categoryDetails)
+				{
+					$this->processCategory($output, $search, $categoryDetails, $filename, $categoryName);
+				}
 			}
 		}
 		
