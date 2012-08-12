@@ -5,4 +5,7 @@ AWSSetCred ~!Result,line!~
 
 AWSCloseConnection
 AWSGetHosts
+
+triggerEvent AWS,importedFromAccount
+
 saveToJson ~!General,configDir!~/data/1LayerHosts/~!Result,key!~.json
