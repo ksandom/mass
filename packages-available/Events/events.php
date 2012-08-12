@@ -73,7 +73,7 @@ class Events extends Module
 					foreach ($priorityGroup as $eventee)
 					{
 						$result=$this->core->callFeature($eventee['featureName'], $eventee['featureValue']);
-						$this->core->setSharedMemory($result);
+						$this->core->setSharedMemory($result); // This is necessary because the feature being called may rely on it being there.
 					}
 					
 					$sharedMemory=$this->core->getSharedMemory();
