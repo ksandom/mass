@@ -25,6 +25,8 @@ class AWS extends Module
 	function __construct()
 	{
 		parent::__construct('AWS');
+		
+		# TODO Improce this to detect the class
 		$this->foundLibrary=file_exists(AWSLibrary);;
 	}
 	
@@ -269,10 +271,9 @@ class AWS extends Module
 	}
 }
 
-if (@include_once(AWSLibrary))
-{
-	$core=core::assert();
-	$core->registerModule(new AWS());
-}
+@include_once(AWSLibrary);
+
+$core=core::assert();
+$core->registerModule(new AWS());
  
 ?>
