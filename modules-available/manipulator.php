@@ -269,8 +269,6 @@ class Manipulator extends Module
 		if ($feature)
 		{
 			$this->core->debug(2, 'requireEntry: Matched '.count($outputMatch).". Didn't match ".count($outputNoMatch.". For search $neededKey=$neededRegex"));
-			print_r($input);
-			die("blhljhlkjh");
 			return $this->mixResults($outputMatch, $outputNoMatch, $feature);
 		}
 		else return $outputMatch;
