@@ -222,7 +222,7 @@ class AWS extends Module
 							}
 						}
 						
-						$host['hostname']=$name; # TODO check this!
+						$host['hostName']=$name; # TODO check this!
 						
 						# Re-map a couple of keys, then remove them so people don't use them creating non-portable code.
 						if (isset($item['instancesSet']['item']['privateDnsName']))

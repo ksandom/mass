@@ -149,8 +149,8 @@ class Hosts extends Module
 					$eip=(isset($hostDetails->externalIP))?$hostDetails->externalIP:false;
 					$ifqdn=(isset($hostDetails->internalFQDN))?$hostDetails->internalFQDN:false;
 					$efqdn=(isset($hostDetails->externalFQDN))?$hostDetails->externalFQDN:false;
-					if (is_numeric($hostName) and isset($hostDetails->hostname)) $hostName=$hostDetails->hostname;
-					if (is_numeric($hostName) and isset($hostDetails->hostName)) $hostName=$hostDetails->hostName;
+					if (isset($hostDetails->hostname)) $hostName=$hostDetails->hostname;
+					if (isset($hostDetails->hostName)) $hostName=$hostDetails->hostName;
 					
 					$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip, 'internalFQDN'=>$ifqdn, 'externalFQDN'=>$efqdn);
 				}

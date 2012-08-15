@@ -225,7 +225,11 @@ class Manipulator extends Module
 			else $outputNoMatch[]=$line;
 		}
 		
-		if ($feature) return $this->mixResults($outputMatch, $outputNoMatch, $feature);
+		if ($feature)
+		{
+			$this->core->debug(2, 'requireEach: Matched '.count($outputMatch).". Didn't match ".count($outputNoMatch.". For search $search"));
+			return $this->mixResults($outputMatch, $outputNoMatch, $feature);
+		}
 		else return $outputMatch;
 	}
 	
@@ -262,7 +266,13 @@ class Manipulator extends Module
 			}
 		}
 		
-		if ($feature) return $this->mixResults($outputMatch, $outputNoMatch, $feature);
+		if ($feature)
+		{
+			$this->core->debug(2, 'requireEntry: Matched '.count($outputMatch).". Didn't match ".count($outputNoMatch.". For search $neededKey=$neededRegex"));
+			print_r($input);
+			die("blhljhlkjh");
+			return $this->mixResults($outputMatch, $outputNoMatch, $feature);
+		}
 		else return $outputMatch;
 	}
 	
