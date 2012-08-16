@@ -356,7 +356,7 @@ class core extends Module
 					$this->debugSharedMemory($obj['name']);
 				}
 				
-				$this->set('Global', $obj['name'], $valueIn);
+				$this->makeArgsAvailableToTheScript($obj['name'], $valueIn);
 				$result=$obj['obj']->event($obj['name']);
 				
 				if ($this->isVerboseEnough(4))
@@ -372,6 +372,15 @@ class core extends Module
 			else $this->complain(null, "Could not find a module to match '$argument'", 'callFeature');
 		}
 		return false;
+	}
+	
+	function makeArgsAvailableToTheScript($featureName, $args)
+	{
+		$this->set('Global', $featureName, $args);
+		foreach ($this->interpretParms($args) as $key=>$arg)
+		{
+			$this->set('Global', "$featureName-$key", $arg);
+		}
 	}
 	
 	function splitOnceOn($needle, $haystack)
