@@ -1,0 +1,9 @@
+# Import hosts from an AWS account directly without saving the credentials ~ alpha,AWS
+
+AWSSetCred ~!Global,importHostsFromAWSDirect-0!~,~!Global,importHostsFromAWSDirect-1!~
+
+AWSGetHosts
+
+triggerEvent AWS,importedFromAccount
+
+saveToJson ~!General,configDir!~/data/1LayerHosts/direct.json
