@@ -116,10 +116,22 @@ function doInstall
 		cp -Rv "$startDir/$programName" "$bin"
 		chmod 755 "$bin/$programName"
 		
-		for thing in macros modules templates packages;do
+		for thing in macros modules templates;do
 			echo -e "\n# Sorting out $thing available/enabled"
 			cd "$configDir/$thing-enabled"
-			ln -sf ../$thing-available/* .
+			if [ -f "`ls -1 ../$thing-available/|head -n 1`" ]; then
+				ln -sf ../$thing-available/* .
+			fi
+			cleanEnabled testEnabledFile "$configDir/$thing-enabled"
+		done
+		
+		for thing in packages;do
+			echo -e "\n# Sorting out $thing available/enabled"
+			cd "$configDir/$thing-enabled"
+			if [ -f "`ls -1 ../$thing-available/|head -n 1`" ]; then
+				ln -sf ../$thing-available/* .
+			fi
+			cleanEnabled testEnabledDirectory "$configDir/$thing-enabled"
 		done
 	else
 		cd "$configDir"
