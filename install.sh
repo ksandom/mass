@@ -105,7 +105,7 @@ function doInstall
 	
 	if [ "$installType" == 'cp' ]; then
 		echo -e "\n# Copying available stuff"
-		cp -Rv docs modules-* core.php macros-* packages-* examples interfaces index.php "$configDir"
+		cp -Rv docs templates-* modules-* core.php macros-* packages-* examples interfaces index.php "$configDir"
 		
 		echo -e "\n# Setting up remaining directory structure"
 		cd "$configDir"
@@ -116,7 +116,7 @@ function doInstall
 		cp -Rv "$startDir/$programName" "$bin"
 		chmod 755 "$bin/$programName"
 		
-		for thing in macros modules templates;do
+		for thing in macros modules templates packages;do
 			echo -e "\n# Sorting out $thing available/enabled"
 			cd "$configDir/$thing-enabled"
 			ln -sf ../$thing-available/* .
