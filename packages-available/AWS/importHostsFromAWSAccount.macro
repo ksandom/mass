@@ -4,6 +4,7 @@ loadStoreFromData AWSCreds
 AWSSetCred ~!Result,line!~
 
 AWSCloseConnection
+clearResults
 AWSGetHosts
 
 triggerEvent AWS,importedFromAccount
