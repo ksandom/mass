@@ -32,16 +32,16 @@ class Condition extends Module
 			case 'last':
 				break;
 			case 'notIfResultExists':
-				return $this->ifResultExists($this->core->getSharedMemory(), $this->core->get('Global', 'notIfResultExists'), false);
+				return $this->ifResultExists($this->core->getResultSet(), $this->core->get('Global', 'notIfResultExists'), false);
 				break;
 			case 'ifResultExists':
-				return $this->ifResultExists($this->core->getSharedMemory(), $this->core->get('Global', 'ifResultExists'), true);
+				return $this->ifResultExists($this->core->getResultSet(), $this->core->get('Global', 'ifResultExists'), true);
 				break;
 			case 'notIfEmptyResult':
-				return $this->ifNotEmptyResult($this->core->getSharedMemory(), $this->core->get('Global', 'notIfEmptyResult'), true);
+				return $this->ifNotEmptyResult($this->core->getResultSet(), $this->core->get('Global', 'notIfEmptyResult'), true);
 				break;
 			case 'ifEmptyResult':
-				return $this->ifNotEmptyResult($this->core->getSharedMemory(), $this->core->get('Global', 'ifEmptyResult'), false);
+				return $this->ifNotEmptyResult($this->core->getResultSet(), $this->core->get('Global', 'ifEmptyResult'), false);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -103,7 +103,7 @@ class Condition extends Module
 		}
 		
 		
-		$this->core->debug(5, "ifNotEmptyResult: Just about to return. Count=".$this->core->getSharedMemoryCount());
+		$this->core->debug(5, "ifNotEmptyResult: Just about to return. Count=".$this->core->getResultSetCount());
 		return $result;
 	}
 	

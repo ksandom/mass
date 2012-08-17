@@ -46,7 +46,7 @@ class Macro extends Module
 				return $this->listMacros();
 				break;
 			case 'loopMacro':
-				return $this->loopMacro($this->core->getSharedMemory(), $this->core->get('Global', 'loopMacro'));
+				return $this->loopMacro($this->core->getResultSet(), $this->core->get('Global', 'loopMacro'));
 			case 'followup':
 				$this->loadSavedMacros();
 				break;

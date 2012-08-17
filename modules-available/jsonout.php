@@ -23,11 +23,11 @@ class JsonOut extends Module
 			case 'last':
 				break;
 			case 'toJson':
-				return array(json_encode($this->core->getSharedMemory()));
+				return array(json_encode($this->core->getResultSet()));
 				break;
 			case 'json':
 				$this->core->setRef('General', 'outputObject', $this);
-				return $this->core->getSharedMemory(); # TODO Fix this!
+				return $this->core->getResultSet(); # TODO Fix this!
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);

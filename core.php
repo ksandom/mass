@@ -116,13 +116,13 @@ class core extends Module
 				return $this->getStoreModule($this->get('Global', 'getStore'));
 				break;
 			case 'setStore':
-				$this->setStoreModule($this->get('Global', 'setStore'), $this->getSharedMemory());
+				$this->setStoreModule($this->get('Global', 'setStore'), $this->getResultSet());
 				break;
 			case 'stashResults':
 				$originalParms=$this->get('Global', 'stashResults');
 				$parms=$this->interpretParms($originalParms);
 				$this->requireNumParms($this, 2, $event, $originalParms, $parms);
-				$this->set($parms[0], $parms[1], $this->core->getSharedMemory());
+				$this->set($parms[0], $parms[1], $this->core->getResultSet());
 				break;
 			case 'retrieveResults':
 				$originalParms=$this->get('Global', 'retrieveResults');
@@ -159,7 +159,7 @@ class core extends Module
 				echo "Pong.\n";
 				break;
 			case 'outNow':
-				$this->out($this->getSharedMemory());
+				$this->out($this->getResultSet());
 				break;
 			case '#':
 				break;
@@ -247,24 +247,24 @@ class core extends Module
 		return $this->getFileList($path);
 	}
 	
-	function setSharedMemory(&$value, $src='unknown')
+	function setResultSet(&$value, $src='unknown')
 	{
 		$valueText=(is_string($value))?$value:'Type='.gettype($value);
-		$this->debug(5, "setSharedMemory(value=$valueText, src=$src)");
+		$this->debug(5, "setResultSet(value=$valueText, src=$src)");
 		if (is_array($value)) # ($value!=null and $value!==false)
 		{
 			$nesting=$this->get('Core', 'nesting');
 			if ($this->isVerboseEnough(5))
 			{
 				$numberOfEntries=count($value);
-				$this->debug(5, "setSharedMemory(value=$value($numberOfEntries), src=$src)/$nesting - is_array == true. VALUE WILL BE SET");
+				$this->debug(5, "setResultSet(value=$value($numberOfEntries), src=$src)/$nesting - is_array == true. VALUE WILL BE SET");
 				if ($this->isVerboseEnough(6)) 
 				{
 					print_r($value);
-					$this->debug(6, "setSharedMemory(value=$value($numberOfEntries), src=$src)/$nesting - exiting from var dump.");
+					$this->debug(6, "setResultSet(value=$value($numberOfEntries), src=$src)/$nesting - exiting from var dump.");
 				}
 				$serial=$this->get('Core', 'serial');
-				$this->debugSharedMemory("setSharedMemory $src/$serial");
+				$this->debugResultSet("setResultSet $src/$serial");
 			}
 			$this->setRef('Core', 'shared'.$nesting, $value);
 			return true;
@@ -272,39 +272,39 @@ class core extends Module
 		else return false;
 	}
 	
-	function &getSharedMemory()
+	function &getResultSet()
 	{
 		$nesting=$this->get('Core', 'nesting');
-		$sharedMemoryDiag=count($this->get('Core', 'shared'.$nesting));
+		$resultSetDiag=count($this->get('Core', 'shared'.$nesting));
 		if ($this->isVerboseEnough(5))
 		{
 			$serial=$this->get('Core', 'serial');
-			$this->debug(5, "getSharedMemory/$nesting count=$sharedMemoryDiag serial=$serial");
+			$this->debug(5, "getResultSet/$nesting count=$resultSetDiag serial=$serial");
 			#print_r($this->get('Core', 'shared'.$nesting));
 		}
 		return $this->get('Core', 'shared'.$nesting);
 	}
 	
-	function &getParentSharedMemory()
+	function &getParentResultSet()
 	{
 		$nesting=$this->get('Core', 'nesting');
 		$nestingSrc=$nesting-1;
 		if ($nestingSrc<1 or !is_numeric($nestingSrc)) $nestingSrc = 1; # TODO check this
-		$sharedMemory=&$this->get('Core', 'shared'.$nestingSrc);
+		$resultSet=&$this->get('Core', 'shared'.$nestingSrc);
 		
 		if ($this->isVerboseEnough(5))
 		{
 			$serial=$this->get('Core', 'serial');
-			$sharedMemoryDiag=count($sharedMemory);
-			$this->debug(5, "getParentSharedMemory $nestingSrc->$nesting/$sharedMemoryDiag/$serial");
+			$resultSetDiag=count($resultSet);
+			$this->debug(5, "getParentResultSet $nestingSrc->$nesting/$resultSetDiag/$serial");
 		}
-		return $sharedMemory;
+		return $resultSet;
 	}
 	
 	function makeParentShareMemoryCurrent()
 	{
 		$this->debug(5, "makeParentShareMemoryCurrent/");
-		$this->setSharedMemory($this->getParentSharedMemory());
+		$this->setResultSet($this->getParentResultSet());
 	}
 	
 	function callFeatureWithDataset($argument, $value, $dataset)
@@ -312,13 +312,13 @@ class core extends Module
 		// Increment nesting
 		$this->incrementNesting();
 		
-		// set sharedmemory to dataset
-		$this->setSharedMemory($dataset);
+		// set resultSet to dataset
+		$this->setResultSet($dataset);
 		
 		// call feature
 		$output=$this->callFeature($argument, $value);
 		
-		// Decrement nesting (WITHOUT pulling the sharedMemory)
+		// Decrement nesting (WITHOUT pulling the resultSet)
 		$this->decrementNesting();
 		return $output;
 	}
@@ -350,7 +350,7 @@ class core extends Module
 				
 				if ($this->isVerboseEnough(5))
 				{
-					$this->debugSharedMemory($obj['name']);
+					$this->debugResultSet($obj['name']);
 				}
 				
 				$this->makeArgsAvailableToTheScript($obj['name'], $valueIn);
@@ -361,8 +361,8 @@ class core extends Module
 					$resultCount=count($result);
 					$nesting=$this->get('Core', 'nesting');
 					$isArray=is_array($result)?'True':'False';;
-					$this->debug(4, "INVOKE-Exit  {$indentation}{$obj['name']}/$nesting value={$value}, valueIn=$valueIn resultCount=$resultCount is_array=$isArray smCount=".$this->getSharedMemoryCount());
-					$this->debugSharedMemory($obj['name']);
+					$this->debug(4, "INVOKE-Exit  {$indentation}{$obj['name']}/$nesting value={$value}, valueIn=$valueIn resultCount=$resultCount is_array=$isArray smCount=".$this->getResultSetCount());
+					$this->debugResultSet($obj['name']);
 				}
 				return $result;
 			}
@@ -437,14 +437,14 @@ class core extends Module
 
 	}
 	
-	function debugSharedMemory($label='undefined')
+	function debugResultSet($label='undefined')
 	{
 		$nesting=$this->get('Core', 'nesting');
 		$serial=$this->get('Core', 'serial');
 		for ($i=$nesting;$i>-1;$i--)
 		{
-			$sharedMemory=$this->get('Core', 'shared'.$i);
-			$this->debug(3, "debugSharedMemory $label/$i count=".count($sharedMemory)." serial=$serial");
+			$resultSet=$this->get('Core', 'shared'.$i);
+			$this->debug(3, "debugResultSet $label/$i count=".count($resultSet)." serial=$serial");
 		}
 	}
 	
@@ -511,13 +511,13 @@ class core extends Module
 		$nesting=(is_numeric($srcNesting))?$srcNesting-1:1;
 		if ($nesting<1) $nesting=1;
 		$this->set('Core', 'nesting', $nesting);
-		$this->debug(5, "Decremented nesting to $nesting count=".$this->getSharedMemoryCount());
+		$this->debug(5, "Decremented nesting to $nesting count=".$this->getResultSetCount());
 		return $nesting;
 	}
 	
-	function getSharedMemoryCount()
+	function getResultSetCount()
 	{
-		return count($this->getSharedMemory());
+		return count($this->getResultSet());
 	}
 	
 	function &go($macroName='default')
@@ -534,8 +534,8 @@ class core extends Module
 				foreach ($this->store['Macros'][$macroName] as $actionItem)
 				{
 					$nesting=$this->get('Core', 'nesting');
-					$this->debug(5, "ITER $macroName/$nesting - {$actionItem['name']}: Result count before invoking=".count($this->getSharedMemory()));
-					$this->debugSharedMemory("$macroName - {$actionItem['name']}");
+					$this->debug(5, "ITER $macroName/$nesting - {$actionItem['name']}: Result count before invoking=".count($this->getResultSet()));
+					$this->debugResultSet("$macroName - {$actionItem['name']}");
 					
 					# TODO The problem happens somewhere between here...
 					$returnedValue1=$this->callFeature($actionItem['name'], $actionItem['value']);
@@ -543,27 +543,27 @@ class core extends Module
 					# and here
 					$this->debug(5,"GOT HERE ALSO");
 					
-					$this->debugSharedMemory("$macroName - {$actionItem['name']}");
+					$this->debugResultSet("$macroName - {$actionItem['name']}");
 					
 					$nesting=$this->get('Core', 'nesting');
-					$this->debug(5, "ITER $macroName/$nesting - {$actionItem['name']}: Restult count before set=".count($this->getSharedMemory()));
-					$this->setSharedMemory($returnedValue);
-					$this->debug(5, "ITER $macroName/$nesting - {$actionItem['name']}: Result count after set=".count($this->getSharedMemory()));
+					$this->debug(5, "ITER $macroName/$nesting - {$actionItem['name']}: Restult count before set=".count($this->getResultSet()));
+					$this->setResultSet($returnedValue);
+					$this->debug(5, "ITER $macroName/$nesting - {$actionItem['name']}: Result count after set=".count($this->getResultSet()));
 					#echo "$macroName\n";
 					#print_r($returnedValue);
 				}
-				$sharedMemory=$this->getSharedMemory();
+				$resultSet=$this->getResultSet();
 				
 				# Output our results if we are back to the first level
 				if ($nesting==1)
 				{
-					$this->out($sharedMemory);
+					$this->out($resultSet);
 				}
 				
 				# Set the shared memory back to the previous nesting level
 				$this->decrementNesting();
 				
-				return $sharedMemory;
+				return $resultSet;
 			}
 			else
 			{

@@ -33,41 +33,41 @@ class Manipulator extends Module
 			case 'last':
 				break;
 			case 'requireEach':
-				return $this->requireEach($this->core->getSharedMemory(), $this->core->get('Global', 'requireEach'));
+				return $this->requireEach($this->core->getResultSet(), $this->core->get('Global', 'requireEach'));
 				break;
 			case 'requireItem':
 				$parms=$this->core->interpretParms($this->core->get('Global', 'requireItem'), 2, 1);
-				return $this->requireEntry($this->core->getSharedMemory(), $parms[0], $parms[1]);
+				return $this->requireEntry($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
 			case 'manipulateEach':
 				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateEach'), 1, 2);
-				return $this->requireEach($this->core->getSharedMemory(), $parms[0], $parms[1]);
+				return $this->requireEach($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
 			case 'manipulateItem':
 				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateItem'), 2, 3);
-				return $this->requireEntry($this->core->getSharedMemory(), $parms[0], $parms[1], $parms[2]);
+				return $this->requireEntry($this->core->getResultSet(), $parms[0], $parms[1], $parms[2]);
 				break;
 			case 'toString':
-				return $this->toString($this->core->getSharedMemory(), $this->core->get('Global', 'toString'));
+				return $this->toString($this->core->getResultSet(), $this->core->get('Global', 'toString'));
 				break;
 			case 'flatten':
-				return $this->flatten($this->core->getSharedMemory(), $this->core->get('Global', 'flatten'));
+				return $this->flatten($this->core->getResultSet(), $this->core->get('Global', 'flatten'));
 				break;
 			case 'chooseFirst':
-				return $this->chooseFirst($this->core->getSharedMemory(), $this->core->interpretParms($this->core->get('Global', 'chooseFirst')));
+				return $this->chooseFirst($this->core->getResultSet(), $this->core->interpretParms($this->core->get('Global', 'chooseFirst')));
 				break;
 			case 'resultSet':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', 'resultSet'));
 				$this->core->requireNumParms($this, 2, $event, $originalParms, $parms);
-				return $this->resultSet($this->core->getSharedMemory(), $parms[0], $parms[1]);
+				return $this->resultSet($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
 			case 'cleanUnresolvedResultVars':
-				return $this->cleanUnresolvedVars($this->core->getSharedMemory(), resultVarBegin, resultVarEnd);
+				return $this->cleanUnresolvedVars($this->core->getResultSet(), resultVarBegin, resultVarEnd);
 				break;
 			case 'addSlashes':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', 'addSlashes'));
 				$this->core->requireNumParms($this, 2, $event, $originalParms, $parms);
-				return $this->addResultSlashes($this->core->getSharedMemory(), $parms[0], $parms[1]);
+				return $this->addResultSlashes($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);

@@ -36,7 +36,7 @@ class Template extends Module
 				break;
 			case 'template':
 				#$this->core->setRef('General', 'outputObject', $this);
-				return array($this->processTemplateByName($this->core->get('Global', 'template'), $this->core->getSharedMemory()));
+				return array($this->processTemplateByName($this->core->get('Global', 'template'), $this->core->getResultSet()));
 				break;
 			case 'templateOut':
 				$this->core->setRef('General', 'outputObject', $this);

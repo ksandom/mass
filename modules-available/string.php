@@ -33,7 +33,7 @@ class String extends Module
 				$this->stringToFile($this->core->get('Global', 'stringToFile'));
 				break;
 			case 'singleStringNow':
-				$this->singleStringNow($this->core->get('Global', 'singleStringNow'), $this->core->getSharedMemory());
+				$this->singleStringNow($this->core->get('Global', 'singleStringNow'), $this->core->getResultSet());
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
