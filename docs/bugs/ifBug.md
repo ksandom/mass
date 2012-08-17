@@ -4,7 +4,7 @@ Results get lost after the second `ifResult` in testIf.macro.
 
 # Status
 
-Testing. It appears to be solved. Giving it a decent chance to re-manifest before cleaning up.
+Fixed. There are still TODO's below.
 
 # Details
 
