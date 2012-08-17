@@ -157,10 +157,6 @@ class Hosts extends Module
 					$outputLine=$hostDetails;
 					$outputLine['filename']=$filename;
 					$outputLine['categoryName']=$categoryName;
-					# TODO finish this
-					
-					$output[]=$outputLine;
-					#$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip, 'internalFQDN'=>$ifqdn, 'externalFQDN'=>$efqdn);
 				}
 				else $this->core->debug(4, "Did not match $hostName");
 			}
