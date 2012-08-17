@@ -28,6 +28,7 @@ class AWS extends Module
 		
 		# TODO Improce this to detect the class
 		$this->foundLibrary=file_exists(AWSLibrary);;
+		if (!$this->foundLibrary) $this->core->debug(1, "The AWS library was not found. Looking for it at ".AWSLibrary);
 	}
 	
 	function event($event)
@@ -271,7 +272,10 @@ class AWS extends Module
 	}
 }
 
-@include_once(AWSLibrary);
+if (file_exists(AWSLibrary))
+{
+	@include_once(AWSLibrary);
+}
 
 $core=core::assert();
 $core->registerModule(new AWS());
