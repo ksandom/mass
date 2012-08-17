@@ -249,7 +249,8 @@ class core extends Module
 	
 	function setSharedMemory(&$value, $src='unknown')
 	{
-		$this->debug(5, "setSharedMemory(value=$value, src=$src)");
+		$valueText=(is_string($value))?$value:'Type='.gettype($value);
+		$this->debug(5, "setSharedMemory(value=$valueText, src=$src)");
 		if (is_array($value)) # ($value!=null and $value!==false)
 		{
 			$nesting=$this->get('Core', 'nesting');
@@ -287,12 +288,9 @@ class core extends Module
 	function &getParentSharedMemory()
 	{
 		$nesting=$this->get('Core', 'nesting');
-		$nestingSrc=$nesting-1; # TODO Check this. Adding this fixes the shared memory loss. MEMORY BUG
+		$nestingSrc=$nesting-1;
 		if ($nestingSrc<1 or !is_numeric($nestingSrc)) $nestingSrc = 1; # TODO check this
 		$sharedMemory=&$this->get('Core', 'shared'.$nestingSrc);
-		
-		# NOTE I think this is the source of the bug that has been kicking my arse! MEMORY BUG
-		#if (!is_array($sharedMemory)) $sharedMemory=array();
 		
 		if ($this->isVerboseEnough(5))
 		{
@@ -311,7 +309,6 @@ class core extends Module
 	
 	function callFeatureWithDataset($argument, $value, $dataset)
 	{
-		# TODO implement this
 		// Increment nesting
 		$this->incrementNesting();
 		
