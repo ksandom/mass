@@ -326,7 +326,7 @@ class core extends Module
 		return $output;
 	}
 	
-	function callFeature($argument, $value)
+	function callFeature($argument, $value='')
 	{
 		$nesting=$this->get('Core', 'nesting');
 		if ($argument=='	')

@@ -8,13 +8,19 @@ For a list of all current AWS functionality, run `mass --help=AWS`
 
 This works by using the "name" tag that you can set for individual hosts. For now this is a requirement to be able to import hosts from AWS.
 
-There are currently a couple of ways of importing hosts from AWS.
+There are currently a few ways of importing hosts from AWS.
 
 ## Using Saved credentials
 
 ### Overview
 
 This is currently the most convenient way of importing hosts from AWS.
+
+It works by using the PHP AWS API SDK (that's a mouth-full!) It 100% relies on this being present. You can find out where mass is expecting to find it using `mass --AWSLibraryDetails`
+
+The version of the SDK is also important. Earlier versions ignore the credentials defined at runtime and instead only use the credentials specified in ~/.aws/???/config.php if you only need to import from one account this may be ok for you. The symptom is that every import will return the hosts defined in that file.
+
+TODO fill in the ??? (I think it's php)
 
 ### Save your credentials
 
@@ -32,9 +38,17 @@ This creates some credentials called "dev" where the key is "ASDFDGFHFSE5FG4" an
 
 Assuming you've set the credentials, that's all you need to do. Done!
 
-## Manually
+## Runtime defined credentials
 
-TODO write a macro to make this easier.
+### Overview
+
+If you don't want to save your credentials in mass, you can now run them using `--importHostsFromAWSDirect`.
+
+## Import the hosts and specify your credentials
+
+    mass --importHostsFromAWSDirect=ASDFDGFHFSE5FG4,vdgnm8i7u6htgf4edwety543d2fg
+
+## Manually
 
 ### Overview
 
@@ -57,3 +71,7 @@ Great, now we have hosts, but once again this is non-persistent. So we need to s
     mass --AWSSetCred=ASDFDGFHFSE5FG4,vdgnm8i7u6htgf4edwety543d2fg --AWSGetHosts --saveToJson=~!General,configDir!~/data/1LayerHosts/manuallyImported.json
 
 Now we've saved them so that we can query them with `mass --list=blah`.
+
+## Installing the PHP AWS API SDK
+
+TODO write this.

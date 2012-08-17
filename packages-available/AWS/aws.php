@@ -41,6 +41,7 @@ class AWS extends Module
 				$this->core->registerFeature($this, array('AWSGetHosts'), 'AWSGetHosts', "Get all running AWS instances", array('import'));
 				$this->core->registerFeature($this, array('AWSGetAllHosts'), 'AWSGetAllHosts', "Get all AWS instances (even powered off ones). More often than not, you probably want --AWSGetInstances.", array('import'));
 				$this->core->registerFeature($this, array('AWSCloseConnection'), 'AWSCloseConnection', "Close any open connections to AWS so that a new one can be created.", array('import'));
+				$this->core->registerFeature($this, array('AWSLibraryDetails'), 'AWSLibraryDetails', "Get information about the AWS library like where mass is expecting to find it.", array('import'));
 				break;
 				break;
 			case 'AWSSetCred':
@@ -65,6 +66,10 @@ class AWS extends Module
 			case 'AWSCloseConnection':
 				if ($this->hasLibrary()) $this->AWSCloseConnection();
 				else $this->warn();
+				break;
+			case 'AWSLibraryDetails':
+				return $this->AWSLibraryDetails();
+				break;
 			case 'last':
 				break;
 			case 'followup':
@@ -269,6 +274,15 @@ class AWS extends Module
 		}
 		
 		return $output;
+	}
+	
+	function AWSLibraryDetails()
+	{
+		$this->core->callFeature('nested');
+		return array(
+			'seekLocation'=>AWSLibrary,
+			'found'=>$this->foundLibrary
+		);
 	}
 }
 
