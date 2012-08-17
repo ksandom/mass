@@ -46,6 +46,7 @@ class Hosts extends Module
 	
 	function hostMatches($host, $search)
 	{
+		$this->core->debug(4, "hostMatches: Checking host");
 		if (!$search) return true; # If no search, return all results.
 		
 		foreach ($host as $key=>$detail)
@@ -54,7 +55,7 @@ class Hosts extends Module
 			{
 				if (preg_match('/'.$search.'/', $detail) or !$search)
 				{
-					$this->core->debug(5, "hostMatches: Matched search=\"$search\", detail=\"$detail\"");
+					$this->core->debug(4, "hostMatches: Matched search=\"$search\", detail=\"$detail\"");
 					return true;
 				}
 				else
@@ -69,7 +70,7 @@ class Hosts extends Module
 			}
 			else
 			{
-				$this->core->debug(5, "hostMatches: What is this? key=$key type=".gettype($detail));
+				$this->core->debug(4, "hostMatches: What is this? key=$key type=".gettype($detail));
 			}
 		}
 	}
@@ -92,7 +93,7 @@ class Hosts extends Module
 		$this->core->debug(3, "loadHostDefinitions: Loading folder $folderName into $destination.");
 		foreach ($hostFiles as $filename=>$hostFile)
 		{
-			$allHostDefinitions[$filename]=json_decode(file_get_contents($hostFile));
+			$allHostDefinitions[$filename]=json_decode(file_get_contents($hostFile), true);
 			$this->core->debug(4, "loadHostDefinitions:   Loaded $hostFile into $destination.");
 		}
 		
@@ -138,11 +139,12 @@ class Hosts extends Module
 	
 	function processCategory(&$output, $search, $categoryDetails, $filename, $categoryName='unknown')
 	{
-		if ($categoryDetails)
+		if (is_array($categoryDetails))
 		{
-			$this->core->debug(5, "processCategory: categoryDetails is ".gettype($categoryDetails));
+			$this->core->debug(4, "processCategory: categoryDetails is ".gettype($categoryDetails));
 			foreach ($categoryDetails as $hostName=>$hostDetails)
 			{
+				$this->core->debug(4, "processCategory: checking $hostName");
 				if ($this->hostMatches($hostDetails, $search))
 				{
 					$iip=(isset($hostDetails->internalIP))?$hostDetails->internalIP:false;
@@ -152,7 +154,13 @@ class Hosts extends Module
 					if (isset($hostDetails->hostname)) $hostName=$hostDetails->hostname;
 					if (isset($hostDetails->hostName)) $hostName=$hostDetails->hostName;
 					
-					$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip, 'internalFQDN'=>$ifqdn, 'externalFQDN'=>$efqdn);
+					$outputLine=$hostDetails;
+					$outputLine['filename']=$filename;
+					$outputLine['categoryName']=$categoryName;
+					# TODO finish this
+					
+					$output[]=$outputLine;
+					#$output[]=array('filename'=>$filename, 'categoryName'=>$categoryName, 'hostName'=>$hostName, 'internalIP'=>$iip, 'externalIP'=>$eip, 'internalFQDN'=>$ifqdn, 'externalFQDN'=>$efqdn);
 				}
 				else $this->core->debug(4, "Did not match $hostName");
 			}
