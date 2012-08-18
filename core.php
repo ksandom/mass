@@ -65,7 +65,7 @@ class core extends Module
 				$this->registerFeature($this, array('setIfNotSet', 'setDefault'), 'setIfNotSet', 'set a value if none has been set. --setIfNotSet=category'.valueSeparator.'variableName'.valueSeparator.'defaultValue', array('storeVars'));
 				$this->registerFeature($this, array('unset'), 'unset', 'un set (delete) a value. --unset=category'.valueSeparator.'variableName	', array('storeVars'));
 				$this->registerFeature($this, array('getCategory'), 'getCategory', 'Get an entire store into the result set. --getCategory=moduleNam', array('storeVars', 'store', 'dev'));
-				$this->registerFeature($this, array('setStore'), 'setStore', 'Set an entire store to the current state of the result set. --setStore=category', array('storeVars', 'store', 'dev'));
+				$this->registerFeature($this, array('setCategory'), 'setCategory', 'Set an entire store to the current state of the result set. --setCategory=category', array('storeVars', 'store', 'dev'));
 				$this->registerFeature($this, array('unsetCategory'), 'unsetCategory', 'Un set/delete an entire store. --unsetCategory=category', array('storeVars', 'store', 'dev'));
 				$this->registerFeature($this, array('stashResults'), 'stashResults', 'Put the current result set into a memory slot. --stashResults=category'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('retrieveResults'), 'retrieveResults', 'Retrieve a result set that has been stored. This will replace the current result set with the retrieved one --retrieveResults=category'.valueSeparator.'variableName');
@@ -121,8 +121,8 @@ class core extends Module
 			case 'getCategory':
 				return $this->getCategoryModule($this->get('Global', 'getCategory'));
 				break;
-			case 'setStore': # TODO -> setCategory
-				$this->setStoreModule($this->get('Global', 'setStore'), $this->getResultSet());
+			case 'setCategory': # TODO -> setCategory
+				$this->setCategory($this->get('Global', 'setCategory'), $this->getResultSet());
 				break;
 			case 'unsetCategory':
 				$this->unsetCategoryModule($this->get('Global', 'unsetCategory'));
@@ -599,7 +599,7 @@ class core extends Module
 		}
 	}
 	
-	function setStoreModule($category, $contents)
+	function setCategoryModule($category, $contents)
 	{
 		$this->store[$category]=$contents;
 	}

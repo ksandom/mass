@@ -68,7 +68,7 @@ class Data extends Module
 		}
 		
 		$config=json_decode(file_get_contents($filenameTouse), 1);
-		$this->core->setStoreModule($storeName, $config);
+		$this->core->setCategoryModule($storeName, $config);
 	}
 	
 	function loadStoreEntryFromFilename($filename)
