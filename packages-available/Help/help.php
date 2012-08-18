@@ -47,7 +47,7 @@ class Help extends Module
 	function searchHelp($tags)
 	{
 		$output=array();
-		$this->store=$this->core->getStore();
+		$this->store=$this->core->getCategory();
 		
 		if ($tags) $tagsArray=$this->core->interpretParms($tags);
 		else $tagsArray=array('user');
@@ -82,14 +82,14 @@ class Help extends Module
 	
 	function getTags()
 	{
-		$this->store=$this->core->getStore();
+		$this->store=$this->core->getCategory();
 		return array_keys($this->store['Tags']);
 	}
 	
 	function showHelp($tags)
 	{ // Deprecated
 		$this->track=array();
-		$this->store=$this->core->getStore();
+		$this->store=$this->core->getCategory();
 		$this->assertCodes();
 		
 		if ($tags) $this->showSpecificHelp($tags);
@@ -121,7 +121,7 @@ class Help extends Module
 	
 	function showAllHelp()
 	{ // Deprecated
-		$store=$this->core->getStore();
+		$store=$this->core->getCategory();
 		$track=array();
 		
 		$programName=$this->core->get('General', 'programName');
@@ -156,7 +156,7 @@ class Help extends Module
 	{
 		if (!$this->codes)
 		{
-			$this->codes=$this->core->getStoreModule('Codes');
+			$this->codes=$this->core->getCategoryModule('Codes');
 		}
 	}
 	

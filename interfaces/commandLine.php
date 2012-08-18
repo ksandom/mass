@@ -119,7 +119,7 @@ class CommandLine extends Module
 	{
 		if (!$this->codes)
 		{
-			$this->codes=$this->core->getStoreModule('Codes');
+			$this->codes=$this->core->getCategoryModule('Codes');
 		}
 	}
 	

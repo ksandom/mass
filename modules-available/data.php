@@ -103,7 +103,7 @@ class Data extends Module
 	
 	function saveStoreEntry($storeName, $source='config')
 	{
-		if ($config=$this->core->getStoreModule($storeName))
+		if ($config=$this->core->getCategoryModule($storeName))
 		{
 			$fullPath="{$this->configDir}/$source/$storeName.$source.json";
 			file_put_contents($fullPath, json_encode($config));

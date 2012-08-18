@@ -64,7 +64,7 @@ class core extends Module
 				$this->registerFeature($this, array('setArray'), 'setArray', 'set a value. All remaining values after the destination go into an array. --set=category'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
 				$this->registerFeature($this, array('setIfNotSet', 'setDefault'), 'setIfNotSet', 'set a value if none has been set. --setIfNotSet=category'.valueSeparator.'variableName'.valueSeparator.'defaultValue', array('storeVars'));
 				$this->registerFeature($this, array('unset'), 'unset', 'un set (delete) a value. --unset=category'.valueSeparator.'variableName	', array('storeVars'));
-				$this->registerFeature($this, array('getStore'), 'getStore', 'Get an entire store into the result set. --getStore=moduleNam', array('storeVars', 'store', 'dev'));
+				$this->registerFeature($this, array('getCategory'), 'getCategory', 'Get an entire store into the result set. --getCategory=moduleNam', array('storeVars', 'store', 'dev'));
 				$this->registerFeature($this, array('setStore'), 'setStore', 'Set an entire store to the current state of the result set. --setStore=category', array('storeVars', 'store', 'dev'));
 				$this->registerFeature($this, array('unsetStore'), 'unsetStore', 'Un set/delete an entire store. --unsetStore=category', array('storeVars', 'store', 'dev'));
 				$this->registerFeature($this, array('stashResults'), 'stashResults', 'Put the current result set into a memory slot. --stashResults=category'.valueSeparator.'variableName');
@@ -118,13 +118,13 @@ class core extends Module
 				$parms=$this->interpretParms($this->get('Global', 'set'), 2, 2, true);
 				$this->doUnset($parms[0], $parms[1]);
 				break;
-			case 'getStore':
-				return $this->getStoreModule($this->get('Global', 'getStore'));
+			case 'getCategory': # TODO -> getCategory
+				return $this->getCategoryModule($this->get('Global', 'getCategory'));
 				break;
-			case 'setStore':
+			case 'setStore': # TODO -> setCategory
 				$this->setStoreModule($this->get('Global', 'setStore'), $this->getResultSet());
 				break;
-			case 'unsetStore':
+			case 'unsetStore':# TODO -> unsetCategory
 				$this->unsetStoreModule($this->get('Global', 'unsetStore'));
 				break;
 			case 'stashResults':
@@ -589,7 +589,7 @@ class core extends Module
 		}
 	}
 	
-	function &getStoreModule($category)
+	function &getCategoryModule($category)
 	{
 		if (isset($this->store[$category])) return $this->store[$category];
 		else
@@ -687,9 +687,9 @@ class core extends Module
 		else $this->debug(5,"delete($category, $valueName) - category not found");
 	}
 	
-	function getStore()
+	function getCategory()
 	{ # Note that this returns a COPY of the store. It is not intended as a way of modifying the store.
-		$this->debug(5,"getStore()");
+		$this->debug(5,"getCategory()");
 		return $this->store;
 	}
 	

@@ -2,7 +2,7 @@
 #onDefine aliasFeature importHostsFromAWS,awsimport
 
 loadStoreFromData AWSCreds
-getStore AWSCreds
+getCategory AWSCreds
 
 notIfResult debug 0,No Accounts created. Please use --AWSSaveCred to define some.
 

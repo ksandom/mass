@@ -125,7 +125,7 @@ class Macro extends Module
 	
 	function listMacros()
 	{
-		$store=$this->core->getStore();
+		$store=$this->core->getCategory();
 		$output=array();
 		if (!isset($store['Macros'])) return $output;
 		foreach ($store['Macros'] as $macroName=>$macro)
@@ -170,7 +170,7 @@ class Macro extends Module
 				$this->core->set('Result', 'key', $key);
 				
 				$this->core->callFeature($macroName, $macroParms);
-				$output[$key]=$this->core->getStoreModule('Result');
+				$output[$key]=$this->core->getCategoryModule('Result');
 			}
 		}
 		else $this->core->debug(5, "loopMacro: No input!");
