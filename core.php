@@ -63,9 +63,10 @@ class core extends Module
 				$this->registerFeature($this, array('set'), 'set', 'set a value. All remaining values after the destination go into a string. --set=category'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
 				$this->registerFeature($this, array('setArray'), 'setArray', 'set a value. All remaining values after the destination go into an array. --set=category'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
 				$this->registerFeature($this, array('setIfNotSet', 'setDefault'), 'setIfNotSet', 'set a value if none has been set. --setIfNotSet=category'.valueSeparator.'variableName'.valueSeparator.'defaultValue', array('storeVars'));
-				$this->registerFeature($this, array('unSet'), 'unSet', 'un set (delete) a value. --unSet=category'.valueSeparator.'variableName	', array('storeVars'));
+				$this->registerFeature($this, array('unset'), 'unset', 'un set (delete) a value. --unset=category'.valueSeparator.'variableName	', array('storeVars'));
 				$this->registerFeature($this, array('getStore'), 'getStore', 'Get an entire store into the result set. --getStore=moduleNam', array('storeVars', 'store', 'dev'));
 				$this->registerFeature($this, array('setStore'), 'setStore', 'Set an entire store to the current state of the result set. --setStore=category', array('storeVars', 'store', 'dev'));
+				$this->registerFeature($this, array('unsetStore'), 'unsetStore', 'Un set/delete an entire store. --unsetStore=category', array('storeVars', 'store', 'dev'));
 				$this->registerFeature($this, array('stashResults'), 'stashResults', 'Put the current result set into a memory slot. --stashResults=category'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('retrieveResults'), 'retrieveResults', 'Retrieve a result set that has been stored. This will replace the current result set with the retrieved one --retrieveResults=category'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('getPID'), 'getPID', 'Save the process ID to a variable. --getPID=category'.valueSeparator.'variableName');
@@ -113,15 +114,18 @@ class core extends Module
 				$this->requireNumParms($this, 2, $event, $originalParms, $parms);
 				$this->setIfNotSet($parms[0], $parms[1], $parms[2]);
 				break;
-			case 'unSet':
+			case 'unset':
 				$parms=$this->interpretParms($this->get('Global', 'set'), 2, 2, true);
-				$this->doUnSet($parms[0], $parms[1]);
+				$this->doUnset($parms[0], $parms[1]);
 				break;
 			case 'getStore':
 				return $this->getStoreModule($this->get('Global', 'getStore'));
 				break;
 			case 'setStore':
 				$this->setStoreModule($this->get('Global', 'setStore'), $this->getResultSet());
+				break;
+			case 'unsetStore':
+				$this->unsetStoreModule($this->get('Global', 'unsetStore'));
 				break;
 			case 'stashResults':
 				$originalParms=$this->get('Global', 'stashResults');
@@ -588,12 +592,21 @@ class core extends Module
 	function &getStoreModule($category)
 	{
 		if (isset($this->store[$category])) return $this->store[$category];
-		else return array();
+		else
+		{
+			$output=array();
+			return $output;
+		}
 	}
 	
 	function setStoreModule($category, $contents)
 	{
 		$this->store[$category]=$contents;
+	}
+	
+	function unsetStoreModule($category)
+	{
+		unset($this->store[$category]);
 	}
 	
 	function &get($category, $valueName, $debug=true)
