@@ -1,0 +1,8 @@
+# Test indentation ~ test,syntax
+
+# debug 0,
+# 	This is the first line.
+# 	This is the second line.
+# 	And the third.
+	
+debug 0,If this worked correctly, there should be 3 lines above this one.
