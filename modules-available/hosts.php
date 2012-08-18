@@ -147,6 +147,7 @@ class Hosts extends Module
 				$this->core->debug(4, "processCategory: checking $hostName");
 				if ($this->hostMatches($hostDetails, $search))
 				{
+					$this->core->debug(4, "processCategory: matched $hostName");
 					$iip=(isset($hostDetails->internalIP))?$hostDetails->internalIP:false;
 					$eip=(isset($hostDetails->externalIP))?$hostDetails->externalIP:false;
 					$ifqdn=(isset($hostDetails->internalFQDN))?$hostDetails->internalFQDN:false;
@@ -157,6 +158,7 @@ class Hosts extends Module
 					$outputLine=$hostDetails;
 					$outputLine['filename']=$filename;
 					$outputLine['categoryName']=$categoryName;
+					$output[]=$outputLine;
 				}
 				else $this->core->debug(4, "Did not match $hostName");
 			}
