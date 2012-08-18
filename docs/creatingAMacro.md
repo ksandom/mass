@@ -36,7 +36,7 @@ Say we want to list out all servers that begin with db and continue with what ev
 There are currerntly two types of variables with very different purposes.
 
  * Result variables - `~%resultKey%~` - reference items within the result of commands you invoke. This is primarily used to retrieve parts of a result.
- * Store variables - `~!ModuleName,variableName!~` - reference items within the store. This is primarily used for working with configuration (both mass and your macros) and parameters.
+ * Store variables - `~!Category,variableName!~` - reference items within the store. This is primarily used for working with configuration (both mass and your macros) and parameters.
 
 ## Result variables
 `~%resultKey%~` - *reference items within the result of commands you invoke. This is primarily used to retrieve parts of a result.*
@@ -84,7 +84,7 @@ As you can see, in my case I'm not connected to a network while I'm writing this
 TODO write about spawning stuff. In the mean time, take a look at term.macro which shows one way of dealing with this.
 
 ## Store variables
-`~!ModuleName,variableName!~` - *reference items within the store. This is primarily used for working with configuration (both mass and macros) and parameters.*
+`~!Category,variableName!~` - *reference items within the store. This is primarily used for working with configuration (both mass and macros) and parameters.*
 
 TODO write this.
 

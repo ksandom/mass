@@ -61,7 +61,7 @@ class Help extends Module
 					$details=$this->store['Features'][$name];
 					$details['name']=$name;
 					$details['matchedTag']=$tag;
-					$details['moduleName']=$details['obj']->getName();
+					$details['category']=$details['obj']->getName();
 					
 					
 					$visualFlags=array();

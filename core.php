@@ -58,18 +58,18 @@ class core extends Module
 			case 'init':
 				$this->registerFeature($this, array('registerTags'), 'registerTags', 'Register tags to a feature. --registerTags=featureName'.valueSeparator.'tag1['.valueSeparator.'tag2['.valueSeparator.'tag3'.valueSeparator.'...]]');
 				$this->registerFeature($this, array('aliasFeature'), 'aliasFeature', 'Create an alias for a feature. Eg aliasing --help to -h and -h1 would be done by --aliasFeature=help'.valueSeparator.'h'.valueSeparator.'h1');
-				# $this->registerFeature($this, array('get'), 'get', 'Get a value. --get=moduleName'.valueSeparator.'variableName', array('storeVars'));
-				$this->registerFeature($this, array('getToResult', 'get'), 'getToResult', 'Get a value and put it in an array so we can do stuff with it. --getToResult=moduleName'.valueSeparator.'variableName', array('storeVars'));
-				$this->registerFeature($this, array('set'), 'set', 'set a value. All remaining values after the destination go into a string. --set=moduleName'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
-				$this->registerFeature($this, array('setArray'), 'setArray', 'set a value. All remaining values after the destination go into an array. --set=moduleName'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
-				$this->registerFeature($this, array('setIfNotSet', 'setDefault'), 'setIfNotSet', 'set a value if none has been set. --setIfNotSet=moduleName'.valueSeparator.'variableName'.valueSeparator.'defaultValue', array('storeVars'));
-				$this->registerFeature($this, array('unSet'), 'unSet', 'un set (delete) a value. --unSet=moduleName'.valueSeparator.'variableName', array('storeVars'));
+				# $this->registerFeature($this, array('get'), 'get', 'Get a value. --get=category'.valueSeparator.'variableName', array('storeVars'));
+				$this->registerFeature($this, array('getToResult', 'get'), 'getToResult', 'Get a value and put it in an array so we can do stuff with it. --getToResult=category'.valueSeparator.'variableName', array('storeVars'));
+				$this->registerFeature($this, array('set'), 'set', 'set a value. All remaining values after the destination go into a string. --set=category'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
+				$this->registerFeature($this, array('setArray'), 'setArray', 'set a value. All remaining values after the destination go into an array. --set=category'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
+				$this->registerFeature($this, array('setIfNotSet', 'setDefault'), 'setIfNotSet', 'set a value if none has been set. --setIfNotSet=category'.valueSeparator.'variableName'.valueSeparator.'defaultValue', array('storeVars'));
+				$this->registerFeature($this, array('unSet'), 'unSet', 'un set (delete) a value. --unSet=category'.valueSeparator.'variableName	', array('storeVars'));
 				$this->registerFeature($this, array('getStore'), 'getStore', 'Get an entire store into the result set. --getStore=moduleNam', array('storeVars', 'store', 'dev'));
-				$this->registerFeature($this, array('setStore'), 'setStore', 'Set an entire store to the current state of the result set. --setStore=moduleName', array('storeVars', 'store', 'dev'));
-				$this->registerFeature($this, array('stashResults'), 'stashResults', 'Put the current result set into a memory slot. --stashResults=moduleName'.valueSeparator.'variableName');
-				$this->registerFeature($this, array('retrieveResults'), 'retrieveResults', 'Retrieve a result set that has been stored. This will replace the current result set with the retrieved one --retrieveResults=moduleName'.valueSeparator.'variableName');
-				$this->registerFeature($this, array('getPID'), 'getPID', 'Save the process ID to a variable. --getPID=moduleName'.valueSeparator.'variableName');
-				$this->registerFeature($this, array('setJson'), 'setJson', 'Take a json encoded array from jsonValue and store the arrary in moduleName'.valueSeparator.'variableName. --setJson=moduleName'.valueSeparator.'variableName'.valueSeparator.'jsonValue');
+				$this->registerFeature($this, array('setStore'), 'setStore', 'Set an entire store to the current state of the result set. --setStore=category', array('storeVars', 'store', 'dev'));
+				$this->registerFeature($this, array('stashResults'), 'stashResults', 'Put the current result set into a memory slot. --stashResults=category'.valueSeparator.'variableName');
+				$this->registerFeature($this, array('retrieveResults'), 'retrieveResults', 'Retrieve a result set that has been stored. This will replace the current result set with the retrieved one --retrieveResults=category'.valueSeparator.'variableName');
+				$this->registerFeature($this, array('getPID'), 'getPID', 'Save the process ID to a variable. --getPID=category'.valueSeparator.'variableName');
+				$this->registerFeature($this, array('setJson'), 'setJson', 'Take a json encoded array from jsonValue and store the arrary in category'.valueSeparator.'variableName. --setJson=category'.valueSeparator.'variableName'.valueSeparator.'jsonValue');
 				$this->registerFeature($this, array('outNow'), 'outNow', 'Execute the output now.', array('dev'));
 				$this->registerFeature($this, array('dump'), 'dump', 'Dump internal state.', array('debug', 'dev'));
 				$this->registerFeature($this, array('debug'), 'debug', 'Send parameters to stdout. --debug=debugLevel,outputText eg --debug=0,StuffToWriteOut . DebugLevel is not implemented yet, but 0 will be "always", and above that will only show as the verbosity level is incremented with -v or --verbose.', array('debug', 'dev'));
@@ -585,25 +585,25 @@ class core extends Module
 		}
 	}
 	
-	function &getStoreModule($moduleName)
+	function &getStoreModule($category)
 	{
-		if (isset($this->store[$moduleName])) return $this->store[$moduleName];
+		if (isset($this->store[$category])) return $this->store[$category];
 		else return array();
 	}
 	
-	function setStoreModule($moduleName, $contents)
+	function setStoreModule($category, $contents)
 	{
-		$this->store[$moduleName]=$contents;
+		$this->store[$category]=$contents;
 	}
 	
-	function &get($moduleName, $valueName, $debug=true)
+	function &get($category, $valueName, $debug=true)
 	{
-		if ($debug) $this->debug(5,"get($moduleName, $valueName, false)");
+		if ($debug) $this->debug(5,"get($category, $valueName, false)");
 		#print_r($this->store);
-		#echo "m=$moduleName, v=$valueName\n";
-		if (isset($this->store[$moduleName]))
+		#echo "m=$category, v=$valueName\n";
+		if (isset($this->store[$category]))
 		{
-			if (isset($this->store[$moduleName][$valueName])) return $this->store[$moduleName][$valueName];
+			if (isset($this->store[$category][$valueName])) return $this->store[$category][$valueName];
 			else 
 			{
 				$result=null;
@@ -617,61 +617,61 @@ class core extends Module
 		return $result;
 	}
 	
-	function setIfNotSet($moduleName, $valueName, $value)
+	function setIfNotSet($category, $valueName, $value)
 	{
 		$shouldSet=false;
-		if (!isset($this->store[$moduleName])) $shouldSet=true;
-		elseif (!isset($this->store[$moduleName][$valueName])) $shouldSet=true;
+		if (!isset($this->store[$category])) $shouldSet=true;
+		elseif (!isset($this->store[$category][$valueName])) $shouldSet=true;
 		
-		if ($shouldSet) $this->set($moduleName, $valueName, $value);
+		if ($shouldSet) $this->set($category, $valueName, $value);
 	}
 	
-	function set($moduleName, $valueName, $args)
+	function set($category, $valueName, $args)
 	{ // set a variable for a module
 		$argsDisplay=(is_array($args))?'Array':$args;
-		$this->debug(5,"set($moduleName, $valueName, $argsDisplay)");
-		if (!isset($this->store[$moduleName])) $this->store[$moduleName]=array();
+		$this->debug(5,"set($category, $valueName, $argsDisplay)");
+		if (!isset($this->store[$category])) $this->store[$category]=array();
 		
-		$this->store[$moduleName][$valueName]=$args;
+		$this->store[$category][$valueName]=$args;
 	}
 
-	function setRef($moduleName, $valueName, &$args)
+	function setRef($category, $valueName, &$args)
 	{ // set a variable for a module
 		$argString=(is_string($args))?$argString:'[non-string]';
-		$this->debug(5,"setRef($moduleName, $valueName, $argString)");
-		if (!isset($this->store[$moduleName])) $this->store[$moduleName]=array();
+		$this->debug(5,"setRef($category, $valueName, $argString)");
+		if (!isset($this->store[$category])) $this->store[$category]=array();
 		
-		$this->store[$moduleName][$valueName]=&$args;
+		$this->store[$category][$valueName]=&$args;
 	}
 	
-	function doUnSet($moduleName, $valueName)
+	function doUnSet($category, $valueName)
 	{
-		$this->debug(5,"unSet($moduleName, $valueName)");
-		unset($this->store[$moduleName][$valueName]);
+		$this->debug(5,"unSet($category, $valueName)");
+		unset($this->store[$category][$valueName]);
 	}
 	
-	function addItemsToAnArray($moduleName, $valueName, $items)
+	function addItemsToAnArray($category, $valueName, $items)
 	{
-		$currentList=$this->get($moduleName, $valueName);
+		$currentList=$this->get($category, $valueName);
 		if (is_array($currentList)) $output=array_merge($currentList, $items);
 		else $output=$items;
 		
-		$this->set($moduleName, $valueName, $output);
+		$this->set($category, $valueName, $output);
 		return $output;
 	}
 	
-	function delete($moduleName, $valueName)
+	function delete($category, $valueName)
 	{
-		if (isset($this->store[$moduleName]))
+		if (isset($this->store[$category]))
 		{
-			if (isset($this->store[$moduleName][$valueName])) 
+			if (isset($this->store[$category][$valueName])) 
 			{
-				unset($this->store[$moduleName][$valueName]);
-				$this->debug(5,"delete($moduleName, $valueName) - deleted");
+				unset($this->store[$category][$valueName]);
+				$this->debug(5,"delete($category, $valueName) - deleted");
 			}
-			else  $this->debug(5,"delete($moduleName, $valueName) - valueName not found");
+			else  $this->debug(5,"delete($category, $valueName) - valueName not found");
 		}
-		else $this->debug(5,"delete($moduleName, $valueName) - moduleName not found");
+		else $this->debug(5,"delete($category, $valueName) - category not found");
 	}
 	
 	function getStore()
@@ -878,17 +878,17 @@ function loadModules(&$core, $sourcePath, $callInits=true)
 
 class Module
 {
-	private $moduleName=''; 
+	private $category=''; 
 	protected $core=null;
 	
 	function __construct($name)
 	{
-		$this->moduleName=$name;
+		$this->category=$name;
 	}
 	
 	function getName()
 	{
-		return $this->moduleName;
+		return $this->category;
 	}
 	
 	function setCore(&$core)

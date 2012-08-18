@@ -24,7 +24,7 @@ class Macro extends Module
 				$this->core->registerFeature($this, array('defineMacro'), 'defineMacro', 'Define a macro. --defineMacro=macroName:"command1=blah\ncommand2=wheee"');
 				$this->core->registerFeature($this, array('runMacro'), 'runMacro', 'Run a macro. --runMacro=macroName');
 				$this->core->registerFeature($this, array('listMacros'), 'listMacros', 'List all macros');
-				$this->core->registerFeature($this, array('loopMacro'), 'loopMacro', 'Use a macro to loop through a resultSet. The current iteration of the resultSet is accessed via STORE variables under the modulename Result. See loopMacro.md for more information. --loopMacro=macroName[,parametersForTheMacro]');
+				$this->core->registerFeature($this, array('loopMacro'), 'loopMacro', 'Use a macro to loop through a resultSet. The current iteration of the resultSet is accessed via STORE variables under the category Result. See loopMacro.md for more information. --loopMacro=macroName[,parametersForTheMacro]');
 				break;
 			case 'singleLineMacro':
 				$this->defineMacro($this->core->get('Global', 'macro'), true);

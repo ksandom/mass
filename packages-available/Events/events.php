@@ -8,17 +8,15 @@ class Events extends Module
 	private $loadedPackages=array();
 	
 	function __construct()
-	{
-		parent::__construct('Events');
-	}
+	{C
 	
 	function event($event)
 	{
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('registerForEvent'), 'registerForEvent', "Register a feature to be executed when a particular event is triggered. --registerEvent=ModuleName,eventName,featureName[,featureValue]", array());
-				$this->core->registerFeature($this, array('triggerEvent'), 'triggerEvent', "Trigger an event. --triggerEvent=ModuleName,eventName", array());
+				$this->core->registerFeature($this, array('registerForEvent'), 'registerForEvent', "Register a feature to be executed when a particular event is triggered. --registerEvent=Category,eventName,featureName[,featureValue]", array());
+				$this->core->registerFeature($this, array('triggerEvent'), 'triggerEvent', "Trigger an event. --triggerEvent=Category,eventName", array());
 				break;
 			case 'followup':
 				break;
@@ -38,30 +36,30 @@ class Events extends Module
 		}
 	}
 	
-	function registerForEvent($moduleName, $eventName, $featureName, $featureValue='', $priority=50)
+	function registerForEvent($category, $eventName, $featureName, $featureValue='', $priority=50)
 	{
-		$priorityGroups=$this->core->get($moduleName, $eventName);
+		$priorityGroups=$this->core->get($category, $eventName);
 		if (!isset($priorityGroups[$priority])) $priorityGroups[$priority]=array();
 		$priorityGroups[$priority][]=array('featureName'=>$featureName, 'featureValue'=>$featureValue);
 		
-		$this->core->debug(3, "Registered \"$featureName $featureValue\" to event \"$moduleName, $eventName\" at priority $priority.");
-		$this->core->set($moduleName, $eventName, $priorityGroups);
+		$this->core->debug(3, "Registered \"$featureName $featureValue\" to event \"$category, $eventName\" at priority $priority.");
+		$this->core->set($category, $eventName, $priorityGroups);
 	}
 	
 	
-	function unRegisterEvent($moduleName, $eventName, $featureName)
+	function unRegisterEvent($category, $eventName, $featureName)
 	{
 		# TODO write this. It will be useful for unloading code.
 	}
 	
-	function setPriority($moduleName, $eventName, $featureName, $priority=50)
+	function setPriority($category, $eventName, $featureName, $priority=50)
 	{
 		# TODO Write this. If this becomes relied on a lot, check to see if tasks should actually be part of macros. I envisage priorities being used when something HAS to be done first or last. Eg preparing folders for downloads, or cleaning up afterwards.
 	}
 	
-	function triggerEvent($moduleName, $eventName)
+	function triggerEvent($category, $eventName)
 	{
-		$priorityGroups=$this->core->get($moduleName, $eventName);
+		$priorityGroups=$this->core->get($category, $eventName);
 		if (is_array($priorityGroups) && count($priorityGroups)>0)
 		{
 			foreach ($priorityGroups as $priority=>$priorityGroup)
@@ -82,11 +80,11 @@ class Events extends Module
 				}
 				else
 				{
-					$this->core->debug(4, "Removing priority group $priority from event \"$moduleName, $eventName\" as it has no eventees.");
+					$this->core->debug(4, "Removing priority group $priority from event \"$category, $eventName\" as it has no eventees.");
 					unset($priorityGroups['priority']);
 					
 					# This is potentially inefficient. But there would have to be a LOT of priority groups for it to matter. If it becomes an issue, set a flag and do it at the end.
-					$this->core->set($moduleName, $eventName);
+					$this->core->set($category, $eventName);
 				}
 			}
 		}
@@ -94,18 +92,18 @@ class Events extends Module
 		{
 			if (is_array($priorityGroups))
 			{
-				$this->core->debug(4, "Event \"$moduleName, $eventName\" triggered, but there were no eventee priority groups. This means there are no registered eventees.");
+				$this->core->debug(4, "Event \"$category, $eventName\" triggered, but there were no eventee priority groups. This means there are no registered eventees.");
 			}
 			else
 			{
-			$this->core->debug(4, "Event \"$moduleName, $eventName\" triggered, but there were no eventee priority groups. This means there are no registered eventees.");
+			$this->core->debug(4, "Event \"$category, $eventName\" triggered, but there were no eventee priority groups. This means there are no registered eventees.");
 			}
 		}
 	}
 	
-	function getKey($moduleName, $eventName, $featureName)
+	function getKey($category, $eventName, $featureName)
 	{
-		return md5sum("$moduleName, $eventName, $featureName");
+		return md5sum("$category, $eventName, $featureName");
 	}
 }
 
