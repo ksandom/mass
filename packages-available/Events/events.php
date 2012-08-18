@@ -8,7 +8,9 @@ class Events extends Module
 	private $loadedPackages=array();
 	
 	function __construct()
-	{C
+	{
+		parent::__construct('Events');
+	}
 	
 	function event($event)
 	{
