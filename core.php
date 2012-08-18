@@ -66,7 +66,7 @@ class core extends Module
 				$this->registerFeature($this, array('unset'), 'unset', 'un set (delete) a value. --unset=category'.valueSeparator.'variableName	', array('storeVars'));
 				$this->registerFeature($this, array('getCategory'), 'getCategory', 'Get an entire store into the result set. --getCategory=moduleNam', array('storeVars', 'store', 'dev'));
 				$this->registerFeature($this, array('setStore'), 'setStore', 'Set an entire store to the current state of the result set. --setStore=category', array('storeVars', 'store', 'dev'));
-				$this->registerFeature($this, array('unsetStore'), 'unsetStore', 'Un set/delete an entire store. --unsetStore=category', array('storeVars', 'store', 'dev'));
+				$this->registerFeature($this, array('unsetCategory'), 'unsetCategory', 'Un set/delete an entire store. --unsetCategory=category', array('storeVars', 'store', 'dev'));
 				$this->registerFeature($this, array('stashResults'), 'stashResults', 'Put the current result set into a memory slot. --stashResults=category'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('retrieveResults'), 'retrieveResults', 'Retrieve a result set that has been stored. This will replace the current result set with the retrieved one --retrieveResults=category'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('getPID'), 'getPID', 'Save the process ID to a variable. --getPID=category'.valueSeparator.'variableName');
@@ -118,14 +118,14 @@ class core extends Module
 				$parms=$this->interpretParms($this->get('Global', 'set'), 2, 2, true);
 				$this->doUnset($parms[0], $parms[1]);
 				break;
-			case 'getCategory': # TODO -> getCategory
+			case 'getCategory':
 				return $this->getCategoryModule($this->get('Global', 'getCategory'));
 				break;
 			case 'setStore': # TODO -> setCategory
 				$this->setStoreModule($this->get('Global', 'setStore'), $this->getResultSet());
 				break;
-			case 'unsetStore':# TODO -> unsetCategory
-				$this->unsetStoreModule($this->get('Global', 'unsetStore'));
+			case 'unsetCategory':
+				$this->unsetCategoryModule($this->get('Global', 'unsetCategory'));
 				break;
 			case 'stashResults':
 				$originalParms=$this->get('Global', 'stashResults');
@@ -604,7 +604,7 @@ class core extends Module
 		$this->store[$category]=$contents;
 	}
 	
-	function unsetStoreModule($category)
+	function unsetCategoryModule($category)
 	{
 		unset($this->store[$category]);
 	}
