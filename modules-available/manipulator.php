@@ -23,7 +23,8 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('manipulateEach'), 'manipulateEach', 'Call a feature for each entry in the result set that contains an item matching this regular expression. --manipulateEach=regex,feature featureParameters', array('array', 'result'));
 				$this->core->registerFeature($this, array('manipulateItem'), 'manipulateItem', 'Call a feature for each entry that contains an item explicity matching the one specified. --manipulateItem=entryKey,regex,feature featureParameters', array('array', 'result'));
 				$this->core->registerFeature($this, array('chooseFirst'), 'chooseFirst', 'Choose the first non-empty value and put it into the destination variable. --chooseFirst=dstVarName,srcVarName1,srcVarName2[,srcVarName3[,...]]', array('array', 'result'));
-				$this->core->registerFeature($this, array('resultSet'), 'resultSet', 'Set a value in each result item. --setResult=dstVarName,value . Note that this has no counter part as you can already retrieve results with %varName% and many to one would be purely random.', array('array', 'result'));
+				$this->core->registerFeature($this, array('resultSet'), 'resultSet', 'Set a value in each result item. --setResult=dstVarName,value . Note that this has no counter part as you can already retrieve results with ~%varName%~ and many to one would be purely random.', array('array', 'result'));
+				$this->core->registerFeature($this, array('resultUnset'), 'resultUnset', 'Delete a value in each result item. --resultUnset=dstVarName.', array('array', 'result'));
 				$this->core->registerFeature($this, array('addSlashes'), 'addSlashes', 'Put extra backslashes before certain characters to escape them to allow nesting of quoted strings. --addSlashes=srcVar,dstVar', array('array', 'escaping', 'result'));
 				$this->core->registerFeature($this, array('cleanUnresolvedResultVars'), 'cleanUnresolvedResultVars', 'Clean out any result variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
 				#$this->core->registerFeature($this, array('cleanUnresolvedStoreVars'), 'cleanUnresolvedStoreVars', 'Clean out any store variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
@@ -60,6 +61,9 @@ class Manipulator extends Module
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', 'resultSet'));
 				$this->core->requireNumParms($this, 2, $event, $originalParms, $parms);
 				return $this->resultSet($this->core->getResultSet(), $parms[0], $parms[1]);
+				break;
+			case 'resultUnset':
+				return $this->resultUnset($this->core->getResultSet(), explode(',', $this->core->get('Global', 'resultUnset')));
 				break;
 			case 'cleanUnresolvedResultVars':
 				return $this->cleanUnresolvedVars($this->core->getResultSet(), resultVarBegin, resultVarEnd);
@@ -309,6 +313,20 @@ class Manipulator extends Module
 			# TODO There is something wrong happening here.
 			$line[$key]=$this->processResultVarsInString($line, $value);
 			#$line[$key]=$value;
+		}
+		
+		return $output;
+	}
+	
+	function resultUnset($input, $keys)
+	{
+		$output=$input;
+		foreach ($output as &$line)
+		{
+			foreach ($keys as $key)
+			{
+				if (isset($line[$key])) unset($line[$key]);
+			}
 		}
 		
 		return $output;
