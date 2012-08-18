@@ -139,11 +139,8 @@ class core extends Module
 				return $this->dumpState();
 				break;
 			case 'debug':
-				$originalParms=$this->get('Global', 'debug');
-				$parms=$this->interpretParms($originalParms);
-				$this->requireNumParms($this, 2, $event, $originalParms, $parms);
+				$parms=$this->interpretParms($this->get('Global', 'debug'), 1, 1, true);
 				$this->debug($parms[0], $parms[1]);
-				return false;
 				break;
 			case 'verbose':
 				$original=$this->get('Global', 'verbose');
