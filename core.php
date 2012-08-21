@@ -687,9 +687,9 @@ class core extends Module
 		else $this->debug(5,"delete($category, $valueName) - category not found");
 	}
 	
-	function getCategory()
+	function getStore()
 	{ # Note that this returns a COPY of the store. It is not intended as a way of modifying the store.
-		$this->debug(5,"getCategory()");
+		$this->debug(5,"getStore()");
 		return $this->store;
 	}
 	

@@ -125,7 +125,7 @@ class Macro extends Module
 	
 	function listMacros()
 	{
-		$store=$this->core->getCategory();
+		$store=$this->core->getStore();
 		$output=array();
 		if (!isset($store['Macros'])) return $output;
 		foreach ($store['Macros'] as $macroName=>$macro)
