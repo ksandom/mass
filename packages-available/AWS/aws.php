@@ -202,46 +202,6 @@ class AWS extends Module
 						# TODO It looks like there is a key problem, so this may break when there is more than one tag. Test this.
 						$tagKeys=array_keys($host['tagSet']);
 						$name='';
-						/*
-						if (is_numeric($tagKeys[0]))
-						{
-							foreach ($host['tagSet'] as $tagKey=>$tag) 
-							{
-								if (isset($tag['key']))
-								{
-									if ($tag['key']=='Name')
-									{
-										$name=$tag['value'];
-										$this->core->debug(3, "AWSGetHostsForAllRegions: Found $name");
-									}
-									else $this->core->debug(3, "AWSGetHostsForAllRegions: not found");
-								}
-								elseif (is_array($tag)) // TODO Tidy. This is turning into a HACK!
-								{
-									foreach ($tag as $subtag)
-									{
-										if (isset($subtag['key']))
-										{
-											if ($subtag['key']=='Name')
-											{
-												$name=$subtag['value'];
-											}
-										}
-									}
-								}
-								else $this->core->debug(3, "AWSGetHostsForAllRegions: Got unexpected value. # TODO investigate this further.");
-							}
-						}
-						else
-						{
-							if (isset($host['tagSet']['item']['key']))
-							{
-								if ($host['tagSet']['item']['key']=='Name')
-								{
-									$name=$host['tagSet']['item']['value'];
-								}
-							}
-						}*/
 						
 						$name=$this->AWSMagicDemangle($host['tagSet']);
 						
@@ -279,6 +239,16 @@ class AWS extends Module
 							{
 								$host['internalIP']='';
 								$output[]=$host;
+							}
+							
+							if (isset($item['placement']))
+							{
+								if (isset($item['placement']['availabilityZone']))
+								{
+									$host['fullAvailabilityZone']=$item['placement']['availabilityZone'];
+									$host['region']=substr($item['placement']['availabilityZone'], 0, strlen($item['placement']['availabilityZone'])-1);
+									$host['availabilityZone']=substr($item['placement']['availabilityZone'], -1);
+								}
 							}
 						}
 						else
