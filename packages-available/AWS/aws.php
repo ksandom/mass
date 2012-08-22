@@ -201,6 +201,8 @@ class AWS extends Module
 						# Get the name tag
 						# TODO It looks like there is a key problem, so this may break when there is more than one tag. Test this.
 						$tagKeys=array_keys($host['tagSet']);
+						$name='';
+						/*
 						if (is_numeric($tagKeys[0]))
 						{
 							foreach ($host['tagSet'] as $tagKey=>$tag) 
@@ -214,6 +216,19 @@ class AWS extends Module
 									}
 									else $this->core->debug(3, "AWSGetHostsForAllRegions: not found");
 								}
+								elseif (is_array($tag)) // TODO Tidy. This is turning into a HACK!
+								{
+									foreach ($tag as $subtag)
+									{
+										if (isset($subtag['key']))
+										{
+											if ($subtag['key']=='Name')
+											{
+												$name=$subtag['value'];
+											}
+										}
+									}
+								}
 								else $this->core->debug(3, "AWSGetHostsForAllRegions: Got unexpected value. # TODO investigate this further.");
 							}
 						}
@@ -226,40 +241,51 @@ class AWS extends Module
 									$name=$host['tagSet']['item']['value'];
 								}
 							}
-						}
+						}*/
 						
-						$host['hostName']=$name; # TODO check this!
+						$name=$this->AWSMagicDemangle($host['tagSet']);
 						
-						# Re-map a couple of keys, then remove them so people don't use them creating non-portable code.
-						if (isset($item['instancesSet']['item']['privateDnsName']))
+						if ($name)
 						{
-							$host['internalFQDN']=$item['instancesSet']['item']['privateDnsName'];
+							$host['hostName']=$name; # TODO check this!
+							
+							# Re-map a couple of keys, then remove them so people don't use them creating non-portable code.
+							if (isset($item['instancesSet']['item']['privateDnsName']))
+							{
+								$host['internalFQDN']=$item['instancesSet']['item']['privateDnsName'];
+							}
+							else $host['internalFQDN']='';
+							
+							if (isset($item['instancesSet']['item']['privateDnsName']))
+							{
+								$host['externalFQDN']=$item['instancesSet']['item']['dnsName'];
+							}
+							else $host['externalFQDN']='';
+							
+							if (isset($item['instancesSet']['item']['ipAddress']))
+							{
+								$host['externalIP']=$item['instancesSet']['item']['ipAddress'];
+								unset($item['instancesSet']['item']['ipAddress']);
+							}
+							else $host['externalIP']='';
+							
+							if (isset($item['instancesSet']['item']['privateIpAddress']))
+							{
+								$host['internalIP']=$item['instancesSet']['item']['privateIpAddress'];
+								unset($item['instancesSet']['item']['privateIpAddress']);
+								$output[]=$host;
+							}
+							elseif ($includePoweredOffInstances) 
+							{
+								$host['internalIP']='';
+								$output[]=$host;
+							}
 						}
-						else $host['internalFQDN']='';
-						
-						if (isset($item['instancesSet']['item']['privateDnsName']))
+						else
 						{
-							$host['externalFQDN']=$item['instancesSet']['item']['dnsName'];
-						}
-						else $host['externalFQDN']='';
-						
-						if (isset($item['instancesSet']['item']['ipAddress']))
-						{
-							$host['externalIP']=$item['instancesSet']['item']['ipAddress'];
-							unset($item['instancesSet']['item']['ipAddress']);
-						}
-						else $host['externalIP']='';
-						
-						if (isset($item['instancesSet']['item']['privateIpAddress']))
-						{
-							$host['internalIP']=$item['instancesSet']['item']['privateIpAddress'];
-							unset($item['instancesSet']['item']['privateIpAddress']);
-							$output[]=$host;
-						}
-						elseif ($includePoweredOffInstances) 
-						{
-							$host['internalIP']='';
-							$output[]=$host;
+							$instanceID=$host['instanceId'];
+							$this->core->debug(2, "AWSGetHostsForAllRegions: Did not find a name tag for instance $instanceID");
+							print_r($host['tagSet']);
 						}
 					}
 					else
@@ -283,6 +309,33 @@ class AWS extends Module
 			'seekLocation'=>AWSLibrary,
 			'found'=>$this->foundLibrary
 		);
+	}
+	
+	function AWSMagicDemangle($input, $searchValue='Name', $searchKey='key', $fetchKey='value')
+	{ /* This performs kungfoo magic to demangle the messaged up data that comes from AWS.*/
+		
+		if (is_array($input))
+		{
+			if (isset($input[$searchKey]))
+			{
+				if (isset($input[$fetchKey]))
+				{
+					if ($input[$searchKey]==$searchValue) return $input[$fetchKey];
+				}
+			}
+			
+			foreach ($input as $item)
+			{
+				$result=$this->AWSMagicDemangle($item, $searchValue, $searchKey, $fetchKey);
+				if ($result) return $result;
+			}
+			
+			return false;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 
