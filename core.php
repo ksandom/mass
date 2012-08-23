@@ -748,6 +748,7 @@ class core extends Module
 			{
 				$this->core->debug(4, "Aliasing $flag => $feature");
 				$this->setRef('Features', $flag, $entry);
+				$entry['flags'][]=$flag;
 			}
 			elseif ($flag==$feature)
 			{}
