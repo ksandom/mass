@@ -52,7 +52,14 @@ class Manipulator extends Module
 				return $this->toString($this->core->getResultSet(), $this->core->get('Global', 'toString'));
 				break;
 			case 'flatten':
-				return $this->flatten($this->core->getResultSet(), $this->core->get('Global', 'flatten'));
+				$limitIn=$this->core->get('Global', 'flatten');
+				if ($limitIn == null) $limit=-1;
+				elseif ($limitIn==0) $limit=false;
+				else $limit=$limitIn;
+				
+				echo "dfghjjklhgfasyufighnbhh".gettype($limitIn)."\n";
+				
+				return $this->flatten($this->core->getResultSet(), $limit);
 				break;
 			case 'chooseFirst':
 				return $this->chooseFirst($this->core->getResultSet(), $this->core->interpretParms($this->core->get('Global', 'chooseFirst')));
