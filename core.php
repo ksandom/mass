@@ -78,6 +78,7 @@ class core extends Module
 				$this->registerFeature($this, array('V'), 'V', 'Decrement verbosity.', array('debug', 'dev'));
 				$this->registerFeature($this, array('ping'), 'ping', 'Useful for debugging.', array('debug', 'dev'));
 				$this->registerFeature($this, array('#'), '#', 'Comment.', array('systemInternal'));
+				$this->registerFeature($this, array('pass'), 'pass', "It's a place holder meaning that you will not get a message like \"Could not find macro 'default'. This can happen if you haven't asked me to do anything.\"", array('systemInternal'));
 				$this->registerFeature($this, array('	'), '	', 'Internally used for nesting.', array('systemInternal'));
 				break;
 			case 'followup':
@@ -166,6 +167,8 @@ class core extends Module
 				break;
 			case 'outNow':
 				$this->out($this->getResultSet());
+				break;
+			case 'pass':
 				break;
 			case '#':
 				break;
@@ -445,12 +448,15 @@ class core extends Module
 	
 	function debugResultSet($label='undefined')
 	{
-		$nesting=$this->get('Core', 'nesting');
-		$serial=$this->get('Core', 'serial');
-		for ($i=$nesting;$i>-1;$i--)
+		if ($this->isVerboseEnough(4))
 		{
-			$resultSet=$this->get('Core', 'shared'.$i);
-			$this->debug(3, "debugResultSet $label/$i count=".count($resultSet)." serial=$serial");
+			$nesting=$this->get('Core', 'nesting');
+			$serial=$this->get('Core', 'serial');
+			for ($i=$nesting;$i>-1;$i--)
+			{
+				$resultSet=$this->get('Core', 'shared'.$i);
+				$this->debug(4, "debugResultSet $label/$i count=".count($resultSet)." serial=$serial");
+			}
 		}
 	}
 	
