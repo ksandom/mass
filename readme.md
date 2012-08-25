@@ -1,6 +1,8 @@
 # Mass
 is a modularised tool for managing several nodes of a cluster. Open individual SSH terminals to specific groups of nodes of your cluster, a single node, or the whole lot. Do the same with CSSH or virtual terminals in screen. Upload a file to each node or dowload a file from each, prefixed with the hostname. Run a command to conquer the world... or conduct that essential maintenance. Essentially your nodes are one RegEx away.
 
+Driving it all is a full programming language that is very different to anything I've seen before. I'm building it for a very specific itch and I doubt the full picture it will be useful to many people. In fact, most of it isn't in the public repo yet. However the foundations, which are already released, are really useful for Sysadmin tasks as described above.
+
 This is a tiny percentage of the final vision, so there's a lot more to come!
 
 # Requirements
