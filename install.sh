@@ -166,12 +166,32 @@ function cleanProfile
 }
 
 
+
+
+function removeObsoleteStuff
+{
+	mkdir -p $configDir/obsolete
+	for thing in $things;do
+		mv $configDir/$thing* $configDir/obsolete
+	done
+	
+	mv $configDir/obsolete/*available $configDir
+	
+	if [ `ls $configDir/obsolete 2> /dev/null | wc -l` -lt 1 ]; then
+		echo "removeObsoleteStuff: No obsolete stuff to keep. Removing $configDir/obsolete."
+		rmdir $configDir/obsolete
+	else
+		echo "removeObsoleteStuff: Obsolete stuff has been put in $configDir/obsolete. It is likely that this directory can simply be deleted. But if you have done any custom work, you will want to check that it isn't here first." | tee $configDir/obsolete/readme.md
+	fi
+}
+
 function doInstall
 {
 	startDir=`pwd` # for some reason ~- wasn't working
 	mkdir -p "$configDir/data/hosts" "$binExec" "$bin"
 	
 	checkPrereqs
+	removeObsoleteStuff
 	
 	echo "Install details:
 	What: $programName
