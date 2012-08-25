@@ -59,19 +59,27 @@ This is as simple as creating a symlink from the appropriate -available/fileName
 *For now a default install should be fine.*
 
 ## Enabling or disabling stuff
-It all works like available/enabled system that ubuntu uses via symlinks. You can use `ln -s` to create symlinks in the same way that you'd use cp to copy a file. Please do not simply copy the files as that will make things very hard to diagnose when there are problems.
+It all works like available/enabled system that ubuntu uses via symlinks. The biggest differnce is that enabled folders now sit with profiles/profileName, where each profile is for diffenent interfaces/use-cases (most people will want profiles/commandLine.) You can use `ln -s` to create symlinks in the same way that you'd use cp to copy a file. Please do not simply copy the files as that will make things very hard to diagnose when there are problems.
 
 Here's what my macros folder looks like right now:
 
-    [ksandom@k4 macros-enabled]$ ls -l
-    total 0
-    lrwxrwxrwx 1 ksandom ksandom 45 Apr 24 09:35 createDefaultValues.macro -> ../macros-available/createDefaultValues.macro
-    lrwxrwxrwx 1 ksandom ksandom 34 Apr 24 09:35 download.macro -> ../macros-available/download.macro
-    lrwxrwxrwx 1 ksandom ksandom 31 Apr 24 09:35 hosts.macro -> ../macros-available/hosts.macro
-    lrwxrwxrwx 1 ksandom ksandom 29 Apr 24 09:35 run.macro -> ../macros-available/run.macro
-    lrwxrwxrwx 1 ksandom ksandom 32 Apr 24 09:35 screen.macro -> ../macros-available/screen.macro
-    lrwxrwxrwx 1 ksandom ksandom 30 Apr 24 09:35 term.macro -> ../macros-available/term.macro
-    lrwxrwxrwx 1 ksandom ksandom 33 Apr 17 16:44 updateHosts.macro -> ../macros-companyName/updateHosts.macro
+    ksandom@lappyg:~/.mass/profiles/commandLine/macros$ ls -l
+    total 8
+    lrwxrwxrwx 1 ksandom ksandom 62 Aug 25 20:31 createDefaultValues.macro -> /home/ksandom/.mass/macros-available/createDefaultValues.macro
+    lrwxrwxrwx 1 ksandom ksandom 47 Aug 25 20:31 from.macro -> /home/ksandom/.mass/macros-available/from.macro
+    lrwxrwxrwx 1 ksandom ksandom 54 Aug 25 20:31 getLastList.macro -> /home/ksandom/.mass/macros-available/getLastList.macro
+    lrwxrwxrwx 1 ksandom ksandom 48 Aug 25 20:31 hosts.macro -> /home/ksandom/.mass/macros-available/hosts.macro
+    lrwxrwxrwx 1 ksandom ksandom 54 Aug 25 20:31 importHosts.macro -> /home/ksandom/.mass/macros-available/importHosts.macro
+    lrwxrwxrwx 1 ksandom ksandom 62 Aug 25 20:31 importOldStyleHosts.macro -> /home/ksandom/.mass/macros-available/importOldStyleHosts.macro
+    lrwxrwxrwx 1 ksandom ksandom 47 Aug 25 20:31 list.macro -> /home/ksandom/.mass/macros-available/list.macro
+    lrwxrwxrwx 1 ksandom ksandom 51 Aug 25 20:31 listterm.macro -> /home/ksandom/.mass/macros-available/listterm.macro
+    lrwxrwxrwx 1 ksandom ksandom 56 Aug 25 20:31 macroLoopTest.macro -> /home/ksandom/.mass/macros-available/macroLoopTest.macro
+    lrwxrwxrwx 1 ksandom ksandom 47 Aug 25 20:31 noBG.macro -> /home/ksandom/.mass/macros-available/noBG.macro
+    lrwxrwxrwx 1 ksandom ksandom 46 Aug 25 20:31 run.macro -> /home/ksandom/.mass/macros-available/run.macro
+    lrwxrwxrwx 1 ksandom ksandom 53 Aug 25 20:31 saveToJson.macro -> /home/ksandom/.mass/macros-available/saveToJson.macro
+    lrwxrwxrwx 1 ksandom ksandom 52 Aug 25 20:31 testAlias.macro -> /home/ksandom/.mass/macros-available/testAlias.macro
+    lrwxrwxrwx 1 ksandom ksandom 49 Aug 25 20:31 testIf.macro -> /home/ksandom/.mass/macros-available/testIf.macro
+    lrwxrwxrwx 1 ksandom ksandom 45 Aug 25 20:31 to.macro -> /home/ksandom/.mass/macros-available/to.macro
 
 Notice companyName in the last entry. That is how I'm separating out company specific stuff that should not be shared. See "Adding custom stuff" below.
 
@@ -98,19 +106,10 @@ I suggest doing a linked install for development as it allows you to quickly tes
 Save your work in the relevant one of the -available folders and create a symlink to it from the relevant -enabled folder.
 
 ### Private
-I suggest doing a linked install as you will almost definitely have some stuff that you can contribute back. For what you can't, create your work in a separate location (that you will probably want in your own source control) and then symlink it to feature-companyName (eg macros-companyName). From the you can symlink it's contents to the appropriate -enabled folder. Here's an example (written in full):
+I suggest doing a linked install as you will almost definitely have some stuff that you can contribute back. For what you can't, create your work in a separate location (that you will probably want in your own source control) and then symlink it to profiles/commandLine/companyName. Here's an example (written in full):
 
-    cd ~/.mass
-    ln -sf ~/work/repos/companyRepo/stuffForMass/macros macros-companyName
-    ln -sf ~/work/repos/companyRepo/stuffForMass/templates templates-companyName
-    ln -sf ~/work/repos/companyRepo/stuffForMass/modules modules-companyName
-    
-    cd macros-enabled
-    ln -sf ../macros-companyName/* .
-    cd ../templates-enabled
-    ln -sf ../templates-companyName/* .
-    cd ../modules-enabled
-    ln -sf ../modules-companyName/* .
+    cd ~/.mass/profiles/commandLine/packages
+    ln -sf ~/work/repos/companyRepo/stuffForMass companyName
     
 ### Paths explained futher
 Mass can be installed system wide, for a particular user, or linked to the checked out repository.

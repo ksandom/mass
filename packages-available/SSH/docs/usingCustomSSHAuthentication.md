@@ -8,7 +8,7 @@ There are now two ways of getting around this:
 
 This event has the advantage that the maipulations will be done only on the import, therefore keeping everything running faster for everything else. It has the disadvantage that anything run afterwards will override what this does when ever there are collisions.
 
-You can do this by creating a macro called personal.macro in /macros-available (and then symlink to it from macros-enabled). The script should look something like this:
+You can do this by creating a macro called personal.macro in /macros-available (and then symlink to it from macros-enabled within the appropriate profiles). The script should look something like this:
 
     # Set custom credentials for different hosts ~ personal
     #onDefine registerForEvent Import,readyForManipulations,personal
@@ -26,9 +26,9 @@ You can also use the List,finished event using the method described above. It's 
 
 # A blanket resultSet
 
-Given the original scenario, this is problem not what you want, but it may be helpful to you.
+Given the original scenario, this is probably not what you want, but it may be helpful to you.
 
-Create a macro called personal.macro in the mass home folder in /macros-available (and then symlink to it from macros-enabled). That script should look something like this:
+Create a macro called personal.macro in the mass home folder in /macros-available (and then symlink to it from macros-enabled within the apporpriate profiles). That script should look something like this:
 
     # Set personal credentials ~ personal
     #onDefine registerForEvent List,finished,personal
