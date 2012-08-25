@@ -11,6 +11,9 @@
 # install.sh will get replaced eventually. For now it does what I need.
 
 programName='mass'
+fileThings='macros modules templates'
+directoryThings='packages'
+things="$fileThings $directoryThings"
 
 function userInstall
 {
@@ -87,6 +90,82 @@ function testEnabledDirectory
 	return $?
 }
 
+function createProfile
+{
+	name="$1"
+	mkdir -p $configDir/profiles/$name/{packages,modules,macros,templates}
+}
+
+function enableEverythingForProfile
+{
+	name="$1"
+	start=`pwd`
+	for thing in $things; do
+		cd $configDir/profiles/$name/$thing
+		if [ `ls $configDir/$thing-available|wc -l 2> /dev/null` -gt 0 ]; then
+			while read item;do
+				if [ ! -e $item ]; then
+					ln -s $configDir/$thing-available/$item .
+				fi
+			done < <(ls $configDir/$thing-available)
+		fi
+	done
+	
+	cd $start
+}
+
+function enableItemInProfile
+{
+	profile="$1"
+	itemType="$2" # package,module,macro,template
+	item="$3" # AWS,SSH
+	
+	cd $configDir/profiles/$profile/$itemType
+	if [ -e $configDir/profiles/$profile/$itemType/$item ]; then
+		ln -s $configDir/profiles/$profile/$itemType/$item .
+	else
+		echo "enableItemInProfile: Could not find $configDir/profiles/$profile/$itemType/$item" 1>&2
+	fi
+}
+
+function disableItemInProfile
+{
+	profile="$1"
+	itemType="$2" # package,module,macro,template
+	item="$3" # AWS,SSH
+	
+	cd $configDir/profiles/$profile/$itemType
+	if [ -e $configDir/profiles/$profile/$itemType/$item ]; then
+		rm $configDir/profiles/$profile/$itemType/$item
+	else
+		echo "disableItemInProfile: Could not find $configDir/profiles/$profile/$itemType/$item" 1>&2
+	fi
+}
+
+function cloneProfile
+{
+	from="$1"
+	to="$2"
+	
+	cd $configDir/profiles
+	rm -Rf "$to"
+	cp -R "$from" "$to"
+}
+
+function cleanProfile
+{
+	name="$1"
+	
+	for thing in $fileThings;do
+		cleanEnabled testEnabledFile "$configDir/profiles/$name/$thing"
+	done
+	
+	for thing in $directoryThings;do
+		cleanEnabled testEnabledDirectory "$configDir/profiles/$name/$thing"
+	done
+}
+
+
 function doInstall
 {
 	startDir=`pwd` # for some reason ~- wasn't working
@@ -101,81 +180,61 @@ function doInstall
 		bin: $bin
 		binExec: $binExec
 		startDir: $startDir
-		installType: $installType"
+		installType: $installType
+		"
 	
 	if [ "$installType" == 'cp' ]; then
-		echo -e "\n# Copying available stuff"
+		echo -e "Copying available stuff"
 		cp -Rv docs templates-* modules-* core.php macros-* packages-* examples interfaces index.php "$configDir"
 		
-		echo -e "\n# Setting up remaining directory structure"
+		echo -e "Setting up remaining directory structure"
 		cd "$configDir"
-		mkdir -p modules-enabled macros-enabled templates-enabled packages-enabled config
+		mkdir -p config data/1LayerHosts
 		
-		echo -e "\n# Making the thing runnable"
+		echo -e "Making the thing runnable"
 		cd $binExec
 		cp -Rv "$startDir/$programName" "$bin"
 		chmod 755 "$bin/$programName"
-		
-		for thing in macros modules templates;do
-			echo -e "\n# Sorting out $thing available/enabled"
-			cd "$configDir/$thing-enabled"
-			if [ -f "`ls -1 ../$thing-available/|head -n 1`" ]; then
-				ln -sf ../$thing-available/* .
-			fi
-			cleanEnabled testEnabledFile "$configDir/$thing-enabled"
-		done
-		
-		for thing in packages;do
-			echo -e "\n# Sorting out $thing available/enabled"
-			cd "$configDir/$thing-enabled"
-			if [ -f "`ls -1 ../$thing-available/|head -n 1`" ]; then
-				ln -sf ../$thing-available/* .
-			fi
-			cleanEnabled testEnabledDirectory "$configDir/$thing-enabled"
-		done
 	else
 		cd "$configDir"
 		
-		echo -e "\n# Linking like there's no tomorrow."
-		ln -sfv "$startDir"/docs "$startDir"/modules-*available "$startDir"/macros-*available "$startDir"/templates-*available "$startDir/core.php" "$startDir/examples" "$startDir"/packages-*available "$startDir"/interfaces . 
-		ln -sfv "$startDir/index.php" .
+		echo -e "Linking like there's no tomorrow."
+		ln -sf "$startDir"/docs "$startDir"/modules-*available "$startDir"/macros-*available "$startDir"/templates-*available "$startDir/core.php" "$startDir/examples" "$startDir"/packages-*available "$startDir"/interfaces . 
+		ln -sf "$startDir/index.php" .
 		
-		echo -e "\n# Setting up remaining directory structure"
-		mkdir -p modules-enabled macros-enabled templates-enabled config
+		echo -e "Setting up remaining directory structure"
+		mkdir -p config data/1LayerHosts
 		
-		echo -e "\n# Making the thing runnable"
+		echo -e "Making the thing runnable"
 		cd $binExec
-		ln -sfv "$startDir/$programName" .
-		
-		for thing in macros modules templates;do
-			echo -e "\n# Sorting out $thing available/enabled"
-			mkdir -p "$configDir/$thing-enabled"
-			cd "$configDir/$thing-enabled"
-			ln -sf ../$thing-available/* .
-			cleanEnabled testEnabledFile "$configDir/$thing-enabled"
-		done
-		
-		for thing in packages;do
-			echo -e "\n# Sorting out $thing available/enabled"
-			mkdir -p "$configDir/$thing-enabled"
-			cd "$configDir/$thing-enabled"
-			ln -sf ../$thing-available/* .
-			cleanEnabled testEnabledDirectory "$configDir/$thing-enabled"
-		done
+		ln -sf "$startDir/$programName" .
 	fi
 	
-	echo -e "\n# Cleanup"
+	createProfile commandLine
+	enableEverythingForProfile commandLine
+	cleanProfile commandLine
+
+	createProfile privateWebAPI
+	enableEverythingForProfile privateWebAPI
+	disableItemInProfile privateWebAPI packages SSH
+	cleanProfile privateWebAPI
+
+	cloneProfile privateWebAPI publicWebAPI
+	disableItemInProfile publicWebAPI packages AWS
+	cleanProfile publicWebAPI
+	
+	echo -e "Cleanup"
 	rm -f "$configDir/macros-enabled/example"*
 	rm -f "$configDir/modules-enabled/example"
 	rm -f "$configDir/templates-enabled/example"
 	
 	if [ ! -f "$configDir/config/Credentials.config.json" ];then
-		echo -e "\n# First time setup"
+		echo -e "First time setup"
 		mass --set=Credentials,defaultKey,id_rsa --saveStoreToConfig=Credentials
 	fi
 	
 	# It should be safe to do this on an existing setup.
-	echo -e "\n# Detecting stuff"
+	echo -e "Detecting stuff"
 	mass --createDefaultValues
 	mass --detect=Terminal,seed,GUI --saveStoreToConfig=Terminal
 }

@@ -181,7 +181,8 @@ class Macro extends Module
 	function loadSavedMacros()
 	{
 		# TODO This is repeated below. It should be done once.
-		$fileList=$this->core->addItemsToAnArray('Core', 'macrosToLoad', $this->core->getFileList($this->core->get('General', 'configDir').'/macros-enabled'));
+		$profile=$this->core->get('General', 'profile');
+		$fileList=$this->core->addItemsToAnArray('Core', 'macrosToLoad', $this->core->getFileList($this->core->get('General', 'configDir')."/profiles/$profile/macros"));
 		
 		# Pre-register all macros so that they can be nested without issue.
 		foreach ($fileList as $fileName=>$fullPath)

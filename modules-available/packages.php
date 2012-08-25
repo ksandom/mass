@@ -37,7 +37,8 @@ class Packages extends Module
 	
 	function loadEnabledPackages()
 	{
-		$packageEnabledDir=$this->core->get('General', 'configDir').'/packages-enabled';
+		$profile=$this->core->get('General', 'profile');
+		$packageEnabledDir=$this->core->get('General', 'configDir')."/profiles/$profile/packages";
 		$list=$this->core->getFileList($packageEnabledDir);
 		foreach ($list as $filename)
 		{

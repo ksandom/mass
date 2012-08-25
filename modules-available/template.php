@@ -71,7 +71,8 @@ class Template extends Module
 	
 	function loadEnabledTenmplates()
 	{
-		$templateDir=$this->core->get('General', 'configDir').'/templates-enabled';
+		$profile=$this->core->get('General', 'profile');
+		$templateDir=$this->core->get('General', 'configDir')."/profiles/$profile/templates";
 		$list=$this->core->getFileList($templateDir);
 		$this->core->addItemsToAnArray('Core', 'templatesToLoad', $list);
 	}

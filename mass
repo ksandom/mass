@@ -4,6 +4,7 @@
  
 define('programName', 'mass');
 $description="A commandline tool/API for doing awesome stuff on many nodes of a cluster.";
+$profile='commandLine';
 
 # Find home
 $home=trim(`echo \$HOME`); # TODO There is a better way than this!
@@ -29,12 +30,13 @@ include "$configDir/core.php";
 $core=core::assert();
 $core->set('General', 'EOL', "\n");
 $core->set('General', 'configDir', $configDir);
+$core->set('General', 'profile', $profile);
 $core->set('General', 'hostsDir', "$configDir/data/1LayerHosts");
 $core->set('General', 'programName', programName);
 $core->set('General', 'description', $description);
 include ($configDir.'/interfaces/commandLine.php');
 $core->setRef('CommandLine', 'arguments', $argv);
-loadModules($core, "$configDir/modules-enabled");
+loadModules($core, "$configDir/profiles/$profile/modules");
 
 $core->go();
 

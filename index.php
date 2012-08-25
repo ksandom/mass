@@ -3,6 +3,8 @@
  
 define('programName', 'mass');
 $description="A commandline tool/API for doing awesome stuff on many nodes of a cluster.";
+$profile='commandLine';
+
 
 $configDir=getcwd();
 
@@ -12,12 +14,13 @@ include "$configDir/core.php";
 $core=core::assert();
 $core->set('General', 'EOL', '<BR>');
 $core->set('General', 'configDir', $configDir);
+$core->set('General', 'profile', $profile);
 $core->set('General', 'hostsDir', "$configDir/data/1LayerHosts");
 $core->set('General', 'programName', programName);
 $core->set('General', 'description', $description);
 include ($configDir.'/interfaces/basicWeb.php');
 $core->setRef('BasicWeb', 'arguments', $_REQUEST);
-loadModules($core, "$configDir/modules-enabled");
+loadModules($core, "$configDir/profiles/$profile/modules");
 
 $core->go();
 
