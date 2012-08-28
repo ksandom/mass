@@ -2,4 +2,5 @@
 #onDefine aliasFeature help,h
 
 templateOut help
-searchHelp ~!Global,help!~
+searchHelp all
+requireEach ~!Global,help!~

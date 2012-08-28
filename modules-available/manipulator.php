@@ -235,7 +235,7 @@ class Manipulator extends Module
 				foreach ($line as $subline)
 				{
 					$matched=false;
-					if (preg_match('/'.$search.'/', $subline))
+					if (is_string($subline) && preg_match('/'.$search.'/', $subline))
 					{
 						$outputMatch[]=$line;
 						$matched=true;

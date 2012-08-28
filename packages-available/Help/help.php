@@ -58,20 +58,27 @@ class Help extends Module
 			{
 				foreach ($this->store['Tags'][$tag] as $name)
 				{
-					$details=$this->store['Features'][$name];
-					$details['name']=$name;
-					$details['matchedTag']=$tag;
-					$details['category']=$details['obj']->getName();
-					
-					
-					$visualFlags=array();
-					foreach ($details['flags'] as $flag)
+					if (isset($this->store['Features'][$name]))
 					{
-						$visualFlags[]=(strlen($flag)==1)?"-$flag":"--$flag";
+						$details=$this->store['Features'][$name];
+						$details['name']=$name;
+						$details['matchedTag']=$tag;
+						$details['category']=$details['obj']->getName();
+						
+						
+						$visualFlags=array();
+						foreach ($details['flags'] as $flag)
+						{
+							$visualFlags[]=(strlen($flag)==1)?"-$flag":"--$flag";
+						}
+						$details['commandLineFlags']=implode(', ', $visualFlags);
+						
+						$output[]=$details;
 					}
-					$details['commandLineFlags']=implode(', ', $visualFlags);
-					
-					$output[]=$details;
+					else
+					{
+						$this->core->debug(0, "searchHelp: Could not find a feature with the name \"$name\". This can happen if the primary flag for a feature is not in the list of flags for that feature.");
+					}
 				}
 			}
 			else $this->core->complain($this, "Couldn't find tag.", $tag);
