@@ -18,6 +18,8 @@ define('AWSLibrary', '/usr/share/php/AWSSDKforPHP/sdk.class.php');
 class AWS extends Module
 {
 	private $ec2Connection=null;
+	private $elbConnection=null;
+	private $route53Connection=null;
 	private $awsKey=null;
 	private $awsSecret=null;
 	private $foundLibrary;
@@ -39,9 +41,9 @@ class AWS extends Module
 				$this->core->registerFeature($this, array('AWSGetRegions'), 'AWSGetRegions', "Get the AWS regions", array('import'));
 				$this->core->registerFeature($this, array('AWSGetHosts'), 'AWSGetHosts', "Get all running AWS instances", array('import'));
 				$this->core->registerFeature($this, array('AWSGetAllHosts'), 'AWSGetAllHosts', "Get all AWS instances (even powered off ones). More often than not, you probably want --AWSGetInstances.", array('import'));
+				$this->core->registerFeature($this, array('AWSGetELBs'), 'AWSGetELBs', "Get all Elastic Load Balancers", array('import'));
 				$this->core->registerFeature($this, array('AWSCloseConnection'), 'AWSCloseConnection', "Close any open connections to AWS so that a new one can be created.", array('import'));
 				$this->core->registerFeature($this, array('AWSLibraryDetails'), 'AWSLibraryDetails', "Get information about the AWS library like where mass is expecting to find it.", array('import'));
-				break;
 				break;
 			case 'AWSSetCred':
 				if ($this->hasLibrary())
@@ -60,6 +62,10 @@ class AWS extends Module
 				break;
 			case 'AWSGetAllHosts':
 				if ($this->hasLibrary()) return $this->AWSGetHostsForAllRegions(true);
+				else $this->warn();
+				break;
+			case 'AWSGetELBs':
+				if ($this->hasLibrary()) return $this->AWSGetELBsForAllRegions();
 				else $this->warn();
 				break;
 			case 'AWSCloseConnection':
@@ -106,6 +112,8 @@ class AWS extends Module
 		{
 			$this->core->debug(2, "Connecting to AWS with key=$key secret=*hidden*");
 			$this->ec2Connection = new AmazonEC2(array('key'=>$key, 'secret'=>$secret));
+			#$this->route53Connection = new Amazon
+			$this->elbConnection = new AmazonELB(array('key'=>$key, 'secret'=>$secret));
 		}
 		else
 		{
@@ -126,12 +134,24 @@ class AWS extends Module
 	
 	function AWSInternalGetRegions()
 	{
-		$this->core->debug(3, "AWSInternalGetRegions: Getting regions");
+		$this->core->debug(3, "AWSInternalGetRegions: Getting ec2 regions");
 		$this->AWSAssertConnection();
 		$response=$this->ec2Connection->describe_regions();
 		$responseArray=$response->body->regionInfo->to_array();
 		$arrayCopy=$responseArray->getArrayCopy();
-		$regions=$arrayCopy['item'];
+		$rawRegions=$arrayCopy['item'];
+		$regions=array();
+		
+		foreach ($rawRegions as $region)
+		{
+			$regionName=$region['regionName'];
+			if (!isset($regions[$regionName])) $regions[$regionName]=array();
+			
+			$regions[$regionName]['regionName']=$region['regionName'];
+			$regions[$regionName]['ec2RegionEndpoint']=$region['regionEndpoint'];
+			$regions[$regionName]['elbRegionEndpoint']=str_replace('ec2', 'elasticloadbalancing', $region['regionEndpoint']); // TODO This is a hack to fill in missing AWS functionality. It will break sooner or later. See if there is a better way of doing it.
+		}
+		
 		$regionsCount=count($regions);
 		
 		$this->core->debug(2, "AWSInternalGetRegions: Got $regionsCount regions");
@@ -164,10 +184,10 @@ class AWS extends Module
 		foreach ($regions as $region)
 		{
 			# Set up
-			$endPoint=$region['regionEndpoint'];
+			$endPoint=$region['ec2RegionEndpoint'];
 			$regionName=$region['regionName'];
 			
-			$this->core->debug(2, "AWSGetHostsForAllRegions: Getting hosts/instances for $regionName via $endPoint");
+			$this->core->debug(1, "AWSGetHostsForAllRegions: Getting hosts/instances for $regionName via $endPoint");
 			
 			$this->ec2Connection->set_region($endPoint);
 			
@@ -267,6 +287,37 @@ class AWS extends Module
 			}
 			
 			# TODO check what we want the regionKey and region for in this context
+		}
+		
+		return $output;
+	}
+	
+	function AWSGetELBsForAllRegions()
+	{
+		$this->core->debug(4, "AWSGetELBsForAllRegions: ENTERED");
+		$regions=$this->AWSGetRegions();
+		
+		$this->core->debug(3, "AWSGetELBsForAllRegions: Ready to find Elastic Load Balancers");
+		
+		$output=array();
+		$this->AWSAssertConnection();
+		
+		foreach ($regions as $region)
+		{
+			$this->core->debug(1, "AWSGetELBsForAllRegions: Scanning region {$region['regionName']}");
+			$this->elbConnection->set_region($region['elbRegionEndpoint']);
+			
+			$response=$this->elbConnection->describe_load_balancers();
+			$responseArrayObject=$response->body->DescribeLoadBalancersResult->to_array();
+			$usefulArray=$responseArrayObject->getArrayCopy();
+		
+			if (isset($usefulArray['LoadBalancerDescriptions']['member']))
+			{
+				foreach ($usefulArray['LoadBalancerDescriptions']['member'] as $loadBalancer)
+				{
+					$output[$loadBalancer['DNSName']]=$loadBalancer;
+				}
+			}
 		}
 		
 		return $output;

@@ -1,0 +1,5 @@
+# Search through ELBs imported with --importFromAWS ~ AWS,search
+
+loadStoreFromDataDir ELBs,AWS/ELB
+getCategory ELBs
+requireEach ~!Global,elb!~

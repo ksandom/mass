@@ -1,0 +1,10 @@
+# Import everything we can currently do from AWS ~ import,AWS
+
+loadStoreFromData AWSCreds
+getCategory AWSCreds
+
+notIfResult debug 0,No Accounts created. Please use --AWSSaveCred to define some.
+exec mkdir -p ~!General,configDir!~/data/AWS/ELB
+
+loopMacro importFromAWSAccount
+clearResults

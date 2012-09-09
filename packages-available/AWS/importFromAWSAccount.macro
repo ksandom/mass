@@ -5,8 +5,12 @@ AWSSetCred ~!Result,line!~
 
 AWSCloseConnection
 clearResults
+
 AWSGetHosts
-
+triggerEvent AWS,importedHostsFromAccount
 triggerEvent AWS,importedFromAccount
-
 saveToJson ~!General,configDir!~/data/1LayerHosts/~!Result,key!~.json
+
+AWSGetELBs
+triggerEvent AWS,importedELBsFromAccount
+saveToJson ~!General,configDir!~/data/AWS/ELB/~!Result,key!~.json

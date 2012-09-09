@@ -21,6 +21,7 @@ class Data extends Module
 				$this->core->registerFeature($this, array('loadStoreFromConfig'), 'loadStoreFromConfig', 'Load all store values for a particular module name. --loadStoreFromConfig=storeName');
 				$this->core->registerFeature($this, array('saveStoreToData'), 'saveStoreToData', 'Save all store values for a particular module name. --saveStoreToData=storeName');
 				$this->core->registerFeature($this, array('loadStoreFromData'), 'loadStoreFromData', 'Load all store values for a particular module name. --loadStoreFromData=storeName');
+				$this->core->registerFeature($this, array('loadStoreFromDataDir'), 'loadStoreFromDataDir', 'Load all store values for a particular module name using a directory of json files. --loadStoreFromDataDir=storeName,dirName (dirName is automatically prefixed with the mass data directory, so you would put in something like --loadStoreFromDataDir=Hosts,1LayerHosts)');
 				$this->core->registerFeature($this, array('loadStoreFromFile'), 'loadStoreFromFile', 'Load all store values for a particular name from a file. Note that the file name MUST be in the form storeName.config.json where storeName is the destination name of the store that you want to save. This can be useful for importing config. --loadStoreFromFile=filename');
 				$this->core->registerFeature($this, array('saveStoreToFile'), 'saveStoreToFile', 'Save all store values for a particular module name to a file. This can be useful for exporting data to other applications. --saveStoreToFile=Category,fullPathToFilename');
 
@@ -32,23 +33,27 @@ class Data extends Module
 			case 'last':
 				break;
 			case 'saveStoreToConfig':
-				$this->saveStoreEntry($this->core->get('Global', 'saveStoreToConfig'), 'config');
+				$this->saveStoreEntry($this->core->get('Global', $event), 'config');
 				break;
 			case 'loadStoreFromConfig':
-				$this->loadStoreEntryFromName($this->core->get('Global', 'loadStoreFromConfig'), 'config');
+				$this->loadStoreEntryFromName($this->core->get('Global', $event), 'config');
 				break;
 			case 'saveStoreToData':
-				$this->saveStoreEntry($this->core->get('Global', 'saveStoreToData'), 'data');
+				$this->saveStoreEntry($this->core->get('Global', $event), 'data');
 				break;
 			case 'loadStoreFromData':
-				$this->loadStoreEntryFromName($this->core->get('Global', 'loadStoreFromData'), 'data');
+				$this->loadStoreEntryFromName($this->core->get('Global', $event), 'data');
+				break;
+			case 'loadStoreFromDataDir':
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 2);
+				$this->loadStoreEntryFromDataDir($parms[0], $parms[1]);
 				break;
 			case 'loadStoreFromFile':
-				$this->loadStoreEntryFromFilename($this->core->get('Global', 'loadStoreFromFile'));
+				$this->loadStoreEntryFromFilename($this->core->get('Global', $event));
 				break;
 			case 'saveStoreToFile':
 				# TODO finish this. See help for details of how it will fit together.
-				$this->saveStoreEntryToFilename($this->core->get('Global', 'saveStoreToFile'));
+				$this->saveStoreEntryToFilename($this->core->get('Global', $event));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -90,6 +95,22 @@ class Data extends Module
 	{
 		$filename=$this->configDir."/$source/$storeName.$source.json";
 		return $this->loadStoreEntry($storeName, $filename);
+	}
+	
+	function loadStoreEntryFromDataDir($storeName, $dirName)
+	{
+		$fileList=$this->core->getFileList($this->configDir.'/data/'.$dirName);
+		$result=array();
+		foreach ($fileList as $fileName)
+		{
+			# TODO this needs to be made more resilient to failure
+			$preResult=json_decode(file_get_contents($fileName), 1);
+			
+			$result=array_merge($result, $preResult);
+		}
+		
+		$this->core->setCategoryModule($storeName, $result);
+		return true;
 	}
 
 	function loadConfig()

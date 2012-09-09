@@ -1,4 +1,4 @@
-# Import hosts from an AWS account directly without saving the credentials ~ alpha,AWS
+# Import hosts from an AWS account directly without saving the credentials ~ AWS
 
 AWSSetCred ~!Global,importHostsFromAWSDirect-0!~,~!Global,importHostsFromAWSDirect-1!~
 AWSGetHosts
