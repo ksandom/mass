@@ -122,8 +122,8 @@ class core extends Module
 			case 'getCategory':
 				return $this->getCategoryModule($this->get('Global', 'getCategory'));
 				break;
-			case 'setCategory': # TODO -> setCategory
-				$this->setCategory($this->get('Global', 'setCategory'), $this->getResultSet());
+			case 'setCategory':
+				$this->setCategoryModule($this->get('Global', 'setCategory'), $this->getResultSet());
 				break;
 			case 'unsetCategory':
 				$this->unsetCategoryModule($this->get('Global', 'unsetCategory'));

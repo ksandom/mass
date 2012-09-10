@@ -21,6 +21,8 @@ class String extends Module
 				$this->core->registerFeature($this, array('s', 'singleString'), 'singleString', 'Set final output to send the returned output as one large string. Each entry will be separated by a new line.', array('string'));
 				$this->core->registerFeature($this, array('stringToFile'), 'stringToFile', 'Send returned output as a string to a file at the end of the processing. Each entry will be separated by a new line. --stringToFile=filename', array('string'));
 				$this->core->registerFeature($this, array('singleStringNow'), 'singleStringNow', 'Send returned output as a string. Each entry will be separated by a new line. --singleStringNow[=filename] . If filename is omitted, stdout will be used instead.', array('string'));
+				$this->core->registerFeature($this, array('getSingleString'), 'getSingleString', 'Return a single string containing all the results.', array('string'));
+				$this->core->registerFeature($this, array('getSingleStringUsingSeparator'), 'getSingleStringUsingSeparator', 'Return a single string containing all the results with a custom separator --getSingleStringUsingSeparator=separator .', array('string'));
 				break;
 			case 'followup':
 				break;
@@ -30,10 +32,16 @@ class String extends Module
 				$this->stringToFile();
 				break;
 			case 'stringToFile':
-				$this->stringToFile($this->core->get('Global', 'stringToFile'));
+				$this->stringToFile($this->core->get('Global', $event));
 				break;
 			case 'singleStringNow':
-				$this->singleStringNow($this->core->get('Global', 'singleStringNow'), $this->core->getResultSet());
+				echo $this->singleStringNow($this->core->get('Global', $event), $this->core->getResultSet());
+				break;
+			case 'getSingleString':
+				return $this->singleStringNow(false, $this->core->getResultSet());
+				break;
+			case 'getSingleStringUsingSeparator':
+				return $this->singleStringNow(false, $this->core->getResultSet(), $this->core->get('Global', $event));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -53,17 +61,25 @@ class String extends Module
 		$this->core->setRef('General', 'outputObject', $this);
 	}
 	
-	function singleStringNow($filename, $output)
+	function singleStringNow($filename, $output, $separator="\n")
 	{
-		$readyValue=(is_array($output))?implode("\n", $output):$output;
-		if ($filename) file_put_contents($filename, $readyValue);
-		else echo $readyValue;
+		$readyValue=(is_array($output))?implode($separator, $output):$output;
+		if ($filename) 
+		{
+			$this->core->debug(3, "singleStringNow: Sending to $filename");
+			file_put_contents($filename, $readyValue);
+		}
+		else
+		{
+			$this->core->debug(3, "singleStringNow: Returning value of length ".strlen($readyValue));
+			return array($readyValue);
+		}
 	}
 	
 	function out($output)
 	{
 		$this->core->debug(4, "String: Writing output to {$this->outputFile}");
-		$this->singleStringNow($this->outputFile, $output);
+		echo $this->singleStringNow($this->outputFile, $output);
 	}
 }
 

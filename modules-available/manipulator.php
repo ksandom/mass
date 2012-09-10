@@ -19,6 +19,7 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array of arrays into an array of strings. eg --toString="blah file=%hostName% ip=%externalIP%"', array('array', 'string'));
 				$this->core->registerFeature($this, array('f', 'flatten'), 'flatten', 'Flatten an array of arrays into a keyed array of values. --flatten[=limit] (default:-1). Note that "limit" specifies how far to go into the nesting before simply returning what ever is below. Choosing a negative number specifies how many levels to go in before beginning to flatten. Choosing 0 sets no limit.', array('array', 'string'));
 				$this->core->registerFeature($this, array('finalFlatten'), 'finalFlatten', 'To be used after a --flatten as gone as far as it can.', array('array', 'string'));
+				$this->core->registerFeature($this, array('unique'), 'unique', 'Only keep unique entries. The exception is non-string values will simply be kept without being compared.', array('array', 'string'));
 				$this->core->registerFeature($this, array('requireEach'), 'requireEach', 'Require each entry to match this regular expression. --requireEach=regex', array('array', 'result'));
 				$this->core->registerFeature($this, array('requireItem'), 'requireItem', 'Require a named entry in each of the root entries. A regular expression can be supplied to provide a more precise match. --requireItem=entryKey[,regex]', array('array', 'result'));
 				$this->core->registerFeature($this, array('manipulateEach'), 'manipulateEach', 'Call a feature for each entry in the result set that contains an item matching this regular expression. --manipulateEach=regex,feature featureParameters', array('array', 'result'));
@@ -58,13 +59,13 @@ class Manipulator extends Module
 				if ($limitIn == null) $limit=-1;
 				elseif ($limitIn==0) $limit=false;
 				else $limit=$limitIn;
-				
-				echo "dfghjjklhgfasyufighnbhh".gettype($limitIn)."\n";
-				
 				return $this->flatten($this->core->getResultSet(), $limit);
 				break;
 			case 'finalFlatten':
 				return $this->finalFlatten($this->core->getResultSet());
+				break;
+			case 'unique':
+				return $this->unique($this->core->getResultSet());
 				break;
 			case 'chooseFirst':
 				return $this->chooseFirst($this->core->getResultSet(), $this->core->interpretParms($this->core->get('Global', 'chooseFirst')));
@@ -197,6 +198,22 @@ class Manipulator extends Module
 				{
 					$output[]=$subline;
 				}
+			}
+			else $output[]=$line;
+		}
+		
+		return $output;
+	}
+	
+	function unique($dataIn)
+	{
+		$output=array();
+		
+		foreach ($dataIn as $line)
+		{
+			if (is_string($line))
+			{
+				$output[md5($line)]=$line;
 			}
 			else $output[]=$line;
 		}
