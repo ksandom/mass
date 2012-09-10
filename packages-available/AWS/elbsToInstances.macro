@@ -1,0 +1,9 @@
+# Take a list of ELBs (that you got from --elb) and give a list of instances ~ AWS,ELB,elb,instance
+
+takeAsOneResultset Instances
+unique
+getSingleStringUsingSeparator |
+setCategory Result
+
+unsetTemplateOut
+list (~!Result,0!~)

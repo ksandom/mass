@@ -1,0 +1,6 @@
+# Take a single key from every result and make it one result set ~ Manipulator
+
+take ~!Global,takeAsOneResultset!~
+flatten
+finalFlatten
+

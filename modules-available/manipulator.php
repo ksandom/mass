@@ -18,6 +18,8 @@ class Manipulator extends Module
 			case 'init':
 				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array of arrays into an array of strings. eg --toString="blah file=%hostName% ip=%externalIP%"', array('array', 'string'));
 				$this->core->registerFeature($this, array('f', 'flatten'), 'flatten', 'Flatten an array of arrays into a keyed array of values. --flatten[=limit] (default:-1). Note that "limit" specifies how far to go into the nesting before simply returning what ever is below. Choosing a negative number specifies how many levels to go in before beginning to flatten. Choosing 0 sets no limit.', array('array', 'string'));
+				$this->core->registerFeature($this, array('finalFlatten'), 'finalFlatten', 'To be used after a --flatten as gone as far as it can.', array('array', 'string'));
+				$this->core->registerFeature($this, array('unique'), 'unique', 'Only keep unique entries. The exception is non-string values will simply be kept without being compared.', array('array', 'string'));
 				$this->core->registerFeature($this, array('requireEach'), 'requireEach', 'Require each entry to match this regular expression. --requireEach=regex', array('array', 'result'));
 				$this->core->registerFeature($this, array('requireItem'), 'requireItem', 'Require a named entry in each of the root entries. A regular expression can be supplied to provide a more precise match. --requireItem=entryKey[,regex]', array('array', 'result'));
 				$this->core->registerFeature($this, array('manipulateEach'), 'manipulateEach', 'Call a feature for each entry in the result set that contains an item matching this regular expression. --manipulateEach=regex,feature featureParameters', array('array', 'result'));
@@ -27,6 +29,7 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('resultUnset'), 'resultUnset', 'Delete a value in each result item. --resultUnset=dstVarName.', array('array', 'result'));
 				$this->core->registerFeature($this, array('addSlashes'), 'addSlashes', 'Put extra backslashes before certain characters to escape them to allow nesting of quoted strings. --addSlashes=srcVar,dstVar', array('array', 'escaping', 'result'));
 				$this->core->registerFeature($this, array('cleanUnresolvedResultVars'), 'cleanUnresolvedResultVars', 'Clean out any result variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
+				$this->core->registerFeature($this, array('take'), 'take', 'Take only a single key from a result set --take=key.', array('array', 'result'));
 				#$this->core->registerFeature($this, array('cleanUnresolvedStoreVars'), 'cleanUnresolvedStoreVars', 'Clean out any store variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
 				break;
 			case 'followup':
@@ -56,16 +59,19 @@ class Manipulator extends Module
 				if ($limitIn == null) $limit=-1;
 				elseif ($limitIn==0) $limit=false;
 				else $limit=$limitIn;
-				
-				echo "dfghjjklhgfasyufighnbhh".gettype($limitIn)."\n";
-				
 				return $this->flatten($this->core->getResultSet(), $limit);
+				break;
+			case 'finalFlatten':
+				return $this->finalFlatten($this->core->getResultSet());
+				break;
+			case 'unique':
+				return $this->unique($this->core->getResultSet());
 				break;
 			case 'chooseFirst':
 				return $this->chooseFirst($this->core->getResultSet(), $this->core->interpretParms($this->core->get('Global', 'chooseFirst')));
 				break;
 			case 'resultSet':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', 'resultSet'));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event));
 				$this->core->requireNumParms($this, 2, $event, $originalParms, $parms);
 				return $this->resultSet($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
@@ -74,6 +80,10 @@ class Manipulator extends Module
 				break;
 			case 'cleanUnresolvedResultVars':
 				return $this->cleanUnresolvedVars($this->core->getResultSet(), resultVarBegin, resultVarEnd);
+				break;
+			case 'take':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event));
+				return $this->take($parms, $this->core->getResultSet());
 				break;
 			case 'addSlashes':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', 'addSlashes'));
@@ -172,6 +182,41 @@ class Manipulator extends Module
 			}
 		}
 		else $this->getArrayNodes($output, $input, $clashes, $limit, $nesting);
+		
+		return $output;
+	}
+	
+	function finalFlatten($dataIn)
+	{
+		$output=array();
+		
+		foreach ($dataIn as $line)
+		{
+			if (is_array($line))
+			{
+				foreach ($line as $subline)
+				{
+					$output[]=$subline;
+				}
+			}
+			else $output[]=$line;
+		}
+		
+		return $output;
+	}
+	
+	function unique($dataIn)
+	{
+		$output=array();
+		
+		foreach ($dataIn as $line)
+		{
+			if (is_string($line))
+			{
+				$output[md5($line)]=$line;
+			}
+			else $output[]=$line;
+		}
 		
 		return $output;
 	}
@@ -356,6 +401,28 @@ class Manipulator extends Module
 		foreach ($output as &$line)
 		{
 			$line[$dst]=addslashes($line[$src]);
+		}
+		
+		return $output;
+	}
+	
+	function take($key, $resultSet)
+	{
+		$output=array();
+		
+		foreach ($resultSet as $line)
+		{
+			if (isset($line[$key[0]]))
+			{
+				if (false) //(is_array($line[$key]))
+				{ # TODO I don't think this is correct!
+					foreach ($line[$key] as $subline)
+					{
+						$output[]=$subline;
+					}
+				}
+				else $output[]=$line[$key[0]];
+			}
 		}
 		
 		return $output;
