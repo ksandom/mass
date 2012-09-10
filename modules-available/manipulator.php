@@ -18,6 +18,7 @@ class Manipulator extends Module
 			case 'init':
 				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array of arrays into an array of strings. eg --toString="blah file=%hostName% ip=%externalIP%"', array('array', 'string'));
 				$this->core->registerFeature($this, array('f', 'flatten'), 'flatten', 'Flatten an array of arrays into a keyed array of values. --flatten[=limit] (default:-1). Note that "limit" specifies how far to go into the nesting before simply returning what ever is below. Choosing a negative number specifies how many levels to go in before beginning to flatten. Choosing 0 sets no limit.', array('array', 'string'));
+				$this->core->registerFeature($this, array('finalFlatten'), 'finalFlatten', 'To be used after a --flatten as gone as far as it can.', array('array', 'string'));
 				$this->core->registerFeature($this, array('requireEach'), 'requireEach', 'Require each entry to match this regular expression. --requireEach=regex', array('array', 'result'));
 				$this->core->registerFeature($this, array('requireItem'), 'requireItem', 'Require a named entry in each of the root entries. A regular expression can be supplied to provide a more precise match. --requireItem=entryKey[,regex]', array('array', 'result'));
 				$this->core->registerFeature($this, array('manipulateEach'), 'manipulateEach', 'Call a feature for each entry in the result set that contains an item matching this regular expression. --manipulateEach=regex,feature featureParameters', array('array', 'result'));
@@ -62,6 +63,9 @@ class Manipulator extends Module
 				
 				return $this->flatten($this->core->getResultSet(), $limit);
 				break;
+			case 'finalFlatten':
+				return $this->finalFlatten($this->core->getResultSet());
+				break;
 			case 'chooseFirst':
 				return $this->chooseFirst($this->core->getResultSet(), $this->core->interpretParms($this->core->get('Global', 'chooseFirst')));
 				break;
@@ -78,7 +82,7 @@ class Manipulator extends Module
 				break;
 			case 'take':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event));
-				return $this->core->take($parms, $this->core->getResultSet());
+				return $this->take($parms, $this->core->getResultSet());
 				break;
 			case 'addSlashes':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', 'addSlashes'));
@@ -177,6 +181,25 @@ class Manipulator extends Module
 			}
 		}
 		else $this->getArrayNodes($output, $input, $clashes, $limit, $nesting);
+		
+		return $output;
+	}
+	
+	function finalFlatten($dataIn)
+	{
+		$output=array();
+		
+		foreach ($dataIn as $line)
+		{
+			if (is_array($line))
+			{
+				foreach ($line as $subline)
+				{
+					$output[]=$subline;
+				}
+			}
+			else $output[]=$line;
+		}
 		
 		return $output;
 	}
@@ -372,7 +395,7 @@ class Manipulator extends Module
 		
 		foreach ($resultSet as $line)
 		{
-			if (isset($line[$key]))
+			if (isset($line[$key[0]]))
 			{
 				if (false) //(is_array($line[$key]))
 				{ # TODO I don't think this is correct!
@@ -381,11 +404,11 @@ class Manipulator extends Module
 						$output[]=$subline;
 					}
 				}
-				else $output[]=$line[$key];
+				else $output[]=$line[$key[0]];
 			}
 		}
 		
-		return false;
+		return $output;
 	}
 }
 
