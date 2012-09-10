@@ -27,6 +27,7 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('resultUnset'), 'resultUnset', 'Delete a value in each result item. --resultUnset=dstVarName.', array('array', 'result'));
 				$this->core->registerFeature($this, array('addSlashes'), 'addSlashes', 'Put extra backslashes before certain characters to escape them to allow nesting of quoted strings. --addSlashes=srcVar,dstVar', array('array', 'escaping', 'result'));
 				$this->core->registerFeature($this, array('cleanUnresolvedResultVars'), 'cleanUnresolvedResultVars', 'Clean out any result variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
+				$this->core->registerFeature($this, array('take'), 'take', 'Take only a single key from a result set --take=key.', array('array', 'result'));
 				#$this->core->registerFeature($this, array('cleanUnresolvedStoreVars'), 'cleanUnresolvedStoreVars', 'Clean out any store variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
 				break;
 			case 'followup':
@@ -65,7 +66,7 @@ class Manipulator extends Module
 				return $this->chooseFirst($this->core->getResultSet(), $this->core->interpretParms($this->core->get('Global', 'chooseFirst')));
 				break;
 			case 'resultSet':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', 'resultSet'));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event));
 				$this->core->requireNumParms($this, 2, $event, $originalParms, $parms);
 				return $this->resultSet($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
@@ -74,6 +75,10 @@ class Manipulator extends Module
 				break;
 			case 'cleanUnresolvedResultVars':
 				return $this->cleanUnresolvedVars($this->core->getResultSet(), resultVarBegin, resultVarEnd);
+				break;
+			case 'take':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event));
+				return $this->core->take($parms, $this->core->getResultSet());
 				break;
 			case 'addSlashes':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', 'addSlashes'));
@@ -359,6 +364,28 @@ class Manipulator extends Module
 		}
 		
 		return $output;
+	}
+	
+	function take($key, $resultSet)
+	{
+		$output=array();
+		
+		foreach ($resultSet as $line)
+		{
+			if (isset($line[$key]))
+			{
+				if (false) //(is_array($line[$key]))
+				{ # TODO I don't think this is correct!
+					foreach ($line[$key] as $subline)
+					{
+						$output[]=$subline;
+					}
+				}
+				else $output[]=$line[$key];
+			}
+		}
+		
+		return false;
 	}
 }
 
