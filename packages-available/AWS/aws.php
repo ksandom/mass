@@ -316,6 +316,7 @@ class AWS extends Module
 				foreach ($usefulArray['LoadBalancerDescriptions']['member'] as $loadBalancer)
 				{
 					$output[$loadBalancer['DNSName']]=$loadBalancer;
+					$output[$loadBalancer['DNSName']]['Region']=$region;
 				}
 			}
 		}
