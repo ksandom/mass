@@ -12,9 +12,6 @@ sudo apt-get install php5-curl
 */
 
 
-
-define('AWSLibrary', '/usr/share/php/AWSSDKforPHP/sdk.class.php');
-
 class AWS extends Module
 {
 	private $ec2Connection=null;
@@ -28,8 +25,7 @@ class AWS extends Module
 	{
 		parent::__construct('AWS');
 		
-		# TODO Improce this to detect the class
-		$this->foundLibrary=file_exists(AWSLibrary);;
+		$this->foundLibrary=class_exists('AmazonEC2');;
 	}
 	
 	function event($event)
@@ -366,12 +362,28 @@ class AWS extends Module
 	}
 }
 
-if (file_exists(AWSLibrary))
+$core=core::assert();
+
+$configDir=$core->get('General', 'configDir');
+
+$awsLibrary=array(
+	'installedViaMass'=>"$configDir/externalLibraries/aws-sdk-for-php/sdk.class.php",
+	'installedViaApt'=>'/usr/share/php/AWSSDKforPHP/sdk.class.php'
+);
+
+
+foreach ($awsLibrary as $title=>$file)
 {
-	@include_once(AWSLibrary);
+	if (file_exists($file))
+	{
+		@include_once($file);
+		$core->set('AWS', 'libraryTitle', $title);
+		$core->set('AWS', 'libraryFile', $file);
+		break;
+	}
 }
 
-$core=core::assert();
+
 $core->registerModule(new AWS());
  
 ?>
