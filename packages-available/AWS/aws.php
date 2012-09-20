@@ -108,7 +108,8 @@ class AWS extends Module
 		{
 			$this->core->debug(2, "Connecting to AWS with key=$key secret=*hidden*");
 			$this->ec2Connection = new AmazonEC2(array('key'=>$key, 'secret'=>$secret));
-			#$this->route53Connection = new Amazon
+			#$this->route53Connection = new AmazonRoute53(array('key'=>$key, 'secret'=>$secret));
+			$this->route53Connection = new AmazonRoute53($key, $secret);
 			$this->elbConnection = new AmazonELB(array('key'=>$key, 'secret'=>$secret));
 		}
 		else
@@ -321,6 +322,59 @@ class AWS extends Module
 				}
 			}
 		}
+		
+		return $output;
+	}
+	
+	function AWSGetDNSEntriesForAllRegions()
+	{
+		$this->core->debug(4, "AWSGetDNSEntriesForAllRegions: ENTERED");
+		#$regions=$this->AWSGetRegions();
+		
+		$this->core->debug(3, "AWSGetDNSEntriesForAllRegions: Ready to find DNS entries");
+		
+		$output=array();
+		$this->AWSAssertConnection();
+		
+		$hostedZones=$this->route53Connection->list_hosted_zone();
+		
+		
+		/*
+			foreach ($hostedZones as $zone)
+			{
+				// Takes the zone_ID from the hostedZones above.
+				// public function list_rrset($zone_ID = null, $opt = null)
+				$rrset=$this->route53Connection->list_rrset();
+				print_r($rrset);
+				
+				
+			}
+		*/
+		
+		/*
+		foreach ($regions as $region)
+		{
+			$this->core->debug(1, "AWSGetDNSEntriesForAllRegions: Scanning region {$region['regionName']}");
+			$this->elbConnection->set_region($region['elbRegionEndpoint']);
+			
+			$response=$this->elbConnection->describe_load_balancers();
+			$responseArrayObject=$response->body->DescribeLoadBalancersResult->to_array();
+			$usefulArray=$responseArrayObject->getArrayCopy();
+		
+			if (isset($usefulArray['LoadBalancerDescriptions']['member']))
+			{
+				foreach ($usefulArray['LoadBalancerDescriptions']['member'] as $loadBalancer)
+				{
+					foreach (array('DNSName', 'CanonicalHostedZoneName', 'LoadBalancerName') as $id)
+					{
+						if (isset($loadBalancer[$id])) break;
+					}
+					
+					$output[$loadBalancer[$id]]=$loadBalancer;
+					$output[$loadBalancer[$id]]['Region']=$region['regionName'];
+				}
+			}
+		}/*
 		
 		return $output;
 	}
