@@ -17,7 +17,7 @@ class Codes extends Module
 			case 'init':
 				$this->loadCodes();
 				$this->core->registerFeature($this, array('color', 'C'), 'color', 'Turn on colored output.', array('userExtra'));
-				$this->core->registerFeature($this, array('nocolor', 'b'), 'nocolor', 'Turn off colored output.', array('userExtra'));
+				$this->core->registerFeature($this, array('noColor', 'nocolor', 'b'), 'noColor', 'Turn off colored output.', array('userExtra'));
 
 				break;
 			case 'followup':
@@ -27,7 +27,7 @@ class Codes extends Module
 			case 'color':
 				$this->loadColorCodes(true);
 				break;
-			case 'nocolor':
+			case 'noColor':
 				$this->loadColorCodes(false);
 				break;
 			default:
