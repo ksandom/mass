@@ -108,8 +108,8 @@ class AWS extends Module
 		{
 			$this->core->debug(2, "Connecting to AWS with key=$key secret=*hidden*");
 			$this->ec2Connection = new AmazonEC2(array('key'=>$key, 'secret'=>$secret));
-			#$this->route53Connection = new AmazonRoute53(array('key'=>$key, 'secret'=>$secret));
-			$this->route53Connection = new AmazonRoute53($key, $secret);
+			if (class_exists('route53Connection')) $this->route53Connection = new AmazonRoute53(array('key'=>$key, 'secret'=>$secret));
+#			$this->route53Connection = new AmazonRoute53($key, $secret);
 			$this->elbConnection = new AmazonELB(array('key'=>$key, 'secret'=>$secret));
 		}
 		else
@@ -374,7 +374,7 @@ class AWS extends Module
 					$output[$loadBalancer[$id]]['Region']=$region['regionName'];
 				}
 			}
-		}/*
+		}*/
 		
 		return $output;
 	}
