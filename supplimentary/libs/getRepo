@@ -1,0 +1,19 @@
+# Get a repo
+
+function getRepo
+{
+	repoName="$1"
+	repoSrc="$2"
+	$libDir="$configDir/externalLibraries"
+	repoDir="$libDir/$repoName"
+	
+	if [ -d "$repoDir"  ]; then
+		cd "$repoDir"
+		git pull
+	else
+		mkdir -p "$libDir"
+		cd "$libDir"
+		git clone "$repoSrc"
+	fi
+}
+
