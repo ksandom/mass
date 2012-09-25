@@ -5,6 +5,7 @@ getCategory AWSCreds
 
 notIfResult debug 0,No Accounts created. Please use --AWSSaveCred to define some.
 exec mkdir -p ~!General,configDir!~/data/AWS/ELB
+exec mkdir -p ~!General,configDir!~/data/AWS/R53
 
 loopMacro importFromAWSAccount
 clearResults
