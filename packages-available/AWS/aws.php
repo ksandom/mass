@@ -317,8 +317,8 @@ class AWS extends Module
 						if (isset($loadBalancer[$id])) break;
 					}
 					
-					$output[$loadBalancer[$id]]=$loadBalancer;
-					$output[$loadBalancer[$id]]['Region']=$region['regionName'];
+					$output[$loadBalancer[$id].$region['regionName']]=$loadBalancer;
+					$output[$loadBalancer[$id].$region['regionName']]['Region']=$region['regionName'];
 				}
 			}
 		}
