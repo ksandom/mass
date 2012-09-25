@@ -26,6 +26,7 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('manipulateItem'), 'manipulateItem', 'Call a feature for each entry that contains an item explicity matching the one specified. --manipulateItem=entryKey,regex,feature featureParameters', array('array', 'result'));
 				$this->core->registerFeature($this, array('chooseFirst'), 'chooseFirst', 'Choose the first non-empty value and put it into the destination variable. --chooseFirst=dstVarName,srcVarName1,srcVarName2[,srcVarName3[,...]]', array('array', 'result'));
 				$this->core->registerFeature($this, array('resultSet'), 'resultSet', 'Set a value in each result item. --setResult=dstVarName,value . Note that this has no counter part as you can already retrieve results with ~%varName%~ and many to one would be purely random.', array('array', 'result'));
+				$this->core->registerFeature($this, array('resultSetIfNotSet'), 'resultSetIfNotSet', 'Set a value in each result item only if it is not already set. --resultSetIfNotSet=dstVarName,value . Note that this has no counter part as you can already retrieve results with ~%varName%~ and many to one would be purely random.', array('array', 'result'));
 				$this->core->registerFeature($this, array('resultUnset'), 'resultUnset', 'Delete a value in each result item. --resultUnset=dstVarName.', array('array', 'result'));
 				$this->core->registerFeature($this, array('addSlashes'), 'addSlashes', 'Put extra backslashes before certain characters to escape them to allow nesting of quoted strings. --addSlashes=srcVar,dstVar', array('array', 'escaping', 'result'));
 				$this->core->registerFeature($this, array('cleanUnresolvedResultVars'), 'cleanUnresolvedResultVars', 'Clean out any result variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
@@ -74,6 +75,11 @@ class Manipulator extends Module
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event));
 				$this->core->requireNumParms($this, 2, $event, $originalParms, $parms);
 				return $this->resultSet($this->core->getResultSet(), $parms[0], $parms[1]);
+				break;
+			case 'resultSetIfNotSet':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event));
+				$this->core->requireNumParms($this, 2, $event, $originalParms, $parms);
+				return $this->resultSet($this->core->getResultSet(), $parms[0], $parms[1], false);
 				break;
 			case 'resultUnset':
 				return $this->resultUnset($this->core->getResultSet(), explode(',', $this->core->get('Global', 'resultUnset')));
@@ -368,14 +374,12 @@ class Manipulator extends Module
 		return $output;
 	}
 	
-	function resultSet($input, $key, $value)
+	function resultSet($input, $key, $value, $overwrite=true)
 	{
 		$output=$input;
 		foreach ($output as &$line)
 		{
-			# TODO There is something wrong happening here.
-			$line[$key]=$this->processResultVarsInString($line, $value);
-			#$line[$key]=$value;
+			if ($overwrite or !isset($line[$key])) $line[$key]=$this->processResultVarsInString($line, $value);
 		}
 		
 		return $output;
