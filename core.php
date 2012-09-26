@@ -112,7 +112,7 @@ class core extends Module
 			case 'setIfNotSet':
 				$originalParms=$this->get('Global', 'setIfNotSet');
 				$parms=$this->interpretParms($originalParms);
-				$this->requireNumParms($this, 2, $event, $originalParms, $parms);
+				$this->requireNumParms($this, 3, $event, $originalParms, $parms);
 				$this->setIfNotSet($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'unset':

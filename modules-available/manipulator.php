@@ -19,6 +19,7 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array of arrays into an array of strings. eg --toString="blah file=%hostName% ip=%externalIP%"', array('array', 'string'));
 				$this->core->registerFeature($this, array('f', 'flatten'), 'flatten', 'Flatten an array of arrays into a keyed array of values. --flatten[=limit] (default:-1). Note that "limit" specifies how far to go into the nesting before simply returning what ever is below. Choosing a negative number specifies how many levels to go in before beginning to flatten. Choosing 0 sets no limit.', array('array', 'string'));
 				$this->core->registerFeature($this, array('finalFlatten'), 'finalFlatten', 'To be used after a --flatten as gone as far as it can.', array('array', 'string'));
+				$this->core->registerFeature($this, array('replace'), 'replace', 'Replace a pattern matching a regular expression and replace it with something defined. --replace=searchRegex,replacement', array('array', 'string'));
 				$this->core->registerFeature($this, array('unique'), 'unique', 'Only keep unique entries. The exception is non-string values will simply be kept without being compared.', array('array', 'string'));
 				$this->core->registerFeature($this, array('requireEach'), 'requireEach', 'Require each entry to match this regular expression. --requireEach=regex', array('array', 'result'));
 				$this->core->registerFeature($this, array('requireItem'), 'requireItem', 'Require a named entry in each of the root entries. A regular expression can be supplied to provide a more precise match. --requireItem=entryKey[,regex]', array('array', 'result'));
@@ -64,6 +65,10 @@ class Manipulator extends Module
 				break;
 			case 'finalFlatten':
 				return $this->finalFlatten($this->core->getResultSet());
+				break;
+			case 'replace':
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 2);
+				return $this->replaceUsingRegex($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
 			case 'unique':
 				return $this->unique($this->core->getResultSet());
@@ -206,6 +211,20 @@ class Manipulator extends Module
 				}
 			}
 			else $output[]=$line;
+		}
+		
+		return $output;
+	}
+	
+	function replaceUsingRegex($dataIn, $search, $replace)
+	{
+		$searchArray=array("/$search/");
+		$replaceArray=array($replace);
+		$output=array();
+		
+		foreach ($dataIn as $line)
+		{
+			$output[]=preg_replace($searchArray, $replaceArray, $line);
 		}
 		
 		return $output;
