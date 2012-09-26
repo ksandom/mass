@@ -3,5 +3,5 @@
 
 loadStoreFromDataDir ELBs,AWS/ELB
 getCategory ELBs
-requireEach ~!Global,elb!~
+requireEach ~!Global,ELB!~
 templateOut elb

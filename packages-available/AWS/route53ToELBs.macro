@@ -1,6 +1,5 @@
 # Take a list of DNS entries from route53 (that you got from --route53) and give a list of ELBs ~ AWS,route53,r53,ELB,elb
-#onDefine aliasFeature route53ToELBs,route53Toelbs
-#onDefine aliasFeature r53ToELBs,route53Toelbs
+#onDefine aliasFeature route53ToELBs,route53Toelbs,r53ToELBs
 
 flatten
 
