@@ -1,0 +1,7 @@
+# Search through ELBs imported with --importFromAWS ~ AWS,search
+#onDefine aliasFeature ELB,elb
+
+loadStoreFromDataDir ELBs,AWS/ELB
+getCategory ELBs
+requireEach ~!Global,elb!~
+templateOut elb
