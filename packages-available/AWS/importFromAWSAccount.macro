@@ -14,3 +14,7 @@ saveToJson ~!General,configDir!~/data/1LayerHosts/~!Result,key!~.json
 AWSGetELBs
 triggerEvent AWS,importedELBsFromAccount
 saveToJson ~!General,configDir!~/data/AWS/ELB/~!Result,key!~.json
+
+AWSGetRoute53
+triggerEvent AWS,importedRoute53FromAccount
+saveToJson ~!General,configDir!~/data/AWS/R53/~!Result,key!~.json

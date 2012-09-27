@@ -35,7 +35,9 @@ class String extends Module
 				$this->stringToFile($this->core->get('Global', $event));
 				break;
 			case 'singleStringNow':
-				echo $this->singleStringNow($this->core->get('Global', $event), $this->core->getResultSet());
+				$output=$this->singleStringNow($this->core->get('Global', $event), $this->core->getResultSet());;
+				if (is_array($output))$output=implode(',', $output); # TODO decide if this is the best way to output it
+				echo $output;
 				break;
 			case 'getSingleString':
 				return $this->singleStringNow(false, $this->core->getResultSet());

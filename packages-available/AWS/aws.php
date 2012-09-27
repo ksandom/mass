@@ -12,9 +12,6 @@ sudo apt-get install php5-curl
 */
 
 
-
-define('AWSLibrary', '/usr/share/php/AWSSDKforPHP/sdk.class.php');
-
 class AWS extends Module
 {
 	private $ec2Connection=null;
@@ -28,8 +25,7 @@ class AWS extends Module
 	{
 		parent::__construct('AWS');
 		
-		# TODO Improce this to detect the class
-		$this->foundLibrary=file_exists(AWSLibrary);;
+		$this->foundLibrary=class_exists('AmazonEC2');;
 	}
 	
 	function event($event)
@@ -42,6 +38,7 @@ class AWS extends Module
 				$this->core->registerFeature($this, array('AWSGetHosts'), 'AWSGetHosts', "Get all running AWS instances", array('import'));
 				$this->core->registerFeature($this, array('AWSGetAllHosts'), 'AWSGetAllHosts', "Get all AWS instances (even powered off ones). More often than not, you probably want --AWSGetInstances.", array('import'));
 				$this->core->registerFeature($this, array('AWSGetELBs'), 'AWSGetELBs', "Get all Elastic Load Balancers", array('import'));
+				$this->core->registerFeature($this, array('AWSGetRoute53'), 'AWSGetRoute53', "Get all Route53 entries.", array('import'));
 				$this->core->registerFeature($this, array('AWSCloseConnection'), 'AWSCloseConnection', "Close any open connections to AWS so that a new one can be created.", array('import'));
 				$this->core->registerFeature($this, array('AWSLibraryDetails'), 'AWSLibraryDetails', "Get information about the AWS library like where mass is expecting to find it.", array('import'));
 				break;
@@ -68,6 +65,10 @@ class AWS extends Module
 				if ($this->hasLibrary()) return $this->AWSGetELBsForAllRegions();
 				else $this->warn();
 				break;
+			case 'AWSGetRoute53':
+				if ($this->hasLibrary()) return $this->AWSGetDNSEntriesForAllRegions();
+				else $this->warn();
+				break;
 			case 'AWSCloseConnection':
 				if ($this->hasLibrary()) $this->AWSCloseConnection();
 				else $this->warn();
@@ -76,6 +77,7 @@ class AWS extends Module
 				return $this->AWSLibraryDetails();
 				break;
 			case 'last':
+				# TODO update this to reflect the new ability to use multiple libraries.
 				if (!$this->foundLibrary) $this->core->debug(1, "The AWS library was not found. Looking for it at ".AWSLibrary);
 				break;
 			case 'followup':
@@ -93,6 +95,7 @@ class AWS extends Module
 	
 	function warn()
 	{
+		# TODO update this to reflect the new ability to use multiple libraries.
 		$this->core->debug(0, "The AWS PHP library doesn't appear to be installed. I tried to find it at ".AWSLibrary);
 	}
 	
@@ -112,8 +115,11 @@ class AWS extends Module
 		{
 			$this->core->debug(2, "Connecting to AWS with key=$key secret=*hidden*");
 			$this->ec2Connection = new AmazonEC2(array('key'=>$key, 'secret'=>$secret));
-			#$this->route53Connection = new Amazon
 			$this->elbConnection = new AmazonELB(array('key'=>$key, 'secret'=>$secret));
+			
+			# TODO This will unboubtedly change before it makes it into the official AWS PHP SDK. Therefore the required code is commented out below.
+			#if (class_exists('AmazonRoute53')) $this->route53Connection = new AmazonRoute53(array('key'=>$key, 'secret'=>$secret));
+			if (class_exists('AmazonRoute53')) $this->route53Connection = new AmazonRoute53($key, $secret);
 		}
 		else
 		{
@@ -320,9 +326,49 @@ class AWS extends Module
 						if (isset($loadBalancer[$id])) break;
 					}
 					
-					$output[$loadBalancer[$id]]=$loadBalancer;
-					$output[$loadBalancer[$id]]['Region']=$region['regionName'];
+					$output[$loadBalancer[$id].$region['regionName']]=$loadBalancer;
+					$output[$loadBalancer[$id].$region['regionName']]['Region']=$region['regionName'];
 				}
+			}
+		}
+		
+		return $output;
+	}
+	
+	function AWSGetDNSEntriesForAllRegions()
+	{
+		$this->core->debug(4, "AWSGetDNSEntriesForAllRegions: ENTERED");
+		#$regions=$this->AWSGetRegions();
+		
+		$this->core->debug(3, "AWSGetDNSEntriesForAllRegions: Ready to find DNS entries");
+		
+		$output=array();
+		$this->AWSAssertConnection();
+		
+		if (!$this->route53Connection)
+		{
+			$this->core->debug(2, "The route53 library is not loaded, and is therefore probably not included with the version of the AWS PHP SDK you have. It certainly isn't in the official one at the time of this writing.");
+			return false;
+		}
+		
+		$response=$this->route53Connection->list_hosted_zone();
+		$responseArrayObject=$response->body->HostedZones->to_array();
+		$hostedZones=$responseArrayObject->getArrayCopy();
+		
+		$output=array();
+		
+		foreach ($hostedZones['HostedZone'] as $hostedZone)
+		{
+			$this->core->debug(1, "AWSGetDNSEntriesForAllRegions: Getting DNS entries for {$hostedZone['Name']}");
+			
+			$idParms=explode('/', $hostedZone['Id']);
+			$rrset=$this->route53Connection->list_rrset($idParms[2]);
+			$responseArrayObject=$rrset->body->ResourceRecordSets->to_array();
+			$recordSets=$responseArrayObject->getArrayCopy();
+			
+			foreach ($recordSets['ResourceRecordSet'] as $recordSet)
+			{
+				$output[]=$recordSet;
 			}
 		}
 		
@@ -366,12 +412,28 @@ class AWS extends Module
 	}
 }
 
-if (file_exists(AWSLibrary))
+$core=core::assert();
+
+$configDir=$core->get('General', 'configDir');
+
+$awsLibrary=array(
+	'installedViaMass'=>"$configDir/externalLibraries/aws-sdk-for-php/sdk.class.php",
+	'installedViaApt'=>'/usr/share/php/AWSSDKforPHP/sdk.class.php'
+);
+
+
+foreach ($awsLibrary as $title=>$file)
 {
-	@include_once(AWSLibrary);
+	if (file_exists($file))
+	{
+		@include_once($file);
+		$core->set('AWS', 'libraryTitle', $title);
+		$core->set('AWS', 'libraryFile', $file);
+		break;
+	}
 }
 
-$core=core::assert();
+
 $core->registerModule(new AWS());
  
 ?>

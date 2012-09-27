@@ -1,6 +1,6 @@
 # List hosts. Search using regex. --list[=regex] . eg --list=^db.* ~ user
 
-templateOutIfNotSet compactOutput
+templateOut compactOutput
 
 search ~!Global,list!~
 notIfResult searchOld ~!Global,list!~

@@ -1,0 +1,15 @@
+# Take a list of DNS entries from route53 (that you got from --route53) and give a list of ELBs ~ AWS,route53,r53,ELB,elb
+#onDefine aliasFeature route53ToELBs,route53Toelbs,r53ToELBs
+
+flatten
+
+# For a correctly set up load balancer DNS entry, this shouldn't be necessary. But it's here just in case.
+resultSetIfNotSet DNSName,~%Value%~
+
+takeAsOneResultset DNSName
+unique
+replace \.$,
+getSingleStringUsingSeparator |
+setCategory Result
+
+elb (~!Result,0!~)
