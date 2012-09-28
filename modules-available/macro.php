@@ -49,7 +49,8 @@ class Macro extends Module
 			case 'loopMacro':
 				return $this->loopMacro($this->core->getResultSet(), $this->core->get('Global', 'loopMacro'));
 			case 'forEach':
-				return false; # TODO implement this
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 1);
+				return $this->doForEach($this->core->getResultSet(), $parms[0], $parms[1]); # TODO implement this
 			case 'followup':
 				$this->loadSavedMacros();
 				break;
@@ -177,6 +178,22 @@ class Macro extends Module
 			}
 		}
 		else $this->core->debug(5, "loopMacro: No input!");
+		
+		return $output;
+	}
+	
+	function doForEach($data, $feature, $value)
+	{
+		$output=array();
+		
+		foreach ($data as $line)
+		{
+			if ($returnValue=$this->core->callFeatureWithDataset($feature, $value, $line))
+			{
+				$output[]=$returnValue;
+			}
+			else $output[]=$line;
+		}
 		
 		return $output;
 	}
