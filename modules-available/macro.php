@@ -50,7 +50,7 @@ class Macro extends Module
 				return $this->loopMacro($this->core->getResultSet(), $this->core->get('Global', 'loopMacro'));
 			case 'forEach':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 1);
-				return $this->doForEach($this->core->getResultSet(), $parms[0], $parms[1]); # TODO implement this
+				return $this->doForEach($this->core->getResultSet(), $parms[0], $parms[1]);
 			case 'followup':
 				$this->loadSavedMacros();
 				break;
