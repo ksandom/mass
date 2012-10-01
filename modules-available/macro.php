@@ -24,7 +24,8 @@ class Macro extends Module
 				$this->core->registerFeature($this, array('defineMacro'), 'defineMacro', 'Define a macro. --defineMacro=macroName:"command1=blah\ncommand2=wheee"');
 				$this->core->registerFeature($this, array('runMacro'), 'runMacro', 'Run a macro. --runMacro=macroName');
 				$this->core->registerFeature($this, array('listMacros'), 'listMacros', 'List all macros');
-				$this->core->registerFeature($this, array('loopMacro'), 'loopMacro', 'Use a macro to loop through a resultSet. The current iteration of the resultSet is accessed via STORE variables under the category Result. See loopMacro.md for more information. --loopMacro=macroName[,parametersForTheMacro]');
+				$this->core->registerFeature($this, array('loopMacro'), 'loopMacro', 'Use a macro to loop through a resultSet. The current iteration of the resultSet is accessed via STORE variables under the category Result. See loopMacro.md for more information. --loopMacro=macroName[,parametersForTheMacro]', array('loop', 'iterate', 'resultset')); # TODO This should probably move to a language module
+				$this->core->registerFeature($this, array('forEach'), 'forEach', "For each result in the resultSet, run this command. The whole resultSet will temporarily be set to the result in the current iteration, and the resultSet of that iteration will replace the original result in the original resultSet. Basically it's a way to work with nested results and be able to send their results back. --foreEach=feature,value", array('loop', 'iterate', 'resultset')); # TODO This should probably move to a language module
 				break;
 			case 'singleLineMacro':
 				$this->defineMacro($this->core->get('Global', 'macro'), true);
@@ -47,6 +48,9 @@ class Macro extends Module
 				break;
 			case 'loopMacro':
 				return $this->loopMacro($this->core->getResultSet(), $this->core->get('Global', 'loopMacro'));
+			case 'forEach':
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 1);
+				return $this->doForEach($this->core->getResultSet(), $parms[0], $parms[1]);
 			case 'followup':
 				$this->loadSavedMacros();
 				break;
@@ -174,6 +178,22 @@ class Macro extends Module
 			}
 		}
 		else $this->core->debug(5, "loopMacro: No input!");
+		
+		return $output;
+	}
+	
+	function doForEach($data, $feature, $value)
+	{
+		$output=array();
+		
+		foreach ($data as $line)
+		{
+			if ($returnValue=$this->core->callFeatureWithDataset($feature, $value, $line))
+			{
+				$output[]=$returnValue;
+			}
+			else $output[]=$line;
+		}
 		
 		return $output;
 	}

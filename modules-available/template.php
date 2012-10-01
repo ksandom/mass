@@ -27,6 +27,7 @@ class Template extends Module
 				$this->core->registerFeature($this, array('noTemplateOut'), 'noTemplateOut', 'Do not allow futue --templateOutIfNotSet to be set. It will not have effect if one has already been set.');
 				$this->core->registerFeature($this, array('unsetTemplateOut'), 'unsetTemplateOut', 'Unset the current templateOut. This disables the output, but allows --templateOutIfNotSet to be used again.');
 				$this->core->registerFeature($this, array('templateOutIfNotSet'), 'templateOutIfNotSet', "Same as --templateOut, but will only be set if it hasn't been already.");
+				$this->core->registerFeature($this, array('nestTemplates'), 'nestTemplates', "Nest templates. --nestTemplates=rootTemplate,[inputField],[outputField],firstNestedTemplate,[inputField],[outputField][,secondNestedTemplate,[inputField],[outputField][,thirdNestedTemplate,[inputField],[outputField][,etc[,etc]]]] . The syntax works in sets of 3. The first field is the template to use. The second is the field to pass as the input to the next template. If the input is omitted, the whole level will be passed to the next template. The third is the field to put the result from the next template into. If ommitted the whole level will be replaced by a string that can be accessed via ~%line%~ .");
 				
 				$this->loadEnabledTenmplates();
 				break;
@@ -62,6 +63,10 @@ class Template extends Module
 				break;
 			case 'unsetTemplateOut':
 				$this->templateOut=false;
+				break;
+			case 'nestTemplates':
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 3, 1);
+				return array($this->nestTemplates($this->core->getResultSet(), $parms[0], $parms[1], $parms[2], $parms[3]));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -181,6 +186,52 @@ class Template extends Module
 		}
 		else $output=$input;
 		return $output;
+	}
+	
+	function indent($dataIn, $indentCharacter='	')
+	{
+		if (is_array($dataIn))
+		{
+			$output=array();
+			foreach ($dataIn as $key=>$line)
+			{
+				$output[$key]=$this->indent($line, $indentCharacter);
+			}
+			return $output;
+		}
+		else
+		{
+			return '	'.implode("\n	", explode("\n", $dataIn));
+		}
+	}
+	
+	function nestTemplates($dataIn, $templateName, $input, $output, $remainder, $autoIndent=true)
+	{
+		$dataOut=$dataIn;
+		if ($remainder)
+		{
+			$this->core->debug(2, "nestTemplates: Processing remainder $remainder");
+			# TODO debug this. Check input and output.
+			foreach ($dataIn as $key=>$line)
+			{
+				if ($input)
+				{
+					if (isset($line[$input])) $outputLine=$this->core->callFeatureWithDataset('nestTemplates', $remainder, $line[$input], $autoIndent);
+					else
+					{
+						$this->core->debug(2, "nestTemplates: Input key $input did not exist when trying to process template the remaining part of nestTemplates sequence $remainder.");
+					}
+				}
+				else $outputLine=$this->core->callFeatureWithDataset('nestTemplates', $remainder, $line);
+				
+				$outputLine=$this->indent($outputLine);
+				
+				if ($output) $dataOut[$key][$output]=$outputLine;
+				else $dataOut[$key]=$outputLine;
+			}
+		}
+		
+		return $this->processTemplateByName($templateName, $dataOut);
 	}
 	
 	function out($output)
