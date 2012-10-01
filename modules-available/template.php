@@ -66,7 +66,7 @@ class Template extends Module
 				break;
 			case 'nestTemplates':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 3, 1);
-				return array($this->nestTemplates($this->core->getResultSet(), $parms[0]. $parms[1], $parms[2], $parms[4]));
+				return array($this->nestTemplates($this->core->getResultSet(), $parms[0], $parms[1], $parms[2], $parms[3]));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -210,19 +210,21 @@ class Template extends Module
 		$dataOut=$dataIn;
 		if ($remainder)
 		{
+			$this->core->debug(2, "nestTemplates: Processing remainder $remainder");
+			# TODO debug this. Check input and output.
 			foreach ($dataIn as $key=>$line)
 			{
 				if ($input)
 				{
-					if (isset($line[$input])) $outputLine=$this->core->callFeatureWithData($nestTemplates, $remainder, $line[$input], $autoIndent);
+					if (isset($line[$input])) $outputLine=$this->core->callFeatureWithDataset('nestTemplates', $remainder, $line[$input], $autoIndent);
 					else
 					{
-						$this->core->debug(3, "nestTemplates: Input key $input did not exist when trying to process template the remaining part of nestTemplates sequence $remainder.");
+						$this->core->debug(2, "nestTemplates: Input key $input did not exist when trying to process template the remaining part of nestTemplates sequence $remainder.");
 					}
 				}
-				else $outputLine=$this->core->callFeatureWithData($nestTemplates, $remainder, $line);
+				else $outputLine=$this->core->callFeatureWithDataset('nestTemplates', $remainder, $line);
 				
-				$this->outputLine=$this->indent($this->outputLine);
+				$outputLine=$this->indent($outputLine);
 				
 				if ($output) $dataOut[$key][$output]=$outputLine;
 				else $dataOut[$key]=$outputLine;
