@@ -220,14 +220,18 @@ class Template extends Module
 					else
 					{
 						$this->core->debug(2, "nestTemplates: Input key $input did not exist when trying to process template the remaining part of nestTemplates sequence $remainder.");
+						$outputLine=false;
 					}
 				}
 				else $outputLine=$this->core->callFeatureWithDataset('nestTemplates', $remainder, $line);
 				
-				$outputLine=$this->indent($outputLine);
-				
-				if ($output) $dataOut[$key][$output]=$outputLine;
-				else $dataOut[$key]=$outputLine;
+				if ($outputLine!==false)
+				{
+					$outputLine=$this->indent($outputLine);
+					
+					if ($output) $dataOut[$key][$output]=$outputLine[0];
+					else $dataOut[$key]=$outputLine[0];
+				}
 			}
 		}
 		
