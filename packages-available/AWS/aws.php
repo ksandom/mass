@@ -78,7 +78,7 @@ class AWS extends Module
 				break;
 			case 'last':
 				# TODO update this to reflect the new ability to use multiple libraries.
-				if (!$this->foundLibrary) $this->core->debug(1, "The AWS library was not found. Looking for it at ".AWSLibrary);
+				if (!$this->foundLibrary) $this->core->debug(1, "The AWS library was not found.");
 				break;
 			case 'followup':
 				break;
