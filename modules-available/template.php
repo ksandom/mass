@@ -70,6 +70,7 @@ class Template extends Module
 				return array($this->nestTemplates($this->core->getResultSet(), $parms[0], $parms[1], $parms[2], $parms[3]));
 				break;
 			case 'nestTemplatesOut':
+				$this->core->setRef('General', 'outputObject', $this);
 				$this->templateOut=$this->core->get('Global', $event);
 				break;
 			default:
@@ -258,10 +259,13 @@ class Template extends Module
 		if (is_string($output)) echo "template: Unexpected string=\"$output\"\n";
 		elseif(strpos($this->templateOut, ',')!==false)
 		{
-			echo $this->core->callFeatureWithDataset('nestTemplates', $this->templateOut, $output);
+			$this->core->debug(2, "Template->out: Using nestedTemplates: {$this->templateOut}");
+			$result=$this->core->callFeatureWithDataset('nestTemplates', $this->templateOut, $output);
+			echo $result[0];
 		}
 		else
 		{
+			$this->core->debug(2, "Template->out: Using a single template: {$this->templateOut}");
 			echo $this->processTemplateByName($this->templateOut, $output);
 		}
 	}
