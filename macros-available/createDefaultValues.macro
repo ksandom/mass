@@ -20,7 +20,7 @@ set Terminal,mactermDescription,The default terminal in Mac OSX
 set Terminal,mactermTest,/Applications/Utilities/Terminal.app
 set Terminal,mactermCMD,echo 'tell app "Terminal" to do script "ssh -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~"' | osascript
 
-# xterm;
+# xterm
 set Terminal,xtermName,xterm
 set Terminal,xtermDescription,X's default terminal
 set Terminal,xtermTest,which xterm
