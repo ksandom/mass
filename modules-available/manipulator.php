@@ -23,9 +23,12 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('unique'), 'unique', 'Only keep unique entries. The exception is non-string values will simply be kept without being compared.', array('array', 'string'));
 				$this->core->registerFeature($this, array('requireEach'), 'requireEach', 'Require each entry to match this regular expression. --requireEach=regex', array('array', 'result'));
 				$this->core->registerFeature($this, array('requireItem'), 'requireItem', 'Require a named entry in each of the root entries. A regular expression can be supplied to provide a more precise match. --requireItem=entryKey[,regex]', array('array', 'result'));
+				$this->core->registerFeature($this, array('excludeEach'), 'excludeEach', 'The counterpart of --requireEach. Excludes any item that contains an entry that matches the regular expression. --requireEach=regex', array('array', 'result'));
+				$this->core->registerFeature($this, array('excludeItem'), 'excludeItem', 'The counterpart of --requireItem. Excludes any items wherre a named entry matches the specified regex. --excludeItem=entryKey[,regex]', array('array', 'result'));
 				$this->core->registerFeature($this, array('manipulateEach'), 'manipulateEach', 'Call a feature for each entry in the result set that contains an item matching this regular expression. --manipulateEach=regex,feature featureParameters', array('array', 'result'));
 				$this->core->registerFeature($this, array('manipulateItem'), 'manipulateItem', 'Call a feature for each entry that contains an item explicity matching the one specified. --manipulateItem=entryKey,regex,feature featureParameters', array('array', 'result'));
 				$this->core->registerFeature($this, array('chooseFirst'), 'chooseFirst', 'Choose the first non-empty value and put it into the destination variable. --chooseFirst=dstVarName,srcVarName1,srcVarName2[,srcVarName3[,...]]', array('array', 'result'));
+				$this->core->registerFeature($this, array('chooseFirstSet'), 'chooseFirstSet', "Choose the first set whose key has a non-empty value and put each item in the set into the it's destination variable. --chooseFirstSet=setSize,srcVarName1,dstVarName1,srcVarName2,dstVarName2[,srcVarName3,dstVarName3[,...]] . The setSize determines how many src/dst pairs are in each set. eg --chooseFirstSet=3,x,y,z,a1,b1,c1,a2,b2,c2 . In this example, we define that the setSize is 3. Therefore we can take a,b and c from set 1 and 2 and put it into x, y, and z. In each case 'a' is the variable that will be tested. So if a1 is empty, a2 will be tested. If that succeeds then a2, b2 and c3 will be put into x, y and z.", array('array', 'result'));
 				$this->core->registerFeature($this, array('resultSet'), 'resultSet', 'Set a value in each result item. --setResult=dstVarName,value . Note that this has no counter part as you can already retrieve results with ~%varName%~ and many to one would be purely random.', array('array', 'result'));
 				$this->core->registerFeature($this, array('resultSetIfNotSet'), 'resultSetIfNotSet', 'Set a value in each result item only if it is not already set. --resultSetIfNotSet=dstVarName,value . Note that this has no counter part as you can already retrieve results with ~%varName%~ and many to one would be purely random.', array('array', 'result'));
 				$this->core->registerFeature($this, array('resultUnset'), 'resultUnset', 'Delete a value in each result item. --resultUnset=dstVarName.', array('array', 'result'));
@@ -44,6 +47,13 @@ class Manipulator extends Module
 			case 'requireItem':
 				$parms=$this->core->interpretParms($this->core->get('Global', 'requireItem'), 2, 1);
 				return $this->requireEntry($this->core->getResultSet(), $parms[0], $parms[1]);
+				break;
+			case 'excludeEach':
+				return $this->requireEach($this->core->getResultSet(), $this->core->get('Global', $event), false, false);
+				break;
+			case 'excludeItem':
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 1);
+				return $this->requireEntry($this->core->getResultSet(), $parms[0], $parms[1], false, false);
 				break;
 			case 'manipulateEach':
 				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateEach'), 1, 2);
@@ -75,6 +85,9 @@ class Manipulator extends Module
 				break;
 			case 'chooseFirst':
 				return $this->chooseFirst($this->core->getResultSet(), $this->core->interpretParms($this->core->get('Global', 'chooseFirst')));
+				break;
+			case 'chooseFirstSet':
+				return $this->chooseFirstSet($this->core->getResultSet(), $this->core->interpretParms($this->core->get('Global', $event)));
 				break;
 			case 'resultSet':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event));
@@ -281,7 +294,7 @@ class Manipulator extends Module
 		return array_merge($processed, $notMatching);
 	}
 	
-	private function requireEach($input, $search, $feature=false)
+	private function requireEach($input, $search, $feature=false, $shouldMatch=true)
 	{
 		//print_r($input);
 		$outputMatch=array();
@@ -305,7 +318,7 @@ class Manipulator extends Module
 				foreach ($line as $subline)
 				{
 					$matched=false;
-					if (is_string($subline) && preg_match('/'.$search.'/', $subline))
+					if ((is_string($subline) && preg_match('/'.$search.'/', $subline)))
 					{
 						$outputMatch[]=$line;
 						$matched=true;
@@ -322,10 +335,14 @@ class Manipulator extends Module
 			$this->core->debug(3, 'requireEach: Matched '.count($outputMatch).". Didn't match ".count($outputNoMatch.". For search $search")); # TODO Optimise this so that the counts are not done if the debugging isn't going to be seen
 			return $this->mixResults($outputMatch, $outputNoMatch, $feature);
 		}
-		else return $outputMatch;
+		else
+		{
+			if ($shouldMatch) return $outputMatch;
+			else return $outputNoMatch;
+		}
 	}
 	
-	private function requireEntry($input, $neededKey, $neededRegex, $feature=false)
+	private function requireEntry($input, $neededKey, $neededRegex, $feature=false, $shouldMatch=true)
 	{
 		$outputMatch=array();
 		$outputNoMatch=array();
@@ -363,7 +380,11 @@ class Manipulator extends Module
 			$this->core->debug(3, 'requireEntry: Matched '.count($outputMatch).". Didn't match ".count($outputNoMatch.". For search $neededKey=$neededRegex")); # TODO Optimise this so that the counts are not done if the debugging isn't going to be seen
 			return $this->mixResults($outputMatch, $outputNoMatch, $feature);
 		}
-		else return $outputMatch;
+		else
+		{
+			if ($shouldMatch) return $outputMatch;
+			else return $outputNoMatch;
+		}
 	}
 	
 	function chooseFirst($input, $parms)
@@ -387,6 +408,56 @@ class Manipulator extends Module
 				}
 			}
 			
+			$output[]=$line;
+		}
+		
+		return $output;
+	}
+	
+	function chooseFirstSet($dataIn, $parms)
+	{
+		# TODO write this
+		/*
+			build an array of sets
+			test each set for each inputItem
+				assign results
+			return result
+		*/
+		
+		$stop=count($parms);
+		$width=$parms[0];
+		$sets=array(0=>array());
+		$setID=-1;
+		$output=array();
+		$destination=0;
+		
+		
+		for ($inputKey=1;$inputKey<$stop;$inputKey++)
+		{
+			if ($inputKey%$width==1)
+			{
+				$setID++;
+				$sets[$setID]=array();
+			}
+			
+			$sets[$setID][]=$parms[$inputKey];
+		}
+		
+		foreach ($dataIn as $line)
+		{
+			for ($setToTest=1;$setToTest<=$setID;$setToTest++)
+			{
+				$value=(isset($line[$sets[$setToTest][0]]))?$line[$sets[$setToTest][0]]:'';
+				if ($value)
+				{
+					foreach ($sets[0] as $key=>$destinationField)
+					{
+						$valueToCopy=(isset($line[$sets[$setToTest][$key]]))?$line[$sets[$setToTest][$key]]:'';
+						$line[$sets[0][$key]]=$line[$sets[$setToTest][$key]];
+					}
+					break;
+				}
+			}
 			$output[]=$line;
 		}
 		
