@@ -7,6 +7,7 @@ toString mkdir -p ~%externalFQDN%~
 exec
 
 retrieveResults Download,sourcelist
-toString scp ~%scpExtra%~ ~%auth%~ -r ~%externalFQDN%~/`echo ~!Global,uploadM2M!~|sed 's/.*\///'` ~%userAt%~~%IP%~:~!Global,uploadM2M!~ >&2 ~!Settings,backgroundTasks!~
+toString scp ~%scpExtra%~ ~%auth%~ -r ~%externalFQDN%~/`echo ~!Global,uploadM2M!~|sed 's/.*\///'` ~%userAt%~~%FQDN%~:~!Global,uploadM2M!~ >&2 ~!Settings,backgroundTasks!~
 cleanUnresolvedResultVars
+nested
 exec

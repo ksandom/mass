@@ -1,1 +1,1 @@
-cssh ~%csshExtra%~ <~~ ~%userAt%~~%IP%~  ~> &
+cssh ~%csshExtra%~ <~~ ~%userAt%~~%FQDN%~  ~> &
