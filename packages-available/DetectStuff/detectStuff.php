@@ -18,6 +18,7 @@ class DetectStuff extends Module
 		{
 			case 'init':
 				$this->core->registerFeature($this, array('detect'), 'detect', 'Detect something based on a seed. --detect=Category'.valueSeparator.'seedVariable,'.valueSeparator.'destinationGroup . See docs/detect.md for more details.');
+				$this->core->registerFeature($this, array('getHostName'), 'getHostName', 'Save the hostname to Local,hostname .', array('hostname'));
 				break;
 			case 'followup':
 				break;
@@ -28,6 +29,9 @@ class DetectStuff extends Module
 				$input=$this->core->get($parms[0], $parms[1]);
 				$seed=explode(':', $input);
 				$this->detect($parms[0], $seed, $parms[2]);
+				break;
+			case 'getHostName':
+				$this->core->set('Local', 'hostname', gethostname());
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
