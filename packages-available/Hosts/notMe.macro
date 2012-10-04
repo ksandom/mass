@@ -1,0 +1,4 @@
+# Filters a list of hosts to only show entries where the hostname is the current computer ~ convenience,hostname,me
+
+getHostName
+excludeItem hostName,^~!Local,hostname!~$
