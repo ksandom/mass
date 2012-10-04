@@ -1,7 +1,6 @@
 Found hosts ~!Global,message!~
 
-<~~ ~!Codes,blue!~~%categoryName%~/ ~!Codes,default!~~%hostName%~ (~!Codes,cyan!~~%IP%~~!Codes,default!~)
-  ~!Codes,brightBlack!~external: ~!Codes,green!~~%externalFQDN%~ ~!Codes,default!~(~!Codes,cyan!~~%externalIP%~~!Codes,default!~)
-  ~!Codes,brightBlack!~internal: ~!Codes,green!~~%internalFQDN%~ ~!Codes,default!~(~!Codes,cyan!~~%internalIP%~~!Codes,default!~)
+<~~ ~!Codes,blue!~~%categoryName%~/ ~!Codes,default!~~%hostName%~ ~!Codes,brightBlack!~/ ~!Codes,cyan!~~%IP%~~!Codes,default!~
+  ~!Codes,brightBlack!~FQDN: ~!Codes,green!~~%FQDN%~ ~!Codes,default!~
 
 ~>
