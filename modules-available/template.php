@@ -28,6 +28,7 @@ class Template extends Module
 				$this->core->registerFeature($this, array('unsetTemplateOut'), 'unsetTemplateOut', 'Unset the current templateOut. This disables the output, but allows --templateOutIfNotSet to be used again.');
 				$this->core->registerFeature($this, array('templateOutIfNotSet'), 'templateOutIfNotSet', "Same as --templateOut, but will only be set if it hasn't been already.");
 				$this->core->registerFeature($this, array('nestTemplates'), 'nestTemplates', "Nest templates. --nestTemplates=rootTemplate,[inputField],[outputField],firstNestedTemplate,[inputField],[outputField][,secondNestedTemplate,[inputField],[outputField][,thirdNestedTemplate,[inputField],[outputField][,etc[,etc]]]] . The syntax works in sets of 3. The first field is the template to use. The second is the field to pass as the input to the next template. If the input is omitted, the whole level will be passed to the next template. The third is the field to put the result from the next template into. If ommitted the whole level will be replaced by a string that can be accessed via ~%line%~ .");
+				$this->core->registerFeature($this, array('nestTemplatesOut'), 'nestTemplatesOut', "Same as nestTemplates, but will use the output object instead.");
 				
 				$this->loadEnabledTenmplates();
 				break;
@@ -67,6 +68,10 @@ class Template extends Module
 			case 'nestTemplates':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 3, 1);
 				return array($this->nestTemplates($this->core->getResultSet(), $parms[0], $parms[1], $parms[2], $parms[3]));
+				break;
+			case 'nestTemplatesOut':
+				$this->core->setRef('General', 'outputObject', $this);
+				$this->templateOut=$this->core->get('Global', $event);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -201,7 +206,10 @@ class Template extends Module
 		}
 		else
 		{
-			return '	'.implode("\n	", explode("\n", $dataIn));
+			$output='	'.implode("\n	", explode("\n", $dataIn));
+			$length=strlen($output);
+			if (substr($output, $length-1, 1)=='	') $output=substr($output, 0, $length-1);
+			return $output;
 		}
 	}
 	
@@ -216,19 +224,31 @@ class Template extends Module
 			{
 				if ($input)
 				{
-					if (isset($line[$input])) $outputLine=$this->core->callFeatureWithDataset('nestTemplates', $remainder, $line[$input], $autoIndent);
+					if (isset($line[$input]))
+					{
+						$outputLine=$this->core->callFeatureWithDataset('nestTemplates', $remainder, $line[$input], $autoIndent);
+						$this->core->debug(2, "nestTemplates: Using input $input $remainder");
+					}
 					else
 					{
 						$this->core->debug(2, "nestTemplates: Input key $input did not exist when trying to process template the remaining part of nestTemplates sequence $remainder.");
+						$outputLine=false;
 					}
 				}
-				else $outputLine=$this->core->callFeatureWithDataset('nestTemplates', $remainder, $line);
+				else
+				{
+					$this->core->debug(2, "nestTemplates: Taking the whole array for $remainder");
+					$outputLine=$this->core->callFeatureWithDataset('nestTemplates', $remainder, $line);
+				}
 				
-				$outputLine=$this->indent($outputLine);
-				
-				if ($output) $dataOut[$key][$output]=$outputLine;
-				else $dataOut[$key]=$outputLine;
+				if ($outputLine!==false)
+				{
+					$outputLine=$this->indent($outputLine);
+					if ($output) $dataOut[$key][$output]=$outputLine[0];
+					else $dataOut[$key]=$outputLine[0];
+				}
 			}
+			$this->core->debug(2, "nestTemplates: Finished remainder $remainder");
 		}
 		
 		return $this->processTemplateByName($templateName, $dataOut);
@@ -237,8 +257,15 @@ class Template extends Module
 	function out($output)
 	{
 		if (is_string($output)) echo "template: Unexpected string=\"$output\"\n";
+		elseif(strpos($this->templateOut, ',')!==false)
+		{
+			$this->core->debug(2, "Template->out: Using nestedTemplates: {$this->templateOut}");
+			$result=$this->core->callFeatureWithDataset('nestTemplates', $this->templateOut, $output);
+			echo $result[0];
+		}
 		else
 		{
+			$this->core->debug(2, "Template->out: Using a single template: {$this->templateOut}");
 			echo $this->processTemplateByName($this->templateOut, $output);
 		}
 	}
