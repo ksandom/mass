@@ -1,0 +1,9 @@
+# If the host running mass can be found in --list, save it the details to Me ~
+
+list
+me
+ifResult flatten 3
+ifResult setCategory Me
+ifResult saveStoreToConfig Me
+
+nested
