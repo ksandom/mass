@@ -46,10 +46,10 @@ class Codes extends Module
 	function loadControlCodes()
 	{
 		$this->core->set('Codes', 'esc', "\e");
-		#$this->core->set('Codes', '', "");
-		#$this->core->set('Codes', '', "");
-		#$this->core->set('Codes', '', "");
-		#$this->core->set('Codes', '', "");
+		$this->core->set('Codes', '!', "~!");
+		$this->core->set('Codes', '!!', "!~");
+		$this->core->set('Codes', '%', "~%");
+		$this->core->set('Codes', '%%', "%~");
 		#$this->core->set('Codes', '', "");
 		#$this->core->set('Codes', '', "");
 		#$this->core->set('Codes', '', "");
