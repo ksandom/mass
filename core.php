@@ -402,11 +402,9 @@ class core extends Module
 
 	}
 	
-	function processValue($value)
-	{ // Substitute in an variables
-		$output=$value;
-		
-		$iterations=0;
+	private function findAndProcessVariables($input, &$iterations=0)
+	{
+		$output=$input;
 		
 		while (strpos($output, storeValueBegin)!==false and $iterations<100)
 		{
@@ -421,6 +419,17 @@ class core extends Module
 			
 			$iterations++;
 		}
+		
+		return $output;
+	}
+	
+	function processValue($value)
+	{ // Substitute in an variables
+		$output=$value;
+		
+		$iterations=0;
+		
+		$output=$this->findAndProcessVariables($output, $iterations);
 		
 		# This is the first go at escaping
 		foreach (array(
@@ -432,20 +441,7 @@ class core extends Module
 			$output=implode($to, explode($from, $output));
 		}
 		
-		# TODO This is a hack to prove the idea works. Refactor it, if it is useful.
-		while (strpos($output, storeValueBegin)!==false and $iterations<100)
-		{
-			$startPos=strpos($output, storeValueBegin)+2;
-			$endPos=strpos($output, storeValueEnd);
-			$length=$endPos-$startPos;
-			
-			$varDef=substr($output, $startPos, $length);
-			$varParts=explode(',', $varDef);
-			$varValue=$this->get($varParts[0], $varParts[1]);
-			$output=implode($varValue, explode(storeValueBegin.$varDef.storeValueEnd, $output));
-			
-			$iterations++;
-		}
+		$output=$this->findAndProcessVariables($output, $iterations);
 		
 		if ($iterations>10) $this->debug(0, "processValue: $iterations reached while processing variables in \"$value\". The result achieved is \"$output\". This is probably a big."); # NOTE 10 is very strict, yet unlikely to be reached in any legitimate situation I can think of at the moment. The warning limit may need to be reconsidered in the future.
 		
