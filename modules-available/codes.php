@@ -76,11 +76,11 @@ class Codes extends Module
 		
 		$deck=array(
 			0=>'dark', // Potentially this should be reset....
-			1=>'bright');
-			#2=>'', potentiall this should replace 0
-			#4=>'underscore',
-			#5=>'blink',
-			#7=>'reverse',
+			1=>'bright',
+			# 2=>'dim', #potentiall this should replace 0
+			4=>'underscore',
+			5=>'blink',
+			7=>'reverse');
 			#8=>'hidden');
 			
 		$color=array(
@@ -91,7 +91,15 @@ class Codes extends Module
 			34=>'Blue',
 			35=>'Purple',
 			36=>'Cyan',
-			37=>'White');
+			37=>'White',
+			40=>'HLBlack',
+			41=>'HLRed',
+			42=>'HLGreen',
+			43=>'HLYellow',
+			44=>'HLBlue',
+			45=>'HLPurple',
+			46=>'HLCyan',
+			47=>'HLWhite');
 		
 		foreach ($deck as $deckKey=>$deckName)
 		{
