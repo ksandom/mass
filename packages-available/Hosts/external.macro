@@ -1,0 +1,4 @@
+# Force use of external IP and FQDN ~ force,external,ip,dns,fqdn
+
+resultSet FQDN,~%externalFQDN%~
+resultSet IP,~%externalIP%~

@@ -1,0 +1,4 @@
+# Force use of internal IP and FQDN ~ force,internal,ip,dns,fqdn
+
+resultSet FQDN,~%internalFQDN%~
+resultSet IP,~%internalIP%~
