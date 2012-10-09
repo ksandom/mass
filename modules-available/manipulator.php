@@ -29,6 +29,7 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('manipulateItem'), 'manipulateItem', 'Call a feature for each entry that contains an item explicity matching the one specified. --manipulateItem=entryKey,regex,feature featureParameters', array('array', 'result'));
 				$this->core->registerFeature($this, array('chooseFirst'), 'chooseFirst', 'Choose the first non-empty value and put it into the destination variable. --chooseFirst=dstVarName,srcVarName1,srcVarName2[,srcVarName3[,...]]', array('array', 'result'));
 				$this->core->registerFeature($this, array('chooseFirstSet'), 'chooseFirstSet', "Choose the first set whose key has a non-empty value and put each item in the set into the it's destination variable. --chooseFirstSet=setSize,srcVarName1,dstVarName1,srcVarName2,dstVarName2[,srcVarName3,dstVarName3[,...]] . The setSize determines how many src/dst pairs are in each set. eg --chooseFirstSet=3,x,y,z,a1,b1,c1,a2,b2,c2 . In this example, we define that the setSize is 3. Therefore we can take a,b and c from set 1 and 2 and put it into x, y, and z. In each case 'a' is the variable that will be tested. So if a1 is empty, a2 will be tested. If that succeeds then a2, b2 and c3 will be put into x, y and z.", array('array', 'result'));
+				$this->core->registerFeature($this, array('chooseFirstSetIfNotSet'), 'chooseFirstSetIfNotSet', "See --chooseFirstSet for full help. This variant will only take action on each result that doesn't have x set.", array('array', 'result'));
 				$this->core->registerFeature($this, array('resultSet'), 'resultSet', 'Set a value in each result item. --setResult=dstVarName,value . Note that this has no counter part as you can already retrieve results with ~%varName%~ and many to one would be purely random.', array('array', 'result'));
 				$this->core->registerFeature($this, array('resultSetIfNotSet'), 'resultSetIfNotSet', 'Set a value in each result item only if it is not already set. --resultSetIfNotSet=dstVarName,value . Note that this has no counter part as you can already retrieve results with ~%varName%~ and many to one would be purely random.', array('array', 'result'));
 				$this->core->registerFeature($this, array('resultUnset'), 'resultUnset', 'Delete a value in each result item. --resultUnset=dstVarName.', array('array', 'result'));
@@ -88,6 +89,9 @@ class Manipulator extends Module
 				break;
 			case 'chooseFirstSet':
 				return $this->chooseFirstSet($this->core->getResultSet(), $this->core->interpretParms($this->core->get('Global', $event)));
+				break;
+			case 'chooseFirstSetIfNotSet':
+				return $this->chooseFirstSet($this->core->getResultSet(), $this->core->interpretParms($this->core->get('Global', $event)), false);
 				break;
 			case 'resultSet':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event));
@@ -414,7 +418,7 @@ class Manipulator extends Module
 		return $output;
 	}
 	
-	function chooseFirstSet($dataIn, $parms)
+	function chooseFirstSet($dataIn, $parms, $overwrite=true)
 	{
 		# TODO write this
 		/*
@@ -445,17 +449,20 @@ class Manipulator extends Module
 		
 		foreach ($dataIn as $line)
 		{
-			for ($setToTest=1;$setToTest<=$setID;$setToTest++)
+			if ($overwrite or !isset($line[$sets[0][0]]))
 			{
-				$value=(isset($line[$sets[$setToTest][0]]))?$line[$sets[$setToTest][0]]:'';
-				if ($value)
+				for ($setToTest=1;$setToTest<=$setID;$setToTest++)
 				{
-					foreach ($sets[0] as $key=>$destinationField)
+					$value=(isset($line[$sets[$setToTest][0]]))?$line[$sets[$setToTest][0]]:'';
+					if ($value)
 					{
-						$valueToCopy=(isset($line[$sets[$setToTest][$key]]))?$line[$sets[$setToTest][$key]]:'';
-						$line[$sets[0][$key]]=$line[$sets[$setToTest][$key]];
+						foreach ($sets[0] as $key=>$destinationField)
+						{
+							$valueToCopy=(isset($line[$sets[$setToTest][$key]]))?$line[$sets[$setToTest][$key]]:'';
+							$line[$sets[0][$key]]=$line[$sets[$setToTest][$key]];
+						}
+						break;
 					}
-					break;
 				}
 			}
 			$output[]=$line;

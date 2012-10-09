@@ -9,7 +9,7 @@ resultSet cmd,~!Global,stray!~
 addSlashes cmd,cmd
 
 # the internalIP will work if we are connected to a VPN
-chooseFirstSet 2,IP,FQDN,externalIP,externalFQDN,internalIP,internalFQDN
+chooseFirstSetIfNotSet 2,IP,FQDN,externalIP,externalFQDN,internalIP,internalFQDN
 
 triggerEvent List,finished
 
