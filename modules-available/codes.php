@@ -84,34 +84,50 @@ class Codes extends Module
 			#8=>'hidden');
 			
 		$color=array(
-			30=>'Black',
-			31=>'Red',
-			32=>'Green',
-			33=>'Yellow',
-			34=>'Blue',
-			35=>'Purple',
-			36=>'Cyan',
-			37=>'White',
-			40=>'HLBlack',
-			41=>'HLRed',
-			42=>'HLGreen',
-			43=>'HLYellow',
-			44=>'HLBlue',
-			45=>'HLPurple',
-			46=>'HLCyan',
-			47=>'HLWhite');
+			'foreground'=>array(
+				30=>'Black',
+				31=>'Red',
+				32=>'Green',
+				33=>'Yellow',
+				34=>'Blue',
+				35=>'Purple',
+				36=>'Cyan',
+				37=>'White'),
+			'background'=>array(
+				40=>'HLBlack',
+				41=>'HLRed',
+				42=>'HLGreen',
+				43=>'HLYellow',
+				44=>'HLBlue',
+				45=>'HLPurple',
+				46=>'HLCyan',
+				47=>'HLWhite'));
 		
 		foreach ($deck as $deckKey=>$deckName)
 		{
-			foreach ($color as $colorKey=>$colorName)
+			foreach ($color as $rangeName=>$range)
 			{
-				$colorCode=($useColor)?"\033[$deckKey;{$colorKey}m":'';
-				$this->core->set('Codes', "$deckName$colorName", $colorCode);
-				
-				if ($deckName==$shortNamesBelongTo)
-				{ // give short names to the lover deck
-					$shortname=strtolower($colorName);
-					$this->core->set('Codes', $shortname, $colorCode);
+				foreach ($range as $colorKey=>$colorName)
+				{
+					$shortname='';
+					$colorCode=($useColor)?"\033[$deckKey;{$colorKey}m":'';
+					$this->core->set('Codes', "$deckName$colorName", $colorCode);
+					
+					if ($deckName==$shortNamesBelongTo)
+					{ // give short names to the lover deck
+						$shortname=strtolower($colorName);
+						$this->core->set('Codes', $shortname, $colorCode);
+					}
+					
+					if ($rangeName=='foreground')
+					{
+						foreach ($color['background'] as $bgColorKey=>$bgColorName)
+						{
+							$bgColorCode=($useColor)?"\033[$deckKey;{$colorKey};{$bgColorKey}m":'';
+							$withBGKey=($shortname)?"$shortname$bgColorName":"$deckName$colorName$bgColorName";
+							$this->core->set('Codes', "$withBGKey", $colorCode);
+						}
+					}
 				}
 			}
 		}
