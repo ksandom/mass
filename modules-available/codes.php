@@ -77,7 +77,7 @@ class Codes extends Module
 		$deck=array(
 			0=>'dark', // Potentially this should be reset....
 			1=>'bright',
-			# 2=>'dim', #potentiall this should replace 0
+			#2=>'dim', #potentiall this should replace 0
 			4=>'underscore',
 			5=>'blink',
 			7=>'reverse');
@@ -123,9 +123,13 @@ class Codes extends Module
 					{
 						foreach ($color['background'] as $bgColorKey=>$bgColorName)
 						{
-							$bgColorCode=($useColor)?"\033[$deckKey;{$colorKey};{$bgColorKey}m":'';
-							$withBGKey=($shortname)?"$shortname$bgColorName":"$deckName$colorName$bgColorName";
-							$this->core->set('Codes', "$withBGKey", $colorCode);
+							if (($colorKey!=$bgColorKey-10) or $deckName=='bright')
+							{
+								$bgColorCode=($useColor)?"\033[$deckKey;{$colorKey};{$bgColorKey}m":'';
+								$withBGKey=($shortname)?"$shortname$bgColorName":"$deckName$colorName$bgColorName";
+								$this->core->set('Codes', "$withBGKey", $bgColorCode);
+							}
+							#$this->core->debug(0, "d=$deckKey bg=$bgColorKey fg=$colorKey");
 						}
 					}
 				}
