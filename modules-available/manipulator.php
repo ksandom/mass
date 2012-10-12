@@ -36,6 +36,7 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('addSlashes'), 'addSlashes', 'Put extra backslashes before certain characters to escape them to allow nesting of quoted strings. --addSlashes=srcVar,dstVar', array('array', 'escaping', 'result'));
 				$this->core->registerFeature($this, array('cleanUnresolvedResultVars'), 'cleanUnresolvedResultVars', 'Clean out any result variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
 				$this->core->registerFeature($this, array('take'), 'take', 'Take only a single key from a result set --take=key.', array('array', 'result'));
+				$this->core->registerFeature($this, array('duplicate', 'dup'), 'duplicate', 'Duplicate the result set. --duplicate[=numberOfTimesToDuplicate]Eg --duplicate=3 would take a result set of [a,b,c] and give [a,b,c,a,b,c,a,b,c]. The original intended use for this was to open extra terminals for each host when using --term or --cssh. Note that --dup --dup is not the same as --dup=2 !', array('array', 'result'));
 				#$this->core->registerFeature($this, array('cleanUnresolvedStoreVars'), 'cleanUnresolvedStoreVars', 'Clean out any store variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
 				break;
 			case 'followup':
@@ -114,9 +115,12 @@ class Manipulator extends Module
 				return $this->take($parms, $this->core->getResultSet());
 				break;
 			case 'addSlashes':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', 'addSlashes'));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event));
 				$this->core->requireNumParms($this, 2, $event, $originalParms, $parms);
 				return $this->addResultSlashes($this->core->getResultSet(), $parms[0], $parms[1]);
+				break;
+			case 'duplicate':
+				return $this->duplicate($this->core->getResultSet(), $this->core->get('Global', $event));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -523,6 +527,23 @@ class Manipulator extends Module
 					}
 				}
 				else $output[]=$line[$key[0]];
+			}
+		}
+		
+		return $output;
+	}
+	
+	function duplicate($input, $numberOfTimesToDuplicate=1)
+	{
+		$output=array();
+		
+		$actualNumberOfTimesToDuplicate=($numberOfTimesToDuplicate)?$numberOfTimesToDuplicate:1;
+		
+		for($duplication=0;$duplication<=$actualNumberOfTimesToDuplicate;$duplication++)
+		{
+			foreach ($input as $line)
+			{
+				$output[]=$line;
 			}
 		}
 		
