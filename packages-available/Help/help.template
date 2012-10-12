@@ -1,5 +1,5 @@
 Available features:
-<~~ ~!Codes,cyan!~~%commandLineFlags%~ ~!Codes,brightBlack!~~ ~!Codes,green!~~%tagString%~ ~!Codes,brightBlack!~(~%category%~)
-  ~!Codes,default!~~%description%~
+<~~ ~!Color,cyan!~~%commandLineFlags%~ ~!Color,brightBlack!~~ ~!Color,green!~~%tagString%~ ~!Color,brightBlack!~(~%category%~)
+  ~!Color,default!~~%description%~
 
 ~>

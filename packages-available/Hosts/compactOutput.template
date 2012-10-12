@@ -1,7 +1,7 @@
 Found hosts ~!Global,message!~
 
-<~~ ~!Codes,default!~~%hostName%~ ~!Codes,brightBlack!~/ ~!Codes,cyan!~~%IP%~~!Codes,default!~
-  ~!Codes,green!~~%FQDN%~ ~!Codes,default!~
-  ~!Codes,darkYellow!~~%instanceType%~ ~!Codes,brightBlack!~/ ~!Codes,darkYellow!~~%architecture%~ ~!Codes,brightBlack!~/ ~!Codes,darkYellow!~~%rootDeviceType%~~!Codes,default!~
+<~~ ~!Color,default!~~%hostName%~ ~!Color,brightBlack!~/ ~!Color,cyan!~~%IP%~~!Color,default!~
+  ~!Color,green!~~%FQDN%~ ~!Color,default!~
+  ~!Color,darkYellow!~~%instanceType%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%architecture%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%rootDeviceType%~~!Color,default!~
 
 ~>

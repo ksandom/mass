@@ -111,12 +111,12 @@ class Codes extends Module
 				{
 					$shortname='';
 					$colorCode=($useColor)?"\033[$deckKey;{$colorKey}m":'';
-					$this->core->set('Codes', "$deckName$colorName", $colorCode);
+					$this->core->set('Color', "$deckName$colorName", $colorCode);
 					
 					if ($deckName==$shortNamesBelongTo)
 					{ // give short names to the lover deck
 						$shortname=strtolower($colorName);
-						$this->core->set('Codes', $shortname, $colorCode);
+						$this->core->set('Color', $shortname, $colorCode);
 					}
 					
 					if ($rangeName=='foreground')
@@ -127,7 +127,7 @@ class Codes extends Module
 							{
 								$bgColorCode=($useColor)?"\033[$deckKey;{$colorKey};{$bgColorKey}m":'';
 								$withBGKey=($shortname)?"$shortname$bgColorName":"$deckName$colorName$bgColorName";
-								$this->core->set('Codes', "$withBGKey", $bgColorCode);
+								$this->core->set('Color', "$withBGKey", $bgColorCode);
 							}
 							#$this->core->debug(0, "d=$deckKey bg=$bgColorKey fg=$colorKey");
 						}
@@ -137,9 +137,9 @@ class Codes extends Module
 		}
 		
 		$colorCode=($useColor)?"\033[0;0m":'';
-		$this->core->set('Codes', 'default', $colorCode);
+		$this->core->set('Color', 'default', $colorCode);
 		
-		$this->core->set('Codes', 'testColor', "This shows that the color codes have been loaded.");
+		$this->core->set('Color', 'testColor', "{$colorCode}This shows that the color codes have been loaded.");
 	}
 	
 	function loadDefaultAliases()
