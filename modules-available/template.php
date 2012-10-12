@@ -193,7 +193,6 @@ class Template extends Module
 		}
 		else $output=$input;
 		
-		echo "$output asdasd\n\n\n\n";
 		return $output;
 	}
 	
