@@ -493,8 +493,8 @@ class core extends Module
 		{
 			$title="debug$verbosityLevel";
 			# TODO These lookups can be optimized!
-			$code=$this->get('Codes', $title, false);
-			$default=$this->get('Codes', 'default', false);
+			$code=$this->get('Color', $title, false);
+			$default=$this->get('Color', 'default', false);
 			$eol=$this->get('General', 'EOL', false); # TODO This can be improved
 			echo "[$code$title$default]: $output$eol";
 			# return false;
