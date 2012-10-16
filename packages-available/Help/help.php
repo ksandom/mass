@@ -163,7 +163,7 @@ class Help extends Module
 	{
 		if (!$this->codes)
 		{
-			$this->codes=$this->core->getCategoryModule('Codes');
+			$this->codes=$this->core->getCategoryModule('Color');
 		}
 	}
 	

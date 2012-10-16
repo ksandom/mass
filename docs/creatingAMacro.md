@@ -7,8 +7,8 @@ The first line is a `#` comment describing the macro with tags related to the ma
 
 Note that there are no spaces between the tags, but there are around the `~`.After that everything is just using the commands you can see when you run `mass --help` with a couple of exceptions:
 
- * Leave off the `--`
- * Use a space instead of an = to separate the command and the parameters
+ * Leave off the `--` when choosing a name for the macro.
+ * Use a space instead of an = to separate the command and the parameters.
  
 For example if you were to do `mass --list=db --chooseFirst=IP,externalIP,internalIP` on the command line, as a macro it would look like:
 
@@ -17,7 +17,7 @@ For example if you were to do `mass --list=db --chooseFirst=IP,externalIP,intern
     list db
     chooseFirst IP,externalIP,internalIP
  
-Assume we save that as `macros-enabled/listdbs.macro` then we could invoke it from the command line as --listdbs or if from inside other macros, it would be `listdbs`.
+Assume we save that as `macros-available/listdbs.macro` and then symlink that to `profiles/commandline/macros/listdbs.macro`, we could invoke it from the command line as --listdbs or if from inside other macros, it would be `listdbs`. For more information on the directory structure, see [paths.md](paths.md).
 
 See examples/example.macro for a working example.
 

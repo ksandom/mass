@@ -22,4 +22,4 @@ By convention I put documentation in a folder called docs within the package. Do
     ./importFromAWS.macro
     ./ELB.macro
 
-TODO Check if there is more that should go in this document.
+For more information on the directory structure, see [paths.md](paths.md).
