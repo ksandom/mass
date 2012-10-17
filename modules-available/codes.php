@@ -50,6 +50,7 @@ class Codes extends Module
 		$this->core->set('Codes', '!!', "!~");
 		$this->core->set('Codes', '%', "~%");
 		$this->core->set('Codes', '%%', "%~");
+		$this->core->set('Codes', 'break', "\033c");
 		#$this->core->set('Codes', '', "");
 		#$this->core->set('Codes', '', "");
 		#$this->core->set('Codes', '', "");
