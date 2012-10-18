@@ -1,0 +1,4 @@
+# Set the username to be used for each SSH connection. ~ SSH,auth
+#onDefine aliasFeature user,L
+
+resultSet userAt,~!Global,user!~@

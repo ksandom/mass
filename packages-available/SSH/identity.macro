@@ -1,0 +1,4 @@
+# Set the identity file to be used for each SSH connection. ~ SSH,auth
+#onDefine aliasFeature identity,i
+
+resultSet auth,-i ~/.ssh/id_rsa
