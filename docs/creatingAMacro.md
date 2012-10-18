@@ -107,25 +107,24 @@ It's important to think about whether this is really your best option, as using 
 
 upload.macro is an exmaple of this stuff in action.
 
-In the "Store variables" section, I mention ~!Settings,backgroundTasks!~ which you can append to commands that you want to happen in the background and in parallel. This works simply by appending an & at the end of the line, which works in most cases, but sometimes you need to redirect some output as well. Take a look at clusterssh.template (within the SSH package). While it is actually a template, it solves the same problem in the same way that I'm talking about here. Before this commit, it looked like this:
+In the "Store variables" section, I mention ~!Settings,backgroundTasks!~ which you can append to commands that you want to happen in the background and in parallel. This works simply by appending an & at the end of the line, which works in most cases, but sometimes you need to redirect some output as well. Take a look at clusterssh.template (within the SSH package). While it is actually a template, it solves the same problem in the same way that I'm talking about here. It used to look like this:
 
-    cssh ~%csshExtra%~ <~~ ~%userAt%~~%FQDN%~  ~> &
+    cssh ~!Cssh,extra!~ <~~ ~%userAt%~~%FQDN%~  ~> &
 
 Say you list 3 hosts, this would produce
 
     cssh host1 host2 host3 &
 
-But it would not return. So I changed it to this:
+But it would not return until the process terminates. So I changed it to this:
 
-    cssh ~%csshExtra%~ <~~ ~%userAt%~~%FQDN%~  ~> 2>/dev/null 1>/dev/null ~!Settings,backgroundTasks!~
+    cssh ~!Cssh,extra!~ <~~ ~%userAt%~~%FQDN%~  ~> ~!Settings,nullOutput!~ ~!Settings,backgroundTasks!~
 
 Which resolves to:
 
     cssh host1 host2 host3 2>/dev/null 1>/dev/null &
 
-TODO ~%csshExtra%~ is a bug. It should be something like ~!Cssh,extra!~
+If you now include `--noBG` before the `--cssh`, it will output stuff to the terminal and not return until it completes. It would look like this:
 
-TODO Refactor `2>/dev/null 1>/dev/null` to be handeled with --noBG to make debugging easier.
+    cssh host1 host2 host3
 
-
-    
+This is useful for debugging.

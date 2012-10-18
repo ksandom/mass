@@ -1,1 +1,1 @@
-cssh ~%csshExtra%~ <~~ ~%userAt%~~%FQDN%~  ~> 2>/dev/null 1>/dev/null ~!Settings,backgroundTasks!~
+cssh ~!Cssh,extra!~ <~~ ~%userAt%~~%FQDN%~  ~> ~!Settings,nullOutput!~ ~!Settings,backgroundTasks!~
