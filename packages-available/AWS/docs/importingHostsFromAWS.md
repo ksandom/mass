@@ -86,6 +86,19 @@ Great, now we have hosts, but once again this is non-persistent. So we need to s
 
 Now we've saved them so that we can query them with `mass --list=blah`.
 
-## Installing the PHP AWS API SDK
+# Installing the PHP AWS API SDK
 
-TODO write this.
+## Installing the official PHP AWS API SDK
+
+    sudo apt-get install php-pear
+    sudo pear channel-discover pear.amazonwebservices.com
+    sudo pear install aws/sdk
+    sudo apt-get install php5-curl
+
+## Installing the forked PHP AWS API SDK
+
+The advantage of doing this is that adds support for route53. If you don't need this for now, use the official one since that will always be the most up-to-date in every other way.
+
+TODO Fill this out when it's ready.
+
+_Comming soon_

@@ -1,4 +1,4 @@
-# Import all running hosts from AWS --importHostsFromAWS use --AWSSaveCred to set the credentials ~ import,AWS
+# Import all running hosts from AWS and save for later use. Use --AWSSaveCred to set the credentials. ~ import,AWS
 #onDefine aliasFeature importHostsFromAWS,awsimport
 
 loadStoreFromData AWSCreds

@@ -1,10 +1,12 @@
+This document is currently inactive, but the contents have been verified to be correct as at 2012-10-19.
+
 # Background
 While building the --importHosts macro I realised that the palette of data management functionality was no where near as complete as I thought it was. The purpose of this document is to find out what I do and don't have and provide a one stop shop for all things data management.
 
 # Terms
 ## Store (eg --saveStoreToConfig)
 
-Every module has it's own store, which can contain many variables. Eg _Host_,hostDefinitions. Saving or loading a store will do the action to the entire store including it's contents.
+Every module has it's own store, which can contain many variables. Eg **Host**,hostDefinitions. Saving or loading a store will do the action to the entire store including it's contents. Where possible use Data instead of Config since config is loaded on every run of mass. See below.
 
 ## Config vs Data (eg --loadStoreFromConfig and --loadStoreFromData)
 
