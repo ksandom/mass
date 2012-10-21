@@ -17,7 +17,7 @@ None at the moment. As a general rule, when ever you update, you should re-run i
 
 # Install
 
-See [docs/install.md](tree/master/docs/install.md)
+See [docs/install.md](mass/tree/master/docs/install.md)
 
 Use install.sh.
 
