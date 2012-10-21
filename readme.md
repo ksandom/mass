@@ -21,6 +21,14 @@ See [docs/install.md](docs/install.md)
 
 Use install.sh.
 
+# Contributing
+
+* If there's something you want mass to do that it doesn't currently, take a look at the "creatingA" series in the [documentation](tree/master/docs). It would be lovely if you can contribute is back.
+* There are `TODO`'s floating around the documentation that need to be filled in. Filling these in would be very helpful.
+* There are `# TODO`'s floating around in the code. There are going to be a few which I'll reserve for me. Typically I only do this if I've planned something else based on how that thing gets done.
+
+The bottom line is, I wrote this tool because it's useful to me. If it's useful to you and you have something to contribute, it would be lovely for you to put it forward.
+
 # History
 I've written a version of this tool at every company I've worked at since 2007 and it's always been a big hit. In each case it was very specific to the architecture of the given place, so it wasn't very portable.
 
