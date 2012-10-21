@@ -1,4 +1,4 @@
-# Import everything we can currently do from AWS ~ import,AWS
+# Import everything we can currently do from AWS and save it for later use. Use --AWSSaveCred to set the credentials. ~ import,AWS
 
 loadStoreFromData AWSCreds
 getCategory AWSCreds

@@ -50,6 +50,7 @@ class Codes extends Module
 		$this->core->set('Codes', '!!', "!~");
 		$this->core->set('Codes', '%', "~%");
 		$this->core->set('Codes', '%%', "%~");
+		$this->core->set('Codes', 'break', "\033c");
 		#$this->core->set('Codes', '', "");
 		#$this->core->set('Codes', '', "");
 		#$this->core->set('Codes', '', "");
@@ -77,64 +78,85 @@ class Codes extends Module
 		$deck=array(
 			0=>'dark', // Potentially this should be reset....
 			1=>'bright',
-			# 2=>'dim', #potentiall this should replace 0
+			#2=>'dim', #potentiall this should replace 0
 			4=>'underscore',
 			5=>'blink',
 			7=>'reverse');
 			#8=>'hidden');
 			
 		$color=array(
-			30=>'Black',
-			31=>'Red',
-			32=>'Green',
-			33=>'Yellow',
-			34=>'Blue',
-			35=>'Purple',
-			36=>'Cyan',
-			37=>'White',
-			40=>'HLBlack',
-			41=>'HLRed',
-			42=>'HLGreen',
-			43=>'HLYellow',
-			44=>'HLBlue',
-			45=>'HLPurple',
-			46=>'HLCyan',
-			47=>'HLWhite');
+			'foreground'=>array(
+				30=>'Black',
+				31=>'Red',
+				32=>'Green',
+				33=>'Yellow',
+				34=>'Blue',
+				35=>'Purple',
+				36=>'Cyan',
+				37=>'White'),
+			'background'=>array(
+				40=>'HLBlack',
+				41=>'HLRed',
+				42=>'HLGreen',
+				43=>'HLYellow',
+				44=>'HLBlue',
+				45=>'HLPurple',
+				46=>'HLCyan',
+				47=>'HLWhite'));
 		
 		foreach ($deck as $deckKey=>$deckName)
 		{
-			foreach ($color as $colorKey=>$colorName)
+			foreach ($color as $rangeName=>$range)
 			{
-				$colorCode=($useColor)?"\033[$deckKey;{$colorKey}m":'';
-				$this->core->set('Codes', "$deckName$colorName", $colorCode);
-				
-				if ($deckName==$shortNamesBelongTo)
-				{ // give short names to the lover deck
-					$shortname=strtolower($colorName);
-					$this->core->set('Codes', $shortname, $colorCode);
+				foreach ($range as $colorKey=>$colorName)
+				{
+					$shortname='';
+					$colorCode=($useColor)?"\033[$deckKey;{$colorKey}m":'';
+					$this->core->set('Color', "$deckName$colorName", $colorCode);
+					
+					if ($deckName==$shortNamesBelongTo)
+					{ // give short names to the lover deck
+						$shortname=strtolower($colorName);
+						$this->core->set('Color', $shortname, $colorCode);
+					}
+					
+					if ($rangeName=='foreground')
+					{
+						foreach ($color['background'] as $bgColorKey=>$bgColorName)
+						{
+							if (($colorKey!=$bgColorKey-10) or $deckName=='bright')
+							{
+								$bgColorCode=($useColor)?"\033[$deckKey;{$colorKey};{$bgColorKey}m":'';
+								$withBGKey=($shortname)?"$shortname$bgColorName":"$deckName$colorName$bgColorName";
+								$this->core->set('Color', "$withBGKey", $bgColorCode);
+							}
+							#$this->core->debug(0, "d=$deckKey bg=$bgColorKey fg=$colorKey");
+						}
+					}
 				}
 			}
 		}
 		
 		$colorCode=($useColor)?"\033[0;0m":'';
-		$this->core->set('Codes', 'default', $colorCode);
+		$this->core->set('Color', 'default', $colorCode);
 		
-		$this->core->set('Codes', 'testColor', "This shows that the color codes have been loaded.");
+		$this->core->set('Color', 'testColor', "{$colorCode}This shows that the color codes have been loaded.");
 	}
 	
 	function loadDefaultAliases()
 	{
-		$this->core->set('Codes', 'debug0', $this->core->get('Codes', 'brightBlack'));
-		$this->core->set('Codes', 'debug1', $this->core->get('Codes', 'brightRed'));
-		$this->core->set('Codes', 'debug2', $this->core->get('Codes', 'red'));
-		$this->core->set('Codes', 'debug3', $this->core->get('Codes', 'yellow'));
-		$this->core->set('Codes', 'debug4', $this->core->get('Codes', 'green'));
-		$this->core->set('Codes', 'debug5', $this->core->get('Codes', 'cyan'));
+		$this->core->set('Codes', 'debug0', $this->core->get('Color', 'brightBlack'));
+		$this->core->set('Codes', 'debug1', $this->core->get('Color', 'brightRed'));
+		$this->core->set('Codes', 'debug2', $this->core->get('Color', 'red'));
+		$this->core->set('Codes', 'debug3', $this->core->get('Color', 'yellow'));
+		$this->core->set('Codes', 'debug4', $this->core->get('Color', 'green'));
+		$this->core->set('Codes', 'debug5', $this->core->get('Color', 'cyan'));
 		
-		$this->core->set('Codes', 'debug6', $this->core->get('Codes', 'brightBlue'));
-		$this->core->set('Codes', 'debug7', $this->core->get('Codes', 'brightBlue'));
-		$this->core->set('Codes', 'debug8', $this->core->get('Codes', 'brightBlue'));
-		$this->core->set('Codes', 'debug9', $this->core->get('Codes', 'brightBlue'));
+		$this->core->set('Codes', 'debug6', $this->core->get('Color', 'brightBlue'));
+		$this->core->set('Codes', 'debug7', $this->core->get('Color', 'brightBlue'));
+		$this->core->set('Codes', 'debug8', $this->core->get('Color', 'brightBlue'));
+		$this->core->set('Codes', 'debug9', $this->core->get('Color', 'brightBlue'));
+		$this->core->set('Codes', 'default', $this->core->get('Color', 'default'));
 	}
 }
 

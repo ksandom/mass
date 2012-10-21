@@ -1,0 +1,5 @@
+# Show all the possible colors you can use in templates ~ color,colour,template
+
+color
+getCategory Color
+templateOut colors

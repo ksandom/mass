@@ -1,3 +1,5 @@
+Development of FlexiImport is currently suspended since it doesn't seem to be needed right now.
+
 # What
 
 FlexiImport is for important various text-based data structures.

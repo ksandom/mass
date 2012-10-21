@@ -414,8 +414,15 @@ class core extends Module
 			
 			$varDef=substr($output, $startPos, $length);
 			$varParts=explode(',', $varDef);
-			$varValue=$this->get($varParts[0], $varParts[1]);
-			$output=implode($varValue, explode(storeValueBegin.$varDef.storeValueEnd, $output));
+			if (isset($varParts[1]))
+			{
+				$varValue=$this->get($varParts[0], $varParts[1]);
+				$output=implode($varValue, explode(storeValueBegin.$varDef.storeValueEnd, $output));
+			}
+			else
+			{
+				$this->core->debug(0, "findAndProcessVariables: Probable syntax error in ".storeValueBegin."$varDef".storeValueEnd." . It should have had an extra value. Perhaps like this: ".storeValueBegin."Thing,{$varParts[0]}".storeValueEnd."");
+			}
 			
 			$iterations++;
 		}
@@ -789,7 +796,7 @@ class core extends Module
 			{
 				$existing=$this->get('Features', $flag);
 				$existingName=$existing['obj']->getName();
-				$this->complain($obj, "Feature $flag has already been registered by $existingName");
+				$this->complain($this, "Feature $flag has already been registered by $existingName");
 			}
 		}
 	}

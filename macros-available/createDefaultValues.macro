@@ -51,5 +51,6 @@ saveStoreToConfig Verbosity
 
 # Set default settings
 setDefault Settings,backgroundTasks,&
+setDefault Settings,nullOutput,2>/dev/null 1>/dev/null
 saveStoreToConfig Settings
 

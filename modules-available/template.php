@@ -166,7 +166,7 @@ class Template extends Module
 		$output='';
 		if (is_array($input))
 		{
-			foreach ($input as $inputLine)
+			foreach ($input as $key=>$inputLine)
 			{
 				$templateLine=$template;
 				if (is_array($inputLine))
@@ -175,21 +175,24 @@ class Template extends Module
 					{
 						if (!is_object($lineValue))
 						{
-						$this->core->debug(4, "Template: lineKey=$lineKey, inputLine=$inputLine");
+						$this->core->debug(4, "Template: itemKey=$key, lineKey=$lineKey, inputLine=$inputLine");
 						$templateLine=implode(strval($lineValue), explode(resultVarBegin."$lineKey".resultVarEnd, $templateLine));
 						}
-						else $this->core->debug(4, "Template: lineKey=$lineKey, inputLine=OBJECT-skipped");
+						else $this->core->debug(4, "Template: itemKey=$key, lineKey=$lineKey, inputLine=OBJECT-skipped");
 					}
+					$templateLine=implode(strval($key), explode(resultVarBegin."key".resultVarEnd, $templateLine));
 				}
 				else
 				{
 					$this->core->debug(4, "Template: The line is not an array, inputLine=$inputLine");
 					$templateLine=implode(strval($inputLine), explode(resultVarBegin."line".resultVarEnd, $templateLine));
+					$templateLine=implode(strval($key), explode(resultVarBegin."key".resultVarEnd, $templateLine));
 				}
 				$output.=$this->core->processValue($templateLine);
 			}
 		}
 		else $output=$input;
+		
 		return $output;
 	}
 	
