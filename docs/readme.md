@@ -7,4 +7,4 @@ If you're starting out, you'll want install.md to get you up and running with da
 Once you're ready to do custom stuff, you'll want to check out the "creatingA" series. I recommend starting with creatingAPackage.md, which will save you much effort! And then move on to creatingAMacro.md and creatingATemplate.md.
 
 
-If you spot a _TODO_ in the documentation, you're welcome to fill it in. That would be very helpful!
+If you spot a `TODO` in the documentation, you're welcome to fill it in. That would be very helpful!
