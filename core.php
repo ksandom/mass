@@ -61,6 +61,7 @@ class core extends Module
 				# $this->registerFeature($this, array('get'), 'get', 'Get a value. --get=category'.valueSeparator.'variableName', array('storeVars'));
 				$this->registerFeature($this, array('getToResult', 'get'), 'getToResult', 'Get a value and put it in an array so we can do stuff with it. --getToResult=category'.valueSeparator.'variableName', array('storeVars'));
 				$this->registerFeature($this, array('set'), 'set', 'set a value. All remaining values after the destination go into a string. --set=category'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
+				$this->registerFeature($this, array('setNested'), 'setNested', 'set a value into a nested array, creating all the necessary sub arrays. The last parameter is the value. All the other parameters are the keys for each level. --setNested=StoreName'.valueSeparator.'category'.valueSeparator.'subcategory'.valueSeparator.'subsubcategory'.valueSeparator.'value. In this case an array would be created in StoreName,category that looks like this subcategory=>array(subsubcategory=>value)', array('storeVars'));
 				$this->registerFeature($this, array('setArray'), 'setArray', 'set a value. All remaining values after the destination go into an array. --set=category'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
 				$this->registerFeature($this, array('setIfNotSet', 'setDefault'), 'setIfNotSet', 'set a value if none has been set. --setIfNotSet=category'.valueSeparator.'variableName'.valueSeparator.'defaultValue', array('storeVars'));
 				$this->registerFeature($this, array('unset'), 'unset', 'un set (delete) a value. --unset=category'.valueSeparator.'variableName	', array('storeVars'));
@@ -104,6 +105,10 @@ class core extends Module
 			case 'set':
 				$parms=$this->interpretParms($this->get('Global', 'set'), 2, 2, true);
 				$this->set($parms[0], $parms[1], $parms[2]);
+				break;
+			case 'setNested':
+				$parms=$this->interpretParms($this->get('Global', 'set'), 2, 3, false);
+				$this->setNested($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'setArray':
 				$parms=$this->interpretParms($this->get('Global', 'setArray'), 2, 2, false);
@@ -701,6 +706,31 @@ class core extends Module
 	{
 		$this->debug(5,"unSet($category, $valueName)");
 		unset($this->store[$category][$valueName]);
+	}
+	
+	function setNested($store, $category, $values)
+	{
+		$initialValue=$this->get($store, $category);
+		if (!is_array($initialValue)) $initialValue=array();
+		
+		$this->set($store, $category, $this->setNestedRecursively($initialValue, $values, count($values)));
+	}
+	
+	function setNestedRecursively($existingArray, $values, $valueCount, $progress=0)
+	{
+		if ($progress<$valueCount-2)
+		{
+			if (!isset($existingArray[$values[$progress]])) $existingArray[$values[$progress]]=array();
+			if (!is_array($existingArray[$values[$progress]])) $existingArray[$values[$progress]]=array();
+			
+			$existingArray[$input[$progress]]=$this->setNestedRecursively($existingArray[$input[$progress]], $values, $valueCount, $progress+1);
+			
+			return $existingArray;
+		}
+		else
+		{
+			return $values[$progres+1];
+		}
 	}
 	
 	function addItemsToAnArray($category, $valueName, $items)
