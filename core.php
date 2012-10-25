@@ -107,7 +107,7 @@ class core extends Module
 				$this->set($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'setNested':
-				$parms=$this->interpretParms($this->get('Global', 'set'), 2, 3, false);
+				$parms=$this->interpretParms($this->get('Global', $event), 2, 3, false);
 				$this->setNested($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'setArray':
@@ -718,18 +718,18 @@ class core extends Module
 	
 	function setNestedRecursively($existingArray, $values, $valueCount, $progress=0)
 	{
-		if ($progress<$valueCount-2)
+		if ($progress<$valueCount-1)
 		{
 			if (!isset($existingArray[$values[$progress]])) $existingArray[$values[$progress]]=array();
 			if (!is_array($existingArray[$values[$progress]])) $existingArray[$values[$progress]]=array();
 			
-			$existingArray[$input[$progress]]=$this->setNestedRecursively($existingArray[$input[$progress]], $values, $valueCount, $progress+1);
+			$existingArray[$values[$progress]]=$this->setNestedRecursively($existingArray[$values[$progress]], $values, $valueCount, $progress+1);
 			
 			return $existingArray;
 		}
 		else
 		{
-			return $values[$progres+1];
+			return $values[$progress];
 		}
 	}
 	

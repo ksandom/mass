@@ -1,0 +1,3 @@
+# Save semantics to config so that it will be loaded on the next run ~ config,semantics
+
+saveStoreToConfig Semantics

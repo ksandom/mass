@@ -1,0 +1,4 @@
+# Detect the best terminal available ~ install,terminal
+
+detect Terminal,seed,GUI
+saveStoreToConfig Terminal

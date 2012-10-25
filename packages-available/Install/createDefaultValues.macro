@@ -1,4 +1,5 @@
 # Setup default values ~ setup
+#onDefine registerForEvent Install,general,createDefaultValues
 
 set Terminal,seed,konsole:gnome-terminal:macterm:xterm:none
 

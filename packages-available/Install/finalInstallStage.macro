@@ -1,0 +1,5 @@
+# Run all the stuff that needs to be run at the end of an install. This is typically asserting data types. ~ install
+
+triggerEvent Install,early
+triggerEvent Install,general
+triggerEvent Install,late

@@ -1,0 +1,7 @@
+# Install Semantics related stuff ~ install,semantics
+#onDefine registerForEvent Install,general,installSemantics
+
+triggerEvent Install,dataTypes
+triggerEvent Install,featureTypes
+
+saveSemantics

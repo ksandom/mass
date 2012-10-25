@@ -254,9 +254,9 @@ function doInstall
 	fi
 	
 	# It should be safe to do this on an existing setup.
-	echo -e "Detecting stuff"
-	mass --createDefaultValues
-	mass --detect=Terminal,seed,GUI --saveStoreToConfig=Terminal
+	echo -e "Doing mass --finalInstallStage"
+	
+	mass --finalInstallStage
 }
 
 if [ `id -u` -gt 0 ];then
