@@ -1,6 +1,9 @@
-# Setup default values ~ setup
-#onDefine registerForEvent Install,general,createDefaultValues
+# Create default values. Not intended for general use. ~ install,defaults
+#onDefine registerForEvent Install,early,createDefaultValues
 
+debug 1,Creating default values
+
+debug 2,  Information for detecting the best terminal
 set Terminal,seed,konsole:gnome-terminal:macterm:xterm:none
 
 # Konsole - KDE's default terminal
@@ -35,7 +38,7 @@ set Terminal,noneCMD,false
 
 saveStoreToConfig Terminal
 
-
+debug 2,  Debug colors
 # Set verbosity names
 set Verbosity,0,The strong silent type
 set Verbosity,1,Information
@@ -50,6 +53,7 @@ set Verbosity,8,Words can not describe how verbose this is
 saveStoreToConfig Verbosity
 
 
+debug 2,  Runtime settings
 # Set default settings
 setDefault Settings,backgroundTasks,&
 setDefault Settings,nullOutput,2>/dev/null 1>/dev/null

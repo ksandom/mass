@@ -1,6 +1,7 @@
 # Install Semantics related stuff ~ install,semantics
 #onDefine registerForEvent Install,general,installSemantics
 
+debug 1,Creating semantics data
 triggerEvent Install,dataTypes
 triggerEvent Install,featureTypes
 

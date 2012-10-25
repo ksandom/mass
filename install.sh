@@ -254,9 +254,9 @@ function doInstall
 	fi
 	
 	# It should be safe to do this on an existing setup.
-	echo -e "Doing mass --finalInstallStage"
+	echo -e "Calling the final stage"
 	
-	mass --finalInstallStage
+	mass -vv --finalInstallStage
 }
 
 if [ `id -u` -gt 0 ];then
