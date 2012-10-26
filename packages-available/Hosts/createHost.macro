@@ -1,0 +1,43 @@
+# Manually create a manual host. This is for if you can't import a particular host from AWS, hosts file etc. --createHost=hostName,internalIP,internalFQDN,[externalIP],[externalFQDN],[location],[collection] . location is up to you how you use. collection is to separate out logical groups/sources of hosts and defaults to "manual". ~ host,hosts,create,manualHosts
+
+
+# Put input into a more readable format
+unsetCategory CreateHost
+set CreateHost,hostName,~!Global,createHost-0!~
+set CreateHost,internalIP,~!Global,createHost-1!~
+set CreateHost,internalFQDN,~!Global,createHost-2!~
+set CreateHost,externalIP,~!Global,createHost-3!~
+set CreateHost,externalFQDN,~!Global,createHost-4!~
+set CreateHost,location,~!Global,createHost-5!~
+set CreateHost,collection,~!Global,createHost-6!~
+
+
+# Apply defaults if necessary
+setIfNotSet CreateHost,location,unknown
+setIfNotSet CreateHost,collection,manual
+
+debug 2,Creating host ~!CreateHost,hostName!~ in collection ~!CreateHost,location!~/~!CreateHost,collection!~
+
+
+# Load the collection if it has not been loaded already
+retrieveResults Hosts,~!CreateHost,collection!~
+notIfResult loadStoreVariableFromFile ~!General,configDir!~/data/1LayerHosts/~!CreateHost,collection!~.json,Hosts,~!CreateHost,collection!~
+
+
+# Set the details and cleanup
+setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,hostName,~!CreateHost,hostName!~
+setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,internalIP,~!CreateHost,internalIP!~
+setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,internalFQDN,~!CreateHost,internalFQDN!~
+setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,externalIP,~!CreateHost,externalIP!~
+setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,externalFQDN,~!CreateHost,externalFQDN!~
+setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,location,~!CreateHost,location!~
+setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,collection,~!CreateHost,collection!~
+
+retrieveResults Hosts,~!CreateHost,collection!~
+
+
+# Save the result out
+# TODO This should reallly be done via an event on exit
+saveToJson ~!General,configDir!~/data/1LayerHosts/~!CreateHost,collection!~.json
+unsetCategory CreateHost
+
