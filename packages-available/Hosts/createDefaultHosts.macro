@@ -4,4 +4,3 @@
 debug 1,Creating default hosts
 
 createHost localhost,127.0.0.1,localhost.localdomain,,,local,local
-createHost localhost2,127.0.0.2,localhost.localdomain,,,local,local
