@@ -61,6 +61,7 @@ class Events extends Module
 	
 	function triggerEvent($category, $eventName)
 	{
+		$this->core->debug(3, "triggerEvent: $category,$eventName");
 		$priorityGroups=$this->core->get($category, $eventName);
 		if (is_array($priorityGroups) && count($priorityGroups)>0)
 		{
@@ -72,6 +73,7 @@ class Events extends Module
 					
 					foreach ($priorityGroup as $eventee)
 					{
+						$this->core->debug(2, "triggerEvent: $category,$eventName: --{$eventee['featureName']}={$eventee['featureValue']}");
 						$result=$this->core->callFeature($eventee['featureName'], $eventee['featureValue']);
 						$this->core->setResultSet($result); // This is necessary because the feature being called may rely on it being there.
 					}

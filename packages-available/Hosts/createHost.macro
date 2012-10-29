@@ -37,6 +37,6 @@ retrieveResults Hosts,~!CreateHost,collection!~
 
 
 # Save the result out
-triggerEvent Mass,finishGeneral,saveHostConnection,~!CreateHost,collection!~
+registerForEvent Mass,finishGeneral,saveHostsCollection,~!CreateHost,collection!~
 unsetCategory CreateHost 
 

@@ -26,4 +26,4 @@ unsetCategory DefineDataType
 retrieveResults Semantics,dataTypes
 
 # Save the result out
-triggerEvent Mass,finishGeneral,saveSemantics
+registerForEvent Mass,finishGeneral,saveSemantics
