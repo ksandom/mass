@@ -614,6 +614,14 @@ class core extends Module
 				# Set the shared memory back to the previous nesting level
 				$this->decrementNesting();
 				
+				# If this is the default macro, we need to run the cleanup stuff
+				if ($macroName=='default')
+				{
+					$this->callFeature('triggerEvent', 'Mass,finishEarly');
+					$this->callFeature('triggerEvent', 'Mass,finishGeneral');
+					$this->callFeature('triggerEvent', 'Mass,finishLate');
+				}
+				
 				return $resultSet;
 			}
 			else
