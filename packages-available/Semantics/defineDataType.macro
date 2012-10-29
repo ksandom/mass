@@ -26,5 +26,4 @@ unsetCategory DefineDataType
 retrieveResults Semantics,dataTypes
 
 # Save the result out
-# TODO This should really be done via an event on exit
-saveStoreToData Semantics
+triggerEvent Mass,finishGeneral,saveSemantics

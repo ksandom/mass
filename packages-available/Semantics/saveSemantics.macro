@@ -1,3 +1,3 @@
-# Save semantics to config so that it will be loaded on the next run ~ config,semantics
+# Save semantics to config so that it will be loaded on the next run. This is really intended for internal use. ~ config,semantics,internal
 
 saveStoreToConfig Semantics

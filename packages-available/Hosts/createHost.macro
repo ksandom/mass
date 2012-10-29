@@ -37,7 +37,6 @@ retrieveResults Hosts,~!CreateHost,collection!~
 
 
 # Save the result out
-# TODO This should reallly be done via an event on exit
-saveToJson ~!General,configDir!~/data/1LayerHosts/~!CreateHost,collection!~.json
-unsetCategory CreateHost
+triggerEvent Mass,finishGeneral,saveHostConnection,~!CreateHost,collection!~
+unsetCategory CreateHost 
 
