@@ -94,7 +94,7 @@ class Data extends Module
 		$filenameParts=explode('.', $noPath);
 		if (!$storeName) $storeName=$filenameParts[0];
 		
-		return $this->loadStoreEntry($storeName, $filename, $storeName, $variableName);
+		return $this->loadStoreEntry($storeName, $filename, $variableName);
 	}
 	
 	function loadStoreEntryFromName($storeName, $source='config')

@@ -1,6 +1,9 @@
 # Create default values. Not intended for general use. ~ install,defaults
 #onDefine registerForEvent Install,early,createDefaultValues
 
+# Clean up after the loadStoreEntryFromFilename duplicate $storeName bug
+unset Terminal,Terminal
+
 debug 1,Creating default values
 
 debug 2,  Information for detecting the best terminal
