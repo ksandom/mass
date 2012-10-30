@@ -191,6 +191,7 @@ class Manipulator extends Module
 	function cleanUnresolvedVarsFromString($input, $begin, $end)
 	{
 		$start=strpos($input, $begin);
+		if (!$start) return $input;
 		$finish=strpos($input, $end)+strlen($end);
 		$termite=substr($input, $start, $finish-$start);
 		$output=$this->replace($input, $termite, '');
