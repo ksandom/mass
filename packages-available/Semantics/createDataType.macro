@@ -1,14 +1,18 @@
-# Define a data type. --defineDataType=typeName,defaultTemplate,[moreTemplate],[lessTemplate],description ~ data,semantics
+# Create a data type. action is the command that should be run with the appropriate value (defined in default, more and less). --defineDataType=typeName,default,[more],[less],[action],description ~ data,semantics
+
+# TODO Document this further.
 
 set DefineDataType,dataTypeName,~!Global,defineDataType-0!~
 set DefineDataType,defaultTemplate,~!Global,defineDataType-1!~
 set DefineDataType,moreTemplate,~!Global,defineDataType-2!~
 set DefineDataType,lessTemplate,~!Global,defineDataType-3!~
-set DefineDataType,description,~!Global,defineDataType-4!~
+set DefineDataType,action,~!Global,defineDataType-4!~
+set DefineDataType,description,~!Global,defineDataType-5!~
 
 # Apply defaults if necessary
 setIfNotSet DefineDataType,moreTemplate,~!DefineDataType,defaultTemplate!~
 setIfNotSet DefineDataType,lessTemplate,~!DefineDataType,defaultTemplate!~
+setIfNotSet DefineDataType,action,templateOut
 
 # Load the collection if it has not been loaded already
 retrieveResults Semantics,dataTypes
@@ -19,6 +23,7 @@ setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,dataTypeName,~!Def
 setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,defaultTemplate,~!DefineDataType,defaultTemplate!~
 setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,moreTemplate,~!DefineDataType,moreTemplate!~
 setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,lessTemplate,~!DefineDataType,lessTemplate!~
+setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,action,~!DefineDataType,action!~
 setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,description,~!DefineDataType,description!~
 
 unsetCategory DefineDataType
@@ -26,4 +31,4 @@ unsetCategory DefineDataType
 retrieveResults Semantics,dataTypes
 
 # Save the result out
-registerForEvent Mass,finishGeneral,saveSemantics
+registerOnceForEvent Mass,finishGeneral,saveSemantics

@@ -17,19 +17,24 @@ class Events extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('registerForEvent'), 'registerForEvent', "Register a feature to be executed when a particular event is triggered. --registerEvent=Category,eventName,featureName[,featureValue]", array());
+				$this->core->registerFeature($this, array('registerOnceForEvent', 'registerForEvent'), 'registerOnceForEvent', "Register a feature once to be executed when a particular event is triggered. --registerForEvent=Category,eventName,featureName[,featureValue]", array());
+				$this->core->registerFeature($this, array('registerMultipleTimesForEvent'), 'registerMultipleTimesForEvent', "Register a feature to be executed when a particular event is triggered. If you use --registerMultipleTimesForEvent multiple times for a single action (say saving some data), then that action will get called once for everytime it was registered per trigger of that event. This is probably not what you want. Usually --registerOnceForEvent (--registerForEvent) will be what you want. --registerEvent=Category,eventName,featureName[,featureValue]", array());
 				$this->core->registerFeature($this, array('triggerEvent'), 'triggerEvent', "Trigger an event. --triggerEvent=Category,eventName", array());
 				break;
 			case 'followup':
 				break;
 			case 'last':
 				break;
-			case 'registerForEvent':
-				$parms=$this->core->interpretParms($this->core->get('Global', 'registerForEvent'), 4, 3, true);
+			case 'registerMultipleTimesForEvent':
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 4, 3, true);
 				$this->registerForEvent($parms[0], $parms[1], $parms[2], $parms[3]);
 				break;
+			case 'registerOnceForEvent':
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 4, 3, true);
+				$this->registerForEvent($parms[0], $parms[1], $parms[2], $parms[3], true);
+				break;
 			case 'triggerEvent':
-				$parms=$this->core->interpretParms($this->core->get('Global', 'triggerEvent'), 2, 2, true);
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 2, true);
 				return $this->triggerEvent($parms[0], $parms[1]);
 				break;
 			default:
@@ -38,11 +43,14 @@ class Events extends Module
 		}
 	}
 	
-	function registerForEvent($category, $eventName, $featureName, $featureValue='', $priority=50)
+	function registerForEvent($category, $eventName, $featureName, $featureValue='', $onlyOnce=false, $priority=50)
 	{
 		$priorityGroups=$this->core->get($category, $eventName);
 		if (!isset($priorityGroups[$priority])) $priorityGroups[$priority]=array();
-		$priorityGroups[$priority][]=array('featureName'=>$featureName, 'featureValue'=>$featureValue);
+		
+		$newValue=array('featureName'=>$featureName, 'featureValue'=>$featureValue);
+		if ($onlyOnce) $priorityGroups[$priority][md5("$featureName,$featureValue")]=$newValue;
+		else $priorityGroups[$priority][]=$newValue;
 		
 		$this->core->debug(3, "Registered \"$featureName $featureValue\" to event \"$category, $eventName\" at priority $priority.");
 		$this->core->set($category, $eventName, $priorityGroups);

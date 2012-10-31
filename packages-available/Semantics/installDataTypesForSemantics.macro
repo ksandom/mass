@@ -1,4 +1,4 @@
 # Install the data types to be used with semantics. Ya have to try your own medicine roooight?. ~ semantics,internal,install
 #onDefine registerForEvent Install,dataTypes,installDataTypesForSemantics
 
-defineDataType dataType,compactOutput,hostsMore,,Defines how a dataType will be displayed.
+createDataType dataType,compactOutput,hostsMore,,,Defines how a dataType will be displayed.
