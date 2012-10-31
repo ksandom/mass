@@ -1,0 +1,5 @@
+# Install the data types to be used with hosts. ~ semantics,internal,install
+#onDefine registerForEvent Install,dataTypes,installDataTypesForHosts
+
+defineDataType ELB,elb,,,Elastic load balancer.
+defineDataType route53,route53,,,Route53 DNS entry.
