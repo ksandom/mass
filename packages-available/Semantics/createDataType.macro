@@ -1,13 +1,13 @@
-# Create a data type. action is the command that should be run with the appropriate value (defined in default, more and less). --defineDataType=typeName,default,[more],[less],[action],description ~ data,semantics
+# Create a data type. action is the command that should be run with the appropriate value (defined in default, more and less). --createDataType=typeName,default,[more],[less],[action],description ~ data,semantics
 
 # TODO Document this further.
 
-set DefineDataType,dataTypeName,~!Global,defineDataType-0!~
-set DefineDataType,defaultTemplate,~!Global,defineDataType-1!~
-set DefineDataType,moreTemplate,~!Global,defineDataType-2!~
-set DefineDataType,lessTemplate,~!Global,defineDataType-3!~
-set DefineDataType,action,~!Global,defineDataType-4!~
-set DefineDataType,description,~!Global,defineDataType-5!~
+set DefineDataType,dataTypeName,~!Global,createDataType-0!~
+set DefineDataType,defaultTemplate,~!Global,createDataType-1!~
+set DefineDataType,moreTemplate,~!Global,createDataType-2!~
+set DefineDataType,lessTemplate,~!Global,createDataType-3!~
+set DefineDataType,action,~!Global,createDataType-4!~
+set DefineDataType,description,~!Global,createDataType-5!~
 
 # Apply defaults if necessary
 setIfNotSet DefineDataType,moreTemplate,~!DefineDataType,defaultTemplate!~
@@ -31,4 +31,4 @@ unsetCategory DefineDataType
 retrieveResults Semantics,dataTypes
 
 # Save the result out
-registerOnceForEvent Mass,finishGeneral,saveSemantics
+registerForEvent Mass,finishGeneral,saveSemantics
