@@ -64,6 +64,7 @@ class core extends Module
 				$this->registerFeature($this, array('setNested'), 'setNested', 'set a value into a nested array, creating all the necessary sub arrays. The last parameter is the value. All the other parameters are the keys for each level. --setNested=StoreName'.valueSeparator.'category'.valueSeparator.'subcategory'.valueSeparator.'subsubcategory'.valueSeparator.'value. In this case an array would be created in StoreName,category that looks like this subcategory=>array(subsubcategory=>value)', array('storeVars'));
 				$this->registerFeature($this, array('setArray'), 'setArray', 'set a value. All remaining values after the destination go into an array. --set=category'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
 				$this->registerFeature($this, array('setIfNotSet', 'setDefault'), 'setIfNotSet', 'set a value if none has been set. --setIfNotSet=category'.valueSeparator.'variableName'.valueSeparator.'defaultValue', array('storeVars'));
+				$this->registerFeature($this, array('setIfNothing'), 'setIfNothing', 'set a value if none has been set or evaluates(PHP) to false. --setIfNothing=category'.valueSeparator.'variableName'.valueSeparator.'defaultValue', array('storeVars'));
 				$this->registerFeature($this, array('unset'), 'unset', 'un set (delete) a value. --unset=category'.valueSeparator.'variableName	', array('storeVars'));
 				$this->registerFeature($this, array('getCategory'), 'getCategory', 'Get an entire store into the result set. --getCategory=moduleNam', array('storeVars', 'store', 'dev'));
 				$this->registerFeature($this, array('setCategory'), 'setCategory', 'Set an entire store to the current state of the result set. --setCategory=category', array('storeVars', 'store', 'dev'));
@@ -115,10 +116,16 @@ class core extends Module
 				$this->set($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'setIfNotSet':
-				$originalParms=$this->get('Global', 'setIfNotSet');
+				$originalParms=$this->get('Global', $event);
 				$parms=$this->interpretParms($originalParms);
 				$this->requireNumParms($this, 3, $event, $originalParms, $parms);
 				$this->setIfNotSet($parms[0], $parms[1], $parms[2]);
+				break;
+			case 'setIfNothing':
+				$originalParms=$this->get('Global', $event);
+				$parms=$this->interpretParms($originalParms);
+				$this->requireNumParms($this, 3, $event, $originalParms, $parms);
+				$this->setIfNotSet($parms[0], $parms[1], $parms[2], true);
 				break;
 			case 'unset':
 				$parms=$this->interpretParms($this->get('Global', 'set'), 2, 2, true);
@@ -683,11 +690,12 @@ class core extends Module
 		return $result;
 	}
 	
-	function setIfNotSet($category, $valueName, $value)
+	function setIfNotSet($category, $valueName, $value, $orNothing=false)
 	{
 		$shouldSet=false;
 		if (!isset($this->store[$category])) $shouldSet=true;
 		elseif (!isset($this->store[$category][$valueName])) $shouldSet=true;
+		elseif (!$this->store[$category][$valueName] and $orNothing)  $shouldSet=true;
 		
 		if ($shouldSet) $this->set($category, $valueName, $value);
 	}

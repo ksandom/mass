@@ -10,9 +10,9 @@ set DefineDataType,action,~!Global,createDataType-4!~
 set DefineDataType,description,~!Global,createDataType-5!~
 
 # Apply defaults if necessary
-setIfNotSet DefineDataType,moreTemplate,~!DefineDataType,defaultTemplate!~
-setIfNotSet DefineDataType,lessTemplate,~!DefineDataType,defaultTemplate!~
-setIfNotSet DefineDataType,action,templateOut
+setIfNothing DefineDataType,moreTemplate,~!DefineDataType,defaultTemplate!~
+setIfNothing DefineDataType,lessTemplate,~!DefineDataType,defaultTemplate!~
+setIfNothing DefineDataType,action,templateOut
 
 # Load the collection if it has not been loaded already
 retrieveResults Semantics,dataTypes
@@ -20,9 +20,9 @@ notIfResult loadStoreVariableFromFile loadStoreFromData Semantics
 
 # Set the details and cleanup
 setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,dataTypeName,~!DefineDataType,dataTypeName!~
-setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,defaultTemplate,~!DefineDataType,defaultTemplate!~
-setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,moreTemplate,~!DefineDataType,moreTemplate!~
-setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,lessTemplate,~!DefineDataType,lessTemplate!~
+setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,default,~!DefineDataType,defaultTemplate!~
+setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,more,~!DefineDataType,moreTemplate!~
+setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,less,~!DefineDataType,lessTemplate!~
 setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,action,~!DefineDataType,action!~
 setNested Semantics,dataTypes,~!DefineDataType,dataTypeName!~,description,~!DefineDataType,description!~
 
