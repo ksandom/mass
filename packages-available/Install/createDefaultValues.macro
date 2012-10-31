@@ -12,19 +12,19 @@ set Terminal,seed,konsole:gnome-terminal:lxterminal:macterm:xterm:none
 set Terminal,konsoleName,konsole
 set Terminal,konsoleDescription,KDE's default terminal
 set Terminal,konsoleTest,which konsole
-set Terminal,konsoleCMD,konsole -e bash -c "ssh -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~" &
+set Terminal,konsoleCMD,konsole -e bash -c "ssh -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~" 2>/dev/null 1>/dev/null &
 
 # Gnome-terminal - Gnome/Unity's default terminal
 set Terminal,gnome-terminalName,konsole
 set Terminal,gnome-terminalDescription,Ubuntu's default terminal
 set Terminal,gnome-terminalTest,which gnome-terminal
-set Terminal,gnome-terminalCMD,gnome-terminal -e "bash -c \"ssh -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~\"" &
+set Terminal,gnome-terminalCMD,gnome-terminal -e "bash -c \"ssh -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~\"" 2>/dev/null 1>/dev/null &
 
-# Gnome-terminal - Gnome/Unity's default terminal
+# lxterminal - The default terminal for lubuntu
 set Terminal,lxterminalName,konsole
 set Terminal,lxterminalDescription,lubuntu's default terminal
 set Terminal,lxterminalTest,which gnome-terminal
-set Terminal,lxterminalCMD,lxterminal -e "bash -c \"ssh -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~\"" &
+set Terminal,lxterminalCMD,lxterminal -e "bash -c \"ssh -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~\"" 2>/dev/null 1>/dev/null &
 
 # MacOS X's default terminal. Pretty much any custom terminal except xterm should take precedence over this.
 set Terminal,mactermName,macterm
@@ -36,7 +36,7 @@ set Terminal,mactermCMD,echo 'tell app "Terminal" to do script "ssh -t ~%sshExtr
 set Terminal,xtermName,xterm
 set Terminal,xtermDescription,X's default terminal
 set Terminal,xtermTest,which xterm
-set Terminal,xtermCMD,xterm -e bash -c "ssh -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~" &
+set Terminal,xtermCMD,xterm -e bash -c "ssh -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~" 2>/dev/null 1>/dev/null &
 
 # No GUI terminal available
 set Terminal,noneName,none
