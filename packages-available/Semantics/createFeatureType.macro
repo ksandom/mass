@@ -1,0 +1,27 @@
+# Create a feature type. --createFeatureType=typeName,inDataType,outDataType,,description ~ feature,definition,semantics
+
+# TODO Document this further.
+
+set DefineFeatureType,featureTypeName,~!Global,createFeatureType-0!~
+set DefineFeatureType,inDataType,~!Global,createFeatureType-1!~
+set DefineFeatureType,outDataType,~!Global,createFeatureType-2!~
+set DefineFeatureType,description,~!Global,createFeatureType-3!~
+
+# Apply defaults if necessary
+
+# Load the collection if it has not been loaded already
+retrieveResults Semantics,featureTypes
+notIfResult loadStoreVariableFromFile loadStoreFromData Semantics
+
+# Set the details and cleanup
+setNested Semantics,featureTypes,~!DefineFeatureType,dataTypeName!~,featureTypeName,~!DefineFeatureType,featureTypeName!~
+setNested Semantics,featureTypes,~!DefineFeatureType,dataTypeName!~,inDataType,~!DefineFeatureType,inDataType!~
+setNested Semantics,featureTypes,~!DefineFeatureType,dataTypeName!~,outDataType,~!DefineFeatureType,outDataType!~
+setNested Semantics,featureTypes,~!DefineFeatureType,dataTypeName!~,description,~!DefineFeatureType,description!~
+
+unsetCategory DefineFeatureType
+
+retrieveResults Semantics,dataTypes
+
+# Save the result out
+registerForEvent Mass,finishGeneral,saveSemantics
