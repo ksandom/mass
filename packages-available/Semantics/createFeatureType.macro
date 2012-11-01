@@ -14,14 +14,14 @@ retrieveResults Semantics,featureTypes
 notIfResult loadStoreVariableFromFile loadStoreFromData Semantics
 
 # Set the details and cleanup
-setNested Semantics,featureTypes,~!DefineFeatureType,dataTypeName!~,featureTypeName,~!DefineFeatureType,featureTypeName!~
-setNested Semantics,featureTypes,~!DefineFeatureType,dataTypeName!~,inDataType,~!DefineFeatureType,inDataType!~
-setNested Semantics,featureTypes,~!DefineFeatureType,dataTypeName!~,outDataType,~!DefineFeatureType,outDataType!~
-setNested Semantics,featureTypes,~!DefineFeatureType,dataTypeName!~,description,~!DefineFeatureType,description!~
+setNested Semantics,featureTypes,~!DefineFeatureType,featureTypeName!~,featureTypeName,~!DefineFeatureType,featureTypeName!~
+setNested Semantics,featureTypes,~!DefineFeatureType,featureTypeName!~,inDataType,~!DefineFeatureType,inDataType!~
+setNested Semantics,featureTypes,~!DefineFeatureType,featureTypeName!~,outDataType,~!DefineFeatureType,outDataType!~
+setNested Semantics,featureTypes,~!DefineFeatureType,featureTypeName!~,description,~!DefineFeatureType,description!~
 
 unsetCategory DefineFeatureType
 
-retrieveResults Semantics,dataTypes
+retrieveResults Semantics,featureTypes
 
 # Save the result out
 registerForEvent Mass,finishGeneral,saveSemantics
