@@ -1,4 +1,4 @@
-# Create a data type. action is the command that should be run with the appropriate value (defined in default, more and less). --createDataType=typeName,default,[more],[less],[action],description ~ data,semantics
+# Create a data type. action is the command that should be run with the appropriate value (defined in default, more and less). --createDataType=typeName,default,[more],[less],[action],description ~ data,definition,semantics
 
 # TODO Document this further.
 

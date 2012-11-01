@@ -1,0 +1,7 @@
+<~~ ~!Color,cyan!~~%dataTypeName%~ ~!Color,brightBlack!~/ ~!Color,blue!~~%action%~~!Color,default!~
+  ~!Color,brightBlack!~less:    ~!Color,green!~~%less%~ ~!Color,default!~
+  ~!Color,default!~default: ~!Color,brightGreen!~~%default%~ ~!Color,default!~
+  ~!Color,brightBlack!~more:    ~!Color,green!~~%more%~ ~!Color,default!~
+  ~!Color,default!~~%description%~~!Color,default!~
+
+~>

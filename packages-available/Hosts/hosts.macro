@@ -5,4 +5,4 @@ list ~!Global,hosts!~
 stashResults Hosts,sourcelist
 
 singleString
-template hosts
+template hostsFile

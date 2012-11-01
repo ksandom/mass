@@ -1,3 +1,4 @@
 # Save semantics to config so that it will be loaded on the next run. This is really intended for internal use. ~ config,semantics,internal
 
+retrieveResults Semantics,~!Global,saveSemantics!~
 saveStoreToConfig Semantics
