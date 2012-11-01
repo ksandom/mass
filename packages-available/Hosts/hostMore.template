@@ -1,5 +1,3 @@
-Found hosts ~!Global,message!~
-
 <~~ ~!Color,default!~~%hostName%~ ~!Color,brightBlack!~/ ~!Color,blue!~~%location%~~!Color,default!~
   ~!Color,brightBlack!~external: ~!Color,green!~~%externalFQDN%~ ~!Color,default!~(~!Color,cyan!~~%externalIP%~~!Color,default!~)
   ~!Color,brightBlack!~internal: ~!Color,green!~~%internalFQDN%~ ~!Color,default!~(~!Color,cyan!~~%internalIP%~~!Color,default!~)
