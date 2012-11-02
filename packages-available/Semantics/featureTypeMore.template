@@ -1,0 +1,5 @@
+<~~ ~!Color,cyan!~~%featureTypeName%~ ~!Color,brightBlack!~/ ~!Color,default!~~%description%~
+  ~!Color,green!~inDataType~!Color,brightBlack!~:  ~!Color,default!~~%inDataType%~~!Color,default!~
+  ~!Color,green!~outDataType~!Color,brightBlack!~: ~!Color,default!~~%outDataType%~~!Color,default!~
+
+~>

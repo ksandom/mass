@@ -1,0 +1,7 @@
+# Install the feature types to be used with Hosts. ~ semantics,internal,install
+#onDefine registerForEvent Install,featureTypes,installFeatureTypesForHosts
+
+createFeatureType generateHosts,,host,Generates a list of hosts.
+createFeatureType manipulateHosts,host,host,Manipulate a list of hosts.
+createFeatureType actOnHosts,host,host,Take an action on a list of hosts. The output is still a list of hosts, that may or may not have been manipulated.
+createFeatureType actOnHostsUnknown,host,,Take an action on a list of hosts.
