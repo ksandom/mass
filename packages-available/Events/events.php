@@ -22,15 +22,17 @@ class Events extends Module
 				$this->core->registerFeature($this, array('triggerEvent'), 'triggerEvent', "Trigger an event. --triggerEvent=Category,eventName", array());
 				break;
 			case 'followup':
+				$this->triggerEvent('Startup', 'followup');
 				break;
 			case 'last':
+				$this->triggerEvent('Startup', 'last');
 				break;
 			case 'registerMultipleTimesForEvent':
-				$parms=$this->core->interpretParms($this->core->get('Global', $event), 4, 3, true);
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 3, 3, true);
 				$this->registerForEvent($parms[0], $parms[1], $parms[2], $parms[3]);
 				break;
 			case 'registerOnceForEvent':
-				$parms=$this->core->interpretParms($this->core->get('Global', $event), 4, 3, true);
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 3, 3, true);
 				$this->registerForEvent($parms[0], $parms[1], $parms[2], $parms[3], true);
 				break;
 			case 'triggerEvent':

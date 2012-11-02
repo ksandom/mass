@@ -78,24 +78,24 @@ class Packages extends Module
 			switch ($filenameParts[$lastPos])
 			{
 				case 'md':
-					$this->core->debug(packageVerbosity, "loadPackage: $filename Documentation should be in it's packages /doc folder.");
+					#$this->core->debug(0, "loadPackage: $filename Documentation should be in it's packages /doc folder.");
 					break;
 				case 'php':
 				case 'module':
-					$this->core->debug(packageVerbosity, "loadPackage: $filename Module. ($fullPath)");
+					#$this->core->debug(0, "loadPackage: $filename Module. ($fullPath)");
 					loadModules($this->core, $fullPath, false);
 					break;
 				case 'macro':
-					$this->core->debug(packageVerbosity, "loadPackage: $filename Macro.");
+					#$this->core->debug(0, "loadPackage: $filename Macro.");
 					$this->core->addItemsToAnArray('Core', 'macrosToLoad', array($filename=>$fullPath));
 					break;
 				case 'template':
-					$this->core->debug(packageVerbosity, "loadPackage: $filename Template.");
+					#$this->core->debug(0, "loadPackage: $filename Template.");
 					$this->core->addItemsToAnArray('Core', 'templatesToLoad', array($filename=>$fullPath));
 					break;
 			}
 			
-			$this->core->debug(packageVerbosity, "loadEnabledPackages:   File $filename");
+			# $this->core->debug(packageVerbosity, "loadEnabledPackages:   File $filename");
 		}
 		else
 		{

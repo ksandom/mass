@@ -247,6 +247,8 @@ class Macro extends Module
 				else $this->core->complain($this, "$fullPath appears to be a macro, but doesn't have a helpful comment on the first line begining with a # .");
 			}
 		}
+		
+		$this->core->callFeature('triggerEvent', 'Macro,allLoaded');
 	}
 }
 
