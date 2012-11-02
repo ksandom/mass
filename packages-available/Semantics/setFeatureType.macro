@@ -1,0 +1,3 @@
+# Set the featureType for a feature ~ Semantics,feature
+
+setFeatureAttribute ~!Global,setFeatureType-0!~,featureType,~!Global,setFeatureType-1!~

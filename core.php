@@ -58,6 +58,7 @@ class core extends Module
 			case 'init':
 				$this->registerFeature($this, array('registerTags'), 'registerTags', 'Register tags to a feature. --registerTags=featureName'.valueSeparator.'tag1['.valueSeparator.'tag2['.valueSeparator.'tag3'.valueSeparator.'...]]');
 				$this->registerFeature($this, array('aliasFeature'), 'aliasFeature', 'Create an alias for a feature. Eg aliasing --help to -h and -h1 would be done by --aliasFeature=help'.valueSeparator.'h'.valueSeparator.'h1');
+				$this->registerFeature($this, array('setFeatureAttribute'), 'setFeatureAttribute', 'Set a feature attribute. --setFeatureAttribute=featureName,attributeName,attributeValue');
 				# $this->registerFeature($this, array('get'), 'get', 'Get a value. --get=category'.valueSeparator.'variableName', array('storeVars'));
 				$this->registerFeature($this, array('getToResult', 'get'), 'getToResult', 'Get a value and put it in an array so we can do stuff with it. --getToResult=category'.valueSeparator.'variableName', array('storeVars'));
 				$this->registerFeature($this, array('set'), 'set', 'set a value. All remaining values after the destination go into a string. --set=category'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
@@ -98,6 +99,10 @@ class core extends Module
 			case 'aliasFeature':
 				$parms=$this->interpretParms($this->get('Global', 'aliasFeature'));
 				$this->aliasFeature($parms[0], $parms);
+				break;
+			case 'setFeatureAttribute':
+				$parms=$this->interpretParms($this->get('Global', $event), 2, 3, true);
+				$this->setFeatureAttribute($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'getToResult':
 				$parms=$this->interpretParms($this->get('Global', 'getToResult'));
@@ -845,6 +850,12 @@ class core extends Module
 				$this->complain($this, "Feature $flag has already been registered by $existingName");
 			}
 		}
+	}
+	
+	function setFeatureAttribute($featureName, $attributeName, $attributeValue)
+	{
+		$entry=&$this->get('Features', $featureName);
+		$entry[$attributeName]=$attributeValue;
 	}
 	
 	function registerTags($name, $tags)
