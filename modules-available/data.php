@@ -66,7 +66,7 @@ class Data extends Module
 		}
 	}
 	
-	function loadStoreEntry($storeName, $filename, $variableName, $source='config')
+	function loadStoreEntry($storeName, $filename, $variableName=false, $source='config')
 	{
 		$filenameTouse=false;
 		if (file_exists($filename)) $filenameTouse=$filename;
