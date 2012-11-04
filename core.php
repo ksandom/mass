@@ -382,6 +382,23 @@ class core extends Module
 				$this->makeArgsAvailableToTheScript($obj['name'], $valueIn);
 				$result=$obj['obj']->event($obj['name']);
 				
+				if (isset($obj['featureType']))
+				{
+					$this->core->debug(3, "callFeature: ".$obj['featureType']);
+					if ($outDataType=$this->getNested(array('Semantics', 'featureTypes', $obj['featureType'], 'outDataType')))
+					{
+						if ($dataType=$this->getNested(array('Semantics', 'dataTypes', $outDataType)))
+						{
+							$semanticsTemplate=$this->get('Settings', 'semanticsTemplate');
+							$this->core->debug(3, "callFeature: Applying --{$dataType['action']}={$dataType[$semanticsTemplate]}");
+							$this->callFeature($dataType['action'], $dataType[$semanticsTemplate]);
+						}
+						else $this->core->debug(3, "callFeature: Could not find dataType $outDataType");
+					}
+					else $this->core->debug(3, "callFeature: Could not find featureType ".$obj['featureType']);
+				}
+				
+				
 				if ($this->isVerboseEnough(4))
 				{
 					$resultCount=count($result);
@@ -721,6 +738,26 @@ class core extends Module
 	{
 		$this->debug(5,"unSet($category, $valueName)");
 		unset($this->store[$category][$valueName]);
+	}
+	
+	function getNested($values)
+	{
+		$output=$this->store;
+		foreach ($values as $value)
+		{
+			if (isset($output[$value]))
+			{
+				$output=$output[$value];
+				# print_r($output);
+			}
+			else
+			{
+				$this->core->debug(0, "getNested: Could not find \"$value\" using key ".implode(',', $values));
+				return false;
+			}
+		}
+		
+		return $output;
 	}
 	
 	function setNested($store, $category, $values)

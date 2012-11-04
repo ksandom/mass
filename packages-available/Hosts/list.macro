@@ -1,7 +1,7 @@
 # List hosts. Search using regex. --list[=regex] . eg --list=^db.* ~ user
 #onLoaded setFeatureType list,generateHosts
 
-templateOut host
+# templateOut host
 
 search ~!Global,list!~
 notIfResult searchOld ~!Global,list!~
