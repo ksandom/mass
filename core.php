@@ -617,12 +617,6 @@ class core extends Module
 				}
 				$resultSet=$this->getResultSet();
 				
-				# Output our results if we are back to the first level
-				if ($nesting==1)
-				{
-					$this->out($resultSet);
-				}
-				
 				# Set the shared memory back to the previous nesting level
 				$this->decrementNesting();
 				

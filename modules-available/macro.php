@@ -108,6 +108,11 @@ class Macro extends Module
 						$this->core->debug(3, "#onDefine {$parts[0]}={$parts[1]}");
 						$this->core->callFeature($parts[0], $parts[1]);
 						break;
+					case '#onLoaded':
+						$parts=$this->core->splitOnceOn(' ', $value);
+						$this->core->debug(3, "#onLoaded {$parts[0]}={$parts[1]}");
+						$this->core->callFeature("registerForEvent", "Macro,allLoaded,$parts[0],$parts[1]");
+						break;
 					default:
 						$this->core->addAction($argument, $value, $macroName);
 						break;

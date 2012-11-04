@@ -1,5 +1,5 @@
 # List hosts. Search using regex. --list[=regex] . eg --list=^db.* ~ user
-#onDefine setFeatureAttribute list,featureType,generateHosts
+#onLoaded setFeatureType list,generateHosts
 
 templateOut host
 
