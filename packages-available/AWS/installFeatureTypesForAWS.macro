@@ -1,0 +1,4 @@
+# Install the feature types to be used with semantics. ~ semantics,internal,install
+#onDefine registerForEvent Install,featureTypes,installFeatureTypesForAWS
+
+createFeatureType generateListOfELBs,,ELB,Generates a list of Elastic Load Balancers.
