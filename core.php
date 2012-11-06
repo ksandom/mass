@@ -407,6 +407,7 @@ class core extends Module
 							$this->callFeature($dataType['action'], $dataType[$semanticsTemplate]);
 							$dataType['chosenTemplate']=$dataType[$semanticsTemplate];
 							$this->set('SemanticsState', 'currentDataType', $dataType);
+							$this->set('SemanticsState', 'currentFeatureType', $obj['featureType']);
 						}
 						else $this->core->debug(3, "callFeature: Could not find dataType $outDataType");
 					}
