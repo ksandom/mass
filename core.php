@@ -73,8 +73,13 @@ class core extends Module
 				$this->registerFeature($this, array('stashResults'), 'stashResults', 'Put the current result set into a memory slot. --stashResults=category'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('retrieveResults'), 'retrieveResults', 'Retrieve a result set that has been stored. This will replace the current result set with the retrieved one --retrieveResults=category'.valueSeparator.'variableName');
 				$this->registerFeature($this, array('getPID'), 'getPID', 'Save the process ID to a variable. --getPID=category'.valueSeparator.'variableName');
+				
 				$this->registerFeature($this, array('setJson'), 'setJson', 'Take a json encoded array from jsonValue and store the arrary in category'.valueSeparator.'variableName. --setJson=category'.valueSeparator.'variableName'.valueSeparator.'jsonValue');
 				$this->registerFeature($this, array('outNow'), 'outNow', 'Execute the output now.', array('dev'));
+				
+				$this->registerFeature($this, array('callFeature', 'callFeatureReturn'), 'callFeatureReturn', "Call a feature. This essentially allows you to execute what ever is in a variable. Take a lot of care to make sure your variables contain what you think they do as you could introduce a lot of pain here. --callFeature=feature[,parm1[,parm2..etc]]", array('dangerous'));
+				$this->registerFeature($this, array('callFeatureNoReturn'), 'callFeatureNoReturn', "Call a feature but don't return the results. This essentially allows you to execute what ever is in a variable without affecting what is in the resultSet. Take a lot of care to make sure your variables contain what you think they do as you could introduce a lot of pain here. This can also be used to isolate a feature so that it doesn't affect the following feature calls. --callFeatureNoReturn=feature[,parm1[,parm2..etc]]", array('dangerous'));
+				
 				$this->registerFeature($this, array('dump'), 'dump', 'Dump internal state.', array('debug', 'dev'));
 				$this->registerFeature($this, array('debug'), 'debug', 'Send parameters to stdout. --debug=debugLevel,outputText eg --debug=0,StuffToWriteOut . DebugLevel is not implemented yet, but 0 will be "always", and above that will only show as the verbosity level is incremented with -v or --verbose.', array('debug', 'dev'));
 				$this->registerFeature($this, array('verbose', 'v', 'verbosity'), 'verbose', 'Increment/set the verbosity. --verbose[=verbosityLevel] where verbosityLevel is an integer starting from 0 (default)', array('debug', 'dev'));
@@ -164,6 +169,14 @@ class core extends Module
 				break;
 			case 'dump':
 				return $this->dumpState();
+				break;
+			case 'callFeatureReturn':
+				$parms=$this->splitOnceOn(valueSeparator, $this->get('Global', $event));
+				$this->callFeature($parms[0], $parms[1]);
+				break;
+			case 'callFeatureNoReturn':
+				$parms=$this->splitOnceOn(valueSeparator, $this->get('Global', $event));
+				$this->callFeature($parms[0], $parms[1]);
 				break;
 			case 'debug':
 				$parms=$this->interpretParms($this->get('Global', 'debug'), 1, 1, true);
@@ -392,6 +405,8 @@ class core extends Module
 							$semanticsTemplate=$this->get('Settings', 'semanticsTemplate');
 							$this->core->debug(3, "callFeature: Applying --{$dataType['action']}={$dataType[$semanticsTemplate]}");
 							$this->callFeature($dataType['action'], $dataType[$semanticsTemplate]);
+							$dataType['chosenTemplate']=$dataType[$semanticsTemplate];
+							$this->set('SemanticsState', 'currentDataType', $dataType);
 						}
 						else $this->core->debug(3, "callFeature: Could not find dataType $outDataType");
 					}
@@ -443,14 +458,31 @@ class core extends Module
 		while (strpos($output, storeValueBegin)!==false and $iterations<100)
 		{
 			$startPos=strpos($output, storeValueBegin)+2;
+			$nextStartPos=strpos($output, storeValueBegin, $startPos)+2;
 			$endPos=strpos($output, storeValueEnd);
+			
+			# This allows us to have nested variables.
+			while ($nextStartPos<$endPos and $nextStartPos>$startPos)
+			{
+				$startPos=strpos($output, storeValueBegin, $startPos)+2;
+				$nextStartPos=strpos($output, storeValueBegin, $startPos)+2;
+			}
+			
 			$length=$endPos-$startPos;
 			
 			$varDef=substr($output, $startPos, $length);
 			$varParts=explode(',', $varDef);
 			if (isset($varParts[1]))
 			{
-				$varValue=$this->get($varParts[0], $varParts[1]);
+				if (count($varParts)==2)
+				{
+					/*
+						This will slowly become irrelevant as new features take advantage of nesting deeper than two levels. But until then it's still a huge performance saver.
+					*/
+					$varValue=$this->get($varParts[0], $varParts[1]);
+				}
+				else $varValue=$this->getNested($varParts);
+				
 				$output=implode($varValue, explode(storeValueBegin.$varDef.storeValueEnd, $output));
 			}
 			else

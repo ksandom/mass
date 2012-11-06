@@ -1,3 +1,4 @@
 # More verbose output for listing hosts ~ hosts,user
 
 set Settings,semanticsTemplate,more
+applyFeatureType
