@@ -1,0 +1,6 @@
+# Apply a feature type. This is useful if something like --more or --less has changed the choice of template but we're still using the same data type, so it hasn't been applied yet. ~ Semantics,featureType
+
+# TODO Migrate Settings,semanticsTemplate => SemanticsState,semanticsTemplate
+# TODO create lookup to resolve the actual template that Settings,semanticsTemplate references. Settings,semanticsTemplate currently points to the
+
+callFeatureNoReturn ~!SemanticsState,currentDataType,action!~,~!SemanticsState,currentDataType,~!Settings,semanticsTemplate!~!~
