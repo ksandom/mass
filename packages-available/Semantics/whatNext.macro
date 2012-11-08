@@ -1,0 +1,4 @@
+# Show possible features that could be called with the current data set. --whatNext ~ Semantics
+
+help
+requireItem inDataType,~!SemanticsState,currentDataType,dataTypeName!~
