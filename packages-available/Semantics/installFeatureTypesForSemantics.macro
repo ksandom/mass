@@ -2,3 +2,4 @@
 #onDefine registerForEvent Install,featureTypes,installFeatureTypesForSemantics
 
 createFeatureType generateDataTypes,,dataType,Generates a list of dataTypes.
+createFeatureType generateFeatureTypes,,featureType,Generates a list of featureTypes.
