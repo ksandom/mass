@@ -1,5 +1,6 @@
 # Search through Route53 DNS entries imported with --importFromAWS ~ AWS,search
 #onDefine aliasFeature route53,r53
+#onLoaded setFeatureType route53,generateListOfR53s
 
 loadStoreFromDataDir R53,AWS/R53
 getCategory R53
@@ -7,4 +8,4 @@ requireEach ~!Global,route53!~
 flatten
 resultSetIfNotSet DNSName,~%Value%~
 resultSetIfNotSet Region,GLOBAL
-templateOut route53
+# templateOut route53

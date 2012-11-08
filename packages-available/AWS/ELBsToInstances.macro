@@ -1,5 +1,7 @@
 # Take a list of ELBs (that you got from --elb) and give a list of instances ~ AWS,ELB,elb,instance
 #onDefine aliasFeature ELBsToInstances,elbsToInstances
+#onLoaded setFeatureType ELBsToInstances,ELBToInstances
+
 
 takeAsOneResultset Instances
 unique

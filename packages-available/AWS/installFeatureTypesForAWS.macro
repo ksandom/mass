@@ -2,3 +2,6 @@
 #onDefine registerForEvent Install,featureTypes,installFeatureTypesForAWS
 
 createFeatureType generateListOfELBs,,ELB,Generates a list of Elastic Load Balancers.
+createFeatureType generateListOfR53s,,route53,Generates a list of Route53 DNS entries.
+createFeatureType R53ToELB,route53,ELB,Convert route53 entries to Elastic Load Balancer entries.
+createFeatureType ELBToInstances,ELB,host,Convert Elastic Load Balancer entries to instances (hosts).
