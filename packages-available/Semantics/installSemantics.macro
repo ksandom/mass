@@ -7,8 +7,6 @@ triggerEvent Install,featureTypes
 
 saveSemantics
 
-debug 0,This is running now
-
 loadStoreFromConfig Settings
 set Settings,semanticsTemplate,default
 saveStoreToConfig Settings
