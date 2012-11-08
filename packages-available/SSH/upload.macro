@@ -1,4 +1,5 @@
 # Upload a specified single file/directory to the listed servers. --list[=hostRegex] --upload=destinationPathOnTheServer file/directoryToUpload ~ user,files
+#onLoaded setFeatureType upload,actOnHostsUnknown
 
 stashResults Download,sourcelist
 

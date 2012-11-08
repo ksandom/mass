@@ -1,5 +1,6 @@
 # Use cluster ssh to control several terminals at once. --list[=hostRegex] --clusterssh ~ terminal,user
 #onDefine aliasFeature clusterssh,cssh
+#onLoaded setFeatureType clusterssh,actOnHostsUnknown
 
 outNow
 template clusterssh

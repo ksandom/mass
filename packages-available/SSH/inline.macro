@@ -1,5 +1,6 @@
 # Run a command/terminal on each host consecutively on each matching host. --list[=hostRegex] --inline [command] ~ bg,terminal,user
 #onDefine aliasFeature inline,i
+#onLoaded setFeatureType inline,actOnHosts
 
 toString ssh ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ '~%cmd%~'
 cleanUnresolvedResultVars

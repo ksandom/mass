@@ -1,4 +1,5 @@
 # Open a screen terminal to every host in the results ~ terminal,user
+#onLoaded setFeatureType screen,actOnHostsUnknown
 
 getPID Global,PID
 
