@@ -12,6 +12,8 @@
 
 class Condition extends Module
 {
+	private $lastResult=null;
+	
 	function __construct()
 	{
 		parent::__construct('Condition');
@@ -26,6 +28,10 @@ class Condition extends Module
 				$this->core->registerFeature($this, array('ifResultExists'), 'ifResultExists', '--ifResultExists="command[ arguments]" .', array('language'));
 				$this->core->registerFeature($this, array('ifResult', 'notIfEmptyResult'), 'notIfEmptyResult', '--notIfEmptyResult="command[ arguments]" .', array('language'));
 				$this->core->registerFeature($this, array('notIfResult', 'ifEmptyResult'), 'ifEmptyResult', '--ifEmptyResult="command[ arguments]" .', array('language'));
+				$this->core->registerFeature($this, array('if'), 'if', '--if=value1,comparison,value2,command[,arguments] . Comparison could be ==, >, < .', array('language'));
+				$this->core->registerFeature($this, array('lastIf'), 'lastIf', 'Do the last condition. Currently only supported by --if --lastIf=command[, arguments] .', array('language'));
+				$this->core->registerFeature($this, array('else'), 'else', 'Do the inverse of the last condition. Currently only supported by --if --else=command[, arguments] .', array('language'));
+				$this->core->registerFeature($this, array('resetIf'), 'resetIf', 'Reset the status of the last --if. This means that both --lastIf and --else will not evaluate to true.', array('language'));
 				break;
 			case 'followup':
 				break;
@@ -42,6 +48,21 @@ class Condition extends Module
 				break;
 			case 'ifEmptyResult':
 				return $this->ifNotEmptyResult($this->core->getResultSet(), $this->core->get('Global', 'ifEmptyResult'), false);
+				break;
+			case 'if':
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 4, 4, true);
+				if ($this->doIf($parms[0], $parms[1], $parms[2])) $this->core->callFeature($parms[3], $parms[4]);
+				break;
+			case 'lastIf':
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 1, true);
+				if ($this->lastResult) $this->core->callFeature($parms[0], $parms[1]);
+				break;
+			case 'else':
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 1, true);
+				if ($this->lastResult===false) $this->core->callFeature($parms[0], $parms[1]);
+				break;
+			case 'resetIf':
+				$this->lastResult=null;
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -105,6 +126,19 @@ class Condition extends Module
 		
 		$this->core->debug(5, "ifNotEmptyResult: Just about to return. Count=".$this->core->getResultSetCount());
 		return $result;
+	}
+	
+	function doIf($value1, $comparison, $value2)
+	{
+		switch ($comparison)
+		{
+			case '==':
+				return $this->lastResult=($value1==$value2);
+			case '>':
+				return $this->lastResult=($value1>$value2);
+			case '<':
+				return $this->lastResult=($value1<$value2);
+		}
 	}
 	
 	function takeAction($parms)
