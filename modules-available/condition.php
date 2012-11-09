@@ -51,15 +51,15 @@ class Condition extends Module
 				break;
 			case 'if':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 4, 4, true);
-				if ($this->doIf($parms[0], $parms[1], $parms[2])) $this->core->callFeature($parms[3], $parms[4]);
+				if ($this->doIf($parms[0], $parms[1], $parms[2])) return $this->core->callFeature($parms[3], $parms[4]);
 				break;
 			case 'lastIf':
-				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 1, true);
-				if ($this->lastResult) $this->core->callFeature($parms[0], $parms[1]);
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 1, 1, true);
+				if ($this->lastResult) return $this->core->callFeature($parms[0], $parms[1]);
 				break;
 			case 'else':
-				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 1, true);
-				if ($this->lastResult===false) $this->core->callFeature($parms[0], $parms[1]);
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 1, 1, true);
+				if ($this->lastResult===false) return $this->core->callFeature($parms[0], $parms[1]);
 				break;
 			case 'resetIf':
 				$this->lastResult=null;
