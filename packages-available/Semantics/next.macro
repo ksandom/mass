@@ -1,0 +1,14 @@
+# If there is only one possible next step, do that. Otherwise display --whatNext ~ Semantics
+#onDefine aliasFeature next,n
+
+stashResults SemanticsState,results
+whatNext
+countToVar SemanticsState,nextCount
+stashResults SemanticsState,semanticsResults
+retrieveResults SemanticsState,results
+
+# TODO save dataType and template
+if ~!SemanticsState,nextCount!~,==,0,debug,0,No known features that definitely fit this output. I suggest querying --help.
+if ~!SemanticsState,nextCount!~,==,1,~!SemanticsState,semanticsResults,0,name!~
+else debug,0,There's more than one known feature you can use with this output. They are:
+else whatNext
