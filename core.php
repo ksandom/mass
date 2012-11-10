@@ -138,7 +138,7 @@ class core extends Module
 				$this->setIfNotSet($parms[0], $parms[1], $parms[2], true);
 				break;
 			case 'unset':
-				$parms=$this->interpretParms($this->get('Global', 'set'), 2, 2, true);
+				$parms=$this->interpretParms($this->get('Global', $event), 2, 2, true);
 				$this->doUnset($parms[0], $parms[1]);
 				break;
 			case 'getCategory':
