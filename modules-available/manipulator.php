@@ -391,7 +391,7 @@ class Manipulator extends Module
 		
 		if ($feature)
 		{
-			$this->core->debug(3, 'requireEntry: Matched '.count($outputMatch).". Didn't match ".count($outputNoMatch.". For search $neededKey=$neededRegex")); # TODO Optimise this so that the counts are not done if the debugging isn't going to be seen
+			$this->core->debug(3, 'requireEntry: Matched '.count($outputMatch).". Didn't match ".count($outputNoMatch).". For search $neededKey=$neededRegex"); # TODO Optimise this so that the counts are not done if the debugging isn't going to be seen
 			return $this->mixResults($outputMatch, $outputNoMatch, $feature);
 		}
 		else
