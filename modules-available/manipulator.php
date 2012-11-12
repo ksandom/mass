@@ -37,7 +37,9 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('cleanUnresolvedResultVars'), 'cleanUnresolvedResultVars', 'Clean out any result variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
 				$this->core->registerFeature($this, array('take'), 'take', 'Take only a single key from a result set --take=key.', array('array', 'result'));
 				$this->core->registerFeature($this, array('duplicate', 'dup'), 'duplicate', 'Duplicate the result set. --duplicate[=numberOfTimesToDuplicate]Eg --duplicate=3 would take a result set of [a,b,c] and give [a,b,c,a,b,c,a,b,c]. The original intended use for this was to open extra terminals for each host when using --term or --cssh. Note that --dup --dup is not the same as --dup=2 !', array('array', 'result'));
+				$this->core->registerFeature($this, array('count'), 'count', 'Replace the reseulSet with the count of the resultSet. --count', array('result'));
 				$this->core->registerFeature($this, array('countToVar'), 'countToVar', 'Count the number of results and stick the answer in a variable. --countToVar=CategoryName,variableName', array('result'));
+				$this->core->registerFeature($this, array('pos'), 'pos', 'Insert the position of each result to that result. This can be used simply to track results as they get processed in other ways, or for creating an inprovised unique number for each result (NOTE that that number will not necessarily stay with the same result on subsequent runs if the input result set has changed). --pos[=resultVariableName[,offset]] . resultVariableName defaults to "pos" and offset defaults to "0"', array('result'));
 				#$this->core->registerFeature($this, array('cleanUnresolvedStoreVars'), 'cleanUnresolvedStoreVars', 'Clean out any store variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
 				break;
 			case 'followup':
@@ -123,9 +125,16 @@ class Manipulator extends Module
 			case 'duplicate':
 				return $this->duplicate($this->core->getResultSet(), $this->core->get('Global', $event));
 				break;
+			case 'count':
+				return array(count($this->core->getResultSet()));
+				break;
 			case 'countToVar':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2));
 				$this->core->set($parms[0], $parms[1], count($this->core->getResultSet()));
+				break;
+			case 'pos':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2));
+				return $this->assignPos($this->core->getResultSet(), $parms[0], $parms[1]);;
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -554,6 +563,21 @@ class Manipulator extends Module
 		}
 		
 		return $output;
+	}
+	
+	function assignPos($resultSet, $resultVariableName='pos', $offset=0)
+	{
+		if (!$resultVariableName) $resultVariableName='pos';
+		if (!$offset) $offset=0;
+		
+		$pos=$offset;
+		foreach ($resultSet as $key=>&$result)
+		{
+			$result[$resultVariableName]=$pos;
+			$pos++;
+		}
+		
+		return $resultSet;
 	}
 }
 
