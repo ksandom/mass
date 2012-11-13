@@ -81,23 +81,24 @@ class Macro extends Module
 			$lines=explode("\n", $actualMacro);
 		}
 		
+		$obj=null; # TODO check this. It may be needed in more places.
 		foreach ($lines as $line)
 		{
-			$trimmedLine=trim($line);
-			if (substr($trimmedLine, 0, 1)!='	')
+			$endOfArgument=strPos($line, ' ');
+			if ($endOfArgument)
 			{
-				$endOfArgument=strPos($trimmedLine, ' ');
-				if ($endOfArgument)
-				{
-					$argument=trim(substr($line, 0, $endOfArgument));
-					$value=trim(substr($line, $endOfArgument+1));
-				}
-				else
-				{
-					$argument=$trimmedLine;
-					$value='';
-				}
-				
+				$argument=trim(substr($line, 0, $endOfArgument));
+				$value=trim(substr($line, $endOfArgument+1));
+			}
+			else
+			{
+				$argument=trim($line);
+				$value='';
+			}
+			
+			
+			if (substr($line, 0, 1)!='	')
+			{
 				switch ($argument)
 				{
 					case '#':
@@ -114,15 +115,21 @@ class Macro extends Module
 						$this->core->callFeature("registerForEvent", "Macro,allLoaded,$parts[0],$parts[1]");
 						break;
 					default:
+						$obj=&$this->core->get('Features', $argument);
 						$this->core->addAction($argument, $value, $macroName);
 						break;
 				}
 			}
 			else
 			{
-				$remaining=substr($trimmedLine, 1);
-				$remaining=str_replace($remaining, '	', '	 ');
-				$this->core->addAction('	', $remaining, $macroName);
+				$remaining=substr($argument, 1);
+				# $remaining=str_replace($remaining, '	', '	 '); # TODO Check this
+				#$this->core->addAction('	', $remaining, $macroName);
+				
+				# Get indentation command
+				if (isset($obj['indentFeature'])) $this->core->addAction($obj['indentFeature'], "$argument,$value", $macroName);
+				elseif (!$argument) {}
+				else $this->core->debug(0, "defineMacro($macroName): Syntax error: Indentation without a feature. immediately beforehand. The line was $line");
 			}
 		}
 	}
