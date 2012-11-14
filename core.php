@@ -13,6 +13,8 @@ define('resultVarsDefaultRecusionWarn', 25); // If we get to this many (arbitrar
 define('resultVarsDefaultWarnDebugLevel', 2);
 define('resultVarsDefaultSevereDebugLevel', 1);
 
+define('nestedPrivateVarsName', 'Me');
+
 define('workAroundIfBug', true); // See doc/bugs/ifBug.md
 
 
@@ -620,6 +622,7 @@ class core extends Module
 		
 		$this->delete('Core', 'lastArgument'.$srcNesting);
 		$this->delete('Core', 'lastValue'.$srcNesting);
+		$this->delete(nestedPrivateVarsName, $srcNesting);
 		
 		$nesting=(is_numeric($srcNesting))?$srcNesting-1:1;
 		if ($nesting<1) $nesting=1;
@@ -725,10 +728,30 @@ class core extends Module
 		#echo "m=$category, v=$valueName\n";
 		if (isset($this->store[$category]))
 		{
-			if (isset($this->store[$category][$valueName])) return $this->store[$category][$valueName];
-			else 
+			if ($category!=nestedPrivateVarsName)
 			{
-				$result=null;
+				if (isset($this->store[$category][$valueName])) return $this->store[$category][$valueName];
+				else 
+				{
+					$result=null;
+				}
+			}
+			else
+			{
+				$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+				if (isset($this->store['Me'][$nesting])) 
+				{
+					for ($i=$nesting;$i>0;$i--)
+					{
+						if (isset($this->store['Me'][$i][$valueName]))
+						{
+							$result=$this->store['Me'][$i][$valueName];
+							break;
+						}
+						else $result=null;
+					}
+				}
+				else $result=null;
 			}
 		}
 		else
@@ -742,9 +765,20 @@ class core extends Module
 	function setIfNotSet($category, $valueName, $value, $orNothing=false)
 	{
 		$shouldSet=false;
-		if (!isset($this->store[$category])) $shouldSet=true;
-		elseif (!isset($this->store[$category][$valueName])) $shouldSet=true;
-		elseif (!$this->store[$category][$valueName] and $orNothing)  $shouldSet=true;
+		if ($category!=nestedPrivateVarsName)
+		{
+			if (!isset($this->store[$category])) $shouldSet=true;
+			elseif (!isset($this->store[$category][$valueName])) $shouldSet=true;
+			elseif (!$this->store[$category][$valueName] and $orNothing)  $shouldSet=true;
+		}
+		else
+		{
+			$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+			if (!isset($this->store[$category])) $shouldSet=true;
+			elseif(!isset($this->store[$category][$nesting])) $shouldSet=true;
+			elseif (!isset($this->store[$category][$nesting][$valueName])) $shouldSet=true;
+			elseif (!$this->store[$category][$nesting][$valueName] and $orNothing)  $shouldSet=true;
+		}
 		
 		if ($shouldSet) $this->set($category, $valueName, $value);
 	}
@@ -755,7 +789,13 @@ class core extends Module
 		$this->debug(5,"set($category, $valueName, $argsDisplay)");
 		if (!isset($this->store[$category])) $this->store[$category]=array();
 		
-		$this->store[$category][$valueName]=$args;
+		if ($category!=nestedPrivateVarsName) $this->store[$category][$valueName]=$args;
+		else
+		{
+			$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+			if (!isset($this->store[$category][$nesting])) $this->store[$category][$nesting]=array();
+			$this->store[$category][$nesting][$valueName]=$args;
+		}
 	}
 
 	function setRef($category, $valueName, &$args)
@@ -764,13 +804,28 @@ class core extends Module
 		$this->debug(5,"setRef($category, $valueName, $argString)");
 		if (!isset($this->store[$category])) $this->store[$category]=array();
 		
-		$this->store[$category][$valueName]=&$args;
+		if ($category!=nestedPrivateVarsName) $this->store[$category][$valueName]=&$args;
+		else
+		{
+			$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+			if (!isset($this->store[$category][$nesting])) $this->store[$category][$nesting]=array();
+			$this->store[$category][$nesting][$valueName]=$args;
+		}
 	}
 	
 	function doUnSet($category, $valueName)
 	{
 		$this->debug(5,"unSet($category, $valueName)");
 		unset($this->store[$category][$valueName]);
+		if ($category!=nestedPrivateVarsName) unset($this->store[$category][$valueName]);
+		else
+		{
+			$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+			if (isset($this->store[$category][$nesting]))
+			{
+				if (isset($this->store[$category][$nesting][$valueName])) unset($this->store[$category][$nesting][$valueName]);
+			}
+		}
 	}
 	
 	function getNested($values)
