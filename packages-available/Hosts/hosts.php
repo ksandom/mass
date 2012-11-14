@@ -18,7 +18,8 @@ class Hosts extends Module
 		{
 			case 'init':
 				$this->core->registerFeature($this, array('search'), 'search', 'List/Search host entries. ', array('search'));
-				$this->core->registerFeature($this, array('searchOld'), 'searchOld', 'Deprecated. List/Search host entries. ', array('deprecated', 'search'));
+				# TODO Cleanly remove the searchOld feature without breaking stuff.
+				# $this->core->registerFeature($this, array('searchOld'), 'searchOld', 'Deprecated. List/Search old style host entries. ', array('deprecated', 'search'));
 				$this->core->registerFeature($this, array('importFromHostsFile'), 'importFromHostsFile', 'Import host entries from a hosts file.', array('import'));
 				$this->core->registerFeature($this, array('reloadOldStyleHosts'), 'reloadOldStyleHosts', 'Import host entries from a hosts file.', array('hosts', 'src'));
 				break;
