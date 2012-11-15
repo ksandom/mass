@@ -3,7 +3,6 @@
 
 stashResults Download,sourcelist
 
-# retrieveResults Download,sourcelist
 toString mkdir -p ~%externalFQDN%~
 exec
 
@@ -12,3 +11,5 @@ toString scp ~%scpExtra%~ ~%auth%~ -r ~%userAt%~~%FQDN%~:~!Global,download!~ ~%e
 cleanUnresolvedResultVars
 nested
 exec
+
+unset Download,sourcelist

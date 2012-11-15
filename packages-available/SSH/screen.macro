@@ -8,5 +8,5 @@ cleanUnresolvedResultVars
 singleStringNow /tmp/mass-~!Global,PID!~.screen
 
 exec screen -c /tmp/mass-~!Global,PID!~.screen
-# TODO Removign the file kills the screen session. We need to remove it somehow to get rid of clutter. This needs to be solved.
+# TODO Removing the file kills the screen session. We need to remove it somehow to get rid of clutter. This needs to be solved.
 # exec rm /tmp/mass-~!Global,PID!~.screen
