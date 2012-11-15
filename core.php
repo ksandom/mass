@@ -367,17 +367,6 @@ class core extends Module
 	function callFeature($argument, $value='')
 	{
 		$nesting=$this->get('Core', 'nesting');
-		if ($argument=='	')
-		{
-			$argument=$this->get('Core', 'lastArgument'.$nesting);
-			$lastValue=$this->get('Core', 'lastValue'.$nesting);
-			$value=($lastValue)?$lastValue.','.$value:$value;
-		}
-		else
-		{
-			$this->set('Core', 'lastArgument'.$nesting, $argument);
-			$this->set('Core', 'lastValue'.$nesting, $value);
-		}
 		
 		if ($argument and $argument != '#' and $argument != '//')
 		{ // Only process non-white space
@@ -620,8 +609,6 @@ class core extends Module
 	{
 		$srcNesting=$this->get('Core', 'nesting');
 		
-		$this->delete('Core', 'lastArgument'.$srcNesting);
-		$this->delete('Core', 'lastValue'.$srcNesting);
 		$this->delete(nestedPrivateVarsName, $srcNesting);
 		
 		$nesting=(is_numeric($srcNesting))?$srcNesting-1:1;
