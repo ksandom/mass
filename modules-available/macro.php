@@ -122,10 +122,6 @@ class Macro extends Module
 			}
 			else
 			{
-				$remaining=substr($argument, 1);
-				# $remaining=str_replace($remaining, '	', '	 '); # TODO Check this
-				#$this->core->addAction('	', $remaining, $macroName);
-				
 				# Get indentation command
 				if (isset($obj['indentFeature'])) $this->core->addAction($obj['indentFeature'], "$argument,$value", $macroName);
 				elseif (!$argument) {}
