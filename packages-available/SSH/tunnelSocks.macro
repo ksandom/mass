@@ -1,0 +1,16 @@
+# Create a separate socks proxy using every host in the result set. --tunnelSocks[=port] . Eg to a common use would be use port 8080 for proxying HTTP traffic like this --tunnelSocks=8080 . The port for each proxy will be incremented by 1 compared to the last. If the port isn't specified, 8080 is used. ~ user,tunnel
+
+pos port,~!tunnelSocks!~
+
+# Gather input
+set TunnelSocks,port,~!tunnelSocks!~
+
+# Set defaults
+setIfNotSet TunnelSocks,port,8080
+
+# Send parameters so that we only start a tunnel
+resultSet sshExtra,-D ~!TunnelSocks,port!~
+
+unsetCategory TunnelSpecific
+
+screen 

@@ -1,0 +1,19 @@
+# Tunnel via every host in the result set. --tunnelSpecific=fromPort[,toHost[,toPort]] . Eg to forward MySQL you could do --tunnelSpecific=3306 . Or if you have 3306 taken on your local machine already, you could do --tunnelSpecific=13306,,3306 which would create a tunnel to each matching host listening on localhost on ports beginning at 13306. TODO Note about localhost ~ user,tunnel,INCOMPLETE
+#onDefine aliasFeature tunnelSpecific,tunnel
+
+pos fromPort,~!tunnelSpecific-0!~
+
+# Gather input
+set TunnelSpecific,toHost,~!tunnelSpecific-1!~
+set TunnelSpecific,toPort,~!tunnelSpecific-2!~
+
+# Set defaults
+setIfNotSet TunnelSpecific,toHost,localhost
+setIfNotSet TunnelSpecific,toPort,~!TunnelSpecific,toHost!~
+
+# Send parameters so that we only start a tunnel
+resultSet sshExtra,-NL ~%fromPort%~:~!TunnelSpecific,toHost!~:~!TunnelSpecific,toPort!~
+
+unsetCategory TunnelSpecific
+
+screen 
