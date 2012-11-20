@@ -19,7 +19,7 @@ class Events extends Module
 			case 'init':
 				$this->core->registerFeature($this, array('registerOnceForEvent', 'registerForEvent'), 'registerOnceForEvent', "Register a feature once to be executed when a particular event is triggered. --registerForEvent=Category,eventName,featureName[,featureValue]", array());
 				$this->core->registerFeature($this, array('registerMultipleTimesForEvent'), 'registerMultipleTimesForEvent', "Register a feature to be executed when a particular event is triggered. If you use --registerMultipleTimesForEvent multiple times for a single action (say saving some data), then that action will get called once for everytime it was registered per trigger of that event. This is probably not what you want. Usually --registerOnceForEvent (--registerForEvent) will be what you want. --registerEvent=Category,eventName,featureName[,featureValue]", array());
-				$this->core->registerFeature($this, array('triggerEvent'), 'triggerEvent', "Trigger an event. --triggerEvent=Category,eventName", array());
+				$this->core->registerFeature($this, array('triggerEvent'), 'triggerEvent', "Trigger an event. --triggerEvent=Category,eventName[,value] . Note that if value is given, it will be appended as an extra option to what ever was provided when the eventee was registered.", array());
 				break;
 			case 'followup':
 				$this->triggerEvent('Startup', 'followup');
@@ -37,7 +37,7 @@ class Events extends Module
 				break;
 			case 'triggerEvent':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 2, true);
-				return $this->triggerEvent($parms[0], $parms[1]);
+				return $this->triggerEvent($parms[0], $parms[1], $parms[2]);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -69,7 +69,7 @@ class Events extends Module
 		# TODO Write this. If this becomes relied on a lot, check to see if tasks should actually be part of macros. I envisage priorities being used when something HAS to be done first or last. Eg preparing folders for downloads, or cleaning up afterwards.
 	}
 	
-	function triggerEvent($category, $eventName)
+	function triggerEvent($category, $eventName, $value)
 	{
 		$this->core->debug(3, "triggerEvent: $category,$eventName");
 		$priorityGroups=$this->core->get($category, $eventName);
@@ -84,7 +84,11 @@ class Events extends Module
 					foreach ($priorityGroup as $eventee)
 					{
 						$this->core->debug(2, "triggerEvent: $category,$eventName: --{$eventee['featureName']}={$eventee['featureValue']}");
-						$result=$this->core->callFeature($eventee['featureName'], $eventee['featureValue']);
+						
+						if ($value) $valueToSend=($eventee['featureValue'])?$eventee['featureValue'].','.$value:$value;
+						else $valueToSend=$eventee['featureValue'];
+						
+						$result=$this->core->callFeature($eventee['featureName'], $valueToSend);
 						$this->core->setResultSet($result); // This is necessary because the feature being called may rely on it being there.
 					}
 					
