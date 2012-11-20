@@ -69,7 +69,7 @@ class Events extends Module
 		# TODO Write this. If this becomes relied on a lot, check to see if tasks should actually be part of macros. I envisage priorities being used when something HAS to be done first or last. Eg preparing folders for downloads, or cleaning up afterwards.
 	}
 	
-	function triggerEvent($category, $eventName, $value)
+	function triggerEvent($category, $eventName, $value='')
 	{
 		$this->core->debug(3, "triggerEvent: $category,$eventName");
 		$priorityGroups=$this->core->get($category, $eventName);
