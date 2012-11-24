@@ -83,9 +83,9 @@ class Events extends Module
 					
 					foreach ($priorityGroup as $eventee)
 					{
-						$this->core->debug(2, "triggerEvent: $category,$eventName: --{$eventee['featureName']}={$eventee['featureValue']}");
+						$this->core->debug(3, "triggerEvent: $category,$eventName: --{$eventee['featureName']}={$eventee['featureValue']}");
 						
-						if ($value) $valueToSend=($eventee['featureValue'])?$eventee['featureValue'].','.$value:$value;
+						if ($value!='') $valueToSend=($eventee['featureValue'])?$eventee['featureValue'].','.$value:$value;
 						else $valueToSend=$eventee['featureValue'];
 						
 						$result=$this->core->callFeature($eventee['featureName'], $valueToSend);
