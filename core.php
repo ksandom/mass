@@ -376,7 +376,7 @@ class core extends Module
 				$indentation=str_repeat('  ', $nesting);
 				$valueIn=$this->processValue($value);
 				
-				$this->debug(3, "INVOKE-Enter {$indentation}{$obj['name']}/$nesting value={$value}, valueIn=$valueIn");
+				$this->debug(4, "INVOKE-Enter {$indentation}{$obj['name']}/$nesting value={$value}, valueIn=$valueIn");
 				
 				if ($this->isVerboseEnough(5))
 				{
@@ -388,21 +388,21 @@ class core extends Module
 				
 				if (isset($obj['featureType']))
 				{
-					$this->core->debug(3, "callFeature: ".$obj['featureType']);
+					$this->core->debug(4, "callFeature: ".$obj['featureType']);
 					if ($outDataType=$this->getNested(array('Semantics', 'featureTypes', $obj['featureType'], 'outDataType')))
 					{
 						if ($dataType=$this->getNested(array('Semantics', 'dataTypes', $outDataType)))
 						{
 							$semanticsTemplate=$this->get('Settings', 'semanticsTemplate');
-							$this->core->debug(3, "callFeature: Applying --{$dataType['action']}={$dataType[$semanticsTemplate]}");
+							$this->core->debug(4, "callFeature: Applying --{$dataType['action']}={$dataType[$semanticsTemplate]}");
 							$this->callFeature($dataType['action'], $dataType[$semanticsTemplate]);
 							$dataType['chosenTemplate']=$dataType[$semanticsTemplate];
 							$this->set('SemanticsState', 'currentDataType', $dataType);
 							$this->set('SemanticsState', 'currentFeatureType', $obj['featureType']);
 						}
-						else $this->core->debug(3, "callFeature: Could not find dataType $outDataType");
+						else $this->core->debug(4, "callFeature: Could not find dataType $outDataType");
 					}
-					else $this->core->debug(3, "callFeature: Could not find featureType ".$obj['featureType']);
+					else $this->core->debug(4, "callFeature: Could not find featureType ".$obj['featureType']);
 				}
 				
 				
