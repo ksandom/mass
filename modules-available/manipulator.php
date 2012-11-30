@@ -40,6 +40,7 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('count'), 'count', 'Replace the reseulSet with the count of the resultSet. --count', array('result'));
 				$this->core->registerFeature($this, array('countToVar'), 'countToVar', 'Count the number of results and stick the answer in a variable. --countToVar=CategoryName,variableName', array('result'));
 				$this->core->registerFeature($this, array('pos'), 'pos', 'Insert the position of each result to that result. This can be used simply to track results as they get processed in other ways, or for creating an inprovised unique number for each result (NOTE that that number will not necessarily stay with the same result on subsequent runs if the input result set has changed). --pos[=resultVariableName[,offset]] . resultVariableName defaults to "pos" and offset defaults to "0"', array('result'));
+				$this->core->registerFeature($this, array('chooseBasedOn'), 'chooseBasedOn', 'For each item in the result set, choose the value of an array based on the modulous of a named value in the result set and the number of items in the array. This would naturally work well with --pos. --chooseBasedOn=inputValueName,outputValueName,inputCategory[,inputValueName,[subInputValueName,[etc,[etc]]]]', array('result'));
 				#$this->core->registerFeature($this, array('cleanUnresolvedStoreVars'), 'cleanUnresolvedStoreVars', 'Clean out any store variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
 				break;
 			case 'followup':
@@ -133,9 +134,14 @@ class Manipulator extends Module
 				$this->core->set($parms[0], $parms[1], count($this->core->getResultSet()));
 				break;
 			case 'pos':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event), 2);
 				return $this->assignPos($this->core->getResultSet(), $parms[0], $parms[1]);;
 				break;
+			case 'chooseBasedOn':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 3, true));
+				return $this->chooseBasedOn($this->core->getResultSet(), $parms[0], $parms[1], $parms[2]);;
+				break;
+			
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
 				break;
@@ -578,6 +584,42 @@ class Manipulator extends Module
 		}
 		
 		return $resultSet;
+	}
+	
+	function chooseBasedOn($resultSet, $inputValueName, $outputValueName, $inputArrayName)
+	{
+		if ($inputArray=$this->core->getNested($this->core->interpretParms($inputArrayName)))
+		{
+			if (is_array($inputArray))
+			{
+				$index=array_keys($inputArray);
+				$count=count($inputArray);
+				
+				foreach ($resultSet as &$item)
+				{
+					if (!isset($item[$inputValueName])) continue; # TODO Do we need debugging on this? Probably yes.
+					if (!is_numeric($item[$inputValueName])) continue; # TODO Do we need debugging on this? Probably yes.
+					
+					# TODO test/finish this
+					$arrayPos=$item[$inputValueName]%$count;
+					$item[$outputValueName]=$inputArray[$index[$arrayPos]];
+				}
+				
+				
+				
+				return $resultSet;
+			}
+			else
+			{
+				$this->core->debug(3, "Manipulator->chooseBasedOn: $inputArrayName was not an array. It's ".gettype($inputArray));
+				return false;
+			}
+		}
+		else 
+		{
+			$this->core->debug(3, "Manipulator->chooseBasedOn: $inputArrayName did not exist.");
+			return false;
+		}
 	}
 }
 

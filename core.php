@@ -218,14 +218,18 @@ class core extends Module
 	
 	function interpretParms($parms, $limit=0, $require=null, $reassemble=true)
 	{
-		if ($require===null) $require=$limit;
+		#if ($require===null) $require=$limit;
 		$parts=explode(valueSeparator, $parms);
 		$partsCount=count($parts);
 		
 		if ($partsCount<$require)
 		{
 			$this->debug(0, "Expected $require parameters, but got $partsCount. Bad things could happen if execution had been allowed to continue. Parms=$parms");
-			return false;
+			
+			# TODO This array almost certainly could be generated in a  better way.
+			$output=array();
+			while (count($output)< $limit) $output[]='';
+			return $output;
 		}
 		
 		for ($i=$partsCount;$i<$limit;$i++) $parts[$i]=false;
@@ -241,7 +245,7 @@ class core extends Module
 					# $this->core->debug(2, "interpretParms: Added main part $i => {$parts[$i]}");
 					$output[]=$parts[$i];
 				}
-				else return $output;
+				else break;
 			}
 			
 			$outputParts=array();
@@ -256,6 +260,13 @@ class core extends Module
 			# Reassemble=true sets a string. False sets an array.
 			if ($reassemble) $output[]=implode(valueSeparator, $outputParts);
 			else $output[]=$outputParts;
+			
+			while (count($output)< $limit)
+			{
+				$this->debug(0, "add one");
+				$output[]='';
+			}
+			
 			return $output;
 		}
 		else return $parts;
