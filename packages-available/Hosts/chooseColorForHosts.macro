@@ -1,0 +1,6 @@
+# Choose a color for each host. This should happen automatically on import. ~ color,host
+#onDefine registerForEvent AWS,importedHostsFromAccount,chooseColorForHosts
+#onDefine registerForEvent Hosts,saveHostsCollection,chooseColorForHosts
+
+positiveCRC hostName,pseudoID
+chooseBasedOn pseudoID,color,Color

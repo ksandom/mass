@@ -486,7 +486,11 @@ class core extends Module
 				}
 				else $varValue=$this->getNested($varParts);
 				
-				$output=implode($varValue, explode(storeValueBegin.$varDef.storeValueEnd, $output));
+				if (!is_array($varValue)) $output=implode($varValue, explode(storeValueBegin.$varDef.storeValueEnd, $output));
+				else 
+				{
+					# print_r($varValue);
+				}
 			}
 			else
 			{

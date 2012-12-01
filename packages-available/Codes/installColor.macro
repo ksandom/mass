@@ -2,5 +2,10 @@
 #onDefine registerForEvent Install,early,installColor
 
 generateColors
+
 triggerEvent Color,generate
+
+# TODO this will need to be done smarter
+improveColorsNoBlink
+
 saveStoreToConfig Color

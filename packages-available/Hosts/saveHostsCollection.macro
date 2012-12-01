@@ -1,4 +1,5 @@
 # Save a collection of hosts to it's appropriate json file. This is really intended for internal use. ~ hosts,save,internal
 
 retrieveResults Hosts,~!Global,saveHostsCollection!~
+triggerEvent Hosts,saveHostsCollection
 saveToJson ~!General,configDir!~/data/1LayerHosts/~!Global,saveHostsCollection!~.json

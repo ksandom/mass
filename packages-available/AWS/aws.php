@@ -323,11 +323,12 @@ class AWS extends Module
 				{
 					foreach (array('DNSName', 'CanonicalHostedZoneName', 'LoadBalancerName') as $id)
 					{
-						if (isset($loadBalancer[$id])) break;
+						if (isset($loadBalancer[$id]))
+						{
+							$output[$loadBalancer[$id].$region['regionName']]=$loadBalancer;
+							$output[$loadBalancer[$id].$region['regionName']]['Region']=$region['regionName'];
+						}
 					}
-					
-					$output[$loadBalancer[$id].$region['regionName']]=$loadBalancer;
-					$output[$loadBalancer[$id].$region['regionName']]['Region']=$region['regionName'];
 				}
 			}
 		}
