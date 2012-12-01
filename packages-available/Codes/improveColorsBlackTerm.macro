@@ -1,0 +1,5 @@
+# Remove colors that would be unreadable on a black terminal. ~ color,improveColors
+
+# For now, these two are not relevant, but may become so later.
+# removeColor black
+# removeColor darkBlack

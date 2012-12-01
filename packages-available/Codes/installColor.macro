@@ -1,0 +1,6 @@
+# Install color codes ~ install,color
+#onDefine registerForEvent Install,early,installColor
+
+generateColors
+triggerEvent Color,generate
+saveStoreToConfig Color

@@ -1,4 +1,5 @@
 # Setup default values ~ setup
+#onDefine registerForEvent Install,general,createDefaultValues
 
 # Clean up after the loadStoreEntryFromFilename duplicate $storeName bug
 unset Terminal,Terminal

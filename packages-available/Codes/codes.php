@@ -16,19 +16,19 @@ class Codes extends Module
 		{
 			case 'init':
 				$this->loadCodes();
-				$this->core->registerFeature($this, array('color', 'C'), 'color', 'Turn on colored output.', array('userExtra'));
-				$this->core->registerFeature($this, array('noColor', 'nocolor', 'b'), 'noColor', 'Turn off colored output.', array('userExtra'));
+				$this->core->registerFeature($this, array('generateColors'), 'generateColors', 'Generate colors.', array('userExtra'));
+				#$this->core->registerFeature($this, array('noColor', 'nocolor', 'b'), 'noColor', 'Turn off colored output.', array('userExtra'));
 
 				break;
 			case 'followup':
 				break;
 			case 'last':
 				break;
-			case 'color':
+			case 'generateColors':
 				$this->loadColorCodes(true);
 				break;
-			case 'noColor':
-				$this->loadColorCodes(false);
+			#case 'noColor':
+			#	$this->loadColorCodes(false);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -39,7 +39,7 @@ class Codes extends Module
 	function loadCodes()
 	{
 		$this->loadControlCodes();
-		$this->loadColorCodes();
+		# $this->loadColorCodes();
 		$this->loadDefaultAliases();
 	}
 	
@@ -124,10 +124,18 @@ class Codes extends Module
 					{
 						foreach ($color['background'] as $bgColorKey=>$bgColorName)
 						{
-							if (($colorKey!=$bgColorKey-10) or $deckName=='bright')
+							$bgColorCode=($useColor)?"\033[$deckKey;{$colorKey};{$bgColorKey}m":'';
+							$withBGKey=($shortname)?"$shortname$bgColorName":"$deckName$colorName$bgColorName";
+							
+							// Filter out combinations that are likely to be very hard to read.
+							if ( (($colorKey==$bgColorKey-10 and $deskName='dark'))
+								or ($deckName=='bright' and $bgColorKey==37)
+								)
 							{
-								$bgColorCode=($useColor)?"\033[$deckKey;{$colorKey};{$bgColorKey}m":'';
-								$withBGKey=($shortname)?"$shortname$bgColorName":"$deckName$colorName$bgColorName";
+								$this->core->set('RejectedColor', "$withBGKey", $bgColorCode);
+							}
+							else
+							{
 								$this->core->set('Color', "$withBGKey", $bgColorCode);
 							}
 							#$this->core->debug(0, "d=$deckKey bg=$bgColorKey fg=$colorKey");

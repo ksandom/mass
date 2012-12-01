@@ -1,0 +1,5 @@
+# Remove color. --removeColor=colorname . You can find out what colorname is with --listColors ~ color
+
+registerForEvent Mass,finishEarly,saveStoreToConfig,Color
+
+unset Color,~!Global,removeColor!~
