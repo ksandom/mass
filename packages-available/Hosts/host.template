@@ -1,5 +1,5 @@
 <~~ ~!Color,default!~~%hostName%~ ~!Color,brightBlack!~/ ~!Color,cyan!~~%IP%~ ~!Color,brightBlack!~/ ~!Color,blue!~~%location%~~!Color,default!~
   ~!Color,green!~~%FQDN%~ ~!Color,default!~
-  ~!Color,darkYellow!~~%instanceType%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%architecture%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%rootDeviceType%~~!Color,default!~
+  ~!Color,darkYellow!~~%instanceType%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%architecture%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%rootDeviceType%~~!Color,default!~ ~%color%~##~!Color,default!~
 
 ~>
