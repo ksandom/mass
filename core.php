@@ -500,6 +500,11 @@ class core extends Module
 			$iterations++;
 		}
 		
+		if ($iterations==100)
+		{
+			$this->debug(1, "Still finding \"".storeValueBegin."\" in \"".$output."\"");
+		}
+		
 		return $output;
 	}
 	

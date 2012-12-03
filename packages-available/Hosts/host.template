@@ -1,5 +1,5 @@
-<~~ ~!Color,~%color%~!~#~!Color,default!~ ~%hostName%~~!Color,default!~ ~!Color,brightBlack!~/ ~!Color,cyan!~~%IP%~ ~!Color,brightBlack!~/ ~!Color,blue!~~%location%~~!Color,default!~
-~!Color,~%color%~!~#~!Color,default!~  ~!Color,green!~~%FQDN%~ ~!Color,default!~
-~!Color,~%color%~!~#~!Color,default!~  ~!Color,darkYellow!~~%instanceType%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%architecture%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%rootDeviceType%~~!Color,default!~
+<~~ ~!Color,default!~~%hostName%~~!Color,default!~ ~!Color,brightBlack!~~!Color,~%color%~!~/~!Color,default!~ ~!Color,cyan!~~%IP%~ ~!Color,brightBlack!~~!Color,~%color%~!~/~!Color,default!~ ~!Color,blue!~~%location%~~!Color,default!~
+~!Color,default!~  ~!Color,green!~~%FQDN%~ ~!Color,default!~
+~!Color,default!~  ~!Color,darkYellow!~~%instanceType%~ ~!Color,brightBlack!~~!Color,~%color%~!~/~!Color,default!~ ~!Color,darkYellow!~~%architecture%~ ~!Color,brightBlack!~~!Color,~%color%~!~/~!Color,default!~ ~!Color,darkYellow!~~%rootDeviceType%~~!Color,default!~
 
 ~>
