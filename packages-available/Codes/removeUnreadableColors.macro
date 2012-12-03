@@ -76,10 +76,6 @@ removeColor greenHLCyan
 removeColor redHLBlue
 
 
-# NOTE These may actually be bugs that need to be fixed
-removeColor testColor
-removeColor generate
-
 # NOTE These colors may later belong in improveColorsBlackTerm.macro and improveColorsWhiteTerm.macro, but that will involve more inderstanding of the specific users' setup. So for now they are here.
 
 removeColor black

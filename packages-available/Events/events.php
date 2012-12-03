@@ -47,7 +47,7 @@ class Events extends Module
 	
 	function registerForEvent($category, $eventName, $featureName, $featureValue='', $onlyOnce=false, $priority=50)
 	{
-		$priorityGroups=$this->core->get($category, $eventName);
+		$priorityGroups=$this->core->get('Events', "$category-$eventName");
 		if (!isset($priorityGroups[$priority])) $priorityGroups[$priority]=array();
 		
 		$newValue=array('featureName'=>$featureName, 'featureValue'=>$featureValue);
@@ -55,7 +55,7 @@ class Events extends Module
 		else $priorityGroups[$priority][]=$newValue;
 		
 		$this->core->debug(3, "Registered \"$featureName $featureValue\" to event \"$category, $eventName\" at priority $priority.");
-		$this->core->set($category, $eventName, $priorityGroups);
+		$this->core->set('Events', "$category-$eventName", $priorityGroups);
 	}
 	
 	
@@ -72,7 +72,7 @@ class Events extends Module
 	function triggerEvent($category, $eventName, $value='')
 	{
 		$this->core->debug(4, "triggerEvent: $category,$eventName");
-		$priorityGroups=$this->core->get($category, $eventName);
+		$priorityGroups=$this->core->get('Events', "$category-$eventName");
 		if (is_array($priorityGroups) && count($priorityGroups)>0)
 		{
 			foreach ($priorityGroups as $priority=>$priorityGroup)
@@ -102,7 +102,7 @@ class Events extends Module
 					unset($priorityGroups['priority']);
 					
 					# This is potentially inefficient. But there would have to be a LOT of priority groups for it to matter. If it becomes an issue, set a flag and do it at the end.
-					$this->core->set($category, $eventName);
+					$this->core->doUnSet('Events', "$category-$eventName");
 				}
 			}
 		}
