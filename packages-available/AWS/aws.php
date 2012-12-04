@@ -242,7 +242,7 @@ class AWS extends Module
 							}
 							else $host['internalFQDN']='';
 							
-							if (isset($item['instancesSet']['item']['privateDnsName']))
+							if (isset($item['instancesSet']['item']['dnsName']))
 							{
 								$host['externalFQDN']=$item['instancesSet']['item']['dnsName'];
 							}
