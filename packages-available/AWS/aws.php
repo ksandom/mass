@@ -259,13 +259,22 @@ class AWS extends Module
 							{
 								$host['internalIP']=$item['instancesSet']['item']['privateIpAddress'];
 								unset($item['instancesSet']['item']['privateIpAddress']);
-								$output[]=$host;
 							}
 							elseif ($includePoweredOffInstances) 
 							{
 								$host['internalIP']='';
+							}
+							
+							if (isset($output[$name]))
+							{
+								$originalInstanceID=$output[$name]['instanceId'];
+								$newInstanceID=$host['instanceId'];
+								
+								$this->core->debug(0, "AWS->AWSGetHostsForAllRegions: Found a duplicate instance ($originalInstanceID) with the name tag \"$name\" while trying to add $newInstanceID. This will cause you much pain. For now this host will be added anonymously, but you really should fix this then run the import again.");
 								$output[]=$host;
 							}
+							else $output[$name]=$host;
+							
 							
 							if (isset($item['placement']))
 							{
@@ -276,6 +285,8 @@ class AWS extends Module
 									$host['availabilityZone']=substr($item['placement']['availabilityZone'], -1);
 								}
 							}
+						
+						unset($host);
 						}
 						else
 						{
