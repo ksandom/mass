@@ -259,18 +259,23 @@ class Template extends Module
 	
 	function out($output)
 	{
-		if (is_string($output)) echo "template: Unexpected string=\"$output\"\n";
+		if (is_string($output)) $this->core->echoOut("template: Unexpected string=\"$output\"");
 		elseif(strpos($this->templateOut, ',')!==false)
 		{
 			$this->core->debug(2, "Template->out: Using nestedTemplates: {$this->templateOut}");
 			$result=$this->core->callFeatureWithDataset('nestTemplates', $this->templateOut, $output);
-			echo $result[0];
+			$this->core->echoOut($result[0]);
 		}
 		else
 		{
 			$this->core->debug(2, "Template->out: Using a single template: {$this->templateOut}");
-			echo $this->processTemplateByName($this->templateOut, $output);
+			$this->core->echoOut($this->processTemplateByName($this->templateOut, $output));
 		}
+	}
+	
+	function put($output)
+	{
+		echo $output;
 	}
 }
 

@@ -32,7 +32,7 @@ class JsonOut extends Module
 				break;
 			case 'json':
 				$this->core->setRef('General', 'outputObject', $this);
-				return $this->core->getResultSet(); # TODO Fix this! # TODO Note what is actually wrong :P
+				$this->core->setRef('General', 'echoObject', $this);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);

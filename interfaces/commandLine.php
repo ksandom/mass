@@ -23,6 +23,7 @@ class CommandLine extends Module
 				$this->core->registerFeature($this, array('nested'), 'nested', 'Print output using a simple nested format. Particularly useful for debugging.', array('debug', 'dev', 'output'));
 				
 				$this->core->setRef('General', 'outputObject', $this);
+				$this->core->setRef('General', 'echoObject', $this);
 				break;
 			case 'followup':
 				break;
@@ -111,7 +112,7 @@ class CommandLine extends Module
 		if (is_array($obj)) $this->core->setRef('Actions', $argument, $obj);
 		else
 		{
-			echo "Could not find a module to match '$argument'\n";
+			$this->core->debug(0,"Could not find a module to match '$argument'");
 		}
 	}
 	
@@ -136,11 +137,11 @@ class CommandLine extends Module
 			$derivedPrefix=($prefix or is_numeric($prefix))?"$prefix{$this->codes['default']}: ":'';
 			if (is_string($output)) 
 			{
-				echo "$indent{$this->codes['green']}$derivedPrefix$output\n";
+				$this->core->echoOut("$indent{$this->codes['green']}$derivedPrefix$output");
 			}
 			elseif (is_array($output))
 			{
-				echo "$indent{$this->codes['cyan']}$derivedPrefix\n";
+				$this->core->echoOut("$indent{$this->codes['cyan']}$derivedPrefix");
 				foreach ($output as $key=>$value)
 				{
 					$this->out($value, $indent.'  ', "$key");
@@ -150,25 +151,30 @@ class CommandLine extends Module
 			{
 				if ($prefix)
 				{
-					echo "$indent{$this->codes['purple']}{$derivedPrefix}NULL\n";
+					$this->core->echoOut("$indent{$this->codes['purple']}{$derivedPrefix}NULL");
 				}
 			}
 			elseif (is_numeric($output))
 			{
-				echo "$indent{$this->codes['purple']}{$derivedPrefix}$output\n";
+				$this->core->echoOut("$indent{$this->codes['purple']}{$derivedPrefix}$output");
 			}
 			elseif (is_bool($output))
 			{
 				$display=($output)?'True':'False';
-				echo "$indent{$this->codes['purple']}{$derivedPrefix}$display\n";
+				$this->core->echoOut("$indent{$this->codes['purple']}{$derivedPrefix}$display");
 			}
 			else
 			{
-				echo "$indent{$this->codes['red']}{$prefix}{$this->codes['default']}: {$this->codes['brightBlack']}I can't display this data type yet.{$this->codes['default']}\n";
+				$this->core->echoOut("$indent{$this->codes['red']}{$prefix}{$this->codes['default']}: {$this->codes['brightBlack']}I can't display this data type yet.{$this->codes['default']}");
 			}
 			
-			echo "{$this->codes['default']}";
+			$this->core->echoOut("{$this->codes['default']}");
 		}
+	}
+	
+	function put($output)
+	{
+		foreach ($output as $line) echo "$line\n";
 	}
 }
 

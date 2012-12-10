@@ -1068,6 +1068,23 @@ class core extends Module
 		}
 	}
 	
+	function echoOut($output)
+	{
+		if (isset($this->store['General']['echoObject']))
+		{
+			$this->store['General']['echoObject']->put(array($output), 'default');
+		}
+		else
+		{
+			if (is_string($output)) echo programName."/noEcho: $output\n";
+			else
+			{
+				echo programName."/noEcho: print_r output follows:\n";
+				print_r($output);
+			}
+		}
+	}
+	
 	function now()
 	{
 		return 'I need to implement this!';
