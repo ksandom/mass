@@ -49,6 +49,8 @@ function checkPrereqs
 function linkedInstall
 {
 	echo "Linked install chosen"
+	echo "NOTE that this is a linked install so you need to keep the reposittory that you installed from in place. If you don't want to do this, you may want to consider installing as root, which will make it available to all users."
+	
 	configDir=~/.$programName
 	bin="."
 	binExec=~/bin
@@ -187,7 +189,7 @@ function removeObsoleteStuff
 
 function doInstall
 {
-	startDir=`pwd` # for some reason ~- wasn't working
+	startDir=`pwd`
 	mkdir -p "$configDir/data/hosts" "$binExec" "$bin"
 	
 	checkPrereqs
@@ -259,25 +261,10 @@ function doInstall
 	mass -vv --finalInstallStage
 }
 
+cd `dirname $0`
+
 if [ `id -u` -gt 0 ];then
-	case $1 in
-		'linked')
-			linkedInstall
-		;;
-		*)
-			echo "User install is broken at the moment and is low on my priorities to fix. Feel free to fix it."
-			echo "In the mean time we'll use the linked install. You can install from another location by simply running $0 from that location at any time."
-			echo
-			echo "Alternatively you can comment out the linkedInstall and exit and roll the dice ;)"
-			echo
-			echo "Continuing with linked install."
-			
-			
-			linkedInstall
-			exit 1
-			userInstall
-		;;
-	esac
+	linkedInstall
 else
 	rootInstall
 fi

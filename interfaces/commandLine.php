@@ -137,7 +137,7 @@ class CommandLine extends Module
 			$derivedPrefix=($prefix or is_numeric($prefix))?"$prefix{$this->codes['default']}: ":'';
 			if (is_string($output)) 
 			{
-				$this->core->echoOut("$indent{$this->codes['green']}$derivedPrefix$output");
+				$this->core->echoOut("$indent{$this->codes['green']}$derivedPrefix$output{$this->codes['default']}");
 			}
 			elseif (is_array($output))
 			{
@@ -151,24 +151,22 @@ class CommandLine extends Module
 			{
 				if ($prefix)
 				{
-					$this->core->echoOut("$indent{$this->codes['purple']}{$derivedPrefix}NULL");
+					$this->core->echoOut("$indent{$this->codes['purple']}{$derivedPrefix}NULL{$this->codes['default']}");
 				}
 			}
 			elseif (is_numeric($output))
 			{
-				$this->core->echoOut("$indent{$this->codes['purple']}{$derivedPrefix}$output");
+				$this->core->echoOut("$indent{$this->codes['purple']}{$derivedPrefix}$output{$this->codes['default']}");
 			}
 			elseif (is_bool($output))
 			{
 				$display=($output)?'True':'False';
-				$this->core->echoOut("$indent{$this->codes['purple']}{$derivedPrefix}$display");
+				$this->core->echoOut("$indent{$this->codes['purple']}{$derivedPrefix}$display{$this->codes['default']}");
 			}
 			else
 			{
 				$this->core->echoOut("$indent{$this->codes['red']}{$prefix}{$this->codes['default']}: {$this->codes['brightBlack']}I can't display this data type yet.{$this->codes['default']}");
 			}
-			
-			$this->core->echoOut("{$this->codes['default']}");
 		}
 	}
 	
