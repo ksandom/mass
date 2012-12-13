@@ -1,0 +1,14 @@
+#!/bin/bash
+# Installs clusterSSH or the appropriate variant
+
+cd `dirname $0`
+
+if which apt; then
+	echo "Choosing apt based install"
+	sudo apt-get install clusterssh
+elif which brew; then
+	echo "Choosing brew based install"
+	brew install csshX
+	cd `which csshX`
+	ln -s csshX cssh
+fi
