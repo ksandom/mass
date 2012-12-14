@@ -11,6 +11,8 @@ For this document, _MASS_ refers to where mass is installed, and the checked out
  * _MASS_/profiles/commandLine - The profile for the command line interface.
  * _MASS_/profiles/commandLine/* - The variout -enabled directories. Note that -enabled is now omitted and therefore assumed.
  * _MASS_/docs links to REPO/docs
+ * _MASS_/repos - The mass repo and anythird party repos go here. This is where packages etc are enabled from.
+ * _MASS_/repos/mass - The mass repo.
  * _MASS_/examples links to REPO/examples
  * _MASS_/supplimentary - (coming soon) Various stuff that is not part of mass, but belongs with mass. Currently I'm using this for scripts that retrieve external dependancies.
  * _MASS_/externalLibraries - Where external dependancies go that are not part of mass, but really useful for it.

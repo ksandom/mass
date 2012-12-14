@@ -164,6 +164,7 @@ class Help extends Module
 		if (!$this->codes)
 		{
 			$this->codes=$this->core->getCategoryModule('Color');
+			if (!isset($this->codes['default'])) $this->codes['default']='';
 		}
 	}
 	

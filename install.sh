@@ -103,15 +103,17 @@ function createProfile
 function enableEverythingForProfile
 {
 	name="$1"
+	repo=${2:-mass}
+	
 	start=`pwd`
 	for thing in $things; do
 		cd $configDir/profiles/$name/$thing
-		if [ `ls $configDir/$thing-available|wc -l 2> /dev/null` -gt 0 ]; then
+		if [ `ls $configDir/repos/$repo/$thing-available|wc -l 2> /dev/null` -gt 0 ]; then
 			while read item;do
 				if [ ! -e $item ]; then
-					ln -s $configDir/$thing-available/$item .
+					ln -sf $configDir/repos/$repo/$thing-available/$item .
 				fi
-			done < <(ls $configDir/$thing-available)
+			done < <(ls $configDir/repos/$repo/$thing-available)
 		fi
 	done
 	
@@ -126,7 +128,7 @@ function enableItemInProfile
 	
 	cd $configDir/profiles/$profile/$itemType
 	if [ -e $configDir/profiles/$profile/$itemType/$item ]; then
-		ln -s $configDir/profiles/$profile/$itemType/$item .
+		ln -sf $configDir/profiles/$profile/$itemType/$item .
 	else
 		echo "enableItemInProfile: Could not find $configDir/profiles/$profile/$itemType/$item" 1>&2
 	fi
@@ -176,10 +178,10 @@ function removeObsoleteStuff
 {
 	mkdir -p $configDir/obsolete
 	for thing in $things;do
-		mv $configDir/$thing* $configDir/obsolete
+		mv $configDir/$thing* $configDir/obsolete 2>/dev/null
 	done
 	
-	mv $configDir/obsolete/*available $configDir
+	# mv $configDir/obsolete/*available $configDir
 	
 	if [ `ls $configDir/obsolete 2> /dev/null | wc -l` -lt 1 ]; then
 		rmdir $configDir/obsolete
@@ -191,7 +193,8 @@ function removeObsoleteStuff
 function doInstall
 {
 	startDir=`pwd`
-	mkdir -p "$configDir/data/hosts" "$binExec" "$bin"
+	repoDir="$configDir/repos/$programName"
+	mkdir -p "$configDir/data/hosts" "$binExec" "$bin" "$configDir/repos" "$configDir/externalLibraries"
 	
 	checkPrereqs
 	removeObsoleteStuff
@@ -202,42 +205,47 @@ function doInstall
 	bin: $bin
 	binExec: $binExec
 	startDir: $startDir
+	repoDir: $repoDir
 	installType: $installType
 	installNotes: $installTypeComments"
 	
 	if [ "$installType" == 'cp' ]; then
 		# echo -e "Copying available stuff"
-		cp -Rv docs templates-* modules-* core.php macros-* packages-* examples interfaces supplimentary index.php "$configDir"
-		
-		# echo -e "Setting up remaining directory structure"
-		cd "$configDir"
-		mkdir -p config data/1LayerHosts
-		
+		cp -Rv "$startDir" "$configDir/repos"
+	else
+		cd "$configDir/repos"
+		ln -sf "$startDir" .
+	fi
+	
+	cd "$configDir"
+	# echo -e "Linking like there's no tomorrow."
+	ln -sf "$repoDir"/docs "$repoDir/core.php" "$repoDir/examples" "$repoDir"/interfaces "$repoDir"/supplimentary .
+	
+	# "$repoDir"/modules-*available "$repoDir"/macros-*available "$repoDir"/templates-*available "$repoDir"/packages-*available
+	
+	ln -sf "$repoDir/index.php" .
+	
+	# echo -e "Setting up remaining directory structure"
+	mkdir -p config data/1LayerHosts
+	
+	
+	if [ "$installType" == 'cp' ]; then
 		# echo -e "Making the thing runnable"
 		cd $binExec
 		cp -Rv "$startDir/$programName" "$bin"
 		chmod 755 "$bin/$programName"
 	else
-		cd "$configDir"
-		
-		# echo -e "Linking like there's no tomorrow."
-		ln -sf "$startDir"/docs "$startDir"/modules-*available "$startDir"/macros-*available "$startDir"/templates-*available "$startDir/core.php" "$startDir/examples" "$startDir"/packages-*available "$startDir"/interfaces "$startDir"/supplimentary . 
-		ln -sf "$startDir/index.php" .
-		
-		# echo -e "Setting up remaining directory structure"
-		mkdir -p config data/1LayerHosts
-		
 		# echo -e "Making the thing runnable"
 		cd $binExec
 		ln -sf "$startDir/$programName" .
 	fi
 	
 	createProfile commandLine
-	enableEverythingForProfile commandLine
+	enableEverythingForProfile commandLine mass 
 	cleanProfile commandLine
 
 	createProfile privateWebAPI
-	enableEverythingForProfile privateWebAPI
+	enableEverythingForProfile privateWebAPI mass 
 	disableItemInProfile privateWebAPI packages SSH
 	cleanProfile privateWebAPI
 

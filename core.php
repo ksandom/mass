@@ -847,7 +847,7 @@ class core extends Module
 			}
 			else
 			{
-				$this->core->debug(0, "getNested: Could not find \"$value\" using key ".implode(',', $values));
+				$this->core->debug(4, "getNested: Could not find \"$value\" using key ".implode(',', $values));
 				return false;
 			}
 		}
