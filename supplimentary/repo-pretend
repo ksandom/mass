@@ -10,7 +10,7 @@
 #   $0 /usr/local/something
 
 requiredParms="$1"
-. `dirname $0`/libs/includeLibs
+. `dirname $0`/libs/includeLibs.sh
 
 cd "$configDir"/externalLibraries
 ln -s "$1" .

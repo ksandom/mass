@@ -44,8 +44,7 @@ startDir=`pwd`
 
 
  # Do stuff. If you want to add something that will get included in all the supplimentary scripts, this is the place to do it.
-. `dirname $0`/libs/getMassDetails
-libDir=configDir/supplimentary/libs
+. `dirname $0`/libs/getMassDetails.sh
 
 
 cd "$startDir"

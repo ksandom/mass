@@ -10,7 +10,7 @@
 #   $0
 
 requiredParms="none"
-. `dirname $0`/libs/includeLibs
+. `dirname $0`/libs/includeLibs.sh
 
 if which apt-get; then
 	echo "Choosing apt based install"

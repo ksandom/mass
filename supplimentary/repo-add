@@ -18,7 +18,7 @@
 #   $0 something /usr/local/something
 
 requiredParms="$2"
-. `dirname $0`/libs/includeLibs
+. `dirname $0`/libs/includeLibs.sh
 . $libDir/getRepo
 
 getRepo "$1" "$2"
