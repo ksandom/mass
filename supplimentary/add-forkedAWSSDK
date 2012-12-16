@@ -1,7 +1,17 @@
 #!/bin/bash
-# Install the PHP AWS SDK
+# Description
+#   Install the PHP AWS SDK
+#
+# Syntax:
+#   $0
+#
+# Examples:
+#   Simply install it. Boo-ya!
+#   $0
 
-. libs/getMassDetails
-. libs/getRepo
+requiredParms="none"
+. `dirname $0`/libs/includeLibs
+
+. $libDir/getRepo
 
 getRepo "aws-sdk-for-php" "git://github.com/rawswift/aws-sdk-for-php.git"

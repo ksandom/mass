@@ -12,8 +12,6 @@
 requiredParms="none"
 . `dirname $0`/libs/includeLibs
 
-cd "$configDir"/externalLibraries
-
 if which apt-get; then
 	echo "Choosing apt based install"
 	sudo apt-get install clusterssh

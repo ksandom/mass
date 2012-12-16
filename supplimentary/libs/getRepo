@@ -4,7 +4,7 @@ function getRepo
 {
 	repoName="$1"
 	repoSrc="$2"
-	$libDir="$configDir/externalLibraries"
+	libDir="$configDir/externalLibraries"
 	repoDir="$libDir/$repoName"
 	
 	if [ -d "$repoDir"  ]; then
@@ -12,8 +12,7 @@ function getRepo
 		git pull
 	else
 		mkdir -p "$libDir"
-		cd "$libDir"
-		git clone "$repoSrc"
+		git clone "$repoSrc" "$repoDir"
 	fi
 }
 
