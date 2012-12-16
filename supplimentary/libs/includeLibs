@@ -13,7 +13,7 @@ if [ "$requiredParms" == "" ]; then
 	echo "Insufficient parameters given, here's some help for you ----v"
 	scriptName=`echo $0|sed 's#^.*/##g'`
 	
-	tail -n +2 $0 | grep '#'|sed 's/^#(.|)//g;s/$0/'$scriptName'/g'
+	tail -n +2 $0 | grep '#'|sed 's/^#/ /g;s/$0/'$scriptName'/g'
 	exit 1
 fi
 

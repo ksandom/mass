@@ -1,5 +1,7 @@
 #!/bin/bash
-# Adds a repository.
+# Description
+#   Adds a repository.
+#
 # Syntax:
 #   $0 repoAddress
 #
