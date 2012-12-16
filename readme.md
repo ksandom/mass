@@ -8,12 +8,15 @@ Driving it all is a full programming language that is very different to anything
 This is a tiny percentage of the final vision, so there's a lot more to come!
 
 # Requirements
+
 * PHP
 * Bash
 
 # Important updates
 
-None at the moment. As a general rule, when ever you update, you should re-run install.sh to apply any structural changes as the internals are regularly being refactored.
+* The -available folders are now within repos/mass/ . The -enabled folders remain in profiles/profileName/ . This is going to allow packages to be installed from other repos.
+
+As a general rule, when ever you update, you should re-run install.sh to apply any structural changes as the internals are regularly being refactored.
 
 # Install
 

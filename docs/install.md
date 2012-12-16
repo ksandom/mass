@@ -66,25 +66,25 @@ _I've gone to a lot of effort to make the defaults pretty good. Feed back is wel
 
 It all works like available/enabled system that ubuntu uses via symlinks. The biggest differnce is that enabled folders now sit with profiles/profileName, where each profile is for diffenent interfaces/use-cases (most people will want profiles/commandLine.) You can use `ln -s` to create symlinks in the same way that you'd use cp to copy a file. Please do not simply copy the files as that will make things very hard to diagnose when there are problems.
 
-Here's what my macros folder looks like right now:
+TODO This needs updating.
 
-    ksandom@lappyg:~/.mass/profiles/commandLine/macros$ ls -l
-    total 8
-    lrwxrwxrwx 1 ksandom ksandom 62 Aug 25 20:31 createDefaultValues.macro -> /home/ksandom/.mass/macros-available/createDefaultValues.macro
-    lrwxrwxrwx 1 ksandom ksandom 47 Aug 25 20:31 from.macro -> /home/ksandom/.mass/macros-available/from.macro
-    lrwxrwxrwx 1 ksandom ksandom 54 Aug 25 20:31 getLastList.macro -> /home/ksandom/.mass/macros-available/getLastList.macro
-    lrwxrwxrwx 1 ksandom ksandom 48 Aug 25 20:31 hosts.macro -> /home/ksandom/.mass/macros-available/hosts.macro
-    lrwxrwxrwx 1 ksandom ksandom 54 Aug 25 20:31 importHosts.macro -> /home/ksandom/.mass/macros-available/importHosts.macro
-    lrwxrwxrwx 1 ksandom ksandom 62 Aug 25 20:31 importOldStyleHosts.macro -> /home/ksandom/.mass/macros-available/importOldStyleHosts.macro
-    lrwxrwxrwx 1 ksandom ksandom 47 Aug 25 20:31 list.macro -> /home/ksandom/.mass/macros-available/list.macro
-    lrwxrwxrwx 1 ksandom ksandom 51 Aug 25 20:31 listterm.macro -> /home/ksandom/.mass/macros-available/listterm.macro
-    lrwxrwxrwx 1 ksandom ksandom 56 Aug 25 20:31 macroLoopTest.macro -> /home/ksandom/.mass/macros-available/macroLoopTest.macro
-    lrwxrwxrwx 1 ksandom ksandom 47 Aug 25 20:31 noBG.macro -> /home/ksandom/.mass/macros-available/noBG.macro
-    lrwxrwxrwx 1 ksandom ksandom 46 Aug 25 20:31 run.macro -> /home/ksandom/.mass/macros-available/run.macro
-    lrwxrwxrwx 1 ksandom ksandom 53 Aug 25 20:31 saveToJson.macro -> /home/ksandom/.mass/macros-available/saveToJson.macro
-    lrwxrwxrwx 1 ksandom ksandom 52 Aug 25 20:31 testAlias.macro -> /home/ksandom/.mass/macros-available/testAlias.macro
-    lrwxrwxrwx 1 ksandom ksandom 49 Aug 25 20:31 testIf.macro -> /home/ksandom/.mass/macros-available/testIf.macro
-    lrwxrwxrwx 1 ksandom ksandom 45 Aug 25 20:31 to.macro -> /home/ksandom/.mass/macros-available/to.macro
+Here's what my packages folder looks like right now:
+
+ksandom@lappyg:~/.mass/profiles/commandLine/packages$ ls -l
+total 11
+    lrwxrwxrwx 1 ksandom ksandom 53 Dec 14 18:56 AWS -> /home/ksandom/.mass/repos/mass/packages-available/AWS
+    lrwxrwxrwx 1 ksandom ksandom 55 Dec 14 18:56 Codes -> /home/ksandom/.mass/repos/mass/packages-available/Codes
+    lrwxrwxrwx 1 ksandom ksandom 61 Dec 14 18:56 DetectStuff -> /home/ksandom/.mass/repos/mass/packages-available/DetectStuff
+    lrwxrwxrwx 1 ksandom ksandom 56 Dec 14 18:56 Events -> /home/ksandom/.mass/repos/mass/packages-available/Events
+    lrwxrwxrwx 1 ksandom ksandom 53 Dec 14 18:56 Get -> /home/ksandom/.mass/repos/mass/packages-available/Get
+    lrwxrwxrwx 1 ksandom ksandom 94 Dec 14 18:56 hailo -> /home/ksandom/files/work/hailo/repos/puppet-live/modules/mass/files/hailoSpecific/hailoPackage
+    lrwxrwxrwx 1 ksandom ksandom 54 Dec 14 18:56 Help -> /home/ksandom/.mass/repos/mass/packages-available/Help
+    lrwxrwxrwx 1 ksandom ksandom 55 Dec 14 18:56 Hosts -> /home/ksandom/.mass/repos/mass/packages-available/Hosts
+    lrwxrwxrwx 1 ksandom ksandom 57 Dec 14 18:56 Install -> /home/ksandom/.mass/repos/mass/packages-available/Install
+    lrwxrwxrwx 1 ksandom ksandom 63 Dec 14 18:56 Manipulations -> /home/ksandom/.mass/repos/mass/packages-available/Manipulations
+    lrwxrwxrwx 1 ksandom ksandom 59 Dec 14 18:56 MiscTests -> /home/ksandom/.mass/repos/mass/packages-available/MiscTests
+    lrwxrwxrwx 1 ksandom ksandom 59 Dec 14 18:56 Semantics -> /home/ksandom/.mass/repos/mass/packages-available/Semantics
+    lrwxrwxrwx 1 ksandom ksandom 53 Dec 14 18:56 SSH -> /home/ksandom/.mass/repos/mass/packages-available/SSH
 
 This is mostly done with packages now, which makes managing all this much more sane. See [creatingAPacakge.md](creatingAPacakge.md) for details. **If you have stuff you need to write for work, that you can't share, a package linked from outside the repository is the way to do it.**
 

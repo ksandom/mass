@@ -17,7 +17,7 @@ For example if you were to do `mass --list=db --chooseFirst=IP,externalIP,intern
     list db
     chooseFirst IP,externalIP,internalIP
  
-Assume we save that as `macros-available/listdbs.macro` and then symlink that to `profiles/commandline/macros/listdbs.macro`, we could invoke it from the command line as --listdbs or if from inside other macros, it would be `listdbs`. For more information on the directory structure, see [paths.md](paths.md).
+Assume we save that as `repos/custom/macros-available/listdbs.macro` and then symlink that to `profiles/commandline/macros/listdbs.macro`, we could invoke it from the command line as --listdbs or if from inside other macros, it would be `listdbs`. For more information on the directory structure, see [paths.md](paths.md).
 
 See examples/example.macro for a working example.
 
