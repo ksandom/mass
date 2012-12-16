@@ -16,6 +16,10 @@ directoryThings='packages'
 things="$fileThings $directoryThings"
 installTypeComments=''
 
+cd `dirname $0`
+. supplimentary/libs/installLibs.sh
+. supplimentary/libs/packages.sh
+
 function userInstall
 {
 	# echo "Non root install chosen"
@@ -268,8 +272,6 @@ function doInstall
 	
 	mass -vv --finalInstallStage
 }
-
-cd `dirname $0`
 
 if [ `id -u` -gt 0 ];then
 	linkedInstall
