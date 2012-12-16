@@ -9,12 +9,24 @@
 #
 # If the there aren't sufficient parameters, then the script will exit with an error code of 1 and will display the help.
 
-if [ "$requiredParms" == "" ]; then
-	echo "Insufficient parameters given, here's some help for you ----v"
+function displayHelp
+{
 	scriptName=`echo $0|sed 's#^.*/##g'`
 	
 	tail -n +2 $0 | grep '#'|sed 's/^#/ /g;s/$0/'$scriptName'/g'
+}
+
+if [ "$requiredParms" == "" ]; then
+	echo "Insufficient parameters given, here's some help for you ----v"
+	displayHelp
 	exit 1
 fi
+
+case $1 in
+	'--help'|'-h')
+		displayHelp
+		exit 0
+	;;
+esac
 
 . `dirname $0`/libs/getMassDetails

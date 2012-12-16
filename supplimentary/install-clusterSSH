@@ -1,9 +1,20 @@
 #!/bin/bash
-# Installs clusterSSH or the appropriate variant
+# Description
+#   Installs clusterSSH or the appropriate variant
+#
+# Syntax:
+#   $0
+#
+# Examples:
+#   Simply install it. Boo-ya!
+#   $0
 
-cd `dirname $0`
+requiredParms="none"
+. `dirname $0`/libs/includeLibs
 
-if which apt; then
+cd "$configDir"/externalLibraries
+
+if which apt-get; then
 	echo "Choosing apt based install"
 	sudo apt-get install clusterssh
 elif which brew; then
