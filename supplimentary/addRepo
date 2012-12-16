@@ -1,0 +1,20 @@
+#!/bin/bash
+# Adds a repository.
+# Syntax:
+#   $0 repoAddress
+#
+# Examples:
+#   Adding a github repo.
+#   $0 http://github.com/ksandom/something
+#
+#   Another way to add the same repo.
+#   $0 git@github.com:ksandom/something
+#
+#   How to add a repo that is stored on your local machine.
+#   $0 /usr/local/something
+
+requiredParms="$1"
+. `dirname $0`/libs/includeLibs
+
+cd "$configDir"/externalLibraries
+git clone "$1"
