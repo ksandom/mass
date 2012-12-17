@@ -1,6 +1,6 @@
 #!/bin/bash
 # Description
-#   Lists out currently installed repos.
+#   Acts as a single tool to call all of the scripts
 #
 # Syntax:
 #   $0 [--short]
@@ -10,6 +10,24 @@
 #   $0
 #   Lists the current repos without symlink information. This is what you will want if you want to write scripts using this script.
 #   $0 --short
+
+configDir=`mass --get=General,configDir --singleStringNow --null`
+libDir=$configDir/supplimentary/libs
+supplimentaryDir=$configDir/supplimentary
+
+. $libDir/theLibOfLibs.sh
+
+if [ "$1" == "" ] || [ "$1" == '--help' ] || [ "$1" == '-h' ]; then
+	name=`dirname $0 | sed 's#.*/##g'`
+	echo "Syntax:"
+	echo "  $name scriptName [options]"
+	echo
+	echo "Possible scripts:"
+	displayListOfSupplimeentaryScripts
+	exit 1
+fi
+
+
 
 requiredParms="none"
 . `dirname $0`/libs/includeLibs.sh
