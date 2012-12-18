@@ -17,13 +17,11 @@ requiredParms="none"
 # TODO Check this works as expected on other systems. It should produce output like this:
 #  aws-sdk-for-php -> /home/ksandom/files/develop/externalRepos/aws-sdk-for-php/
 
-cd "$configDir"/externalLibraries
-
 case $1 in
 	'--short')
-		ls -1
+		ls -1 "$configDir"/repos
 	;;
 	*)
-		ls -l --time-style=+NODATE | tail -n +2 | sed 's/^.*NODATE.//g'
+		resolveSymlinks "$configDir"/repos | tabsToSpacedDashes
 	;;
 esac

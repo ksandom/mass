@@ -16,6 +16,7 @@
 #   
 #
 
+ # The export saves called scripts from having to do this detection, and thus speeds up loading time.
 export configDir=`mass --get=General,configDir --singleStringNow --null`
 export libDir=$configDir/supplimentary/libs
 export supplimentaryDir=$configDir/supplimentary

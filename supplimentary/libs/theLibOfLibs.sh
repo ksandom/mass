@@ -1,3 +1,5 @@
+# Stuff for managing the libraries and supplimentary scripts.
+
 function getListOfSupplimeentaryScripts
 {
 	cd "$supplimentaryDir"

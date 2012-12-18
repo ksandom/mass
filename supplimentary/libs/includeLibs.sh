@@ -19,6 +19,8 @@ startDir=`pwd`
  # Do stuff. If you want to add something that will get included in all the supplimentary scripts, this is the place to do it.
 . `dirname $0`/libs/getMassDetails.sh
 . "$libDir/help.sh"
+. "$libDir/filesystem.sh"
+. "$libDir/display.sh"
 
 
 cd "$startDir"
