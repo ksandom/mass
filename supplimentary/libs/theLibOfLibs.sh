@@ -3,7 +3,7 @@ function getListOfSupplimeentaryScripts
 	cd "$supplimentaryDir"
 	while read file;do
 		if [ -f "$file" ]; then
-			description=`grep -A 1 "Description" "$file" | tail -n 1`
+			description=`grep -A 1 "Description" "$file" | tail -n 1 | sed 's/# *//g'`
 			echo "$name $file	$description"
 		fi
 	done < <(ls -1)
@@ -11,5 +11,5 @@ function getListOfSupplimeentaryScripts
 
 function displayListOfSupplimeentaryScripts
 {
-	getListOfSupplimeentaryScripts
+	getListOfSupplimeentaryScripts | sed 's/	/ - /g;s/^/   /g'
 }

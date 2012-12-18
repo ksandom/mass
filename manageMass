@@ -4,37 +4,30 @@
 #
 # Syntax:
 #   $0 scriptName [parameters]
+#      scriptName is one of the possible scripts listed below. Use --help with the script to find out more about it.
 #
 # Examples:
 #   Lists the current repos including any ssymlink infomation.
 #     $0 repo-list
 #   Adds /usr/blah 
 #     $0 repo-pretend /usr/blah
+#   Display the help for repo-add
+#     $0 repo-add --help
+#   
+#
 
-configDir=`mass --get=General,configDir --singleStringNow --null`
-libDir=$configDir/supplimentary/libs
-supplimentaryDir=$configDir/supplimentary
+export configDir=`mass --get=General,configDir --singleStringNow --null`
+export libDir=$configDir/supplimentary/libs
+export supplimentaryDir=$configDir/supplimentary
 
 . $libDir/theLibOfLibs.sh
+
+# Possible scripts:
 extraHelp='displayListOfSupplimeentaryScripts'
+requiredParms="$1"
 . $libDir/help.sh
 
 name=`echo $0 | sed 's#.*/##g'`
-# TODO tidy/finish this
-# function showHelp
-# {
-# 	echo "Syntax:"
-# 	echo "  $name scriptName [options]"
-# 	echo
-# 	echo "Possible scripts:"
-# 	displayListOfSupplimeentaryScripts
-# 	exit 1
-# }
-# 
-# if [ "$1" == "" ]; then
-# 	echo "Insufficient parameters given."
-# 	showHelp
-# fi
 
 script=""$supplimentaryDir/$1""
 if [ -f "$script" ]; then
