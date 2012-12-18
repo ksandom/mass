@@ -16,7 +16,7 @@ requiredParms="$1"
 cd "$configDir"/externalLibraries
 
 if [ ! -e "$1" ]; then
-	echo "Could not find repo \"$1\". You can list them using repo-list."
+	echo "Could not find repo \"$1\". You can list them using repoList."
 	exit 1
 fi
 

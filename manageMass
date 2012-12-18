@@ -8,11 +8,11 @@
 #
 # Examples:
 #   Lists the current repos including any ssymlink infomation.
-#     $0 repo-list
+#     $0 repoList
 #   Adds /usr/blah 
-#     $0 repo-pretend /usr/blah
+#     $0 repoPretend /usr/blah
 #   Display the help for repo-add
-#     $0 repo-add --help
+#     $0 repoAdd --help
 #   
 #
 
