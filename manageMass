@@ -1,47 +1,54 @@
 #!/bin/bash
 # Description
-#   Acts as a single tool to call all of the scripts
+#   Brings together all the tools for managing mass
 #
 # Syntax:
-#   $0 [--short]
+#   $0 scriptName [parameters]
 #
 # Examples:
 #   Lists the current repos including any ssymlink infomation.
-#   $0
-#   Lists the current repos without symlink information. This is what you will want if you want to write scripts using this script.
-#   $0 --short
+#     $0 repo-list
+#   Adds /usr/blah 
+#     $0 repo-pretend /usr/blah
 
 configDir=`mass --get=General,configDir --singleStringNow --null`
 libDir=$configDir/supplimentary/libs
 supplimentaryDir=$configDir/supplimentary
 
 . $libDir/theLibOfLibs.sh
+extraHelp='displayListOfSupplimeentaryScripts'
+. $libDir/help.sh
 
-if [ "$1" == "" ] || [ "$1" == '--help' ] || [ "$1" == '-h' ]; then
-	name=`dirname $0 | sed 's#.*/##g'`
-	echo "Syntax:"
-	echo "  $name scriptName [options]"
-	echo
-	echo "Possible scripts:"
-	displayListOfSupplimeentaryScripts
-	exit 1
+name=`echo $0 | sed 's#.*/##g'`
+# TODO tidy/finish this
+# function showHelp
+# {
+# 	echo "Syntax:"
+# 	echo "  $name scriptName [options]"
+# 	echo
+# 	echo "Possible scripts:"
+# 	displayListOfSupplimeentaryScripts
+# 	exit 1
+# }
+# 
+# if [ "$1" == "" ]; then
+# 	echo "Insufficient parameters given."
+# 	showHelp
+# fi
+
+script=""$supplimentaryDir/$1""
+if [ -f "$script" ]; then
+	export scriptName="$name $1"
+	shift
+	"$script" $@
+else
+	case $1 in
+		'--help'|'-h')
+			showHelp
+		;;
+		*)
+			echo "Could not find \"$1\""
+			showHelp
+		;;
+	esac
 fi
-
-
-
-requiredParms="none"
-. `dirname $0`/libs/includeLibs.sh
-
-# TODO Check this works as expected on other systems. It should produce output like this:
-#  aws-sdk-for-php -> /home/ksandom/files/develop/externalRepos/aws-sdk-for-php/
-
-cd "$configDir"/externalLibraries
-
-case $1 in
-	'--short')
-		ls -1
-	;;
-	*)
-		ls -l --time-style=+NODATE | tail -n +2 | sed 's/^.*NODATE.//g'
-	;;
-esac

@@ -68,12 +68,12 @@ function doInstall
 	if [ "$installType" == 'cp' ]; then
 		# echo -e "Making the thing runnable"
 		cd $binExec
-		cp -Rv "$startDir/$programName" "$bin"
-		chmod 755 "$bin/$programName"
+		cp -Rv "$startDir/$programName" "$startDir/$manageMass" "$bin"
+		chmod 755 "$bin/$programName" "$bin/manageMass"
 	else
 		# echo -e "Making the thing runnable"
 		cd $binExec
-		ln -sf "$startDir/$programName" .
+		ln -sf "$startDir/$programName" "$startDir/manageMass" .
 	fi
 	
 	createProfile commandLine

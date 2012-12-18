@@ -4,7 +4,7 @@ function getListOfSupplimeentaryScripts
 	while read file;do
 		if [ -f "$file" ]; then
 			description=`grep -A 1 "Description" "$file" | tail -n 1`
-			echo "$file	$description"
+			echo "$name $file	$description"
 		fi
 	done < <(ls -1)
 }
