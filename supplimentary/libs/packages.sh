@@ -35,6 +35,19 @@ function createProfile
 	mkdir -p $configDir/profiles/$name/{packages,modules,macros,templates}
 }
 
+function removeProfile
+{
+	name="$1"
+	profileToRemove="$configDir/profiles/$name"
+	if [ -d "$profileToRemove" ]; then
+		rm -Rf "$profileToRemove"
+	elif [ -h "$profileToRemove" ]; then
+		rm -f "$profileToRemove"
+	else
+		echo "Could not find a profile called \"$name\". I looked in \"$profileToRemove\""
+	fi
+}
+
 function enableEverythingForProfile
 {
 	name="$1"

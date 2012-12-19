@@ -1,12 +1,12 @@
 #!/bin/bash
 # Description
-#   Lists out currently installed repos.
+#   Lists out profiles.
 #
 # Syntax:
 #   $0 [--short]
 #
 # Examples:
-#   Lists the current repos including any symlink infomation.
+#   Lists the profiles including any symlink infomation.
 #   $0
 #   Lists the current repos without symlink information. This is what you will want if you want to write scripts using this script.
 #   $0 --short
@@ -16,9 +16,9 @@ requiredParms="none"
 
 case $1 in
 	'--short')
-		ls -1 "$configDir"/repos
+		ls -1 "$configDir"/profiles
 	;;
 	*)
-		resolveSymlinks "$configDir"/repos | tabsToSpacedDashes
+		resolveSymlinks "$configDir"/profiles | tabsToSpacedDashes
 	;;
 esac
