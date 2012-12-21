@@ -14,3 +14,11 @@ if [ "$supplimentaryDir" == '' ]; then
 fi
 
 managementTool="manageMass"
+
+for parameter in $@;do
+	case $parameter in
+		'--short')
+			short=true
+		;;
+	esac
+done

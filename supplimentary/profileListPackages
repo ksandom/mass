@@ -14,11 +14,13 @@
 requiredParms="none"
 . `dirname $0`/libs/includeLibs.sh
 
-case $1 in
-	'--short')
-		ls -1 "$configDir"/profiles
-	;;
-	*)
-		resolveSymlinks "$configDir"/profiles/$1 | tabsToSpacedDashes
-	;;
-esac
+profileName="$1"
+
+if [ "$short" != '' ]; then
+	ls -1 "$configDir"/profiles/"$profileName"/packages
+else
+	resolveSymlinks "$configDir"/profiles/"$profileName"/packages | while read packageName pathToPackage;do
+		repoName=`echo $pathToPackage| sed "s#^.*repos/##g;"'s#/.*$##g'`
+		echo "$packageName	$repoName	$pathToPackage"
+	done | tabsToSpacedDashes
+fi

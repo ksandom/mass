@@ -13,7 +13,7 @@
 requiredParms="$1"
 . `dirname $0`/libs/includeLibs.sh
 
-cd "$configDir"/externalLibraries
+cd "$configDir"/repos
 
 if [ ! -e "$1" ]; then
 	echo "Could not find repo \"$1\". You can list them using repoList."

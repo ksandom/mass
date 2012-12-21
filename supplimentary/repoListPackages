@@ -1,0 +1,28 @@
+#!/bin/bash
+# Description
+#   Lists out available packages in a repo.
+#
+# Syntax:
+#   $0 repoName
+#     repoName is the name used to refer to the repository.
+#
+# Examples:
+#   Lists the profiles including any symlink infomation.
+#   $0
+#   Lists the current repos without symlink information. This is what you will want if you want to write scripts using this script.
+#   $0 --short
+
+requiredParms="$1"
+. `dirname $0`/libs/includeLibs.sh
+
+repoName="$1"
+
+if [ ! -e "$configDir/repos/$repoName" ]; then
+	echo "Could not find repo \"$repoName\""
+	exit 1
+elif [ ! -e "$configDir/repos/$repoName/packages-available" ]; then
+	echo "$repoName is not a mass repository. This is probably ok since it's probably a library for something eg the \"aws-sdk-for-php\""
+	exit 1
+fi
+
+ls -1 "$configDir/repos/$repoName/packages-available"
