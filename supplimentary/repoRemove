@@ -4,7 +4,7 @@
 #
 # Syntax:
 #   $0 repoName
-#     repoName is the name we use to refer to the repository.
+#     repoName is the name used to refer to the repository.
 #
 # Examples:
 #   Add a directory structure.

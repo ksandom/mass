@@ -3,7 +3,8 @@
 #   Lists out enabled packages in a profile.
 #
 # Syntax:
-#   $0 [--short]
+#   $0 profileName [--short]
+#     profileName is a named profile. # TODO Think up a better description when I don't have a couple arguing beside me.
 #
 # Examples:
 #   Lists the profiles including any symlink infomation.
@@ -11,7 +12,7 @@
 #   Lists the current repos without symlink information. This is what you will want if you want to write scripts using this script.
 #   $0 --short
 
-requiredParms="none"
+requiredParms="$1"
 . `dirname $0`/libs/includeLibs.sh
 
 profileName="$1"

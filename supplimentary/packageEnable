@@ -27,12 +27,29 @@ repoName="$1"
 packageRegex="$2"
 profileNameRegex="$3"
 
-packages=`$managementTool packageList | grep "$packageRegex"`
-profiles=`$managementTool profileList | grep "$profileNameRegex"`
+if [ ! -d "$configDir/repos/$repoName" ]; then
+	echo "Did not find a repo matching \"$repoName\""
+	exit 1
+fi
 
-while read package; do
-	while read profile; do
-		echo not implemented
-		# TODO Do this
-	done < <("echo $profiles")
-done < <(echo "$packages")
+profiles=`$managementTool profileList | grep "$profileNameRegex"`
+if [ "$profiles" == '' ]; then
+	echo "Did not match any profiles using regex \"$profileNameRegex\""
+	exit 1
+fi
+
+while read profile; do
+	while read package;do
+		# TODO test this
+		packagePath="$configDir/profiles/$profile/packages/$package"
+		if [ -h "$packagePath" ]; then
+			rm -f "$packagePath"
+		elif [ -d "$packagePath" ]; then
+			echo "$packagePath is a directory. Is this your only copy of your work?! This should be a symlink."
+			# rm -Rf "$packagePath"
+		else
+			echo "$packagePath is not a symlink or directory."
+		fi
+	done < <($managementTool profileListPackages $profile --short | grep "$packageRegex")
+done < <(echo "$profiles")
+

@@ -9,13 +9,13 @@
 #     profileNameRegex is a regular expression to match profiles found with profileList.
 #
 # Examples:
-#   Disables a package called something in the commandLine profile.
+#   Disables a package called something from the mass repo in the commandLine profile.
 #     $0 mass "^something$" "^commandLine$"
 #
-#   Disables all packages in the commandLine profile.
+#   Disables all packages from the mass repo in the commandLine profile.
 #     $0 mass ".*" "^commandLine$"
 #
-#   Disables all packages in all profiles.
+#   Disables all packages from the mass repo in all profiles.
 #     $0 mass ".*" ".*"
 
 
@@ -27,12 +27,23 @@ repoName="$1"
 packageRegex="$2"
 profileNameRegex="$3"
 
-packages=`$managementTool packageList | grep "$packageRegex"`
 profiles=`$managementTool profileList | grep "$profileNameRegex"`
+if [ "$profiles" == '' ]; then
+	echo "Did not match any profiles using regex \"$profileNameRegex\""
+	exit 1
+fi
 
-while read package; do
-	while read profile; do
-		echo not implemented
-		# TODO Do this
-	done < <("echo $profiles")
-done < <(echo "$packages")
+while read profile; do
+	while read package;do
+		# TODO test this
+		packagePath="$configDir/profiles/$profile/packages/$package"
+		if [ -h "$packagePath" ]; then
+			rm -f "$packagePath"
+		elif [ -d "$packagePath" ]; then
+			echo "$packagePath is a directory. Is this your only copy of your work?! This should be a symlink."
+			# rm -Rf "$packagePath"
+		else
+			echo "$packagePath is not a symlink or directory."
+		fi
+	done < <($managementTool profileListPackages $profile --short | grep "$packageRegex")
+done < <(echo "$profiles")
