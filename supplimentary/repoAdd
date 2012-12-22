@@ -9,13 +9,13 @@
 #
 # Examples:
 #   Adding a github repo.
-#   $0 something http://github.com/ksandom/something
+#     $0 something http://github.com/ksandom/something
 #
 #   Another way to add the same repo.
-#   $0 something git@github.com:ksandom/something
+#     $0 something git@github.com:ksandom/something
 #
 #   How to add a repo that is stored on your local machine.
-#   $0 something /usr/local/something
+#     $0 something /usr/local/something
 
 requiredParms="$2"
 . `dirname $0`/libs/includeLibs.sh

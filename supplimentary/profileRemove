@@ -9,7 +9,7 @@
 #
 # Examples:
 #   Removes a profile called "lite"
-#   $0 lite
+#     $0 lite
 
 requiredParms="$1"
 . `dirname $0`/libs/includeLibs.sh

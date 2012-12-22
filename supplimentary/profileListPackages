@@ -4,13 +4,13 @@
 #
 # Syntax:
 #   $0 profileName [--short]
-#     profileName is a named profile. # TODO Think up a better description when I don't have a couple arguing beside me.
+#     profileName is the name for which the profile is programatically referenced.
 #
 # Examples:
 #   Lists the profiles including any symlink infomation.
-#   $0
+#     $0
 #   Lists the current repos without symlink information. This is what you will want if you want to write scripts using this script.
-#   $0 --short
+#     $0 --short
 
 requiredParms="$1"
 . `dirname $0`/libs/includeLibs.sh

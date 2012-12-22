@@ -7,7 +7,7 @@
 #
 # Examples:
 #   Simply install it. Boo-ya!
-#   $0
+#     $0
 
 requiredParms="none"
 . `dirname $0`/libs/includeLibs.sh
