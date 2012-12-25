@@ -5,13 +5,9 @@ if [ "$configDir" == '' ]; then
 	export configDir=`mass --get=General,configDir --singleStringNow --null`
 fi
 
-if [ "$libDir" == '' ]; then
-	export libDir="$configDir/supplimentary/libs"
-fi
-
-if [ "$supplimentaryDir" == '' ]; then
-	export supplimentaryDir="$configDir/supplimentary"
-fi
+libDir="$configDir/supplimentary/libs"
+supplimentaryDir="$configDir/supplimentary"
+profileDir="$configDir/profiles"
 
 managementTool="manageMass"
 

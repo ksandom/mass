@@ -42,14 +42,15 @@ while read profile; do
 	while read package;do
 		# TODO test this
 		packagePath="$configDir/profiles/$profile/packages/$package"
-		if [ -h "$packagePath" ]; then
-			rm -f "$packagePath"
-		elif [ -d "$packagePath" ]; then
-			echo "$packagePath is a directory. Is this your only copy of your work?! This should be a symlink."
-			# rm -Rf "$packagePath"
-		else
-			echo "$packagePath is not a symlink or directory."
+		profilePath="$configDir/profiles/$profile/packages"
+		cd "$profilePath"
+		
+		if [ -e "$package" ]; then
+			echo "Obsolete named package \"$package\" in \"$packagePath\". It should be in the form repoNanme-packageName."
+		elif [ ! -e "$repoName-$package" ]; then
+			ln -sf "$packagePath" .
+			mv "$package" "$repoName-$package"
 		fi
-	done < <($managementTool profileListPackages $profile --short | grep "$packageRegex")
+	done < <($managementTool repoListPackages $repoName --short | grep "$packageRegex")
 done < <(echo "$profiles")
 

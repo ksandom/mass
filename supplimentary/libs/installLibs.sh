@@ -82,11 +82,11 @@ function doInstall
 
 	createProfile privateWebAPI
 	enableEverythingForProfile privateWebAPI mass 
-	disableItemInProfile privateWebAPI packages SSH
+	disableItemInProfile privateWebAPI packages mass-SSH
 	cleanProfile privateWebAPI
 
 	cloneProfile privateWebAPI publicWebAPI
-	disableItemInProfile publicWebAPI packages AWS
+	disableItemInProfile publicWebAPI packages mass-AWS
 	cleanProfile publicWebAPI
 	
 	# echo -e "Cleanup"

@@ -3,10 +3,10 @@
 #   Lists out available packages.
 #
 # Syntax:
-#   $0 [--short]
+#   $0 [profile] [--short]
 #
 # Examples:
-#   Lists the available packages.
+#   Lists the enabled packages.
 #     $0
 #   Lists the available packages and guarantees that there is no symlink information. This is what you will want if you want to write scripts using this script.
 #     $0 --short
@@ -14,10 +14,13 @@
 requiredParms="none"
 . `dirname $0`/libs/includeLibs.sh
 
-while read repo; do
-	while read package;do 
-		echo $repo	$package
-	done < <($managementTool repoListPackages $repo)
-	
-done < <($managementTool repoList --short)
+function listPackagesForProfile
+{
+	profile="$1"
+	resolveSymlinks "$profileDir/$profile/packages"
+}
+
+while read profile; do
+	listPackagesForProfile "$profile"
+done < <($managementTool profileList --short)
 
