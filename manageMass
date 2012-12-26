@@ -34,7 +34,9 @@ script=""$supplimentaryDir/$1""
 if [ -f "$script" ]; then
 	export scriptName="$name $1"
 	shift
-	"$script" $@
+	
+	# TODO I used to use $@, but resolved '.*' to .* . There's got to be a better way.
+	"$script" "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"
 else
 	case $1 in
 		'--help'|'-h')

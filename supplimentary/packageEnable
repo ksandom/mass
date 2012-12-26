@@ -41,7 +41,7 @@ fi
 while read profile; do
 	while read package;do
 		# TODO test this
-		packagePath="$configDir/profiles/$profile/packages/$package"
+		packagePath="$configDir/repos/$repoName/packages-available/$package"
 		profilePath="$configDir/profiles/$profile/packages"
 		cd "$profilePath"
 		
