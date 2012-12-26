@@ -17,10 +17,22 @@ requiredParms="none"
 function listPackagesForProfile
 {
 	profile="$1"
-	resolveSymlinks "$profileDir/$profile/packages"
+	while read entry fullPath;do
+		realEntryName=`getFile "$fullPath"`
+		repoName=`echo "$fullPath" | sed 's#'"$repoDir"'/##g;s#/.*##g'`
+		if [ "$short" == 'true' ]; then
+			echo "$realEntryName"
+		else
+			echo "$profile	$repoName	$realEntryName"
+		fi
+	done < <(resolveSymlinks "$profileDir/$profile/packages")
 }
 
-while read profile; do
-	listPackagesForProfile "$profile"
-done < <($managementTool profileList --short)
+if ! isValue "$1"; then
+	while read profile; do
+		listPackagesForProfile "$profile" | tabsToSpacedDashes
+	done < <($managementTool profileList --short)
+else
+	listPackagesForProfile "$1" | tabsToSpacedDashes
+fi
 

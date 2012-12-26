@@ -2,5 +2,9 @@
 
 function tabsToSpacedDashes
 {
-	sed 's/	/ - /g'
+	if [ "$noFormat" == '' ]; then
+		sed 's/	/ - /g'
+	else
+		cat -
+	fi
 }

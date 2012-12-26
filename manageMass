@@ -6,6 +6,10 @@
 #   $0 scriptName [parameters]
 #      scriptName is one of the possible scripts listed below. Use --help with the script to find out more about it.
 #
+# Many of the scripts respond to
+#   --short - Which only lists out what was explicitly asked for.
+#   --noFormat - Which preserves the tab delimiter rather than making it pretty for the user.
+#
 # Examples:
 #   Lists the current repos including any ssymlink infomation.
 #     $0 repoList

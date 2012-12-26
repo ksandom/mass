@@ -10,3 +10,9 @@ function resolveSymlinks
 	ls -l --time-style=+NODATE "$dirToScan" | tail -n +2 | sed 's/^.*NODATE.//g;s/ -> /	/g' 
 }
 
+function getFile
+{
+	fullPath="$1"
+	echo "$fullPath" | sed 's#.*/##g'
+}
+
