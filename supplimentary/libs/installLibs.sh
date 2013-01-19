@@ -55,7 +55,8 @@ function doInstall
 	
 	cd "$configDir"
 	# echo -e "Linking like there's no tomorrow."
-	ln -sf "$repoDir"/docs "$repoDir/core.php" "$repoDir/examples" "$repoDir"/interfaces "$repoDir"/supplimentary .
+	ln -sf "$repoDir"/docs "$repoDir/core.php" "$repoDir"/interfaces "$repoDir"/supplimentary .
+	rm -f examples
 	
 	# "$repoDir"/modules-*available "$repoDir"/macros-*available "$repoDir"/templates-*available "$repoDir"/packages-*available
 	

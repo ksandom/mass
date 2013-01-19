@@ -59,7 +59,9 @@ function enableEverythingForProfile
 		if [ `ls $configDir/repos/$repo/$thing-available|wc -l 2> /dev/null` -gt 0 ]; then
 			while read item;do
 				if [ "$thing" == 'packages' ]; then
-					if [ ! -e $item ]; then
+					if [ -e "$repo-$item" ]; then
+						true
+					elif [ ! -e $item ]; then
 						ln -sf "$configDir/repos/$repo/$thing-available/$item" .
 						mv "$item" "$repo-$item"
 					elif [ "$repo" == 'mass' ]; then # Migrate old naming to new naming.
