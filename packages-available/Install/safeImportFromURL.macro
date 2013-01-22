@@ -1,0 +1,34 @@
+# Import data from a URL, but only if it actually contains data. --safeImportFromURL=URL,outFileName[,data|config] . Eg --safeImportFromURL=http://example.com,1LayerHosts/live.json . If data or config is not specified, data will be assumed. ~ safe,import
+
+set Import,URL,~!Global,safeImportFromURL-0!~
+set Import,fileOnly,~!Global,safeImportFromURL-1!~
+set Import,dataConfig,~!Global,safeImportFromURL-2!~
+
+setIfNothing Import,dataConfig,data
+set Import,file,~!General,configDir!~/~!Import,dataConfig!~/~!Import,fileOnly!~
+
+# TODO This is not thread safe!
+set Import,tmpFile,/tmp/SafeImportFromURL.data.json
+
+# get
+exec curl "~!Import,URL!~" > ~!Import,tmpFile!~ 2> /dev/null
+# exec cp ~!General,configDir!~/data/1LayerHosts/live.json ~!Import,tmpFile!~
+
+# load
+# loadStoreVariableFromFile ~!Import,tmpFile!~,Import,data
+loadStoreVariableFromFile ~!General,configDir!~/data/1LayerHosts/live.json,Import,data
+loadStoreFromFile ~!Import,tmpFile!~
+getCategory SafeImportFromURL
+
+# test
+null
+count
+stashResults Import,count
+
+if ~!Import,count,0!~,>,0,
+	debug 1,Got ~!Import,count,0!~ entries from "~!Import,URL!~". Saving to "~!Import,file!~"
+	exec cp "~!Import,tmpFile!~" "~!Import,file!~"
+else
+	debug 0,Could not load "~!Import,URL!~"
+
+exec rm ""~!Import,tmpFile!~""
