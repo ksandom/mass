@@ -12,13 +12,50 @@
 requiredParms="none"
 . `dirname $0`/libs/includeLibs.sh
 
-if which apt-get; then
-	echo "Choosing apt based install"
-	sudo apt-get install clusterssh
-elif which brew; then
-	echo "Choosing brew based install"
-	brew install csshX
-	csshPath=`which csshX`
-	cd `dirname $csshPath`
-	ln -s csshX cssh
-fi
+function installClusterSSH
+{
+	if which apt-get > /dev/null; then
+		echo "Choosing apt based install"
+		sudo apt-get install clusterssh
+	elif which brew > /dev/null; then
+		echo "Choosing brew based install"
+		brew install csshX
+		csshPath=`which csshX`
+		cd `dirname $csshPath`
+		ln -s csshX cssh
+	fi
+	
+	registerWithMass
+}
+
+function query
+{
+	if isInstalled; then
+		cssh --help | grep -A1 Usage | tail -n 1 | sed 's/ \[.*$//g;s/ *//g'
+	else
+		echo "none"
+	fi
+}
+
+function registerWithMass
+{
+	mass --setClusterSSH=`query`
+}
+
+function isInstalled
+{
+	which cssh > /dev/null
+	return $?
+}
+
+case $1 in
+	'query')
+		query
+	;;
+	'registerWithMass')
+		registerWithMass
+	;;
+	*)
+		installClusterSSH
+	;;
+esac

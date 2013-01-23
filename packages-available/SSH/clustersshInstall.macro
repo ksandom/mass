@@ -1,0 +1,4 @@
+# ClusterSSH install time setup ~ install,cssh
+#onDefine registerForEvent Install,general,clustersshInstall
+
+exec manageMass installClusterSSH registerWithMass

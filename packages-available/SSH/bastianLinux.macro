@@ -1,3 +1,0 @@
-# Set linux based bastian host ~ bastian,linux
-
-set Cssh,extra,--ssh="~!Global,bastianOSX!~"

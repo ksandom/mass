@@ -1,0 +1,20 @@
+# Set OSX based bastian host ~ bastian,OSX
+
+set SSH,bastian,~!Global,bastian!~
+
+stashResults Cssh,resultset
+
+
+if ~!ClusterSSH,implementation!~,==,cssh,
+	set Cssh,extra,-C "/tmp/cssh.config"
+	template clustersshBastianConfig
+	cleanUnresolvedResultVars
+	singleStringNow /tmp/cssh.config
+else
+	template clustersshBastianWrapper
+	cleanUnresolvedResultVars
+	singleStringNow /tmp/bastianWrapper
+	exec chmod 755 /tmp/bastianWrapper
+	set Cssh,extra,--ssh="/tmp/bastianWrapper"
+
+retrieveResults Cssh,resultset
