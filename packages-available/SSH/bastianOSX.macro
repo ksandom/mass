@@ -1,3 +1,11 @@
 # Set OSX based bastian host ~ bastian,OSX
 
-set Cssh,extra,--ssh="~!Global,bastianOSX!~"
+set SSH,bastian,~!Global,bastianOSX!~
+
+template clustersshBastianWrapper
+cleanUnresolvedResultVars
+singleStringNow /tmp/bastianWrapper
+
+chmod 755 /tmp/bastianWrapper
+
+set Cssh,extra,--ssh="/tmp/bastianWrapper"
