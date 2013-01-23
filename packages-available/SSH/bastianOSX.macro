@@ -2,6 +2,8 @@
 
 set SSH,bastian,~!Global,bastianOSX!~
 
+stashResults Cssh,resultset
+
 template clustersshBastianWrapper
 cleanUnresolvedResultVars
 singleStringNow /tmp/bastianWrapper
@@ -9,3 +11,5 @@ singleStringNow /tmp/bastianWrapper
 exec chmod 755 /tmp/bastianWrapper
 
 set Cssh,extra,--ssh="/tmp/bastianWrapper"
+
+retrieveResults Cssh,resultset
