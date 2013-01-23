@@ -18,6 +18,7 @@ if which apt-get; then
 elif which brew; then
 	echo "Choosing brew based install"
 	brew install csshX
-	cd `which csshX`
+	csshPath=`which csshX`
+	cd `dirname $csshPath`
 	ln -s csshX cssh
 fi
