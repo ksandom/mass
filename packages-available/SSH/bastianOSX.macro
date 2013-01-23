@@ -1,0 +1,3 @@
+# Set OSX based bastian host ~ bastian,OSX
+
+set Cssh,extra,--ssh="~!Global,bastianOSX!~"
