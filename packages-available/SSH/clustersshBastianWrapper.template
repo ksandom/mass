@@ -1,4 +1,4 @@
 #!/bin/bash
 # Makes clusterssh use a bastian host to connect to each host
 
-ssh -At ~!SSH,bastian!~ $@
+ssh -Avt ~!SSH,bastian!~ ssh $@
