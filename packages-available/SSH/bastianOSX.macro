@@ -6,6 +6,6 @@ template clustersshBastianWrapper
 cleanUnresolvedResultVars
 singleStringNow /tmp/bastianWrapper
 
-chmod 755 /tmp/bastianWrapper
+exec chmod 755 /tmp/bastianWrapper
 
 set Cssh,extra,--ssh="/tmp/bastianWrapper"
