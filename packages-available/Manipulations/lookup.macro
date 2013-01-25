@@ -1,0 +1,3 @@
+# Lookup a value in a store using a named value from the result set and put it as named value in the result set. --lookup=resultSetInputName,StoreName,resultSetOutputName ~ resultset
+
+loopMacro internalLookup,~!Global,lookup-0!~,~!Global,lookup-1!~,~!Global,lookup-2!~

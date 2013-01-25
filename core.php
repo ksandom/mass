@@ -456,25 +456,59 @@ class core extends Module
 	
 	private function findAndProcessVariables($input, &$iterations=0)
 	{
+		$debugLevel=4;
 		$output=$input;
+		
+		$this->core->debug($debugLevel, "findAndProcessVariables: Enter \"$output\"");
 		
 		while (strpos($output, storeValueBegin)!==false and $iterations<100)
 		{
-			$startPos=strpos($output, storeValueBegin)+2;
+			$startPos=strpos($output, storeValueBegin, $startPos)+2;
 			$nextStartPos=strpos($output, storeValueBegin, $startPos)+2;
 			$endPos=strpos($output, storeValueEnd);
+			
+			if ($startPos>$endPos)
+			{
+				$oldStartPos=$startPos;
+				$beginLen=strlen(storeValueBegin);
+				if (substr($output, 0, $beginLen)== storeValueBegin)
+				{
+					$startPos=$beginLen-1;
+					$this->core->debug($debugLevel, "findAndProcessVariables: start=$startPos next=$nextStartPos end=$endPos oldStartPos=$oldStartPos Reset startPos");
+				}
+				else
+				{
+					$endPos=strpos($output, storeValueEnd, $startPos);
+					$this->core->debug($debugLevel, "findAndProcessVariables: start=$startPos next=$nextStartPos end=$endPos Exended endPos (A)");
+				}
+			}
+			
+			$this->core->debug($debugLevel, "findAndProcessVariables: start=$startPos next=$nextStartPos end=$endPos Initial find from $output. ".storeValueBegin.' -> '.storeValueEnd);
+			
 			
 			# This allows us to have nested variables.
 			while ($nextStartPos<$endPos and $nextStartPos>$startPos)
 			{
+				$lastStart=$startPos;
 				$startPos=strpos($output, storeValueBegin, $startPos)+2;
 				$nextStartPos=strpos($output, storeValueBegin, $startPos)+2;
+				
+				# if ($startPos>$endPos) $startPos=$lastStart;
+				if ($startPos>$endPos)
+				{
+					$endPos=strpos($output, storeValueEnd, $startPos);
+					$this->core->debug($debugLevel, "findAndProcessVariables: start=$startPos next=$nextStartPos end=$endPos Exended endPos (B)");
+				}
+				# $this->core->debug(0, "Progressing $startPos $nextStartPos $endPos $output");
+				$this->core->debug($debugLevel, "findAndProcessVariables: start=$startPos next=$nextStartPos end=$endPos Progressing using $output");
 			}
 			
 			$length=$endPos-$startPos;
 			
 			$varDef=substr($output, $startPos, $length);
 			$varParts=explode(',', $varDef);
+			$this->core->debug($debugLevel, "findAndProcessVariables: start=$startPos next=$nextStartPos end=$endPos Trying to lookup $varDef from $output");
+			
 			if (isset($varParts[1]))
 			{
 				if (count($varParts)==2)
@@ -485,6 +519,8 @@ class core extends Module
 					$varValue=$this->get($varParts[0], $varParts[1]);
 				}
 				else $varValue=$this->getNested($varParts);
+				
+				$this->core->debug($debugLevel, "findAndProcessVariables: start=$startPos next=$nextStartPos end=$endPos Got $varValue");
 				
 				if (!is_array($varValue)) $output=implode($varValue, explode(storeValueBegin.$varDef.storeValueEnd, $output));
 				else 
@@ -504,6 +540,8 @@ class core extends Module
 		{
 			$this->debug(1, "Still finding \"".storeValueBegin."\" in \"".$output."\"");
 		}
+		
+		$this->core->debug($debugLevel, "findAndProcessVariables: Return \"$output\"");
 		
 		return $output;
 	}

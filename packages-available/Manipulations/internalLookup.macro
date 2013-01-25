@@ -1,0 +1,3 @@
+# Used by --lookup to do the work inside the loop. --internalLookup=resultSetInputName,StoreName,resultSetOutputName ~ internal,lookup
+
+set Result,~!Global,internalLookup-2!~,~!~!Global,internalLookup-1!~,~!Result,~!Global,internalLookup-0!~!~!~
