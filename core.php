@@ -463,9 +463,9 @@ class core extends Module
 		
 		while (strpos($output, storeValueBegin)!==false and $iterations<100)
 		{
-			$startPos=strpos($output, storeValueBegin, $startPos)+2;
+			$startPos=strpos($output, storeValueBegin)+2;
 			$nextStartPos=strpos($output, storeValueBegin, $startPos)+2;
-			$endPos=strpos($output, storeValueEnd);
+			$endPos=strpos($output, storeValueEnd, $startPos);
 			
 			if ($startPos>$endPos)
 			{
