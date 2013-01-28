@@ -3,6 +3,7 @@
 #onLoaded setFeatureType clusterssh,actOnHostsUnknown
 
 outNow
+triggerEvent Bastion,load
 template clusterssh
 cleanUnresolvedResultVars
 exec
