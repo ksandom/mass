@@ -16,7 +16,7 @@ class Manipulator extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array of arrays into an array of strings. eg --toString="blah file=%hostName% ip=%externalIP%"', array('array', 'string'));
+				$this->core->registerFeature($this, array('toString'), 'toString', 'Convert array of arrays into an array of strings. eg --toString="blah file=%hostName% ip=~%externalIP%~"', array('array', 'string'));
 				$this->core->registerFeature($this, array('f', 'flatten'), 'flatten', 'Flatten an array of arrays into a keyed array of values. --flatten[=limit] (default:-1). Note that "limit" specifies how far to go into the nesting before simply returning what ever is below. Choosing a negative number specifies how many levels to go in before beginning to flatten. Choosing 0 sets no limit.', array('array', 'string'));
 				$this->core->registerFeature($this, array('finalFlatten'), 'finalFlatten', 'To be used after a --flatten as gone as far as it can.', array('array', 'string'));
 				$this->core->registerFeature($this, array('replace'), 'replace', 'Replace a pattern matching a regular expression and replace it with something defined. --replace=searchRegex,replacement', array('array', 'string'));
@@ -160,7 +160,9 @@ class Manipulator extends Module
 	
 	function replace($input, $search, $replace)
 	{
-		return implode($replace, explode($search, $input));
+		$output=implode($replace, explode($search, $input));;
+		$this->core->debug(3, "replace: Search=$search Replace=$replace Input=\"$input\" Output=\"$output\"");
+		return $output;
 	}
 	
 	function toString($input, $template)
@@ -173,10 +175,11 @@ class Manipulator extends Module
 			{
 				# TODO It would be nice to make this recursive.
 				$outputLine=$this->core->processValue($template);
-				foreach ($line as $key=>$value)
-				{
+				#foreach ($line as $key=>$value)
+				#{
+					//$this->core->debug(0, "$key, $value, $outputLine");
 					$outputLine=$this->processResultVarsInString($line, $outputLine);
-				}
+				#}
 				$output[]=$outputLine;
 			}
 			else
@@ -197,6 +200,7 @@ class Manipulator extends Module
 		{
 			if (!is_array($value)) $outputLine=$this->replace($outputLine, resultVarBegin."$key".resultVarEnd, $value);
 			else $this->core->debug(3, "processResultVarsInString: value for key $key is an array, so the replace has not been attempted.");
+			# $this->core->debug(3, "processResultVarsInString: In=\"$string\" Out=\"$outputLine\" Search=$key Value=$value");
 		}
 		
 		return $outputLine;

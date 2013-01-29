@@ -1,4 +1,29 @@
 #!/bin/bash
 # Makes clusterssh use a bastian host to connect to each host
 
-ssh -Avt ~!SSH,bastian!~ ssh -v $@
+if [ $# -eq 1 ]; then # Expected situation
+	host="$1"
+	bastion=`mass --list="^$1$" --triggerEvent=Bastion,lookup --toString='~%bastionHost%~' --singleString`
+	
+	if [ "$bastion" == '~%bastionHost%~' ]; then
+		ssh $@
+	else
+		ssh -Avt $bastion ssh -v $@
+	fi
+	
+elif [ $# -gt 1 ]; then # More than one parameter. Fall back to no bastion server.
+	# TODO This could be legit. Do this better
+	
+	if [ "~!SSH,bastian!~" != '' ]; then
+		echo "Using global bastion host."
+		ssh -Avt ~!SSH,bastian!~ ssh -v $@
+	else
+		ssh -v $@
+	fi
+	
+	exit 1
+	
+elif [ $# -lt 1 ]; then # No parameters. Probably called by the user.
+	echo "This script is intended to be called internally by mass when interacting with clusterssh."
+	exit 1
+fi

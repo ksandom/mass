@@ -1,0 +1,5 @@
+# Lookup bastion hosts for each host ~ bastion,lookup
+#onLoaded registerForEvent Bastion,lookup,lookupSimpleBastionHosts
+
+triggerEvent Bastion,load
+lookup bastion,Bastion,bastionHost

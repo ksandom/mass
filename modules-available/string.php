@@ -81,7 +81,8 @@ class String extends Module
 	function out($output)
 	{
 		$this->core->debug(4, "String: Writing output to {$this->outputFile}");
-		echo $this->singleStringNow($this->outputFile, $output);
+		$result=$this->singleStringNow($this->outputFile, $output);
+		echo $result[0];
 	}
 }
 
