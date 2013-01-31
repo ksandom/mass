@@ -1,0 +1,8 @@
+# Derive the bastion commands for various types of functions for each resultSet entry ~ resultset,bastion
+#onLoaded registerForEvent Bastion,deriveCommands,deriveSimpleBastionCommands
+
+setFromResultSet Bastion,host,bastionHost
+debug 0,host=~!Bastion,host!~
+
+if ~!Bastion,host!~,!=,,
+	set Cssh,extra,-Avt ~!Bastion,host!~ ssh -v
