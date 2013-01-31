@@ -3,4 +3,6 @@
 
 triggerEvent Bastion,load
 lookup bastion,Bastion,bastionHost
+
+# TODO This needs to check for potential conflicts
 setFromResultSet Bastion,host,bastionHost

@@ -3,27 +3,27 @@
 #onLoaded setFeatureType newClusterSSH,actOnHostsUnknown
 
 
+outNow
+triggerEvent Bastion,load
+triggerEvent Bastion,lookup
+triggerEvent Bastion,deriveCommands
+
 stashResults Cssh,resultset
+
+template clustersshBastianConfig
+cleanUnresolvedResultVars
+singleStringNow /tmp/cssh.config
 
 if ~!ClusterSSH,implementation!~,==,cssh,
 	set Cssh,wrapper,-C "/tmp/cssh.config"
-	template clustersshBastianConfig
-	cleanUnresolvedResultVars
-	singleStringNow /tmp/cssh.config
 else
-	template clustersshBastianWrapper
-	cleanUnresolvedResultVars
-	singleStringNow /tmp/bastianWrapper
-	exec chmod 755 /tmp/bastianWrapper
-	set Cssh,wrapper,--ssh="/tmp/bastianWrapper"
+	set Cssh,wrapper,-c "/tmp/cssh.config"
 
 retrieveResults Cssh,resultset
 
 
-
-outNow
-triggerEvent Bastion,load
 template newClusterSSH
 cleanUnresolvedResultVars
+nested
 exec
-null
+# null
