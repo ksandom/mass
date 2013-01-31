@@ -6,8 +6,13 @@ if [ $# -eq 1 ]; then # Expected situation
 	bastion=`mass --list="^$1$" --triggerEvent=Bastion,lookup --toString='~%bastionHost%~' --singleString`
 	
 	if [ "$bastion" == '~%bastionHost%~' ]; then
+		echo "No bastionHost used. (Not set)"
 		ssh $@
+	elif [ "$bastion" == '' ]; then
+		echo "No bastionHost used. (Blank)"
+		ssh -v $@
 	else
+		echo "$bastionHost used as bastionHost."
 		ssh -Avt $bastion ssh -v $@
 	fi
 	

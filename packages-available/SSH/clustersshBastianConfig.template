@@ -1,1 +1,2 @@
-ssh_args=-Avt ~!SSH,bastian!~ ssh -v
+# ssh_args=-Avt ~!SSH,bastian!~ ssh -v
+ssh=/tmp/bastianWrapper

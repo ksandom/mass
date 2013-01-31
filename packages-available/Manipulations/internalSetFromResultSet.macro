@@ -1,0 +1,4 @@
+# Used by --setFromResultSet with --loopMaco. --internalSetFromResultSet=StoreName,variableName,resultSetKey ~ resultset
+
+if ~!Result,~!Global,internalSetFromResultSet-2!~!~,!=,,
+	setIfNotSet ~!Global,internalSetFromResultSet-0!~,~!Global,internalSetFromResultSet-1!~,~!Result,~!Global,internalSetFromResultSet-2!~!~

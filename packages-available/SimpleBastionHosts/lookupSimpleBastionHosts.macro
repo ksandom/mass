@@ -3,3 +3,4 @@
 
 triggerEvent Bastion,load
 lookup bastion,Bastion,bastionHost
+setFromResultSet Bastion,host,bastionHost

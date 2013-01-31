@@ -43,6 +43,11 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('chooseBasedOn'), 'chooseBasedOn', 'For each item in the result set, choose the value of an array based on the modulous of a named value in the result set and the number of items in the array. This would naturally work well with --pos. --chooseBasedOn=inputValueName,outputValueName,inputCategory[,inputValueName,[subInputValueName,[etc,[etc]]]]', array('result'));
 				$this->core->registerFeature($this, array('crc'), 'crc', "For each item in the result set, calculate the CRC of a specified value and set a specified value to that CRC. --crc=inputValueName,outputValueName . Please see the warning on http://uk3.php.net/crc32 for information about it's acuracy. You may want to check out --positiveCRC which is good enough for what I want.", array('result', 'crc'));
 				$this->core->registerFeature($this, array('positiveCRC'), 'positiveCRC', "For each item in the result set, calculate the CRC of a specified value and set a specified value to that CRC. --positiveCRC=inputValueName,outputValueName . If the result is negative, take the absolute value. Please see the warning on http://uk3.php.net/crc32 for why this is useful. Note that this output may not be consistent with other applications generating a CRC. If you need that consistency, then you probably want --crc.", array('result', 'crc'));
+				
+				$this->core->registerFeature($this, array('firstResult', 'firstResults'), 'firstResult', "Take the first x results, where x is one if not specified. --firstResult[=x]", array('result'));
+				#$this->core->registerFeature($this, array('lastResult', 'lastResults'), 'lastResult', "Take the last x results, where x is one if not specified. --firstResult=x", array('result'));
+				$this->core->registerFeature($this, array('offsetResult', 'offsetResults'), 'offsetResult', "After x results, take the first y results. --offsetResult=x,y", array('result'));
+				
 				#$this->core->registerFeature($this, array('cleanUnresolvedStoreVars'), 'cleanUnresolvedStoreVars', 'Clean out any store variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
 				break;
 			case 'followup':
@@ -150,6 +155,14 @@ class Manipulator extends Module
 			case 'positiveCRC':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 2, true));
 				return $this->crc($this->core->getResultSet(), $parms[0], $parms[1], true);;
+				break;
+			case 'firstResult':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 1, 0));
+				return $this->offsetResult($this->core->getResultSet(), 0, $parms[0]);
+				break;
+			case 'offsetResult':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 2));
+				return $this->offsetResult($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
 			
 			default:
@@ -649,6 +662,27 @@ class Manipulator extends Module
 		}
 		
 		return $resultSet;
+	}
+	
+	function offsetResult($resultSet, $offset, $max)
+	{
+		if (!$max) $max=1;
+		
+		$output=array();
+		$keys=array_keys($resultSet);
+		$keyCount=count($keys);
+		$totalRequested=$offset+$max;
+		
+		if ($totalRequested > $keyCount) $stop=$keyCount;
+		else $stop=$totalRequested;
+		
+		for ($i=$offset; $i<$stop; $i++)
+		{
+			$key=$keys[$i];
+			$output[$key]=$resultSet[$key];
+		}
+		
+		return $output;
 	}
 }
 
