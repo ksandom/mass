@@ -1,7 +1,8 @@
 # Use cluster ssh to control several terminals at once. --list[=hostRegex] --clusterssh ~ terminal,user
-#onDefine aliasFeature newClusterSSH,ncssh
-#onLoaded setFeatureType newClusterSSH,actOnHostsUnknown
+#onDefine aliasFeature clusterSSH,clusterssh,cssh
+#onLoaded setFeatureType clusterSSH,actOnHostsUnknown
 
+debug 0,--clusterSSH has gone through heavy refactoring in the last few days. It should be working, but if it isn't you can use --legacyClusterSSH (or --lcssh) and let me know what the trouble is you're having with it.
 
 outNow
 triggerEvent Bastion,load
@@ -22,7 +23,7 @@ else
 retrieveResults Cssh,resultset
 
 
-template newClusterSSH
+template clusterSSH
 cleanUnresolvedResultVars
 nested
 exec

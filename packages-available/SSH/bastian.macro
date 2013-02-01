@@ -1,4 +1,4 @@
-# Set OSX based bastian host ~ bastian,OSX
+# DEPRECATED, you probably want --addSimpleBastionHost. Set OSX based bastian host ~ bastian,OSX
 
 set SSH,bastian,~!Global,bastian!~
 
