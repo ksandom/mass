@@ -5,3 +5,4 @@ setFromResultSet Bastion,host,bastionHost
 
 if ~!Bastion,host!~,!=,,
 	set Cssh,extra,-Avt ~!Bastion,host!~ ssh -v
+	resultSet sshExtra,-Avt ~%bastionHost%~ ssh -v
