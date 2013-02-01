@@ -1,6 +1,7 @@
 # Open a terminal to every host in the results with inline syntax. NOTE This will replace --term when it's finished ~ terminal,user
 #onLoaded setFeatureType term,actOnHosts
 
+resultSet termCmd,ssh -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~
 toString ~!Terminal,GUICMD!~
 cleanUnresolvedResultVars
 exec
