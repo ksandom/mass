@@ -2,7 +2,8 @@
 #onLoaded registerForEvent Bastion,deriveCommands,deriveSimpleBastionCommands
 
 setFromResultSet Bastion,host,bastionHost
+setFromResultSet Bastion,userAt,userAt
 
 if ~!Bastion,host!~,!=,,
-	set Cssh,extra,-Avt ~!Bastion,host!~ ssh -v
-	resultSet sshExtra,-Avt ~%bastionHost%~ ssh -v
+	set Cssh,extra,-Avt ~!Bastion,userAt!~~!Bastion,host!~ ssh -v
+	resultSet sshExtra,-Avt ~%Bastion,userAt%~~%bastionHost%~ ssh -v
