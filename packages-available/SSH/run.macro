@@ -1,9 +1,6 @@
 # Open a terminal to every host in the results ~ user
 
-list ~!Global,run!~
-
-# the internalIP will work if we are connected to a VPN
-chooseFirst IP,externalIP,internalIP
-
-toString ssh %IP% ~!Global,cmd!~ &
+toString ssh ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~!Global,run!~ &
+cleanUnresolvedResultVars
+nested
 exec
