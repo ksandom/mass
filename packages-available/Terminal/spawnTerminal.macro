@@ -1,0 +1,12 @@
+# Spawn a terminal to delegate to ~ spawn,terminal,delegate
+
+setNested Blank,0,default,
+getCategory Blank
+resultSet termCmd,~!Global,spawnTerminal!~
+toString ~!Terminal,GUICMD!~
+cleanUnresolvedResultVars
+exec
+
+# TOOD Is this needed?
+getLastList
+

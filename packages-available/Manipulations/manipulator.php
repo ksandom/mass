@@ -44,7 +44,7 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('crc'), 'crc', "For each item in the result set, calculate the CRC of a specified value and set a specified value to that CRC. --crc=inputValueName,outputValueName . Please see the warning on http://uk3.php.net/crc32 for information about it's acuracy. You may want to check out --positiveCRC which is good enough for what I want.", array('result', 'crc'));
 				$this->core->registerFeature($this, array('positiveCRC'), 'positiveCRC', "For each item in the result set, calculate the CRC of a specified value and set a specified value to that CRC. --positiveCRC=inputValueName,outputValueName . If the result is negative, take the absolute value. Please see the warning on http://uk3.php.net/crc32 for why this is useful. Note that this output may not be consistent with other applications generating a CRC. If you need that consistency, then you probably want --crc.", array('result', 'crc'));
 				
-				$this->core->registerFeature($this, array('firstResult', 'firstResults'), 'firstResult', "Take the first x results, where x is one if not specified. --firstResult[=x]", array('result'));
+				$this->core->registerFeature($this, array('firstResult', 'firstResults', 'first'), 'firstResult', "Take the first x results, where x is one if not specified. --firstResult[=x]", array('result'));
 				#$this->core->registerFeature($this, array('lastResult', 'lastResults'), 'lastResult', "Take the last x results, where x is one if not specified. --firstResult=x", array('result'));
 				$this->core->registerFeature($this, array('offsetResult', 'offsetResults'), 'offsetResult', "After x results, take the first y results. --offsetResult=x,y", array('result'));
 				
