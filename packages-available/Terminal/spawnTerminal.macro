@@ -1,5 +1,6 @@
-# Spawn a terminal to delegate to ~ spawn,terminal,delegate
+# Spawn a terminal. --spawnTerminal=commandToRun ~ spawn,terminal,delegate
 
+stashResults Me,results
 setNested Blank,0,default,
 getCategory Blank
 resultSet termCmd,~!Global,spawnTerminal!~
@@ -7,6 +8,4 @@ toString ~!Terminal,GUICMD!~
 cleanUnresolvedResultVars
 exec
 
-# TOOD Is this needed?
-getLastList
-
+retrieveResults Me,results
