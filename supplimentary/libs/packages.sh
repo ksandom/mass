@@ -18,14 +18,14 @@ function cleanEnabled
 function testEnabledFile
 {
 	item="$1"
-	cat "$item" 2>&1 > /dev/null
+	cat "$item" 1>/dev/null 2>&1
 	return $?
 }
 
 function testEnabledDirectory
 {
 	item="$1"
-	cd "$item" 2>&1 > /dev/null
+	cd "$item" 1>/dev/null 2>&1
 	return $?
 }
 
