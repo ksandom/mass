@@ -1,0 +1,3 @@
+# Describe the compiled result of a macro ~ describe,macro
+
+get Macros,~!Global,describeMacro!~
