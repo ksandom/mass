@@ -103,6 +103,6 @@ function doInstall
 	# It should be safe to do this on an existing setup.
 	echo -e "Calling the final stage"
 	
-	mass -vv --finalInstallStage
+	mass --verbosity=2 --finalInstallStage
 }
 
