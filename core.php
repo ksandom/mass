@@ -19,7 +19,7 @@ define('workAroundIfBug', true); // See doc/bugs/ifBug.md
 
 
 /*
-	Debug levele
+	Debug levels
 		0 Default - Don't use this normally
 		1 Important
 		2 Warning
