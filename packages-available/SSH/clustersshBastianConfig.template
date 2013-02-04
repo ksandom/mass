@@ -1,1 +1,1 @@
-ssh_args=-o StrictHostKeyChecking=no ~!Cssh,extra!~
+ssh_args=-o StrictHostKeyChecking=no ~!Verbosity,externalMinusV!~ ~!Cssh,extra!~

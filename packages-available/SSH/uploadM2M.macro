@@ -13,7 +13,7 @@ toString mkdir -p ~%externalFQDN%~
 exec
 
 retrieveResults UploadM2M,sourcelist
-toString scp ~%scpExtra%~ ~%auth%~ -r ~%externalFQDN%~/`echo ~!Global,uploadM2M!~|sed 's/.*\///'` ~%userAt%~~%FQDN%~:~!Global,uploadM2M!~ >&2 ~!Settings,backgroundTasks!~
+toString scp ~!Verbosity,externalMinusV!~ ~%scpExtra%~ ~%auth%~ -r ~%externalFQDN%~/`echo ~!Global,uploadM2M!~|sed 's/.*\///'` ~%userAt%~~%FQDN%~:~!Global,uploadM2M!~ >&2 ~!Settings,backgroundTasks!~
 cleanUnresolvedResultVars
 nested
 exec

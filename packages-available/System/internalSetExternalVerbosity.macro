@@ -1,0 +1,9 @@
+# Set the verbosity of external apps based on the verbosity of mass. It's intended to be called internally when --verbosity, -v or -V are called. ~ internal,verbosity
+#onDefine registerForEvent Verbosity,changed,internalSetExternalVerbosity
+
+if ~!Verbosity,level!~,>,0,
+	set Verbosity,externalV,v
+	set Verbosity,externalMinusV,-v
+else
+	set Verbosity,externalV,
+	set Verbosity,externalMinusV,

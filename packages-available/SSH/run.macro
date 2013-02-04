@@ -5,7 +5,7 @@ triggerEvent Bastion,load
 triggerEvent Bastion,lookup
 triggerEvent Bastion,deriveCommands
 
-toString ssh ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~!Global,run!~ &
+toString ssh ~!Verbosity,externalMinusV!~ ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~!Global,run!~ &
 cleanUnresolvedResultVars
 nested
 exec

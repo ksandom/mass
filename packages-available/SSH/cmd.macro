@@ -7,7 +7,7 @@ triggerEvent Bastion,lookup
 triggerEvent Bastion,deriveCommands
 
 debug 0,Spawning commands in background
-toString ssh ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ '~%cmd%~ | while read in;do echo "~%hostName%~: $in";done' >&2 &
+toString ssh ~!Verbosity,externalMinusV!~ ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ '~%cmd%~ | while read in;do echo "~%hostName%~: $in";done' >&2 &
 cleanUnresolvedResultVars
 nested
 exec

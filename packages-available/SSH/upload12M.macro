@@ -6,7 +6,7 @@ triggerEvent Bastion,load
 triggerEvent Bastion,lookup
 triggerEvent Bastion,deriveCommands
 
-toString scp ~%scpExtra%~ ~%auth%~ -r `echo ~!Global,upload12M!~|sed 's/.*\///'` ~%userAt%~~%FQDN%~:~!Global,upload12M!~ >&2 ~!Settings,backgroundTasks!~
+toString scp ~!Verbosity,externalMinusV!~ ~%scpExtra%~ ~%auth%~ -r `echo ~!Global,upload12M!~|sed 's/.*\///'` ~%userAt%~~%FQDN%~:~!Global,upload12M!~ >&2 ~!Settings,backgroundTasks!~
 cleanUnresolvedResultVars
 nested
 exec

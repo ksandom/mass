@@ -5,7 +5,7 @@ outNow
 triggerEvent Bastion,load
 triggerEvent Bastion,lookup
 triggerEvent Bastion,deriveCommands
-resultSet termCmd,ssh -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~
+resultSet termCmd,ssh ~!Verbosity,externalMinusV!~ -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~
 stashResults Me,results
 
 toString ~!Terminal,GUICMD!~

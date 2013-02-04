@@ -10,7 +10,7 @@ triggerEvent Bastion,load
 triggerEvent Bastion,lookup
 triggerEvent Bastion,deriveCommands
 
-toString scp ~%scpExtra%~ ~%auth%~ -r ~!Global,stray!~ ~%userAt%~~%FQDN%~:~!Global,upload!~ >&2 ~!Settings,backgroundTasks!~
+toString scp ~!Verbosity,externalMinusV!~ ~%scpExtra%~ ~%auth%~ -r ~!Global,stray!~ ~%userAt%~~%FQDN%~:~!Global,upload!~ >&2 ~!Settings,backgroundTasks!~
 cleanUnresolvedResultVars
 nested
 exec
