@@ -6,7 +6,11 @@ triggerEvent Bastion,load
 triggerEvent Bastion,lookup
 triggerEvent Bastion,deriveCommands
 resultSet termCmd,ssh -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~
+stashResults Me,results
+
 toString ~!Terminal,GUICMD!~
 cleanUnresolvedResultVars
 exec
-getLastList
+singleStringNow
+
+retrieveResults Me,results
