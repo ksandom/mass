@@ -1,6 +1,11 @@
 # Download the same file(s) from many servers. --list[=hostRegex] --download=fullPathToFileOnTheServer ~ user
 #onLoaded setFeatureType download,actOnHostsUnknown
 
+outNow
+triggerEvent Bastion,load
+triggerEvent Bastion,lookup
+triggerEvent Bastion,deriveCommands
+
 stashResults Download,sourcelist
 
 toString mkdir -p ~%externalFQDN%~

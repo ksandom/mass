@@ -2,6 +2,10 @@
 #onDefine aliasFeature inline,i
 #onLoaded setFeatureType inline,actOnHosts
 
+outNow
+triggerEvent Bastion,load
+triggerEvent Bastion,lookup
+triggerEvent Bastion,deriveCommands
 toString ssh ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ '~%cmd%~'
 cleanUnresolvedResultVars
 exec

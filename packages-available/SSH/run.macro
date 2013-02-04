@@ -1,5 +1,9 @@
 # Open a terminal to every host in the results ~ user
 
+outNow
+triggerEvent Bastion,load
+triggerEvent Bastion,lookup
+triggerEvent Bastion,deriveCommands
 toString ssh ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~!Global,run!~ &
 cleanUnresolvedResultVars
 nested

@@ -2,6 +2,10 @@
 #onLoaded setFeatureType screen,actOnHostsUnknown
 
 getPID Global,PID
+outNow
+triggerEvent Bastion,load
+triggerEvent Bastion,lookup
+triggerEvent Bastion,deriveCommands
 
 template screen
 cleanUnresolvedResultVars

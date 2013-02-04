@@ -1,9 +1,15 @@
 # Upload a specified single file/directory to the listed servers. --list[=hostRegex] --upload=destinationPathOnTheServer file/directoryToUpload ~ user,files
 #onLoaded setFeatureType upload,actOnHostsUnknown
 
-stashResults Upload,sourcelist
+# stashResults Upload,sourcelist
 
-retrieveResults Upload,sourcelist
+# retrieveResults Upload,sourcelist
+
+outNow
+triggerEvent Bastion,load
+triggerEvent Bastion,lookup
+triggerEvent Bastion,deriveCommands
+
 toString scp ~%scpExtra%~ ~%auth%~ -r ~!Global,stray!~ ~%userAt%~~%FQDN%~:~!Global,upload!~ >&2 ~!Settings,backgroundTasks!~
 cleanUnresolvedResultVars
 nested

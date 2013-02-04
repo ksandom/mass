@@ -1,5 +1,9 @@
 # Create a separate socks proxy using every host in the result set. --tunnelSocks[=port] . Eg to a common use would be use port 8080 for proxying HTTP traffic like this --tunnelSocks=8080 . The port for each proxy will be incremented by 1 compared to the last. If the port isn't specified, 8080 is used. ~ user,tunnel
 
+outNow
+triggerEvent Bastion,load
+triggerEvent Bastion,lookup
+triggerEvent Bastion,deriveCommands
 pos port,~!Global,tunnelSocks!~
 
 # Gather input
