@@ -1,0 +1,4 @@
+# Install the feature types to be used with semantics. ~ semantics,internal,install
+#onDefine registerForEvent Install,featureTypes,installFeatureTypesForManipulations
+
+createFeatureType manipulateItem,,,Manipulates a resultSet in some way; putting out the same type of data that came in. Often this is some form of refine. Use this feature type when for a feature that can work with multiple data types (there will be a better way of doing this later!). Otherwise create a feature type and it's associated data type(s).
