@@ -4,11 +4,12 @@ function cleanEnabled
 {
 	testDir="$2"
 	testFunction="$1"
+	profileName="$3"
 	
 	cd "$testDir"
 	for item in *;do
 		if ! $testFunction "$item"; then
-			echo "$item is no longer present. Disabling."
+			echo "$item is no longer present. Disabling in profile \"$profileName\"."
 			rm "$item"
 		fi
 		cd "$testDir"
@@ -120,10 +121,10 @@ function cleanProfile
 	name="$1"
 	
 	for thing in $fileThings;do
-		cleanEnabled testEnabledFile "$configDir/profiles/$name/$thing"
+		cleanEnabled testEnabledFile "$configDir/profiles/$name/$thing" "$name"
 	done
 	
 	for thing in $directoryThings;do
-		cleanEnabled testEnabledDirectory "$configDir/profiles/$name/$thing"
+		cleanEnabled testEnabledDirectory "$configDir/profiles/$name/$thing" "$name"
 	done
 }
