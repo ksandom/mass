@@ -28,6 +28,7 @@ class CommandLine extends Module
 			case 'followup':
 				break;
 			case 'last':
+				$this->core->callFeature('triggerEvent', 'CommandLine,startup');
 				$this->processArgs();
 				break;
 			case 'printr':

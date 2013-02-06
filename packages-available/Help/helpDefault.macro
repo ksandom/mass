@@ -1,6 +1,6 @@
 # The help to display if a "" ~ default
 
-help user
+help ~!Help,default!~
 outNow
 
 getTags
