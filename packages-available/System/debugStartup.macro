@@ -1,0 +1,4 @@
+# Turn on level 4 debugging for startup. This must be the very first parameter to be effective. ~ startup,debug
+
+# Note that this is done entirely in code in configDir/mass
+pass

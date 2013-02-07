@@ -25,9 +25,18 @@ else
 
 include "$configDir/core.php";
 
+# Early processing of -q
+$verbosity=0;
+if (isset($argv[1]))
+{
+	$firstArg=$argv[1];
+	if ($firstArg=='-q' or $firstArg=='--quiet') $verbosity=-1;
+	elseif ($firstArg=='--debugStartup') $verbosity=4;
+}
+
 
 # initiate core
-$core=core::assert();
+$core=core::assert($verbosity);
 $core->set('General', 'EOL', "\n");
 $core->set('General', 'configDir', $configDir);
 $core->set('General', 'profile', $profile);
