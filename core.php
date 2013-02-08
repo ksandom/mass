@@ -967,7 +967,7 @@ class core extends Module
 		return true;
 	}
 	
-	function registerFeature(&$obj, $flags, $name, $description, $tags=false,$isMacro=false)
+	function registerFeature(&$obj, $flags, $name, $description, $tags=false,$isMacro=false, $source='unknown')
 	{
 		$this->core->debug(4, "registerFeature name=$name");
 		$arrayTags=(is_array($tags))?$tags:explode(',', $tags);
@@ -982,7 +982,7 @@ class core extends Module
 		$tagString=implode(',', $arrayTags);
 		
 		# TODO Remove the tag string from descriptoin once we have proper integration with help
-		$entry=array('obj'=>&$obj, 'flags'=>$flags, 'name'=>$name, 'description'=>$description, 'tagString'=>$tagString, 'provider'=>$obj->getName(), 'isMacro'=>$isMacro);
+		$entry=array('obj'=>&$obj, 'flags'=>$flags, 'name'=>$name, 'description'=>$description, 'tagString'=>$tagString, 'provider'=>$obj->getName(), 'isMacro'=>$isMacro, 'source'=>$source);
 		
 		foreach ($flags as $flag)
 		{

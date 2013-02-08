@@ -230,7 +230,7 @@ class Macro extends Module
 					#$description=$firstLine;
 					$description=$firstLineParts[0];
 					$tags=(isset($firstLineParts[1]))?'macro,'.trim($firstLineParts[1]):'';
-					$this->core->registerFeature($this, array($macroName), $macroName, 'Macro: '.$description, $tags, true);
+					$this->core->registerFeature($this, array($macroName), $macroName, $description, $tags, true, $fullPath);
 				}
 				else $this->core->complain($this, "$fullPath appears to be a macro, but doesn't have a helpful comment on the first line begining with a # .");
 			}
