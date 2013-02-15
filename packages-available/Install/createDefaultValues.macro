@@ -59,6 +59,9 @@ set Verbosity,6,Grains of sand on the beach
 set Verbosity,7,Atoms in the universe
 set Verbosity,8,Words can not describe how verbose this is
 
+unset Verbosity,externalV
+unset Verbosity,externalMinusV
+
 saveStoreToConfig Verbosity
 
 
