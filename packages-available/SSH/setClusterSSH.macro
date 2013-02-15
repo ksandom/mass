@@ -1,4 +1,4 @@
 # Set which ClusterSSH implementation is in use ~ cssh,config
 
-set ClusterSSH,implementation,~!Global,setClusterSSH!~
+set ClusterSSH,implementation,~!Global,setClusterSSH-0!~
 saveStoreToConfig ClusterSSH

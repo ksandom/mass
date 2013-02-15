@@ -28,10 +28,19 @@ function installClusterSSH
 	registerWithMass
 }
 
+function getFirstExecutable
+{
+	if which cssh; then true
+	elif which csshX; then true
+	elif which csshx; then true
+	else false
+	fi
+}
+
 function query
 {
 	if isInstalled; then
-		cssh --help | grep -A1 Usage | tail -n 1 | sed 's/ \[.*$//g;s/ *//g'
+		`getFirstExecutable` --help | grep -A1 Usage | tail -n 1 | sed 's/ \[.*$//g;s/ *//g'
 	else
 		echo "none"
 	fi
@@ -39,12 +48,13 @@ function query
 
 function registerWithMass
 {
-	mass --setClusterSSH=`query`
+	implementation=`query`
+	mass --setClusterSSH=$implementation
 }
 
 function isInstalled
 {
-	which cssh > /dev/null
+	which `getFirstExecutable` > /dev/null
 	return $?
 }
 
