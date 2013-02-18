@@ -1,0 +1,8 @@
+# Safely run a macro that should only be run once. --load=macroName . Note that no parameters can be passed to the macro at this time. ~ safe,load
+
+if ~!Loaded,~!Global,load!~!~,==,,
+	set Loaded,~!Global,load!~,true
+	debug 3,Load: About to run ~!Global,load!~.
+	~!Global,load!~
+else
+	debug 3,Load: ~!Global,load!~ has already been run.
