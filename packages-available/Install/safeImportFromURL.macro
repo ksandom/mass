@@ -10,6 +10,9 @@ set Import,file,~!General,configDir!~/~!Import,dataConfig!~/~!Import,fileOnly!~
 # TODO This is not thread safe!
 set Import,tmpFile,/tmp/SafeImportFromURL.data.json
 
+# prep
+exec touch "~!Import,file!~"
+
 # get
 exec curl "~!Import,URL!~" > ~!Import,tmpFile!~ 2> /dev/null
 # exec cp ~!General,configDir!~/data/1LayerHosts/live.json ~!Import,tmpFile!~
