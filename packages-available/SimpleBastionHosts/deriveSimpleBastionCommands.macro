@@ -5,6 +5,6 @@ setFromResultSet Bastion,host,bastionHost
 setFromResultSet Bastion,userAt,userAt
 
 if ~!Bastion,host!~,!=,,
-	set Cssh,extra,-At ~!Bastion,userAt!~~!Bastion,host!~ ssh -~!Verbosity,externalV!~ -o StrictHostKeyChecking=no
-	resultSet sshExtra,-o StrictHostKeyChecking=no -At ~%userAt%~~%bastionHost%~ ssh -~!Verbosity,externalV!~
+	set Cssh,extra,-At ~!Bastion,userAt!~~!Bastion,host!~ ssh ~!Verbosity,externalMinusV!~ -o StrictHostKeyChecking=no
+	resultSet sshExtra,-o StrictHostKeyChecking=no -At ~%userAt%~~%bastionHost%~ ssh ~!Verbosity,externalMinusV!~
 	resultSet scpExtra,-o StrictHostKeyChecking=no -o 'ProxyCommand=ssh ~%userAt%~~%bastionHost%~ nc %h %p'
