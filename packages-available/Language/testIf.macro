@@ -1,7 +1,5 @@
 # Test the if features ~ test
 
-# TODO There is still a problem here
-
 ifResult debug 0,Test 1: Got a result - incorrect
 notIfResult debug 0,Test 1: NO result - correct
 
@@ -9,3 +7,36 @@ notIfResult debug 0,Test 1: NO result - correct
 list db.*staging
 ifResult debug 0,Test 2: Got a result - correct
 notIfResult debug 0,Test 2: NO result - incorrect
+
+clear
+nested
+
+if a,==,a,
+	debug 0,Test3: correct
+
+elseIf b,==,a,
+	debug 0,Test3: incorrect - elseif
+
+else
+	debug 0,Test3: incorrect - else
+
+
+if a,==,b,
+	debug 0,Test4: incorrect - if
+
+elseIf b,==,b,
+	debug 0,Test4: correct - elseif
+
+else
+	debug 0,Test4: incorrect - else
+
+
+if a,==,c,
+	debug 0,Test5: incorrect - if
+
+elseIf b,==,c,
+	debug 0,Test5: incorrect - elseif
+
+else
+	debug 0,Test5: correct - else
+

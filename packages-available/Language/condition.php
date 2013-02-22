@@ -13,6 +13,7 @@
 class Condition extends Module
 {
 	private $lastResult=null;
+	private $matched=false;
 	
 	function __construct()
 	{
@@ -31,6 +32,8 @@ class Condition extends Module
 				$this->core->registerFeature($this, array('if'), 'if', '--if=value1,comparison,value2,command[,arguments] . Comparison could be ==, !=, >, >=, <, <= .', array('language'));
 				$this->core->setFeatureAttribute('if', 'indentFeature', 'lastIf');
 				$this->core->registerFeature($this, array('lastIf'), 'lastIf', 'Do the last condition. Currently only supported by --if --lastIf=command[, arguments] .', array('language'));
+				$this->core->registerFeature($this, array('elseIf'), 'elseIf', '--elseIf=value1,comparison,value2,command[,arguments] . Comparison could be ==, !=, >, >=, <, <= .', array('language'));
+				$this->core->setFeatureAttribute('elseIf', 'indentFeature', 'lastIf');
 				$this->core->registerFeature($this, array('else'), 'else', 'Do the inverse of the last condition. Currently only supported by --if --else=command[, arguments] .', array('language'));
 				$this->core->setFeatureAttribute('else', 'indentFeature', 'else');
 				$this->core->registerFeature($this, array('resetIf'), 'resetIf', 'Reset the status of the last --if. This means that both --lastIf and --else will not evaluate to true.', array('language'));
@@ -53,15 +56,31 @@ class Condition extends Module
 				break;
 			case 'if':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 4, 4, true);
-				if ($this->doIf($parms[0], $parms[1], $parms[2])) return $this->core->callFeature($parms[3], $parms[4]);
+				if ($this->doIf($parms[0], $parms[1], $parms[2]))
+				{
+					$this->matched=true;
+					return $this->core->callFeature($parms[3], $parms[4]);
+				}
 				break;
 			case 'lastIf':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 1, 1, true);
 				if ($this->lastResult) return $this->core->callFeature($parms[0], $parms[1]);
 				break;
+			case 'elseIf':
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 4, 4, true);
+				if ($this->matched) $this->lastResult=false;
+				else
+				{
+					if ($this->doIf($parms[0], $parms[1], $parms[2], $this->matched))
+					{
+						$this->matched=true;
+						return $this->core->callFeature($parms[3], $parms[4]);
+					}
+				}
+				break;
 			case 'else':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 1, 1, true);
-				if ($this->lastResult===false) return $this->core->callFeature($parms[0], $parms[1]);
+				if ($this->matched===false) return $this->core->callFeature($parms[0], $parms[1]);
 				break;
 			case 'resetIf':
 				$this->lastResult=null;
@@ -130,8 +149,10 @@ class Condition extends Module
 		return $result;
 	}
 	
-	function doIf($value1, $comparison, $value2)
+	function doIf($value1, $comparison, $value2, $matched=false)
 	{
+		$this->matched=$matched;
+		
 		switch ($comparison)
 		{
 			case '==':
