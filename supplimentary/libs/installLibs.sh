@@ -69,7 +69,7 @@ function doInstall
 	if [ "$installType" == 'cp' ]; then
 		# echo -e "Making the thing runnable"
 		cd $binExec
-		cp -Rv "$startDir/$programName" "$startDir/$manageMass" "$bin"
+		cp -R "$startDir/$programName" "$startDir/$manageMass" "$bin"
 		chmod 755 "$bin/$programName" "$bin/manageMass"
 	else
 		# echo -e "Making the thing runnable"
