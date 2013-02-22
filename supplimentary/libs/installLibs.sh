@@ -47,7 +47,7 @@ function doInstall
 	
 	if [ "$installType" == 'cp' ]; then
 		# echo -e "Copying available stuff"
-		cp -Rv "$startDir" "$configDir/repos"
+		cp -R "$startDir" "$configDir/repos"
 	else
 		cd "$configDir/repos"
 		ln -sf "$startDir" .
@@ -69,7 +69,7 @@ function doInstall
 	if [ "$installType" == 'cp' ]; then
 		# echo -e "Making the thing runnable"
 		cd $binExec
-		cp -R "$startDir/$programName" "$startDir/$manageMass" "$bin"
+		cp -R "$startDir/$programName" "$startDir/manageMass" .
 		chmod 755 "$bin/$programName" "$bin/manageMass"
 	else
 		# echo -e "Making the thing runnable"
