@@ -1,0 +1,4 @@
+# Choose the best interface. This actually happens as part of doing a --list. But if you do some manipulations to the resultSet, you may want to run it again before taking action on it. ~ manipulations
+
+loopMacro internalChooseBestInterface
+

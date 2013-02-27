@@ -1,0 +1,14 @@
+# Used by --chooseBestInterface. ~ internal
+
+if ~!Result,preferredInterface!~,!=,,
+	debug 1,chooseBestInterface(~!Result,hostName!~): preferredInterface=~!Result,preferredInterface!~ so IP and FQDN are set accordingly (~!Result,~!Result,preferredInterface!~IP!~, ~!Result,~!Result,preferredInterface!~FQDN!~).
+	set Result,IP,~!Result,~!Result,preferredInterface!~IP!~
+	set Result,FQDN,~!Result,~!Result,preferredInterface!~FQDN!~
+elseIf ~!Result,externalIP!~,!=,,
+	debug 1,chooseBestInterface(~!Result,hostName!~): external details found (~!Result,externalIP!~, ~!Result,externalFQDN!~)
+	set Result,IP,~!Result,externalIP!~
+	set Result,FQDN,~!Result,externalFQDN!~
+else
+	debug 1,chooseBestInterface(~!Result,hostName!~): defaulting to internal details (~!Result,internalIP!~, ~!Result,internalFQDN!~)
+	set Result,IP,~!Result,internalIP!~
+	set Result,FQDN,~!Result,internalFQDN!~
