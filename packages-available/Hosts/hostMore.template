@@ -1,7 +1,7 @@
-<~~ ~!Color,~%color%~!~#~!Color,default!~ ~%hostName%~ ~!Color,brightBlack!~/ ~!Color,blue!~~%location%~~!Color,default!~
+<~~ ~!Color,~%color%~!~#~!Color,default!~ ~%hostName%~ ~!Color,brightBlack!~/ ~!Color,blue!~~%location%~~!Color,default!~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%instanceId%~~!Color,default!~
 ~!Color,~%color%~!~#~!Color,default!~   ~!Color,brightBlack!~external: ~!Color,green!~~%externalFQDN%~ ~!Color,default!~(~!Color,cyan!~~%externalIP%~~!Color,default!~)
 ~!Color,~%color%~!~#~!Color,default!~   ~!Color,brightBlack!~internal: ~!Color,green!~~%internalFQDN%~ ~!Color,default!~(~!Color,cyan!~~%internalIP%~~!Color,default!~)
 ~!Color,~%color%~!~#~!Color,default!~   chosen:   ~!Color,brightGreen!~~%FQDN%~ ~!Color,default!~(~!Color,brightCyan!~~%IP%~~!Color,default!~)
-~!Color,~%color%~!~#~!Color,default!~   ~!Color,brightBlack!~architecture:  ~!Color,darkYellow!~~%instanceType%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%architecture%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%rootDeviceType%~~!Color,default!~
+~!Color,~%color%~!~#~!Color,default!~   ~!Color,brightBlack!~architecture:  ~!Color,darkYellow!~~%instanceType%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%architecture%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%rootDeviceType%~~!Color,default!~ 
 
 ~>
