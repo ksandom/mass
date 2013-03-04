@@ -34,4 +34,4 @@ if ~!Import,count,0!~,>,0,
 else
 	debug 0,Could not load "~!Import,URL!~"
 
-exec rm ""~!Import,tmpFile!~""
+exec rm "~!Import,tmpFile!~"
