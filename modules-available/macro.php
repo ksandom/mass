@@ -74,6 +74,8 @@ class Macro extends Module
 		else $actualMacro=$macro;
 		$this->lastCreatedMacro=$macroName;
 		
+		$preCompile=array();
+		
 		if ($useSemiColon)
 		{
 			# Strip out new line characters and split into lines using ;
@@ -85,9 +87,13 @@ class Macro extends Module
 			$lines=explode("\n", $actualMacro);
 		}
 		
+		# Precompile macro into a nested array of commands.
 		$obj=null; # TODO check this. It may be needed in more places.
+		$lineNumber=0;
 		foreach ($lines as $line)
 		{
+			$lineNumber++;
+			
 			$endOfArgument=strPos($line, ' ');
 			if ($endOfArgument)
 			{
@@ -119,19 +125,69 @@ class Macro extends Module
 						$this->core->callFeature("registerForEvent", "Macro,allLoaded,$parts[0],$parts[1]");
 						break;
 					default:
-						$obj=&$this->core->get('Features', $argument);
-						$this->core->addAction($argument, $value, $macroName);
+						//$this->core->addAction($argument, $value, $macroName);
+						$lastEntry=array(
+							'argument'=>$argument,
+							'value'=>$value,
+							'nesting'=>array(),
+							'macroName'=>$macroName,
+							'lineNumber'=>$lineNumber
+							);
+						$preCompile[]=&$lastEntry;
 						break;
 				}
 			}
 			else
 			{
 				# Get indentation command
-				if (isset($obj['indentFeature'])) $this->core->addAction($obj['indentFeature'], "$argument,$value", $macroName);
-				elseif (!$argument) {}
+				if (isset($lastEntry))
+				{
+					if ($argument)
+					{
+						$lastEntry['nesting'][]=array(
+							'argument'=>$argument,
+							'value'=>$value,
+							'nesting'=>array(),
+							'macroName'=>$macroName,
+							'lineNumber'=>$lineNumber
+							);
+					}
+				}
 				else $this->core->debug(0, "defineMacro($macroName): Syntax error: Indentation without a feature. immediately beforehand. The line was $line");
+				
+// 				if (isset($obj['indentFeature'])) $this->core->addAction($obj['indentFeature'], "$argument,$value", $macroName);
+// 				elseif (!$argument) {}
+// 				else 
 			}
 		}
+		
+		
+		$this->compileFromArray($macroName, $preCompile);
+	}
+	
+	function compileFromArray($macroName, $inputArray)
+	{
+		foreach($inputArray as $action)
+		{
+			$obj=&$this->core->get('Features', $action['argument']);
+			
+			# Handle any nesting
+			if (count($action['nesting']))
+			{
+				$subName="$macroName--{$action['lineNumber']}";
+				
+				$this->core->registerFeature($this, array($subName), $subName, "Derived macro for $macroName", "$macroName,hidden", true, 'NA');
+				print_r($action);
+				$this->compileFromArray($subName, $action['nesting']);
+				$this->core->addAction($action['argument'], $action['value'].$subName, $macroName);
+			}
+			else
+			{
+				$this->core->addAction($action['argument'], $action['value'], $macroName);
+			}
+		}
+		
+		
 	}
 	
 	function runMacro($macroName)
