@@ -62,12 +62,16 @@ class Macro extends Module
 		}
 	}
 	
-	function defineMacro($macro, $useSemiColon=false)
+	function defineMacro($macro, $useSemiColon=false, $macroName=false)
 	{
 		# Get macroName
-		$endOfName=strPos($macro, ':');
-		$macroName=trim(substr($macro, 0, $endOfName));
-		$actualMacro=trim(substr($macro, $endOfName+1));
+		if (!$macroName)
+		{
+			$endOfName=strPos($macro, ':');
+			$macroName=trim(substr($macro, 0, $endOfName));
+			$actualMacro=trim(substr($macro, $endOfName+1));
+		}
+		else $actualMacro=$macro;
 		$this->lastCreatedMacro=$macroName;
 		
 		if ($useSemiColon)
@@ -250,7 +254,7 @@ class Macro extends Module
 				
 				if (substr($contentsParts[0], 0, 2)=='# ')
 				{
-					$this->defineMacro("$macroName:$contents", false);
+					$this->defineMacro($contents, false, $macroName);
 				}
 				else $this->core->complain($this, "$fullPath appears to be a macro, but doesn't have a helpful comment on the first line begining with a # .");
 			}
