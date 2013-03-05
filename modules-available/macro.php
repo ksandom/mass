@@ -126,24 +126,26 @@ class Macro extends Module
 						break;
 					default:
 						//$this->core->addAction($argument, $value, $macroName);
-						$lastEntry=array(
+						$preCompile[]=array(
 							'argument'=>$argument,
 							'value'=>$value,
 							'nesting'=>array(),
 							'macroName'=>$macroName,
 							'lineNumber'=>$lineNumber
 							);
-						$preCompile[]=&$lastEntry;
 						break;
 				}
 			}
 			else
 			{
 				# Get indentation command
-				if (isset($lastEntry))
+				if (count($preCompile))
 				{
 					if ($argument)
 					{
+						$keys=array_keys($preCompile);
+						$lastEntry=&$preCompile[$keys[count($preCompile)-1]];
+						
 						$lastEntry['nesting'][]=array(
 							'argument'=>$argument,
 							'value'=>$value,
@@ -151,9 +153,13 @@ class Macro extends Module
 							'macroName'=>$macroName,
 							'lineNumber'=>$lineNumber
 							);
+						unset($lastEntry);
 					}
 				}
-				else $this->core->debug(0, "defineMacro($macroName): Syntax error: Indentation without a feature. immediately beforehand. The line was $line");
+				else
+				{
+					if ($argument) $this->core->debug(0, "defineMacro($macroName:$lineNumber): Syntax error: Indentation without any features beforehand. The line was $line");
+				}
 				
 // 				if (isset($obj['indentFeature'])) $this->core->addAction($obj['indentFeature'], "$argument,$value", $macroName);
 // 				elseif (!$argument) {}
@@ -161,7 +167,7 @@ class Macro extends Module
 			}
 		}
 		
-		
+		#print_r($preCompile);
 		$this->compileFromArray($macroName, $preCompile);
 	}
 	
@@ -177,7 +183,7 @@ class Macro extends Module
 				$subName="$macroName--{$action['lineNumber']}";
 				
 				$this->core->registerFeature($this, array($subName), $subName, "Derived macro for $macroName", "$macroName,hidden", true, 'NA');
-				print_r($action);
+				#print_r($action);
 				$this->compileFromArray($subName, $action['nesting']);
 				$this->core->addAction($action['argument'], $action['value'].$subName, $macroName);
 			}
