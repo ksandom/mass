@@ -58,6 +58,7 @@ class Condition extends Module
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 4, 4, true);
 				if ($this->doIf($parms[0], $parms[1], $parms[2]))
 				{
+					# TODO Convert all of these to Me variables that will cope with nesting.
 					$this->matched=true;
 					return $this->core->callFeature($parms[3], $parms[4]);
 				}
