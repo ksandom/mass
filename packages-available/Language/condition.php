@@ -30,7 +30,7 @@ class Condition extends Module
 				$this->core->registerFeature($this, array('ifResult', 'notIfEmptyResult'), 'notIfEmptyResult', '--notIfEmptyResult="command[ arguments]" .', array('language'));
 				$this->core->registerFeature($this, array('notIfResult', 'ifEmptyResult'), 'ifEmptyResult', '--ifEmptyResult="command[ arguments]" .', array('language'));
 				$this->core->registerFeature($this, array('if'), 'if', '--if=value1,comparison,value2,command[,arguments] . Comparison could be ==, !=, >, >=, <, <= .', array('language'));
-				$this->core->setFeatureAttribute('if', 'indentFeature', 'lastIf');
+				// $this->core->setFeatureAttribute('if', 'indentFeature', 'lastIf');
 				$this->core->registerFeature($this, array('lastIf'), 'lastIf', 'Do the last condition. Currently only supported by --if --lastIf=command[, arguments] .', array('language'));
 				$this->core->registerFeature($this, array('elseIf'), 'elseIf', '--elseIf=value1,comparison,value2,command[,arguments] . Comparison could be ==, !=, >, >=, <, <= .', array('language'));
 				$this->core->setFeatureAttribute('elseIf', 'indentFeature', 'lastIf');

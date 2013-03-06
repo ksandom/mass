@@ -1,42 +1,116 @@
 # Test the if features ~ test
 
-ifResult debug 0,Test 1: Got a result - incorrect
-notIfResult debug 0,Test 1: NO result - correct
+verbose
+
+debug 1,Test ifResult
+ifResult debug 1,Test 1: Got a result - incorrect
+notIfResult debug 1,Test 1: NO result - correct
 
 
 list db.*staging
-ifResult debug 0,Test 2: Got a result - correct
-notIfResult debug 0,Test 2: NO result - incorrect
+ifResult debug 1,Test 2: Got a result - correct
+notIfResult debug 1,Test 2: NO result - incorrect
 
 clear
 nested
 
+debug 0,Test if/elseif/else construct
 if a,==,a,
-	debug 0,Test3: correct
+	debug 1,Test3: correct - if
 
 elseIf b,==,a,
-	debug 0,Test3: incorrect - elseif
+	debug 1,Test3: incorrect - elseif
 
 else
-	debug 0,Test3: incorrect - else
+	debug 1,Test3: incorrect - else
 
 
 if a,==,b,
-	debug 0,Test4: incorrect - if
+	debug 1,Test4: incorrect - if
 
 elseIf b,==,b,
-	debug 0,Test4: correct - elseif
+	debug 1,Test4: correct - elseif
 
 else
-	debug 0,Test4: incorrect - else
+	debug 1,Test4: incorrect - else
 
 
 if a,==,c,
-	debug 0,Test5: incorrect - if
+	debug 1,Test5: incorrect - if
 
 elseIf b,==,c,
-	debug 0,Test5: incorrect - elseif
+	debug 1,Test5: incorrect - elseif
 
 else
-	debug 0,Test5: correct - else
+	debug 1,Test5: correct - else
 
+
+
+debug 0,Test nested if
+if a,==,a,
+	debug 1,Test6: correct - if
+	if a,==,b,
+		debug 1,  6/a: if/nested non-match - incorrect
+	else
+		debug 1,  6/b: if/nested non-match - correct
+
+elseIf b,==,a,
+	debug 1,Test6: incorrect - elseif
+	if a,==,b,
+		debug 1,  6/a: elseif/nested non-match - incorrect
+	else
+		debug 1,  6/b: elseif/nested non-match - incorrect
+
+else
+	debug 1,Test6: incorrect - else
+	if a,==,b,
+		debug 1,  6/a: else/nested non-match - incorrect
+	else
+		debug 1,  6/b: else/nested non-match - incorrect
+
+
+if a,==,b,
+	debug 1,Test7: incorrect - if
+	if a,==,b,
+		debug 1,  7/a: if/nested non-match - incorrect
+	else
+		debug 1,  7/b: if/nested non-match - incorrect
+
+elseIf b,==,b,
+	debug 1,Test7: correct - elseif
+	if a,==,b,
+		debug 1,  7/a: elseif/nested non-match - incorrect
+	else
+		debug 1,  7/b: elseif/nested non-match - correct
+
+else
+	debug 1,Test7: incorrect - else
+	if a,==,b,
+		debug 1,  7/a: else/nested non-match - incorrect
+	else
+		debug 1,  7/b: else/nested non-match - incorrect
+
+
+if a,==,c,
+	debug 1,Test8: incorrect - if
+	if a,==,b,
+		debug 1,  8/a: if/nested non-match - incorrect
+	else
+		debug 1,  8/b: if/nested non-match - correct
+
+elseIf b,==,c,
+	debug 1,Test8: incorrect - elseif
+	if a,==,b,
+		debug 1,  8/a: elseif/nested non-match - incorrect
+	else
+		debug 1,  8/b: elseif/nested non-match - incorrect
+
+else
+	debug 1,Test8: correct - else
+	if a,==,b,
+		debug 1,  8/a: else/nested non-match - incorrect
+	else
+		debug 1,  8/b: else/nested non-match - correct
+
+
+V

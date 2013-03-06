@@ -1,0 +1,4 @@
+# Install the feature types to be used with the System package. ~ semantics,internal,install
+#onDefine registerForEvent Install,featureTypes,installFeatureTypesForSystem
+
+createFeatureType feature,,feature,Generates a list of features.

@@ -164,10 +164,12 @@ class Template extends Module
 	function insertResultIntoTemplate($input, $template)
 	{
 		$output='';
+		$this->core->debug(3, "insertResultIntoTemplate: Entered");
 		if (is_array($input))
 		{
 			foreach ($input as $key=>$inputLine)
 			{
+				$this->core->debug(3, "insertResultIntoTemplate: processin key $key");
 				$templateLine=$template;
 				if (is_array($inputLine))
 				{
