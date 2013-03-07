@@ -19,6 +19,9 @@ class Condition extends Module
 	
 	function event($event)
 	{
+		$state=($this->core->get('Me', 'conditionMatched'))?'true':'false';
+		$this->core->debug(2, "Condition: nesting=".$this->core->get('Core', 'nesting')." Before=".$state);
+		
 		switch ($event)
 		{
 			case 'init':
@@ -55,39 +58,35 @@ class Condition extends Module
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 4, 4, true);
 				if ($this->doIf($parms[0], $parms[1], $parms[2]))
 				{
-					# TODO Convert all of these to Me variables that will cope with nesting.
-					$this->core->set('Me', 'conditionMatched', true);
 					return $this->core->callFeature($parms[3], $parms[4]);
 				}
-				else $this->core->set('Me', 'conditionMatched', false);
-				break;
-			case 'lastIf':
-				$parms=$this->core->interpretParms($this->core->get('Global', $event), 1, 1, true);
-				if ($this->core->get('Me', 'lastResult')) return $this->core->callFeature($parms[0], $parms[1]);
 				break;
 			case 'elseIf':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 4, 4, true);
-				if ($this->core->get('Me', 'conditionMatched')) $this->core->set('Me', 'lastResult', false);
-				else
+				$conditionMatched=$this->core->get('Me', 'conditionMatched');
+				if ($conditionMatched===false)
 				{
-					if ($this->doIf($parms[0], $parms[1], $parms[2], $this->core->get('Me', 'conditionMatched')))
+					if ($this->doIf($parms[0], $parms[1], $parms[2]))
 					{
-						$this->core->set('Me', 'conditionMatched', true);
 						return $this->core->callFeature($parms[3], $parms[4]);
 					}
 				}
 				break;
 			case 'else':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 1, 1, true);
-				if ($this->core->get('Me', 'conditionMatched')===false) return $this->core->callFeature($parms[0], $parms[1]);
-				break;
-			case 'resetIf':
-				$this->core->set('Me', 'lastResult', null);
+				if ($this->core->get('Me', 'conditionMatched')===false)
+				{
+					$this->core->set('Me', 'conditionMatched', true);
+					return $this->core->callFeature($parms[0], $parms[1]);
+				}
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
 				break;
 		}
+		
+		$state=($this->core->get('Me', 'conditionMatched'))?'true':'false';
+		$this->core->debug(2, "Condition: nesting=".$this->core->get('Core', 'nesting')." After=".$state);
 	}
 
 	function ifResultExists(&$input, $parms, $match=true)
@@ -150,8 +149,6 @@ class Condition extends Module
 	
 	function doIf($value1, $comparison, $value2, $matched=false)
 	{
-		$this->core->set('Me', 'conditionMatched', $matched);
-		
 		switch ($comparison)
 		{
 			case '==':
@@ -174,7 +171,10 @@ class Condition extends Module
 				break;
 		}
 		
-		$this->core->set('Me', 'lastResult', $result);
+		$this->core->set('Me', 'conditionMatched', $result);
+		#if ($result and $matched)
+		#elseif ($result)
+		
 		return $result;
 	}
 	
