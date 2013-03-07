@@ -47,70 +47,71 @@ else
 
 
 debug 0,Test nested if
+verbosity 4
 if a,==,a,
 	debug 1,Test6: correct - if
 	if a,==,b,
-		debug 1,  6/a: if/nested non-match - incorrect
+		debug 1,  6/a: if/nestedIf non-match - incorrect
 	else
-		debug 1,  6/b: if/nested non-match - correct
+		debug 1,  6/b: if/nestedElse non-match - correct
 
 elseIf b,==,a,
 	debug 1,Test6: incorrect - elseif
 	if a,==,b,
-		debug 1,  6/a: elseif/nested non-match - incorrect
+		debug 1,  6/a: elseif/nestedIf non-match - incorrect
 	else
-		debug 1,  6/b: elseif/nested non-match - incorrect
+		debug 1,  6/b: elseif/nestedElse non-match - incorrect
 
 else
 	debug 1,Test6: incorrect - else
 	if a,==,b,
-		debug 1,  6/a: else/nested non-match - incorrect
+		debug 1,  6/a: else/nestedIf non-match - incorrect
 	else
-		debug 1,  6/b: else/nested non-match - incorrect
-
+		debug 1,  6/b: else/nestedElse non-match - incorrect
+verbosity 1
 
 if a,==,b,
 	debug 1,Test7: incorrect - if
 	if a,==,b,
-		debug 1,  7/a: if/nested non-match - incorrect
+		debug 1,  7/a: if/nestedIf non-match - incorrect
 	else
-		debug 1,  7/b: if/nested non-match - incorrect
+		debug 1,  7/b: if/nestedElse non-match - incorrect
 
 elseIf b,==,b,
 	debug 1,Test7: correct - elseif
 	if a,==,b,
-		debug 1,  7/a: elseif/nested non-match - incorrect
+		debug 1,  7/a: elseif/nestedIf non-match - incorrect
 	else
-		debug 1,  7/b: elseif/nested non-match - correct
+		debug 1,  7/b: elseif/nestedElse non-match - correct
 
 else
 	debug 1,Test7: incorrect - else
 	if a,==,b,
-		debug 1,  7/a: else/nested non-match - incorrect
+		debug 1,  7/a: else/nestedIf non-match - incorrect
 	else
-		debug 1,  7/b: else/nested non-match - incorrect
+		debug 1,  7/b: else/nestedElse non-match - incorrect
 
 
 if a,==,c,
 	debug 1,Test8: incorrect - if
 	if a,==,b,
-		debug 1,  8/a: if/nested non-match - incorrect
+		debug 1,  8/a: if/nestedIf non-match - incorrect
 	else
-		debug 1,  8/b: if/nested non-match - correct
+		debug 1,  8/b: if/nestedElse non-match - correct
 
 elseIf b,==,c,
 	debug 1,Test8: incorrect - elseif
 	if a,==,b,
-		debug 1,  8/a: elseif/nested non-match - incorrect
+		debug 1,  8/a: elseif/nestedIf non-match - incorrect
 	else
-		debug 1,  8/b: elseif/nested non-match - incorrect
+		debug 1,  8/b: elseif/nestedElse non-match - incorrect
 
 else
 	debug 1,Test8: correct - else
 	if a,==,b,
-		debug 1,  8/a: else/nested non-match - incorrect
+		debug 1,  8/a: else/nestedIf non-match - incorrect
 	else
-		debug 1,  8/b: else/nested non-match - correct
+		debug 1,  8/b: else/nestedElse non-match - correct
 
 
 V

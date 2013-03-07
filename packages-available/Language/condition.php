@@ -12,9 +12,6 @@
 
 class Condition extends Module
 {
-	private $lastResult=null;
-	private $matched=false;
-	
 	function __construct()
 	{
 		parent::__construct('Condition');
@@ -59,32 +56,33 @@ class Condition extends Module
 				if ($this->doIf($parms[0], $parms[1], $parms[2]))
 				{
 					# TODO Convert all of these to Me variables that will cope with nesting.
-					$this->matched=true;
+					$this->core->set('Me', 'conditionMatched', true);
 					return $this->core->callFeature($parms[3], $parms[4]);
 				}
+				else $this->core->set('Me', 'conditionMatched', false);
 				break;
 			case 'lastIf':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 1, 1, true);
-				if ($this->lastResult) return $this->core->callFeature($parms[0], $parms[1]);
+				if ($this->core->get('Me', 'lastResult')) return $this->core->callFeature($parms[0], $parms[1]);
 				break;
 			case 'elseIf':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 4, 4, true);
-				if ($this->matched) $this->lastResult=false;
+				if ($this->core->get('Me', 'conditionMatched')) $this->core->set('Me', 'lastResult', false);
 				else
 				{
-					if ($this->doIf($parms[0], $parms[1], $parms[2], $this->matched))
+					if ($this->doIf($parms[0], $parms[1], $parms[2], $this->core->get('Me', 'conditionMatched')))
 					{
-						$this->matched=true;
+						$this->core->set('Me', 'conditionMatched', true);
 						return $this->core->callFeature($parms[3], $parms[4]);
 					}
 				}
 				break;
 			case 'else':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 1, 1, true);
-				if ($this->matched===false) return $this->core->callFeature($parms[0], $parms[1]);
+				if ($this->core->get('Me', 'conditionMatched')===false) return $this->core->callFeature($parms[0], $parms[1]);
 				break;
 			case 'resetIf':
-				$this->lastResult=null;
+				$this->core->set('Me', 'lastResult', null);
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -152,22 +150,22 @@ class Condition extends Module
 	
 	function doIf($value1, $comparison, $value2, $matched=false)
 	{
-		$this->matched=$matched;
+		$this->core->set('Me', 'conditionMatched', $matched);
 		
 		switch ($comparison)
 		{
 			case '==':
-				return $this->lastResult=($value1==$value2);
+				return $this->core->set('Me', 'lastResult', ($value1==$value2));
 			case '!=':
-				return $this->lastResult=($value1!=$value2);
+				return $this->core->set('Me', 'lastResult', ($value1!=$value2));
 			case '>':
-				return $this->lastResult=($value1>$value2);
+				return $this->core->set('Me', 'lastResult', ($value1>$value2));
 			case '<':
-				return $this->lastResult=($value1<$value2);
+				return $this->core->set('Me', 'lastResult', ($value1<$value2));
 			case '>=':
-				return $this->lastResult=($value1>=$value2);
+				return $this->core->set('Me', 'lastResult', ($value1>=$value2));
 			case '<=':
-				return $this->lastResult=($value1<=$value2);
+				return $this->core->set('Me', 'lastResult', ($value1<=$value2));
 		}
 	}
 	
