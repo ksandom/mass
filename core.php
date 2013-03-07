@@ -582,7 +582,7 @@ class core extends Module
 		return $output;
 	}
 	
-	function addAction($argument, $value=null, $macroName='default')
+	function addAction($argument, $value=null, $macroName='default', $lineNumber=false)
 	{
 		if (!isset($this->store['Macros'])) $this->store['Macros']=array();
 		if (!isset($this->store['Macros'][$macroName])) $this->store['Macros'][$macroName]=array();
@@ -590,7 +590,7 @@ class core extends Module
 		$obj=&$this->core->get('Features', $argument);
 		if (is_array($obj))
 		{
-			$this->store['Macros'][$macroName][]=array('obj'=>&$obj, 'name'=>$obj['name'], 'value'=>$value);
+			$this->store['Macros'][$macroName][]=array('obj'=>&$obj, 'name'=>$obj['name'], 'value'=>$value, 'lineNumber'=>$lineNumber);
 		}
 		else $this->complain(null, "Could not find a module to match '$argument'", 'addAction');
 

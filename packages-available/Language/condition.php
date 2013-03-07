@@ -155,18 +155,27 @@ class Condition extends Module
 		switch ($comparison)
 		{
 			case '==':
-				return $this->core->set('Me', 'lastResult', ($value1==$value2));
+				$result=($value1==$value2);
+				break;
 			case '!=':
-				return $this->core->set('Me', 'lastResult', ($value1!=$value2));
+				$result=($value1!=$value2);
+				break;
 			case '>':
-				return $this->core->set('Me', 'lastResult', ($value1>$value2));
+				$result=($value1>$value2);
+				break;
 			case '<':
-				return $this->core->set('Me', 'lastResult', ($value1<$value2));
+				$result=($value1<$value2);
+				break;
 			case '>=':
-				return $this->core->set('Me', 'lastResult', ($value1>=$value2));
+				$result=($value1>=$value2);
+				break;
 			case '<=':
-				return $this->core->set('Me', 'lastResult', ($value1<=$value2));
+				$result=($value1<=$value2);
+				break;
 		}
+		
+		$this->core->set('Me', 'lastResult', $result);
+		return $result;
 	}
 	
 	function takeAction($parms)

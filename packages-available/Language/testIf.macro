@@ -47,7 +47,7 @@ else
 
 
 debug 0,Test nested if
-verbosity 4
+# verbosity 4
 if a,==,a,
 	debug 1,Test6: correct - if
 	if a,==,b,
