@@ -58,7 +58,7 @@ class Condition extends Module
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 4, 4, true);
 				if ($this->doIf($parms[0], $parms[1], $parms[2]))
 				{
-					return $this->core->callFeatureWithDataset($parms[3], $parms[4], $this->core->getResultSet());
+					return $this->core->callFeature($parms[3], $parms[4]);
 				}
 				break;
 			case 'elseIf':
@@ -68,7 +68,7 @@ class Condition extends Module
 				{
 					if ($this->doIf($parms[0], $parms[1], $parms[2]))
 					{
-						return $this->core->callFeatureWithDataset($parms[3], $parms[4], $this->core->getResultSet());
+						return $this->core->callFeature($parms[3], $parms[4]);
 					}
 				}
 				break;
@@ -77,7 +77,7 @@ class Condition extends Module
 				if ($this->core->get('Me', 'conditionMatched')===false)
 				{
 					$this->core->set('Me', 'conditionMatched', true);
-					return $this->core->callFeatureWithDataset($parms[0], $parms[1], $this->core->getResultSet());
+					return $this->core->callFeature($parms[0], $parms[1]);
 				}
 				break;
 			default:
