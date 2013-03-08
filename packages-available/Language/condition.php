@@ -147,7 +147,7 @@ class Condition extends Module
 		return $result;
 	}
 	
-	function doIf($value1, $comparison, $value2, $matched=false)
+	function doIf($value1, $comparison, $value2)
 	{
 		switch ($comparison)
 		{
@@ -172,8 +172,6 @@ class Condition extends Module
 		}
 		
 		$this->core->set('Me', 'conditionMatched', $result);
-		#if ($result and $matched)
-		#elseif ($result)
 		
 		return $result;
 	}

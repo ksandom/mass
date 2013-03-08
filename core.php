@@ -14,6 +14,7 @@ define('resultVarsDefaultWarnDebugLevel', 2);
 define('resultVarsDefaultSevereDebugLevel', 1);
 
 define('nestedPrivateVarsName', 'Me');
+define('isolatedNestedPrivateVarsName', 'Isolated');
 
 define('workAroundIfBug', true); // See doc/bugs/ifBug.md
 
@@ -778,30 +779,43 @@ class core extends Module
 		#echo "m=$category, v=$valueName\n";
 		if (isset($this->store[$category]))
 		{
-			if ($category!=nestedPrivateVarsName)
+			switch ($category)
 			{
-				if (isset($this->store[$category][$valueName])) return $this->store[$category][$valueName];
-				else 
-				{
-					$result=null;
-				}
-			}
-			else
-			{
-				$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
-				if (isset($this->store['Me'][$nesting])) 
-				{
-					for ($i=$nesting;$i>0;$i--)
+				case isolatedNestedPrivateVarsName:
+					$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+					if (isset($this->store[isolatedNestedPrivateVarsName][$nesting]))
 					{
-						if (isset($this->store['Me'][$i][$valueName]))
+						if (isset($this->store[isolatedNestedPrivateVarsName][$nesting][$valueName]))
 						{
-							$result=$this->store['Me'][$i][$valueName];
-							break;
+							$result=$this->store[isolatedNestedPrivateVarsName][$nesting][$valueName];
 						}
 						else $result=null;
 					}
-				}
-				else $result=null;
+					else $result=null;
+					break;
+				case nestedPrivateVarsName:
+					$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+					if (isset($this->store[nestedPrivateVarsName][$nesting])) 
+					{
+						for ($i=$nesting;$i>0;$i--)
+						{
+							if (isset($this->store[nestedPrivateVarsName][$i][$valueName]))
+							{
+								$result=$this->store[nestedPrivateVarsName][$i][$valueName];
+								break;
+							}
+							else $result=null;
+						}
+					}
+					else $result=null;
+					break;
+				default:
+					if (isset($this->store[$category][$valueName])) return $this->store[$category][$valueName];
+					else 
+					{
+						$result=null;
+					}
+					break;
 			}
 		}
 		else

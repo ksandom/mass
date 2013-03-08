@@ -54,6 +54,7 @@ if a,==,a,
 		debug 1,  6/a: if/nestedIf non-match - incorrect
 	else
 		debug 1,  6/b: if/nestedElse non-match - correct
+verbosity 1
 
 elseIf b,==,a,
 	debug 1,Test6: incorrect - elseif
@@ -68,7 +69,6 @@ else
 		debug 1,  6/a: else/nestedIf non-match - incorrect
 	else
 		debug 1,  6/b: else/nestedElse non-match - incorrect
-verbosity 1
 
 if a,==,b,
 	debug 1,Test7: incorrect - if
