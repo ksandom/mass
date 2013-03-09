@@ -424,12 +424,13 @@ class core extends Module
 					$nesting=$this->get('Core', 'nesting');
 					$isArray=is_array($result)?'True':'False';;
 					$this->debug(4, "INVOKE-Exit  {$indentation}{$obj['name']}/$nesting value={$value}, valueIn=$valueIn resultCount=$resultCount is_array=$isArray smCount=".$this->getResultSetCount());
-					$this->debugResultSet($obj['name']);
+					# $this->debugResultSet($obj['name']);
 				}
 				return $result;
 			}
 			else $this->complain(null, "Could not find a module to match '$argument'", 'callFeature');
 		}
+		else $this->debug(3,"Core->callFeature: Non executable code \"$argument\" sent. We shouldn't have got this.");
 		return false;
 	}
 	
@@ -702,7 +703,7 @@ class core extends Module
 				{
 					$nesting=$this->get('Core', 'nesting');
 					$this->debug(5, "ITER $macroName/$nesting - {$actionItem['name']}: Result count before invoking=".count($this->getResultSet()));
-					$this->debugResultSet("$macroName - {$actionItem['name']}");
+					# $this->debugResultSet("$macroName - {$actionItem['name']}");
 					
 					# TODO The problem happens somewhere between here...
 					$returnedValue1=$this->callFeature($actionItem['name'], $actionItem['value']);
@@ -710,7 +711,7 @@ class core extends Module
 					# and here
 					$this->debug(5,"GOT HERE ALSO");
 					
-					$this->debugResultSet("$macroName - {$actionItem['name']}");
+					# $this->debugResultSet("$macroName - {$actionItem['name']}");
 					
 					$nesting=$this->get('Core', 'nesting');
 					$this->debug(5, "ITER $macroName/$nesting - {$actionItem['name']}: Restult count before set=".count($this->getResultSet()));

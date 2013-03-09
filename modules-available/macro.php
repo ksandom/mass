@@ -97,7 +97,8 @@ class Macro extends Module
 			$endOfArgument=strPos($line, ' ');
 			if ($endOfArgument)
 			{
-				$argument=trim(substr($line, 0, $endOfArgument));
+				# TODO The rtrim should be removed once I get past the current problem.
+				$argument=rtrim(substr($line, 0, $endOfArgument));
 				$value=trim(substr($line, $endOfArgument+1));
 			}
 			else
@@ -167,12 +168,16 @@ class Macro extends Module
 			}
 		}
 		
-		#print_r($preCompile);
 		$this->compileFromArray($macroName, $preCompile);
 	}
 	
 	function compileFromArray($macroName, $inputArray)
 	{
+		#if ($macroName=='testIf')
+		#{
+		#	$this->core->debug(0, "compileFromArray: $macroName");
+		#	print_r($inputArray);
+		#}
 		foreach($inputArray as $action)
 		{
 			$obj=&$this->core->get('Features', $action['argument']);
