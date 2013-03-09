@@ -169,6 +169,10 @@ class Condition extends Module
 			case '<=':
 				$result=($value1<=$value2);
 				break;
+			default:
+				$this->core->debug(0, "Condition: Unknown comparison \"$comparison\" in \"$value1,$comparison,$value2\"");
+				$result=false;
+				break;
 		}
 		
 		$this->core->set('Me', 'conditionMatched', $result);
