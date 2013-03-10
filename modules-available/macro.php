@@ -94,6 +94,8 @@ class Macro extends Module
 		{
 			$lineNumber++;
 			
+			if (!trim($line)) continue;
+			
 			$endOfArgument=strPos($line, ' ');
 			if ($endOfArgument)
 			{
@@ -147,8 +149,6 @@ class Macro extends Module
 		$lastRootKey=null;
 		foreach($inputArray as $key=>$action)
 		{
-			if (!trim($action['argument'])) continue;
-			
 			if (substr($action['argument'], 0, 1) == '	')
 			{
 				if (!is_null($lastRootKey))
