@@ -147,13 +147,15 @@ class Macro extends Module
 		$lastRootKey=null;
 		foreach($inputArray as $key=>$action)
 		{
+			if (!trim($action['argument'])) continue;
+			
 			if (substr($action['argument'], 0, 1) == '	')
 			{
 				if (!is_null($lastRootKey))
 				{ // We have indentation. Remove 1 layer of indentation, and nest the argument.
 					$this->core->debug(4, "compileFromArray($macroName:${action['lineNumber']}): Nested feature \"${action['argument']} ${action['value']}\"");
 					$action['argument']=substr($action['argument'], 1);
-					if (trim($action['argument'])) $outputArray[$lastRootKey]['nesting'][]=$action;
+					$outputArray[$lastRootKey]['nesting'][]=$action;
 				}
 				else
 				{ // We have indentation, but no argument to nest it in. This is fatal.
