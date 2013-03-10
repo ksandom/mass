@@ -98,12 +98,12 @@ class Macro extends Module
 			if ($endOfArgument)
 			{
 				# TODO The rtrim should be removed once I get past the current problem.
-				$argument=rtrim(substr($line, 0, $endOfArgument));
+				$argument=substr($line, 0, $endOfArgument);
 				$value=trim(substr($line, $endOfArgument+1));
 			}
 			else
 			{
-				$argument=trim($line);
+				$argument=$line;
 				$value='';
 			}
 			
@@ -173,6 +173,8 @@ class Macro extends Module
 	
 	function compileFromArray($macroName, $inputArray)
 	{
+		$outputArray=array();
+		
 		# Figure out nesting
 		$lastRootKey=null;
 		foreach($inputArray as $key=>$action)
@@ -181,21 +183,27 @@ class Macro extends Module
 			{
 				if (!is_null($lastRootKey))
 				{ // We have indentation. Remove 1 layer of indentation, and nest the argument.
+					$this->core->debug(0, "compileFromArray($macroName:${action['lineNumber']}): Nested feature \"${action['argument']} ${action['value']}\"");
 					$action['argument']=substr($action['argument'], 1);
-					$inputArray[$lastRootKey]['nesting'][]=$action;
+					$outputArray[$lastRootKey]['nesting'][]=$action;
 				}
 				else
 				{ // We have indentation, but no argument to nest it in. This is fatal.
-					$this->core->debug(0, "defineMacro($macroName:${action['lineNumber']}): Syntax error: Indentation without any features beforehand. The derived line was \"${action['argument']} ${action['value']}\"");
+					$this->core->debug(0, "compileFromArray($macroName:${action['lineNumber']}): Syntax error: Indentation without any features beforehand. The derived line was \"${action['argument']} ${action['value']}\"");
 					# TODO implement atomic failure.
 				}
-				unset($inputArray[$key]);
+				# unset($inputArray[$key]);
 			}
-			else $lastRootKey=$key;
+			else
+			{
+				$this->core->debug(0, "compileFromArray($macroName:${action['lineNumber']}): Root feature \"${action['argument']} ${action['value']}\"");
+				$lastRootKey=$key;
+				$outputArray[$lastRootKey]=$action;;
+			}
 		}
 		
 		# Compile
-		foreach($inputArray as $key=>$action)
+		foreach($outputArray as $key=>$action)
 		{
 			$obj=&$this->core->get('Features', $action['argument']);
 			
@@ -206,23 +214,23 @@ class Macro extends Module
 				
 				$this->core->registerFeature($this, array($subName), $subName, "Derived macro for $macroName", "$macroName,hidden", true, 'NA');
 				#print_r($action);
-				$inputArray[$key]['nesting']=$this->compileFromArray($subName, $action['nesting']);
-				$this->core->addAction($action['argument'], $action['value'].$subName, $macroName, $action['lineNumber']);
+				$outputArray[$key]['nesting']=$this->compileFromArray($subName, $action['nesting']);
+				$this->core->addAction(trim($action['argument']), $action['value'].$subName, $macroName, $action['lineNumber']);
 			}
 			else
 			{
-				$this->core->addAction($action['argument'], $action['value'], $macroName);
+				$this->core->addAction(trim($action['argument']), $action['value'], $macroName);
 			}
 		}
 		
-		if ($macroName=='testIf')
+		if ($macroName=='testNestedIf')
 		{
 			$this->core->debug(0, "compileFromArray: $macroName");
-			print_r($inputArray);
+			print_r($outpuArray);
 		}
 
 		
-		return $inputArray;
+		return $outputArray;
 	}
 	
 	function runMacro($macroName)
