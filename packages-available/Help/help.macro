@@ -7,3 +7,5 @@ if ~!Global,help!~,!=,,
 	requireEach ~!Global,help!~
 else
 	requireEach ~!Help,default!~
+
+excludeItem tagString,hidden
