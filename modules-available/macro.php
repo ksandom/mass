@@ -108,64 +108,32 @@ class Macro extends Module
 			}
 			
 			
-			//if (substr($line, 0, 1)!='	')
-			//{
-				switch ($argument)
-				{
-					case '#':
-					case '':
-						break;
-					case '#onDefine':
-						$parts=$this->core->splitOnceOn(' ', $value);
-						$this->core->debug(3, "#onDefine {$parts[0]}={$parts[1]}");
-						$this->core->callFeature($parts[0], $parts[1]);
-						break;
-					case '#onLoaded':
-						$parts=$this->core->splitOnceOn(' ', $value);
-						$this->core->debug(3, "#onLoaded {$parts[0]}={$parts[1]}");
-						$this->core->callFeature("registerForEvent", "Macro,allLoaded,$parts[0],$parts[1]");
-						break;
-					default:
-						//$this->core->addAction($argument, $value, $macroName);
-						$preCompile[]=array(
-							'argument'=>$argument,
-							'value'=>$value,
-							'nesting'=>array(),
-							'macroName'=>$macroName,
-							'lineNumber'=>$lineNumber
-							);
-						break;
-				}
-			//}
-			/*else
+			switch ($argument)
 			{
-				# Get indentation command
-				if (count($preCompile))
-				{
-					if ($argument)
-					{
-						$keys=array_keys($preCompile);
-						$lastEntry=&$preCompile[$keys[count($preCompile)-1]];
-						
-						$lastEntry['nesting'][]=array(
-							'argument'=>$argument,
-							'value'=>$value,
-							'nesting'=>array(),
-							'macroName'=>$macroName,
-							'lineNumber'=>$lineNumber
-							);
-						unset($lastEntry);
-					}
-				}
-				else
-				{
-					if ($argument) $this->core->debug(0, "defineMacro($macroName:$lineNumber): Syntax error: Indentation without any features beforehand. The line was $line");
-				}
-				
-// 				if (isset($obj['indentFeature'])) $this->core->addAction($obj['indentFeature'], "$argument,$value", $macroName);
-// 				elseif (!$argument) {}
-// 				else 
-			}*/
+				case '#':
+				case '':
+					break;
+				case '#onDefine':
+					$parts=$this->core->splitOnceOn(' ', $value);
+					$this->core->debug(3, "#onDefine {$parts[0]}={$parts[1]}");
+					$this->core->callFeature($parts[0], $parts[1]);
+					break;
+				case '#onLoaded':
+					$parts=$this->core->splitOnceOn(' ', $value);
+					$this->core->debug(3, "#onLoaded {$parts[0]}={$parts[1]}");
+					$this->core->callFeature("registerForEvent", "Macro,allLoaded,$parts[0],$parts[1]");
+					break;
+				default:
+					//$this->core->addAction($argument, $value, $macroName);
+					$preCompile[]=array(
+						'argument'=>$argument,
+						'value'=>$value,
+						'nesting'=>array(),
+						'macroName'=>$macroName,
+						'lineNumber'=>$lineNumber
+						);
+					break;
+			}
 		}
 		
 		$this->compileFromArray($macroName, $preCompile);
@@ -183,7 +151,7 @@ class Macro extends Module
 			{
 				if (!is_null($lastRootKey))
 				{ // We have indentation. Remove 1 layer of indentation, and nest the argument.
-					$this->core->debug(0, "compileFromArray($macroName:${action['lineNumber']}): Nested feature \"${action['argument']} ${action['value']}\"");
+					$this->core->debug(4, "compileFromArray($macroName:${action['lineNumber']}): Nested feature \"${action['argument']} ${action['value']}\"");
 					$action['argument']=substr($action['argument'], 1);
 					$outputArray[$lastRootKey]['nesting'][]=$action;
 				}
@@ -192,11 +160,10 @@ class Macro extends Module
 					$this->core->debug(0, "compileFromArray($macroName:${action['lineNumber']}): Syntax error: Indentation without any features beforehand. The derived line was \"${action['argument']} ${action['value']}\"");
 					# TODO implement atomic failure.
 				}
-				# unset($inputArray[$key]);
 			}
 			else
 			{
-				$this->core->debug(0, "compileFromArray($macroName:${action['lineNumber']}): Root feature \"${action['argument']} ${action['value']}\"");
+				$this->core->debug(4, "compileFromArray($macroName:${action['lineNumber']}): Root feature \"${action['argument']} ${action['value']}\"");
 				$lastRootKey=$key;
 				$outputArray[$lastRootKey]=$action;;
 			}
@@ -222,13 +189,6 @@ class Macro extends Module
 				$this->core->addAction(trim($action['argument']), $action['value'], $macroName);
 			}
 		}
-		
-		if ($macroName=='testNestedIf')
-		{
-			$this->core->debug(0, "compileFromArray: $macroName");
-			print_r($outpuArray);
-		}
-
 		
 		return $outputArray;
 	}
