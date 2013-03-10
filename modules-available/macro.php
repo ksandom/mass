@@ -153,7 +153,7 @@ class Macro extends Module
 				{ // We have indentation. Remove 1 layer of indentation, and nest the argument.
 					$this->core->debug(4, "compileFromArray($macroName:${action['lineNumber']}): Nested feature \"${action['argument']} ${action['value']}\"");
 					$action['argument']=substr($action['argument'], 1);
-					$outputArray[$lastRootKey]['nesting'][]=$action;
+					if (trim($action['argument'])) $outputArray[$lastRootKey]['nesting'][]=$action;
 				}
 				else
 				{ // We have indentation, but no argument to nest it in. This is fatal.
@@ -180,7 +180,6 @@ class Macro extends Module
 				$subName="$macroName--{$action['lineNumber']}";
 				
 				$this->core->registerFeature($this, array($subName), $subName, "Derived macro for $macroName", "$macroName,hidden", true, 'NA');
-				#print_r($action);
 				$outputArray[$key]['nesting']=$this->compileFromArray($subName, $action['nesting']);
 				$this->core->addAction(trim($action['argument']), $action['value'].$subName, $macroName, $action['lineNumber']);
 			}
