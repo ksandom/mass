@@ -19,9 +19,6 @@ class Condition extends Module
 	
 	function event($event)
 	{
-		$state=($this->core->get('Me', 'conditionMatched'))?'true':'false';
-		$this->core->debug(2, "Condition: nesting=".$this->core->get('Core', 'nesting')." Before=".$state);
-		
 		switch ($event)
 		{
 			case 'init':
@@ -84,9 +81,6 @@ class Condition extends Module
 				$this->core->complain($this, 'Unknown event', $event);
 				break;
 		}
-		
-		$state=($this->core->get('Me', 'conditionMatched'))?'true':'false';
-		$this->core->debug(2, "Condition: nesting=".$this->core->get('Core', 'nesting')." After=".$state);
 	}
 
 	function ifResultExists(&$input, $parms, $match=true)
