@@ -1,7 +1,6 @@
 # Concurrently run a command on every matching server and return the result in the background. --list[=hostRegex] --cmd command ~ bg,terminal,user
 #onLoaded setFeatureType cmd,actOnHostsUnknown
 
-outNow
 triggerEvent Bastion,load
 triggerEvent Bastion,lookup
 triggerEvent Bastion,deriveCommands
@@ -9,5 +8,5 @@ triggerEvent Bastion,deriveCommands
 debug 0,Spawning commands in background
 toString ssh ~!Verbosity,externalMinusV!~ ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ '~%cmd%~ | while read in;do echo "~%hostName%~: $in";done' >&2 ~!Settings,backgroundTasks!~
 cleanUnresolvedResultVars
-nested
+null
 exec
