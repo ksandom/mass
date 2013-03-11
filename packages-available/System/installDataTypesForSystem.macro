@@ -1,0 +1,4 @@
+# Install the data types to be used with hosts. ~ semantics,internal,install
+#onDefine registerForEvent Install,dataTypes,installDataTypesForSystem
+
+createDataType feature,feature,feature,feature,,Features

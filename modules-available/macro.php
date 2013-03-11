@@ -62,13 +62,19 @@ class Macro extends Module
 		}
 	}
 	
-	function defineMacro($macro, $useSemiColon=false)
+	function defineMacro($macro, $useSemiColon=false, $macroName=false)
 	{
 		# Get macroName
-		$endOfName=strPos($macro, ':');
-		$macroName=trim(substr($macro, 0, $endOfName));
-		$actualMacro=trim(substr($macro, $endOfName+1));
+		if (!$macroName)
+		{
+			$endOfName=strPos($macro, ':');
+			$macroName=trim(substr($macro, 0, $endOfName));
+			$actualMacro=trim(substr($macro, $endOfName+1));
+		}
+		else $actualMacro=$macro;
 		$this->lastCreatedMacro=$macroName;
+		
+		$preCompile=array();
 		
 		if ($useSemiColon)
 		{
@@ -81,53 +87,111 @@ class Macro extends Module
 			$lines=explode("\n", $actualMacro);
 		}
 		
+		# Precompile macro into a nested array of commands.
 		$obj=null; # TODO check this. It may be needed in more places.
+		$lineNumber=0;
 		foreach ($lines as $line)
 		{
+			$lineNumber++;
+			
+			if (!trim($line)) continue;
+			
 			$endOfArgument=strPos($line, ' ');
 			if ($endOfArgument)
 			{
-				$argument=trim(substr($line, 0, $endOfArgument));
+				# TODO The rtrim should be removed once I get past the current problem.
+				$argument=substr($line, 0, $endOfArgument);
 				$value=trim(substr($line, $endOfArgument+1));
 			}
 			else
 			{
-				$argument=trim($line);
+				$argument=$line;
 				$value='';
 			}
 			
 			
-			if (substr($line, 0, 1)!='	')
+			switch ($argument)
 			{
-				switch ($argument)
-				{
-					case '#':
-					case '':
-						break;
-					case '#onDefine':
-						$parts=$this->core->splitOnceOn(' ', $value);
-						$this->core->debug(3, "#onDefine {$parts[0]}={$parts[1]}");
-						$this->core->callFeature($parts[0], $parts[1]);
-						break;
-					case '#onLoaded':
-						$parts=$this->core->splitOnceOn(' ', $value);
-						$this->core->debug(3, "#onLoaded {$parts[0]}={$parts[1]}");
-						$this->core->callFeature("registerForEvent", "Macro,allLoaded,$parts[0],$parts[1]");
-						break;
-					default:
-						$obj=&$this->core->get('Features', $argument);
-						$this->core->addAction($argument, $value, $macroName);
-						break;
+				case '#':
+				case '':
+					break;
+				case '#onDefine':
+					$parts=$this->core->splitOnceOn(' ', $value);
+					$this->core->debug(3, "#onDefine {$parts[0]}={$parts[1]}");
+					$this->core->callFeature($parts[0], $parts[1]);
+					break;
+				case '#onLoaded':
+					$parts=$this->core->splitOnceOn(' ', $value);
+					$this->core->debug(3, "#onLoaded {$parts[0]}={$parts[1]}");
+					$this->core->callFeature("registerForEvent", "Macro,allLoaded,$parts[0],$parts[1]");
+					break;
+				default:
+					//$this->core->addAction($argument, $value, $macroName);
+					$preCompile[]=array(
+						'argument'=>$argument,
+						'value'=>$value,
+						'nesting'=>array(),
+						'macroName'=>$macroName,
+						'lineNumber'=>$lineNumber
+						);
+					break;
+			}
+		}
+		
+		$this->compileFromArray($macroName, $preCompile);
+	}
+	
+	function compileFromArray($macroName, $inputArray)
+	{
+		$outputArray=array();
+		
+		# Figure out nesting
+		$lastRootKey=null;
+		foreach($inputArray as $key=>$action)
+		{
+			if (substr($action['argument'], 0, 1) == '	')
+			{
+				if (!is_null($lastRootKey))
+				{ // We have indentation. Remove 1 layer of indentation, and nest the argument.
+					$this->core->debug(4, "compileFromArray($macroName:${action['lineNumber']}): Nested feature \"${action['argument']} ${action['value']}\"");
+					$action['argument']=substr($action['argument'], 1);
+					$outputArray[$lastRootKey]['nesting'][]=$action;
+				}
+				else
+				{ // We have indentation, but no argument to nest it in. This is fatal.
+					$this->core->debug(0, "compileFromArray($macroName:${action['lineNumber']}): Syntax error: Indentation without any features beforehand. The derived line was \"${action['argument']} ${action['value']}\"");
+					# TODO implement atomic failure.
 				}
 			}
 			else
 			{
-				# Get indentation command
-				if (isset($obj['indentFeature'])) $this->core->addAction($obj['indentFeature'], "$argument,$value", $macroName);
-				elseif (!$argument) {}
-				else $this->core->debug(0, "defineMacro($macroName): Syntax error: Indentation without a feature. immediately beforehand. The line was $line");
+				$this->core->debug(4, "compileFromArray($macroName:${action['lineNumber']}): Root feature \"${action['argument']} ${action['value']}\"");
+				$lastRootKey=$key;
+				$outputArray[$lastRootKey]=$action;;
 			}
 		}
+		
+		# Compile
+		foreach($outputArray as $key=>$action)
+		{
+			$obj=&$this->core->get('Features', $action['argument']);
+			
+			# Handle any nesting
+			if (count($action['nesting']))
+			{
+				$subName="$macroName--{$action['lineNumber']}";
+				
+				$this->core->registerFeature($this, array($subName), $subName, "Derived macro for $macroName", "$macroName,hidden", true, 'NA');
+				$outputArray[$key]['nesting']=$this->compileFromArray($subName, $action['nesting']);
+				$this->core->addAction(trim($action['argument']), $action['value'].$subName, $macroName, $action['lineNumber']);
+			}
+			else
+			{
+				$this->core->addAction(trim($action['argument']), $action['value'], $macroName);
+			}
+		}
+		
+		return $outputArray;
 	}
 	
 	function runMacro($macroName)
@@ -250,7 +314,7 @@ class Macro extends Module
 				
 				if (substr($contentsParts[0], 0, 2)=='# ')
 				{
-					$this->defineMacro("$macroName:$contents", false);
+					$this->defineMacro($contents, false, $macroName);
 				}
 				else $this->core->complain($this, "$fullPath appears to be a macro, but doesn't have a helpful comment on the first line begining with a # .");
 			}

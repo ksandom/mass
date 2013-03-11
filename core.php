@@ -14,6 +14,7 @@ define('resultVarsDefaultWarnDebugLevel', 2);
 define('resultVarsDefaultSevereDebugLevel', 1);
 
 define('nestedPrivateVarsName', 'Me');
+define('isolatedNestedPrivateVarsName', 'Isolated');
 
 define('workAroundIfBug', true); // See doc/bugs/ifBug.md
 
@@ -423,12 +424,13 @@ class core extends Module
 					$nesting=$this->get('Core', 'nesting');
 					$isArray=is_array($result)?'True':'False';;
 					$this->debug(4, "INVOKE-Exit  {$indentation}{$obj['name']}/$nesting value={$value}, valueIn=$valueIn resultCount=$resultCount is_array=$isArray smCount=".$this->getResultSetCount());
-					$this->debugResultSet($obj['name']);
+					# $this->debugResultSet($obj['name']);
 				}
 				return $result;
 			}
 			else $this->complain(null, "Could not find a module to match '$argument'", 'callFeature');
 		}
+		else $this->debug(3,"Core->callFeature: Non executable code \"$argument\" sent. We shouldn't have got this.");
 		return false;
 	}
 	
@@ -582,7 +584,7 @@ class core extends Module
 		return $output;
 	}
 	
-	function addAction($argument, $value=null, $macroName='default')
+	function addAction($argument, $value=null, $macroName='default', $lineNumber=false)
 	{
 		if (!isset($this->store['Macros'])) $this->store['Macros']=array();
 		if (!isset($this->store['Macros'][$macroName])) $this->store['Macros'][$macroName]=array();
@@ -590,7 +592,7 @@ class core extends Module
 		$obj=&$this->core->get('Features', $argument);
 		if (is_array($obj))
 		{
-			$this->store['Macros'][$macroName][]=array('obj'=>&$obj, 'name'=>$obj['name'], 'value'=>$value);
+			$this->store['Macros'][$macroName][]=array('obj'=>&$obj, 'name'=>$obj['name'], 'value'=>$value, 'lineNumber'=>$lineNumber);
 		}
 		else $this->complain(null, "Could not find a module to match '$argument'", 'addAction');
 
@@ -701,7 +703,7 @@ class core extends Module
 				{
 					$nesting=$this->get('Core', 'nesting');
 					$this->debug(5, "ITER $macroName/$nesting - {$actionItem['name']}: Result count before invoking=".count($this->getResultSet()));
-					$this->debugResultSet("$macroName - {$actionItem['name']}");
+					# $this->debugResultSet("$macroName - {$actionItem['name']}");
 					
 					# TODO The problem happens somewhere between here...
 					$returnedValue1=$this->callFeature($actionItem['name'], $actionItem['value']);
@@ -709,7 +711,7 @@ class core extends Module
 					# and here
 					$this->debug(5,"GOT HERE ALSO");
 					
-					$this->debugResultSet("$macroName - {$actionItem['name']}");
+					# $this->debugResultSet("$macroName - {$actionItem['name']}");
 					
 					$nesting=$this->get('Core', 'nesting');
 					$this->debug(5, "ITER $macroName/$nesting - {$actionItem['name']}: Restult count before set=".count($this->getResultSet()));
@@ -778,30 +780,43 @@ class core extends Module
 		#echo "m=$category, v=$valueName\n";
 		if (isset($this->store[$category]))
 		{
-			if ($category!=nestedPrivateVarsName)
+			switch ($category)
 			{
-				if (isset($this->store[$category][$valueName])) return $this->store[$category][$valueName];
-				else 
-				{
-					$result=null;
-				}
-			}
-			else
-			{
-				$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
-				if (isset($this->store['Me'][$nesting])) 
-				{
-					for ($i=$nesting;$i>0;$i--)
+				case isolatedNestedPrivateVarsName:
+					$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+					if (isset($this->store[isolatedNestedPrivateVarsName][$nesting]))
 					{
-						if (isset($this->store['Me'][$i][$valueName]))
+						if (isset($this->store[isolatedNestedPrivateVarsName][$nesting][$valueName]))
 						{
-							$result=$this->store['Me'][$i][$valueName];
-							break;
+							$result=$this->store[isolatedNestedPrivateVarsName][$nesting][$valueName];
 						}
 						else $result=null;
 					}
-				}
-				else $result=null;
+					else $result=null;
+					break;
+				case nestedPrivateVarsName:
+					$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+					if (isset($this->store[nestedPrivateVarsName][$nesting])) 
+					{
+						for ($i=$nesting;$i>0;$i--)
+						{
+							if (isset($this->store[nestedPrivateVarsName][$i][$valueName]))
+							{
+								$result=$this->store[nestedPrivateVarsName][$i][$valueName];
+								break;
+							}
+							else $result=null;
+						}
+					}
+					else $result=null;
+					break;
+				default:
+					if (isset($this->store[$category][$valueName])) return $this->store[$category][$valueName];
+					else 
+					{
+						$result=null;
+					}
+					break;
 			}
 		}
 		else
