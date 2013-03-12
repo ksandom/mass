@@ -12,7 +12,7 @@
 requiredParms="none"
 . `dirname $0`/libs/includeLibs.sh
 
-. $libDir/getRepo
+. $libDir/getRepo.sh
 
 # Make this work in /repos instead of /externalLibraries
 getRepo "PHP-OAuth2" "git@github.com:adoy/PHP-OAuth2.git"

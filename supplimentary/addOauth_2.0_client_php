@@ -12,7 +12,7 @@
 requiredParms="none"
 . `dirname $0`/libs/includeLibs.sh
 
-. $libDir/getRepo
+. $libDir/getRepo.sh
 
 # Make this work in /repos instead of /externalLibraries
 getRepo "oauth_2.0_client_php" "git@github.com:vznet/oauth_2.0_client_php.git"
