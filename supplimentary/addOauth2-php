@@ -1,6 +1,6 @@
 #!/bin/bash
 # Description
-#   Install the PHP AWS SDK
+#   Install the oauth2-php library
 #
 # Syntax:
 #   $0
@@ -15,4 +15,4 @@ requiredParms="none"
 . $libDir/getRepo.sh
 
 # Make this work in /repos instead of /externalLibraries
-getRepo "aws-sdk-for-php" "git://github.com/rawswift/aws-sdk-for-php.git"
+getRepo "oauth2-php" "git@github.com:quizlet/oauth2-php.git"

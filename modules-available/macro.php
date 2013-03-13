@@ -24,30 +24,30 @@ class Macro extends Module
 				$this->core->registerFeature($this, array('defineMacro'), 'defineMacro', 'Define a macro. --defineMacro=macroName:"command1=blah\ncommand2=wheee"');
 				$this->core->registerFeature($this, array('runMacro'), 'runMacro', 'Run a macro. --runMacro=macroName');
 				$this->core->registerFeature($this, array('listMacros'), 'listMacros', 'List all macros');
-				$this->core->registerFeature($this, array('loopMacro'), 'loopMacro', 'Use a macro to loop through a resultSet. The current iteration of the resultSet is accessed via STORE variables under the category Result. See loopMacro.md for more information. --loopMacro=macroName[,parametersForTheMacro]', array('loop', 'iterate', 'resultset')); # TODO This should probably move to a language module
+				$this->core->registerFeature($this, array('loop', 'loopMacro'), 'loop', 'Loop through a resultSet. The current iteration of the resultSet is accessed via STORE variables under the category Result. See loopMacro.md for more information. --loop=macroName[,parametersForTheMacro]', array('loop', 'iterate', 'resultset')); # TODO This should probably move to a language module
 				$this->core->registerFeature($this, array('forEach'), 'forEach', "For each result in the resultSet, run this command. The whole resultSet will temporarily be set to the result in the current iteration, and the resultSet of that iteration will replace the original result in the original resultSet. Basically it's a way to work with nested results and be able to send their results back. --foreEach=feature,value", array('loop', 'iterate', 'resultset')); # TODO This should probably move to a language module
 				break;
 			case 'singleLineMacro':
-				$this->defineMacro($this->core->get('Global', 'macro'), true);
+				$this->defineMacro($this->core->get('Global', $event), true);
 				return $this->runMacro($this->lastCreatedMacro);
 				break;
 			case 'macro':
-				$this->defineMacro($this->core->get('Global', 'macro'));
+				$this->defineMacro($this->core->get('Global', $event));
 				return $this->runMacro($this->lastCreatedMacro);
 				break;
 			case 'defineSingleLineMacro':
-				$this->defineMacro($this->core->get('Global', 'defineMacro'), true);
+				$this->defineMacro($this->core->get('Global', $event), true);
 				break;
 			case 'defineMacro':
-				$this->defineMacro($this->core->get('Global', 'defineMacro'));
+				$this->defineMacro($this->core->get('Global', $event));
 				break;
 			case 'runMacro':
-				return $this->runMacro($this->core->get('Global', 'runMacro'));
+				return $this->runMacro($this->core->get('Global', $event));
 			case 'listMacros':
 				return $this->listMacros();
 				break;
-			case 'loopMacro':
-				return $this->loopMacro($this->core->getResultSet(), $this->core->get('Global', 'loopMacro'));
+			case 'loop':
+				return $this->loopMacro($this->core->getResultSet(), $this->core->get('Global', $event));
 			case 'forEach':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 1);
 				return $this->doForEach($this->core->getResultSet(), $parms[0], $parms[1]);
