@@ -1,0 +1,6 @@
+# Define an OAuth API ~ api,oauth
+
+load oauthLoadConfig
+registerForEvent Mass,finishGeneral,oauthSaveConfig
+
+
