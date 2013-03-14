@@ -1,0 +1,9 @@
+# Delete an API. --oAuthDeleteAPI=APIName ~ delete,oauth,api
+
+load oAuthLoadConfig
+load oAuthLoadCredentials
+registerForEvent Mass,finishGeneral,oAuthSaveConfig
+registerForEvent Mass,finishGeneral,oAuthSaveCredentials
+
+unset OAuthConfig,~!oAuthDeleteAPI,0!~
+unset OAuthCredentials,~!oAuthDeleteAPI,0!~
