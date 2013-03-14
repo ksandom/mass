@@ -1,0 +1,6 @@
+# Define an OAuth API --oAuthDefineAPI=APIName,clientID,clientSecret,URL ~ api,oauth
+
+load oAuthLoadConfig
+registerForEvent Mass,finishGeneral,oAuthSaveConfig
+
+
