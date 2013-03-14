@@ -1,0 +1,5 @@
+# List OAuth endpoints. --oAuthListEndPoints=APIName ~ oauth,endpoint,list
+
+load oAuthLoadConfig
+
+get OAuthConfig,~!oAuthListEndPoints,0!~,endPoints

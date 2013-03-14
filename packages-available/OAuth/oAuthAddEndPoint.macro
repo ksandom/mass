@@ -3,4 +3,5 @@
 load oAuthLoadConfig
 registerForEvent Mass,finishGeneral,oAuthSaveConfig
 
-set OAuthConfig,~!oAuthAddEndPoint,0!~,~!oAuthAddEndPoint,1!~,~!oAuthAddEndPoint,3!~
+set OAuthConfig,~!oAuthAddEndPoint,0!~,endPoints,~!oAuthAddEndPoint,1!~,endPointName,~!oAuthAddEndPoint,3!~
+set OAuthConfig,~!oAuthAddEndPoint,0!~,endPoints,~!oAuthAddEndPoint,1!~,endPointURL,~!oAuthAddEndPoint,3!~

@@ -1,0 +1,3 @@
+# Install the feature types for OAuth ~ oauth,semantics,hidden
+#onDefine registerForEvent Install,featureTypes,installFeatureTypesForOAuth
+

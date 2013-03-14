@@ -1,0 +1,5 @@
+# List the current OAuth APIs ~ oauth,api,list
+
+load oAuthLoadConfig
+
+getCategory OAuthConfig
