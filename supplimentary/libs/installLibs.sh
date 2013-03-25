@@ -38,7 +38,7 @@ function doInstall
 	if mkdir -p "$configDir/data/hosts" "$binExec" "$bin" "$configDir/repos" "$configDir/externalLibraries"
 	then
 		echo a> $configDir/canWrite
-	elseif [ "`cat $configDir/canWrite`" != 'a' ]; then
+	elif [ "`cat $configDir/canWrite`" != 'a' ]; then
 		echo "Could not write to $configDir."
 		exit 1
 	else

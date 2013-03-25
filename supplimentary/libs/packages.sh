@@ -6,14 +6,24 @@ function cleanEnabled
 	testFunction="$1"
 	profileName="$3"
 	
-	cd "$testDir"
-	for item in *;do
-		if ! $testFunction "$item"; then
-			echo "$item is no longer present. Disabling in profile \"$profileName\"."
-			rm "$item"
-		fi
-		cd "$testDir"
-	done
+	if cd "$testDir"; then
+		for item in *;do
+			if ! $testFunction "$item"; then
+				echo "$item is no longer present. Disabling in profile \"$profileName\"."
+				rm "$item"
+			fi
+			cd "$testDir"
+		done
+	else
+		echo
+		echo "Mass install: cleanEnabled: WARNING Clean aborted since we could not sucessfully get into the directory to be cleaned. Continuing would be insanity. Please fix this.";
+		echo "	pwd: 		`pwd`"
+		echo "	testDir:		$testDir"
+		echo "	testFunction:	$testFunction"
+		echo "	profileName:	$profileName"
+		echo "	configDir:	$configDir"
+		echo
+	fi
 }
 
 function testEnabledFile
