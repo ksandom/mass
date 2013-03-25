@@ -2,7 +2,12 @@
 
 function removeObsoleteStuff
 {
-	mkdir -p $configDir/obsolete
+	if ! mkdir -p $configDir/obsolete; then
+		echo "Mass install: Fatal. Could not create the $configDir/obsolete."
+		echo "Check that you can write to $configDir."
+		exit 1
+	fi
+	
 	for thing in $things;do
 		mv $configDir/$thing* $configDir/obsolete 2>/dev/null
 	done
@@ -30,7 +35,19 @@ function doInstall
 {
 	startDir=`pwd`
 	repoDir="$configDir/repos/$programName"
-	mkdir -p "$configDir/data/hosts" "$binExec" "$bin" "$configDir/repos" "$configDir/externalLibraries"
+	if mkdir -p "$configDir/data/hosts" "$binExec" "$bin" "$configDir/repos" "$configDir/externalLibraries"
+	then
+		echo a> $configDir/canWrite
+	elseif [ "`cat $configDir/canWrite`" != 'a' ]; then
+		echo "Could not write to $configDir."
+		exit 1
+	else
+		echo "Mass install: Fatal. Could not create the crucial directories."
+		echo "Check that you can write to $configDir."
+		exit 1
+	fi
+	
+	rm $configDir/canWrite
 	
 	checkPrereqs
 	removeObsoleteStuff
