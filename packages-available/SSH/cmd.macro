@@ -1,4 +1,4 @@
-# Concurrently run a command on every matching server and return the result in the background. --list[=hostRegex] --cmd command ~ bg,terminal,user
+# Concurrently run a command on every matching server and return the result in the background. --list[=hostRegex] --cmd[=]command . Note that the = is optional for --cmd. However, you will need it if you want to combine it with other occurances of --cmd or other features that use the stray variable, like --upload. ~ bg,terminal,user
 #onLoaded setFeatureType cmd,actOnHostsUnknown
 
 triggerEvent Bastion,load
@@ -6,6 +6,10 @@ triggerEvent Bastion,lookup
 triggerEvent Bastion,deriveCommands
 
 debug 0,Spawning commands in background
+
+if ~!Global,cmd!~,!=,,
+	resultSet cmd,~!Global,cmd!~
+
 toString ssh ~!Verbosity,externalMinusV!~ ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ '~%cmd%~ | while read in;do echo "~%hostName%~: $in";done' >&2 ~!Settings,backgroundTasks!~
 cleanUnresolvedResultVars
 null

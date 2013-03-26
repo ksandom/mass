@@ -3,8 +3,9 @@
 
 search ~!Global,list!~
 
-resultSet cmd,~!Global,stray!~
-addSlashes cmd,cmd
+if ~!Global,stray!~,!=,,
+	resultSet cmd,~!Global,stray!~
+	addSlashes cmd,cmd
 
 chooseBestInterface
 
