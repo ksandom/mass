@@ -5,8 +5,19 @@ triggerEvent Bastion,load
 triggerEvent Bastion,lookup
 triggerEvent Bastion,deriveCommands
 
-debug 0,Spawning commands in background
+stashResults Cmd,hosts
+
+if ~!Settings,backgroundTasks!~,!=,,
+	debug 0,Spawning commands in background (~!Settings,backgroundTasks!~)
+
 toString ssh ~!Verbosity,externalMinusV!~ ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ '~%cmd%~ | while read in;do echo "~%hostName%~: $in";done' >&2 ~!Settings,backgroundTasks!~
 cleanUnresolvedResultVars
-null
+
+if ~!Verbosity,level!~,>=,1,
+	nested
+	outNow
+
 exec
+
+retrieveResults Cmd,hosts
+unset Cmd,hosts
