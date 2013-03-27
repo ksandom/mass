@@ -1,10 +1,14 @@
-# Open a terminal to every host in the results with inline syntax. NOTE This will replace --term when it's finished ~ terminal,user
+# Open a terminal to every host in the results with inline syntax. --term[[=]command] NOTE This will replace --term when it's finished. Also note that the = is optional for --term. However, you will need it if you want to combine it with other occurances of --term or other features that use the stray variable, like --upload. ~ terminal,user
 #onLoaded setFeatureType term,actOnHosts
 
 outNow
 triggerEvent Bastion,load
 triggerEvent Bastion,lookup
 triggerEvent Bastion,deriveCommands
+
+if ~!Global,term!~,!=,,
+	resultSet cmd,~!Global,term!~
+
 resultSet termCmd,ssh ~!Verbosity,externalMinusV!~ -t ~%sshExtra%~ ~%auth%~ ~%userAt%~~%FQDN%~ ~%cmd%~
 stashResults Me,results
 

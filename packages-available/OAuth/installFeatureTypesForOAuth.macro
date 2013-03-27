@@ -1,0 +1,6 @@
+# Install the feature types for OAuth ~ oauth,semantics,hidden
+#onDefine registerForEvent Install,featureTypes,installFeatureTypesForOAuth
+
+createFeatureType generateOAuthAPIs,,oAuthAPI,Generates a list of OAuth APIs.
+createFeatureType generateOAuthEndPoints,,oAuthEndPoint,Generates a list of OAuth endPoints.
+

@@ -1,0 +1,6 @@
+# List the current OAuth APIs ~ oauth,api,list
+#onLoaded setFeatureType oAuthListAPIs,generateOAuthAPIs
+
+load oAuthLoadConfig
+
+getCategory OAuthConfig

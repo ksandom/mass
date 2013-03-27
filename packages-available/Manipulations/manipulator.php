@@ -49,6 +49,8 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('offsetResult', 'offsetResults'), 'offsetResult', "After x results, take the first y results. --offsetResult=x,y", array('result'));
 				
 				#$this->core->registerFeature($this, array('cleanUnresolvedStoreVars'), 'cleanUnresolvedStoreVars', 'Clean out any store variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
+				
+				$this->core->registerFeature($this, array('createOneResult'), 'createOneResult', 'Replaces the resultSet with a single entry that can then be manipulated using features like --resultSet.', array('array', 'result'));
 				break;
 			case 'followup':
 				break;
@@ -163,6 +165,9 @@ class Manipulator extends Module
 			case 'offsetResult':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 2));
 				return $this->offsetResult($this->core->getResultSet(), $parms[0], $parms[1]);
+				break;
+			case 'createOneResult':
+				return array(array());
 				break;
 			
 			default:
