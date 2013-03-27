@@ -48,37 +48,6 @@ class OAuth extends Module
 	}
 }
 
-class MassStore implements DataStore
-{
-	private $core=null;
-	private $name='';
-	
-	public function __construct(&$core, $name) {
-		$this->core=&$core;
-		$this->name=$name;
-	}
-
-	/**
-	*
-	* @return \OAuth2\Token
-	*/
-	public function retrieveAccessToken() {
-		$token=$this->core->get('OAuthTokens', $this->name);
-		return ($token) ? $token : new Token();
-	}
-
-	/**
-	* @param \OAuth2\Token $token
-	*/
-	public function storeAccessToken(Token $token) {
-		$this->core->set('OAuthTokens', $this->name, $token);
-	}
-
-	public function  __destruct() {
-		session_write_close();
-	}
-}
-
 $core=core::assert();
 
 $configDir=$core->get('General', 'configDir');
@@ -102,6 +71,8 @@ foreach ($oAuthLibrary as $title=>$directory)
 		{
 			include "$directory/OAuth2/$file";
 		}
+		
+		include 'extra/OAuthImplementationStuff.php';
 		
 		$core->set('OAuth', 'libraryTitle', $title);
 		$core->set('OAuth', 'libraryFile', $directory);
