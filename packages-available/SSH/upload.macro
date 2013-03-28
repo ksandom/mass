@@ -13,7 +13,7 @@ if ~!Settings,backgroundTasks!~,!=,,
 if ~!Global,cmd!~,!=,,
 	resultSet cmd,~!Global,cmd!~
 
-toString scp ~!Verbosity,externalMinusV!~ ~%scpExtra%~ ~%auth%~ -r ~!Global,stray!~ ~%userAt%~~%FQDN%~:~!Global,upload!~ >&2 ~!Settings,backgroundTasks!~
+toString scp ~!Verbosity,externalMinusV!~ ~%scpExtra%~ ~%auth%~ -r ~!Global,stray!~ ~%userAt%~~%FQDN%~:~!Global,upload!~ ~!Settings,backgroundTasks!~
 cleanUnresolvedResultVars
 nested
 exec
