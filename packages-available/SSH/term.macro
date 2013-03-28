@@ -6,6 +6,11 @@ triggerEvent Bastion,load
 triggerEvent Bastion,lookup
 triggerEvent Bastion,deriveCommands
 
+stashResults SSH,hosts
+
+if ~!Settings,backgroundTasks!~,!=,,
+	debug 0,Spawning commands in background (~!Settings,backgroundTasks!~)
+
 if ~!Global,term!~,!=,,
 	resultSet cmd,~!Global,term!~
 
@@ -17,4 +22,9 @@ cleanUnresolvedResultVars
 exec
 singleStringNow
 
-retrieveResults Me,results
+if ~!Verbosity,level!~,>=,1,
+	nested
+	outNow
+
+retrieveResults SSH,hosts
+unset SSH,hosts
