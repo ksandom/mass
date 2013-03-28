@@ -43,6 +43,7 @@ class core extends Module
 		$this->module=array();
 		
 		$this->verbosity=$verbosity;
+		$this->set('Verbosity', 'level', $verbosity);
 		
 		parent::__construct('Core');
 		$this->set('Core', 'serial', intval(rand()));
