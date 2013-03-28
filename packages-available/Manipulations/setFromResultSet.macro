@@ -1,4 +1,7 @@
 # Set a store value from a resultset value. --setFromResultSet=StoreName,variableName,resultSetKey . Eg --setFromResultSet=Bastion,host,bastionHost . Note that this unsets the destination store variable before looking. This is so that subsequent runs that may not have have an appropriate match will reflect that rather than holding on to an incorrect value. ~ resultset
 
 unset ~!Global,setFromResultSet-0!~,~!Global,setFromResultSet-1!~
-loopMacro internalSetFromResultSet,~!Global,setFromResultSet!~
+loop
+	if ~!Result,~!Global,setFromResultSet-2!~!~,!=,,
+		setIfNotSet ~!Global,setFromResultSet-0!~,~!Global,setFromResultSet-1!~,~!Result,~!Global,setFromResultSet-2!~!~
+
