@@ -7,8 +7,9 @@ triggerEvent Bastion,deriveCommands
 
 stashResults SSH,hosts
 
-if ~!Settings,backgroundTasks!~,!=,,
-	debug 0,Spawning commands in background (~!Settings,backgroundTasks!~)
+if ~!Verbosity,level!~,>=,1,
+	if ~!Settings,backgroundTasks!~,!=,,
+		debug 0,Spawning commands in background (~!Settings,backgroundTasks!~)
 
 if ~!Global,cmd!~,!=,,
 	resultSet cmd,~!Global,cmd!~
