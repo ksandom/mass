@@ -19,6 +19,8 @@ function removeObsoleteStuff
 	else
 		echo "removeObsoleteStuff: Obsolete stuff has been put in $configDir/obsolete. It is likely that this directory can simply be deleted. But if you have done any custom work, you will want to check that it isn't here first." | tee $configDir/obsolete/readme.md
 	fi
+	
+	rm -f $configDir/config/Verbosity.config.json
 }
 
 function checkPrereqs

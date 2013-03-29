@@ -632,25 +632,25 @@ class core extends Module
 		return ($this->verbosity >= $verbosityLevel);
 	}
 	
-	function verbosity($level=0)
+	function verbosity($level=0, $announce=true)
 	{
 		if (is_numeric($level))
 		{
 			$this->verbosity=intval($level);
-			$verbosityName=$this->get('Verbosity', $this->verbosity);
-			$this->core->debug($this->verbosity, "verbosity: Set verbosity to \"$verbosityName\" ({$this->verbosity})");
+			$verbosityName=$this->get('VerbosityLevel', $this->verbosity);
+			if ($announce) $this->core->debug($this->verbosity, "verbosity: Set verbosity to \"$verbosityName\" ({$this->verbosity})");
 		}
 		elseif ($level=='-')
 		{
 			$this->verbosity=$this->verbosity-1;
-			$verbosityName=$this->get('Verbosity', $this->verbosity);
-			$this->core->debug($this->verbosity, "verbosity: Decremented verbosity to \"$verbosityName\" ({$this->verbosity})");
+			$verbosityName=$this->get('VerbosityLevel', $this->verbosity);
+			if ($announce) $this->core->debug($this->verbosity, "verbosity: Decremented verbosity to \"$verbosityName\" ({$this->verbosity})");
 		}
 		else
 		{
 			$this->verbosity=$this->verbosity+1;
-			$verbosityName=$this->get('Verbosity', $this->verbosity, false);
-			$this->core->debug($this->verbosity, "verbosity: Incremented verbosity to \"$verbosityName\" ({$this->verbosity})");
+			$verbosityName=$this->get('VerbosityLevel', $this->verbosity, false);
+			if ($announce) $this->core->debug($this->verbosity, "verbosity: Incremented verbosity to \"$verbosityName\" ({$this->verbosity})");
 		}
 		
 		$this->set('Verbosity', 'level', $this->verbosity); // NOTE that changes to this variable will not affect the practicle verbosity. setRef coiuld be used, in which case changes would affect it. However we would then lack safety controls and events.
@@ -853,6 +853,7 @@ class core extends Module
 	{ // set a variable for a module
 		$argsDisplay=(is_array($args))?'Array':$args;
 		$this->debug(5,"set($category, $valueName, $argsDisplay)");
+		
 		if (!isset($this->store[$category])) $this->store[$category]=array();
 		
 		if ($category!=nestedPrivateVarsName) $this->store[$category][$valueName]=$args;

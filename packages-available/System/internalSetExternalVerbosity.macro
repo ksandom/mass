@@ -4,6 +4,8 @@
 if ~!Verbosity,level!~,>,0,
 	set Verbosity,externalV,v
 	set Verbosity,externalMinusV,-v
+	set Verbosity,onlyVerbose,
 else
 	set Verbosity,externalV,
 	set Verbosity,externalMinusV,
+	set Verbosity,onlyVerbose,>/dev/null
