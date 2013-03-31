@@ -1,7 +1,0 @@
-# Add an endpoint to an API. --oAuthAddEndPoint=APIName,endPointName,endPointURL ~ oauth,endpoint,add
-
-load oAuthLoadConfig
-registerForEvent Mass,finishGeneral,oAuthSaveConfig
-
-set OAuthConfig,~!oAuthAddEndPoint,0!~,endPoints,~!oAuthAddEndPoint,1!~,endPointName,~!oAuthAddEndPoint,3!~
-set OAuthConfig,~!oAuthAddEndPoint,0!~,endPoints,~!oAuthAddEndPoint,1!~,endPointURL,~!oAuthAddEndPoint,3!~

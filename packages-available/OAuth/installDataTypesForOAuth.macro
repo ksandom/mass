@@ -1,5 +1,0 @@
-# Install the data types for OAuth ~ oauth,semantics,hidden
-#onDefine registerForEvent Install,dataTypes,installDataTypesForOAuth
-
-createDataType oAuthAPI,oAuthAPI,,,,Defines APIs for OAuth to talk to.
-createDataType oAuthEndPoint,oAuthEndPoint,,,,Defines endPoints for APIs for OAuth to talk to.

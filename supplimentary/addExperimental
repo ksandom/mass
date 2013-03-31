@@ -1,0 +1,17 @@
+#!/bin/bash
+# Description
+#   Install mass-experimental library
+#
+# Syntax:
+#   $0
+#
+# Examples:
+#   Simply install it. Boo-ya!
+#   $0
+
+requiredParms="none"
+. `dirname $0`/libs/includeLibs.sh
+
+. $libDir/getRepo.sh
+
+getRepo "experimental" "git@github.com:ksandom/mass-experimental.git"

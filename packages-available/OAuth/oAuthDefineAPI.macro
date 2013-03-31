@@ -1,8 +1,0 @@
-# Define an OAuth API --oAuthDefineAPI=APIName,clientID,clientSecret,URL ~ api,oauth
-
-load oAuthLoadConfig
-registerForEvent Mass,finishGeneral,oAuthSaveConfig
-
-oAuthSetCredentials ~!oAuthDefineAPI,0!~,~!oAuthDefineAPI,1!~,~!oAuthDefineAPI,2!~
-set OAuthConfig,~!oAuthDefineAPI,0!~,APIName,~!oAuthDefineAPI,0!~
-set OAuthConfig,~!oAuthDefineAPI,0!~,authURL,~!oAuthDefineAPI,3!~

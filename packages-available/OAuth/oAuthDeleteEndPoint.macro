@@ -1,6 +1,0 @@
-# Delete an endpoint for an API. --oAuthDeleteEndPoint=APIName,endPointName ~ delete,oauth,api
-
-load oAuthLoadConfig
-registerForEvent Mass,finishGeneral,oAuthSaveConfig
-
-unset OAuthConfig,~!oAuthDeleteEndPoint,0!~,~!oAuthDeleteEndPoint,1!~
