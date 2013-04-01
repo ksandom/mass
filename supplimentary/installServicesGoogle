@@ -14,16 +14,16 @@ requiredParms="none"
 
 function installServicesGoogle
 {
-	pear update-channels
+	sudo pear update-channels
 	
-	if !pear install Services_Google; then
+	if ! sudo pear install Services_Google; then
 		echo "Falling back to one that is known to work right now. This will certainly become obsolete sooner or later."
-		pear install channel://pear.php.net/Services_Google-0.2.0
+		sudo pear install channel://pear.php.net/Services_Google-0.2.0
 	fi
 }
 
 if which pear > /dev/null; then
-	sudo installServicesGoogle
+	installServicesGoogle
 else
 	echo "Pear is not installed. Please install it."
 	exit 1
