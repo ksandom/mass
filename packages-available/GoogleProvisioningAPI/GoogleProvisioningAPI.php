@@ -93,9 +93,19 @@ class GoogleProvisioningAPI extends Module
 	{
 		$result=true;
 		
+		$reposDir=$this->core->get('General', 'configDir')."/repos";
+		$prefix="libzend-framework-php";
+		include_once "$prefix/Zend/Loader.php";
+		
 		foreach (array('Zend_Gdata_ClientLogin', 'Zend_Gdata_Gapps') as $className)
 		{
-			if (!class_exists($className)) Zend_Loader::loadClass($className);
+			$this->core->debug(0, "GoogleProvisioningAPI->assertLibrary: Loading $className");
+			//if (!class_exists($className)) Zend_Loader::loadClass($className);
+			
+			$parts=explode('_', $className);
+			$fileName=implode('/', $parts).'.php';
+			
+			if (!class_exists($className)) include_once "$prefix/$fileName";
 			if (!class_exists($className))
 			{
 				$this->core->debug(1, "GoogleProvisioningAPI->assertLibrary: Failed to load $className.");

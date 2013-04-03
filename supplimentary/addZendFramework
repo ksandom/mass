@@ -1,0 +1,19 @@
+#!/bin/bash
+# Description
+#   Install zend framework
+#
+# Syntax:
+#   $0
+#
+# Examples:
+#   Simply install it. Boo-ya!
+#   $0
+
+requiredParms="none"
+. `dirname $0`/libs/includeLibs.sh
+
+. $libDir/getRepo.sh
+
+getRepo "zendFramework" "git clone git://github.com/zendframework/ZendSkeletonApplication.git"
+cd $configDir/repos/zendFramework
+php composer.phar install
