@@ -1,0 +1,11 @@
+# Derive what network we are on ~ bastion
+
+isolate
+	getHostName
+	list ^~!Local,hostname!~$
+	first
+	loop
+		debug 3,getCurrentHostDetails: Matched on host ~!Result,hostName!~
+		set Local,bastion,~!Result,bastion!~
+		set Local,location,~!Result,location!~
+		set Local,environment,~!Result,environment!~
