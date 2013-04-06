@@ -30,14 +30,14 @@ class GoogleProvisioningAPI extends Module
 		{
 			case 'init':
 				$this->core->registerFeature($this, array('GPAPISetCred'), 'GPAPISetCred', "Set the credentials for use with GoogleProvisioningAPI. --GPAPISetCred=domain,email,password eg --GPAPISetCred=example.com,dude@example.com,totallyRadDuuuuude", array('credentials', 'gapi'));
-				$this->core->registerFeature($this, array('GPAPIGetUsers'), 'GPAPIGetUsers', "Get all users using the GoogleProvisioningAPI. --GPAPIGetUsers", array('users', 'gapi'));
+				$this->core->registerFeature($this, array('GPAPIGetUsersToResultSet'), 'GPAPIGetUsersToResultSet', "Get all users using the GoogleProvisioningAPI. --GPAPIGetUsersToResultSet", array('users', 'gapi'));
 				break;
 			case 'last':
 				break;
 			case 'followup':
 				break;
 			case 'GPAPISetCred':
-				if ($parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 3, false))
+				if ($parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 3, true))
 				{
 					$this->domain=$parms[0];
 					$this->email=$parms[1];
@@ -45,8 +45,8 @@ class GoogleProvisioningAPI extends Module
 				}
 				else $this->core->debug(1, "GPAPISetCred: Insufficient parameters?");
 				break;
-			case 'GPAPIGetUsers':
-				$this->getAllUsers();
+			case 'GPAPIGetUsersToResultSet':
+				return $this->getAllUsers();
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -58,7 +58,7 @@ class GoogleProvisioningAPI extends Module
 	{
 		if (!$this->assertLogin()) return false;
 		
-		print_r($this->gdata->retrieveAllUsers());
+		return $this->gdata->retrieveAllUsers();
 	}
 	
 	function assertCredentials()
