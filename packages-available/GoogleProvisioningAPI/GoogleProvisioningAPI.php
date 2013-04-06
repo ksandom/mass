@@ -39,9 +39,11 @@ class GoogleProvisioningAPI extends Module
 			case 'GPAPISetCred':
 				if ($parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 3, false))
 				{
-					$this->email=$parms[0];
-					$this->password=$parms[1];
+					$this->domain=$parms[0];
+					$this->email=$parms[1];
+					$this->password=$parms[2];
 				}
+				else $this->core->debug(1, "GPAPISetCred: Insufficient parameters?");
 				break;
 			case 'GPAPIGetUsers':
 				$this->getAllUsers();
@@ -56,7 +58,7 @@ class GoogleProvisioningAPI extends Module
 	{
 		if (!$this->assertLogin()) return false;
 		
-		$this->gdata->retrieveAllUsers();
+		print_r($this->gdata->retrieveAllUsers());
 	}
 	
 	function assertCredentials()
@@ -99,7 +101,7 @@ class GoogleProvisioningAPI extends Module
 		
 		foreach (array('Zend_Gdata_ClientLogin', 'Zend_Gdata_Gapps') as $className)
 		{
-			$this->core->debug(0, "GoogleProvisioningAPI->assertLibrary: Loading $className");
+			$this->core->debug(2, "GoogleProvisioningAPI->assertLibrary: Loading $className");
 			//if (!class_exists($className)) Zend_Loader::loadClass($className);
 			
 			$parts=explode('_', $className);
