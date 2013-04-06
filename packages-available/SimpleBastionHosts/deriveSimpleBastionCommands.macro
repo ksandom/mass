@@ -4,7 +4,10 @@
 setFromResultSet Bastion,host,bastionHost
 setFromResultSet Bastion,userAt,userAt
 
-if ~!Bastion,host!~,!=,,
-	set Cssh,extra,-At ~!Bastion,userAt!~~!Bastion,host!~ ssh ~!Verbosity,externalMinusV!~ -o StrictHostKeyChecking=no
-	resultSet sshExtra,-o StrictHostKeyChecking=no -At ~%userAt%~~%bastionHost%~ ssh ~!Verbosity,externalMinusV!~
-	resultSet scpExtra,-o StrictHostKeyChecking=no -o 'ProxyCommand=ssh ~%userAt%~~%bastionHost%~ nc %h %p'
+if ~!Bastion,host!~,!=,~!Local,bastion!~,
+	if ~!Bastion,host!~,!=,,
+		set Cssh,extra,-At ~!Bastion,userAt!~~!Bastion,host!~ ssh ~!Verbosity,externalMinusV!~ -o StrictHostKeyChecking=no
+		resultSet sshExtra,-o StrictHostKeyChecking=no -At ~%userAt%~~%bastionHost%~ ssh ~!Verbosity,externalMinusV!~
+		resultSet scpExtra,-o StrictHostKeyChecking=no -o 'ProxyCommand=ssh ~%userAt%~~%bastionHost%~ nc %h %p'
+	else
+		debug 1,deriveSimpleBastionCommands: This host is on a network that needs to be accessed via the bastion server ~!Local,bastion!~ yet the server you are trying to connect to doesn't require a bastion server. This could be fine, but is often a sign that you are trying to access a host that is not accessible from this location.
