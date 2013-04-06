@@ -2,7 +2,7 @@
 
 isolate
 	getHostName
-	list ^~!Local,hostname!~$
+	list ^~!Local,hostName!~$
 	first
 	loop
 		debug 3,getCurrentHostDetails: Matched on host ~!Result,hostName!~
