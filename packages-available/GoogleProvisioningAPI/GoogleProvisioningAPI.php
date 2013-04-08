@@ -31,6 +31,7 @@ class GoogleProvisioningAPI extends Module
 			case 'init':
 				$this->core->registerFeature($this, array('GPAPISetCred'), 'GPAPISetCred', "Set the credentials for use with GoogleProvisioningAPI. --GPAPISetCred=domain,email,password eg --GPAPISetCred=example.com,dude@example.com,totallyRadDuuuuude", array('credentials', 'gapi'));
 				$this->core->registerFeature($this, array('GPAPIGetUsersToResultSet'), 'GPAPIGetUsersToResultSet', "Get all users using the GoogleProvisioningAPI. --GPAPIGetUsersToResultSet", array('users', 'gapi'));
+				$this->core->registerFeature($this, array('GPAPIGetUserToResultSet'), 'GPAPIGetUserToResultSet', "Get a specific user using the GoogleProvisioningAPI. --GPAPIGetUserToResultSet=", array('users', 'gapi'));
 				break;
 			case 'last':
 				break;
@@ -48,17 +49,22 @@ class GoogleProvisioningAPI extends Module
 			case 'GPAPIGetUsersToResultSet':
 				return $this->getAllUsers();
 				break;
+			case 'GPAPIGetUserToResultSet':
+				return $this->getAllUsers($this->core->get('Global', $event));
+				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
 				break;
 		}
 	}
 	
-	function getAllUsers()
+	function getAllUsers($specificUser=false)
 	{
 		if (!$this->assertLogin()) return false;
 		
-		return $this->gdata->retrieveAllUsers();
+		if ($specificUser) $result=$this->gdata->retrieveUser($specificUser);
+		else $result=$this->gdata->retrieveAllUsers();
+		return $this->core->objectToArray($result);
 	}
 	
 	function assertCredentials()

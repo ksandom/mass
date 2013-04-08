@@ -89,6 +89,7 @@ class core extends Module
 				$this->registerFeature($this, array('verbose', 'v', 'verbosity'), 'verbose', 'Increment/set the verbosity. --verbose[=verbosityLevel] where verbosityLevel is an integer starting from 0 (default)', array('debug', 'dev'));
 				$this->registerFeature($this, array('V'), 'V', 'Decrement verbosity.', array('debug', 'dev'));
 				$this->registerFeature($this, array('ping'), 'ping', 'Useful for debugging.', array('debug', 'dev'));
+				$this->registerFeature($this, array('cleanResults'), 'cleanResults', 'Cleans keys. Converts any objects to arrays.', array('resultSet'));
 				$this->registerFeature($this, array('#'), '#', 'Comment.', array('systemInternal'));
 				$this->registerFeature($this, array('pass'), 'pass', "It's a place holder meaning that you will not get a message like \"Could not find macro 'default'. This can happen if you haven't asked me to do anything.\"", array('systemInternal'));
 				$this->registerFeature($this, array('	'), '	', 'Internally used for nesting.', array('systemInternal'));
@@ -198,6 +199,9 @@ class core extends Module
 				break;
 			case 'ping':
 				echo "Pong.\n";
+				break;
+			case 'cleanResults':
+				return $this->objectToArray($this->getResultSet());
 				break;
 			case 'outNow':
 				$this->out($this->getResultSet());
@@ -1153,6 +1157,29 @@ class core extends Module
 	function getPID($parms)
 	{
 		$this->set($parms[0], $parms[1], strval(getmypid()));
+	}
+	
+	function objectToArray($data)
+	{
+		if (!is_array($data) and !is_object($data)) return $data;
+		$result = array();
+		
+		$data = (array) $data;
+		foreach ($data as $key => $value)
+		{
+			$newKey=$this->cleanKey($key);
+			if (is_object($value) or is_array($value)) $result[$newKey] = $this->objectToArray($value);
+			else $result[$newKey] = $value;
+		}
+		
+		return $result;
+	}
+	
+	function cleanKey($key)
+	{
+		$result=str_replace("\0", '', $key);
+		$result=preg_replace(array('/^\*_/'), array(''), $result);
+		return $result;
 	}
 }
 
