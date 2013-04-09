@@ -1,0 +1,6 @@
+# Load GPAPI data ~ hidden
+#onDefine registerForEvent GPAPI,load,load,GPAPILoad
+
+loadStoreFromData GPAPI
+retrieveResults GPAPI,users
+

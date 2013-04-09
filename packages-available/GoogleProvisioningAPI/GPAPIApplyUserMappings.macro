@@ -1,0 +1,7 @@
+# Map values to be more accessible in templates and macros. ~ hidden
+
+loop
+	set Result,userName,~!Result,login,username!~
+	set Result,givenName,~!Result,name,givenName!~
+	set Result,familyName,~!Result,name,familyName!~
+	unset Result,service

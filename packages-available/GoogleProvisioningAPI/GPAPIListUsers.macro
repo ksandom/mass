@@ -1,0 +1,8 @@
+# List GP API users. --GPAPIListUsers[=searchRegex] ~ GPAPI,users
+
+triggerEvent GPAPI,load
+
+if ~!Global,GPAPIListUsers!~,!=,,
+	refine ~!Global,GPAPIListUsers!~
+
+templateOut GPAPIUser

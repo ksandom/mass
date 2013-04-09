@@ -35,7 +35,8 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('resultUnset'), 'resultUnset', 'Delete a value in each result item. --resultUnset=dstVarName.', array('array', 'result'));
 				$this->core->registerFeature($this, array('addSlashes'), 'addSlashes', 'Put extra backslashes before certain characters to escape them to allow nesting of quoted strings. --addSlashes=srcVar,dstVar', array('array', 'escaping', 'result'));
 				$this->core->registerFeature($this, array('cleanUnresolvedResultVars'), 'cleanUnresolvedResultVars', 'Clean out any result variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
-				$this->core->registerFeature($this, array('take'), 'take', 'Take only a single key from a result set --take=key.', array('array', 'result'));
+				$this->core->registerFeature($this, array('take'), 'take', 'Take only a single key from each entry in a result set --take=key.', array('array', 'result'));
+				$this->core->registerFeature($this, array('takeSubResult'), 'takeSubResult', 'Take only a single entry in a result set and make that the entrie resultSet. --takeSubResult=key.', array('array', 'result'));
 				$this->core->registerFeature($this, array('duplicate', 'dup'), 'duplicate', 'Duplicate the result set. --duplicate[=numberOfTimesToDuplicate]Eg --duplicate=3 would take a result set of [a,b,c] and give [a,b,c,a,b,c,a,b,c]. The original intended use for this was to open extra terminals for each host when using --term or --cssh. Note that --dup --dup is not the same as --dup=2 !', array('array', 'result'));
 				$this->core->registerFeature($this, array('count'), 'count', 'Replace the reseulSet with the count of the resultSet. --count', array('result'));
 				$this->core->registerFeature($this, array('countToVar'), 'countToVar', 'Count the number of results and stick the answer in a variable. --countToVar=CategoryName,variableName', array('result'));
@@ -125,7 +126,11 @@ class Manipulator extends Module
 				break;
 			case 'take':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event));
-				return $this->take($parms, $this->core->getResultSet());
+				return $this->take($parms[0], $this->core->getResultSet());
+				break;
+			case 'takeSubResult':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event));
+				return $this->takeSubResult($parms[0], $this->core->getResultSet());;
 				break;
 			case 'addSlashes':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event));
@@ -570,7 +575,7 @@ class Manipulator extends Module
 		
 		foreach ($resultSet as $line)
 		{
-			if (isset($line[$key[0]]))
+			if (isset($line[$key]))
 			{
 				if (false) //(is_array($line[$key]))
 				{ # TODO I don't think this is correct!
@@ -579,11 +584,17 @@ class Manipulator extends Module
 						$output[]=$subline;
 					}
 				}
-				else $output[]=$line[$key[0]];
+				else $output[]=$line[$key];
 			}
 		}
 		
 		return $output;
+	}
+	
+	function takeSubResult($key, $resultSet)
+	{
+		if (isset($resultSet[$key])) return $resultSet[$key];
+		else return array(); # Failure should empty the resultSet
 	}
 	
 	function duplicate($input, $numberOfTimesToDuplicate=1)
