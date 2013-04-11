@@ -1,4 +1,4 @@
-# Map values to be more accessible in templates and macros. ~ hidden
+# Map values to be more accessible in templates and macros. ~ GPAPI,hidden
 
 loop
 	set Result,userName,~!Result,login,username!~

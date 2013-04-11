@@ -21,7 +21,7 @@ class GoogleProvisioningAPI extends Module
 	
 	function __construct()
 	{
-		parent::__construct('OAuth');
+		parent::__construct('GoogleProvisioningAPI');
 	}
 	
 	function event($event)

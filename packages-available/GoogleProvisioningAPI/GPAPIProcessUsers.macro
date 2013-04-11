@@ -1,4 +1,4 @@
-# Pull out the bits of the user details that we want ~ GPAPI,users
+# Pull out the bits of the user details that we want ~ GPAPI,users,hidden
 
 takeSubResult entry
 

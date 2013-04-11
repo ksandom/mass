@@ -37,7 +37,7 @@ function doInstall
 {
 	startDir=`pwd`
 	repoDir="$configDir/repos/$programName"
-	if mkdir -p "$configDir/data/hosts" "$binExec" "$bin" "$configDir/repos" "$configDir/externalLibraries"
+	if mkdir -p "$configDir/"{data/hosts,externalLibraries,credentials} "$binExec" "$bin" "$configDir/repos"
 	then
 		echo a> $configDir/canWrite
 	elif [ "`cat $configDir/canWrite`" != 'a' ]; then

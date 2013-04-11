@@ -25,6 +25,7 @@ class Data extends Module
 				$this->core->registerFeature($this, array('loadStoreFromFile'), 'loadStoreFromFile', 'Load all store values for a particular name from a file. Note that the file name MUST be in the form storeName.config.json where storeName is the destination name of the store that you want to save. This can be useful for importing config. --loadStoreFromFile=filename');
 				$this->core->registerFeature($this, array('loadStoreVariableFromFile'), 'loadStoreVariableFromFile', 'Load the contents of a json file into a store variable. --loadStoreVariableFromFile=fileName,StoreName,variableName . This is basically the same as--loadStoreFromFile=filename except for the destination. Note that the file name MUST be in the form storeName.config.json where storeName is the destination name of the store that you want to save.');
 				$this->core->registerFeature($this, array('saveStoreToFile'), 'saveStoreToFile', 'Save all store values for a particular module name to a file. This can be useful for exporting data to other applications. --saveStoreToFile=Category,fullPathToFilename');
+				$this->core->registerFeature($this, array('assertFileExists'), 'assertFileExists', "Assert that a file exists. If it doesn't an empty file will be created.", array('file'));
 
 				$this->configDir=$this->core->get('General', 'configDir');
 				$this->loadConfig();
@@ -59,6 +60,9 @@ class Data extends Module
 			case 'saveStoreToFile':
 				# TODO finish this. See help for details of how it will fit together.
 				$this->saveStoreEntryToFilename($this->core->get('Global', $event));
+				break;
+			case 'assertFileExists':
+				$this->assertFileExists($this->core->get('Global', $event));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -135,6 +139,11 @@ class Data extends Module
 			$fullPath="{$this->configDir}/$source/$storeName.$source.json";
 			file_put_contents($fullPath, json_encode($config));
 		}
+	}
+	
+	function assertFileExists($fileName)
+	{
+		if (!file_exists($fileName)) file_put_contents($fileName, '');
 	}
 }
 
