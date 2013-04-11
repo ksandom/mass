@@ -22,9 +22,9 @@ class Data extends Module
 				$this->core->registerFeature($this, array('saveStoreToData'), 'saveStoreToData', 'Save all store values for a particular module name. --saveStoreToData=storeName');
 				$this->core->registerFeature($this, array('loadStoreFromData'), 'loadStoreFromData', 'Load all store values for a particular module name. --loadStoreFromData=storeName');
 				$this->core->registerFeature($this, array('loadStoreFromDataDir'), 'loadStoreFromDataDir', 'Load all store values for a particular module name using a directory of json files. --loadStoreFromDataDir=storeName,dirName (dirName is automatically prefixed with the mass data directory, so you would put in something like --loadStoreFromDataDir=Hosts,1LayerHosts)');
-				$this->core->registerFeature($this, array('loadStoreFromFile'), 'loadStoreFromFile', 'Load all store values for a particular name from a file. Note that the file name MUST be in the form storeName.config.json where storeName is the destination name of the store that you want to save. This can be useful for importing config. --loadStoreFromFile=filename');
 				$this->core->registerFeature($this, array('loadStoreVariableFromFile'), 'loadStoreVariableFromFile', 'Load the contents of a json file into a store variable. --loadStoreVariableFromFile=fileName,StoreName,variableName . This is basically the same as--loadStoreFromFile=filename except for the destination. Note that the file name MUST be in the form storeName.config.json where storeName is the destination name of the store that you want to save.');
-				$this->core->registerFeature($this, array('saveStoreToFile'), 'saveStoreToFile', 'Save all store values for a particular module name to a file. This can be useful for exporting data to other applications. --saveStoreToFile=Category,fullPathToFilename');
+				$this->core->registerFeature($this, array('loadStoreFromFile'), 'loadStoreFromFile', 'Load all store values for a particular name from a file. Note that the file name MUST be in the form storeName.config.json where storeName is the destination name of the store that you want to save. This can be useful for importing config. --loadStoreFromFile=filename[,StoreName]');
+				$this->core->registerFeature($this, array('saveStoreToFile'), 'saveStoreToFile', 'Save all store values for a particular module name to a file. This can be useful for exporting data to other applications. --saveStoreToFile=fullPathToFilename[,StoreName]');
 				$this->core->registerFeature($this, array('assertFileExists'), 'assertFileExists', "Assert that a file exists. If it doesn't an empty file will be created.", array('file'));
 
 				$this->configDir=$this->core->get('General', 'configDir');
@@ -51,15 +51,16 @@ class Data extends Module
 				$this->loadStoreEntryFromDataDir($parms[0], $parms[1]);
 				break;
 			case 'loadStoreFromFile':
-				$this->loadStoreEntryFromFilename($this->core->get('Global', $event));
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 2);
+				$this->loadStoreEntryFromFilename($parms[0], $parms[1]);
 				break;
 			case 'loadStoreVariableFromFile':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 3, 3);
 				$this->loadStoreEntryFromFilename($parms[0], $parms[1], $parms[2]);
 				break;
 			case 'saveStoreToFile':
-				# TODO finish this. See help for details of how it will fit together.
-				$this->saveStoreEntryToFilename($this->core->get('Global', $event));
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 2);
+				$this->saveStoreEntryToFilename($parms[0], $parms[1]);
 				break;
 			case 'assertFileExists':
 				$this->assertFileExists($this->core->get('Global', $event));
@@ -99,6 +100,23 @@ class Data extends Module
 		if (!$storeName) $storeName=$filenameParts[0];
 		
 		return $this->loadStoreEntry($storeName, $filename, $variableName);
+	}
+	
+	function saveStoreEntryToFilename($fileName, $storeName=false, $variableName=false)
+	{
+		# TODO Is it really config? Or data?
+		# expecting storeName.config.json or /path/to/massHome/config/storeName.config.json
+		
+		// Strip off any path that may be there
+		$fullFilenameParts=explode('/', $fileName);
+		$noPath=$fullFilenameParts[count($fullFilenameParts)-1];
+		
+		// Strip off just the store name
+		$filenameParts=explode('.', $noPath);
+		if (!$storeName) $storeName=$filenameParts[0];
+		
+		$stuffToSave=($variableName)?$this->core->get($storeName,$variableName):$this->core->getCategoryModule($storeName);
+		file_put_contents($fileName, json_encode($stuffToSave));
 	}
 	
 	function loadStoreEntryFromName($storeName, $source='config')
