@@ -1,4 +1,5 @@
 # Save users from Google API ~ GPAPI,users
+#onDefine registerForEvent GPAPI,import,GPAPIGetUsers
 
 GPAPIGetUsersToResultSet
 stashResults GPAPI,users

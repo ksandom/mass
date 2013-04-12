@@ -246,7 +246,18 @@ class Macro extends Module
 				$this->core->set('Result', 'key', $key);
 				
 				$this->core->callFeature($macroName, $macroParms);
-				$output[$key]=$this->core->getCategoryModule('Result');
+				$result=$this->core->getCategoryModule('Result');
+				if (count($result)==1) $single=(isset($result['line']));
+				else $single=false;
+				
+				if ($single)
+				{
+					$output[$key]=$result['line'];
+				}
+				else
+				{
+					$output[$key]=$result;
+				}
 			}
 		}
 		else $this->core->debug(5, "loopMacro: No input!");
