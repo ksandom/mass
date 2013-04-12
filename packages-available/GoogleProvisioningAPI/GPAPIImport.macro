@@ -4,3 +4,5 @@ listCredentials GPAPI
 loop
 	loadCredentials GPAPI,~!Result,line!~,GPAPISetCred,~!Result,line!~
 	triggerEvent GPAPI,import
+
+clear
