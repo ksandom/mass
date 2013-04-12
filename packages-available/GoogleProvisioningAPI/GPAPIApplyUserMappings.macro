@@ -4,4 +4,7 @@ loop
 	set Result,userName,~!Result,login,username!~
 	set Result,givenName,~!Result,name,givenName!~
 	set Result,familyName,~!Result,name,familyName!~
+	set Result,admin,~!Result,login,admin!~
+	set Result,suspended,~!Result,login,suspended!~
+	set Result,changePasswordAtNextLogin,~!Result,login,changePasswordAtNextLogin!~
 	unset Result,service

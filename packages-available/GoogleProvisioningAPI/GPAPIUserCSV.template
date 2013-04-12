@@ -1,0 +1,4 @@
+userName,givenName,familyName,admin,suspended,changePasswordAtNextLogin
+<~~ ~%userName%~,~%givenName%~,~%familyName%~,~%admin%~,~%suspended%~,~%changePasswordAtNextLogin%~
+
+~>
