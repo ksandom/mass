@@ -1,0 +1,6 @@
+# Import everything we know from the google provisioning API ~ GPAPI,import
+
+listCredentials GPAPI
+loop
+	loadCredentials GPAPI,~!Result,line!~,GPAPISetCred,~!Result,line!~
+	triggerEvent GPAPI,import
