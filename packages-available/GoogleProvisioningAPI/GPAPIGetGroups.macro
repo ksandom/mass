@@ -1,0 +1,9 @@
+# Save users from Google API ~ GPAPI,users
+#onDefine registerForEvent GPAPI,import,GPAPIGetGroups
+
+debug 1,GPAPIGetGroups: Getting groups
+GPAPIGetUserToResultSet
+GPAPIProcessGroups
+stashResults GPAPI,groups
+saveStoreToData GPAPI
+debug 1,GPAPIGetGroups: Saved

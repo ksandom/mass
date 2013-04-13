@@ -30,8 +30,8 @@ class GoogleProvisioningAPI extends Module
 		{
 			case 'init':
 				$this->core->registerFeature($this, array('GPAPISetCred'), 'GPAPISetCred', "Set the credentials for use with GoogleProvisioningAPI. --GPAPISetCred=domain,email,password eg --GPAPISetCred=example.com,dude@example.com,totallyRadDuuuuude", array('credentials', 'gapi'));
-				$this->core->registerFeature($this, array('GPAPIGetUsersToResultSet'), 'GPAPIGetUsersToResultSet', "Get all users using the GoogleProvisioningAPI. --GPAPIGetUsersToResultSet", array('users', 'gapi'));
-				$this->core->registerFeature($this, array('GPAPIGetUserToResultSet'), 'GPAPIGetUserToResultSet', "Get a specific user using the GoogleProvisioningAPI. --GPAPIGetUserToResultSet=", array('users', 'gapi'));
+				$this->core->registerFeature($this, array('GPAPIGetUserToResultSet'), 'GPAPIGetUserToResultSet', "Get a specific user using the GoogleProvisioningAPI. --GPAPIGetUserToResultSet[=username] . If a username is not specified, all the users will be retrieved.", array('users', 'gapi'));
+				$this->core->registerFeature($this, array('GPAPIGetGroupToResultSet'), 'GPAPIGetGroupToResultSet', "Get a specific group using the GoogleProvisioningAPI. --GPAPIGetUserToResultSet=group . If a group is not specified, all the groups will be retrieved.", array('users', 'gapi'));
 				break;
 			case 'last':
 				break;
@@ -46,11 +46,11 @@ class GoogleProvisioningAPI extends Module
 				}
 				else $this->core->debug(1, "GPAPISetCred: Insufficient parameters?");
 				break;
-			case 'GPAPIGetUsersToResultSet':
-				return $this->getAllUsers();
-				break;
 			case 'GPAPIGetUserToResultSet':
 				return $this->getAllUsers($this->core->get('Global', $event));
+				break;
+			case 'GPAPIGetGroupToResultSet':
+				return $this->getAllGroups($this->core->get('Global', $event));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -64,6 +64,15 @@ class GoogleProvisioningAPI extends Module
 		
 		if ($specificUser) $result=$this->gdata->retrieveUser($specificUser);
 		else $result=$this->gdata->retrieveAllUsers();
+		return $this->core->objectToArray($result);
+	}
+	
+	function getAllGroups($specificUser=false)
+	{
+		if (!$this->assertLogin()) return false;
+		
+		if ($specificUser) $result=$this->gdata->retrieveGroup($specificUser);
+		else $result=$this->gdata->retrieveAllGroups();
 		return $this->core->objectToArray($result);
 	}
 	
