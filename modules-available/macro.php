@@ -187,7 +187,7 @@ class Macro extends Module
 			}
 			else
 			{
-				$this->core->addAction(trim($action['argument']), $action['value'], $macroName);
+				$this->core->addAction(trim($action['argument']), $action['value'], $macroName, $action['lineNumber']);
 			}
 		}
 		

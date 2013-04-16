@@ -2,8 +2,9 @@
 #onDefine registerForEvent GPAPI,import,GPAPIGetGroups
 
 debug 1,GPAPIGetGroups: Getting groups
+clear
 GPAPIGetUserToResultSet
-GPAPIProcessGroups
+# GPAPIProcessGroups
 stashResults GPAPI,groups
 saveStoreToData GPAPI
 debug 1,GPAPIGetGroups: Saved

@@ -599,7 +599,11 @@ class core extends Module
 		{
 			$this->store['Macros'][$macroName][]=array('obj'=>&$obj, 'name'=>$obj['name'], 'value'=>$value, 'lineNumber'=>$lineNumber);
 		}
-		else $this->complain(null, "Could not find a module to match '$argument'", 'addAction');
+		else
+		{
+			$macroDetails=($lineNumber)?"$macroName:$lineNumber":"$macroName";
+			$this->complain(null, "Could not find a module to match '$argument' in $macroDetails", 'addAction');
+		}
 
 	}
 	
@@ -1080,7 +1084,7 @@ class core extends Module
 	
 	function complain($obj, $message, $specific='', $fatal=false)
 	{
-		$output=($specific)?"$message \"$specific\"":"$message.";
+		$output=($specific)?"$specific: $message":"$message.";
 		if ($obj) $output=$obj->getName().': '.$output;
 		
 		if ($fatal) die("$output\n");
