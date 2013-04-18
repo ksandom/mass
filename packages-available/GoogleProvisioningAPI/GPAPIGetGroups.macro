@@ -3,7 +3,7 @@
 
 debug 1,GPAPIGetGroups: Getting groups
 clear
-GPAPIGetUserToResultSet
+GPAPIGetGroupToResultSet
 # GPAPIProcessGroups
 stashResults GPAPI,groups
 saveStoreToData GPAPI

@@ -46,8 +46,8 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('positiveCRC'), 'positiveCRC', "For each item in the result set, calculate the CRC of a specified value and set a specified value to that CRC. --positiveCRC=inputValueName,outputValueName . If the result is negative, take the absolute value. Please see the warning on http://uk3.php.net/crc32 for why this is useful. Note that this output may not be consistent with other applications generating a CRC. If you need that consistency, then you probably want --crc.", array('result', 'crc'));
 				
 				$this->core->registerFeature($this, array('firstResult', 'firstResults', 'first'), 'firstResult', "Take the first x results, where x is one if not specified. --firstResult[=x]", array('result'));
-				#$this->core->registerFeature($this, array('lastResult', 'lastResults'), 'lastResult', "Take the last x results, where x is one if not specified. --firstResult=x", array('result'));
-				$this->core->registerFeature($this, array('offsetResult', 'offsetResults'), 'offsetResult', "After x results, take the first y results. --offsetResult=x,y", array('result'));
+				$this->core->registerFeature($this, array('lastResult', 'lastResults', 'last'), 'lastResult', "Take the last x results, where x is one if not specified. --lastResult=x", array('result'));
+				$this->core->registerFeature($this, array('offsetResult', 'offsetResults'), 'offsetResult', "After x results, take the first y results. --offsetResult=x,y . If y is negative, The results will be taken from the end rather than the beginning. In this case x therefore is an offset from the end, not the beginning.", array('result'));
 				
 				#$this->core->registerFeature($this, array('cleanUnresolvedStoreVars'), 'cleanUnresolvedStoreVars', 'Clean out any store variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
 				
@@ -166,6 +166,11 @@ class Manipulator extends Module
 			case 'firstResult':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 1, 0));
 				return $this->offsetResult($this->core->getResultSet(), 0, $parms[0]);
+				break;
+			case 'lastResult':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 1, 0));
+				$number=($parms[0])?$parms[0]*-1:-1;
+				return $this->offsetResult($this->core->getResultSet(), 0, $number);
 				break;
 			case 'offsetResult':
 				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 2));
@@ -687,10 +692,18 @@ class Manipulator extends Module
 		$output=array();
 		$keys=array_keys($resultSet);
 		$keyCount=count($keys);
-		$totalRequested=$offset+$max;
+		$absMax=abs($max);
+		$totalRequested=$offset+$absMax;
 		
 		if ($totalRequested > $keyCount) $stop=$keyCount;
 		else $stop=$totalRequested;
+		
+		if ($max<0)
+		{
+			$oldOffset=$offset;
+			$offset=$keyCount-$stop;
+			$stop=$keyCount-$oldOffset;
+		}
 		
 		for ($i=$offset; $i<$stop; $i++)
 		{
