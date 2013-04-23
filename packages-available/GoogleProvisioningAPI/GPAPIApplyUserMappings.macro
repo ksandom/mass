@@ -8,3 +8,9 @@ loop
 	set Result,suspended,~!Result,login,suspended!~
 	set Result,changePasswordAtNextLogin,~!Result,login,changePasswordAtNextLogin!~
 	unset Result,service
+	
+	debug 1,Getting groups for user ~!Result,userName!~
+	# TODO Test this
+	GPAPIListGroups ~!Result,userName!~
+	GPAPIProcessGroups
+	stashResults Result,groups
