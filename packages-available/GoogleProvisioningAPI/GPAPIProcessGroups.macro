@@ -1,0 +1,7 @@
+# Pull out the bits of the group details that we want ~ GPAPI,groups,hidden
+
+takeSubResult 0
+takeSubResult entry
+keyValueOn property,name
+
+GPAPIApplyGroupMappings

@@ -10,28 +10,28 @@ set Import,file,~!General,configDir!~/~!Import,dataConfig!~/~!Import,fileOnly!~
 # TODO This is not thread safe!
 set Import,tmpFile,/tmp/SafeImportFromURL.data.json
 
-# prep
+debug 2,safeImportFromURL: prep
 exec touch "~!Import,file!~"
 
-# get
+debug 2,safeImportFromURL: get
 exec curl "~!Import,URL!~" > ~!Import,tmpFile!~ 2> /dev/null
 # exec cp ~!General,configDir!~/data/1LayerHosts/live.json ~!Import,tmpFile!~
 
-# load
+debug 2,safeImportFromURL: load
 # loadStoreVariableFromFile ~!Import,tmpFile!~,Import,data
 loadStoreVariableFromFile ~!General,configDir!~/data/1LayerHosts/live.json,Import,data
 loadStoreFromFile ~!Import,tmpFile!~
 getCategory SafeImportFromURL
 
-# test
+debug 2,safeImportFromURL: test
 null
 count
 stashResults Import,count
 
 if ~!Import,count,0!~,>,0,
-	debug 1,Got ~!Import,count,0!~ entries from "~!Import,URL!~". Saving to "~!Import,file!~"
+	debug 1,safeImportFromURL: Got ~!Import,count,0!~ entries from "~!Import,URL!~". Saving to "~!Import,file!~"
 	exec cp "~!Import,tmpFile!~" "~!Import,file!~"
 else
-	debug 0,Could not load "~!Import,URL!~"
+	debug 0,safeImportFromURL: Could not load "~!Import,URL!~"
 
 exec rm "~!Import,tmpFile!~"

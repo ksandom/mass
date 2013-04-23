@@ -51,7 +51,7 @@ class Data extends Module
 				$this->loadStoreEntryFromDataDir($parms[0], $parms[1]);
 				break;
 			case 'loadStoreFromFile':
-				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 2);
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 1);
 				$this->loadStoreEntryFromFilename($parms[0], $parms[1]);
 				break;
 			case 'loadStoreVariableFromFile':

@@ -48,6 +48,8 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('firstResult', 'firstResults', 'first'), 'firstResult', "Take the first x results, where x is one if not specified. --firstResult[=x]", array('result'));
 				$this->core->registerFeature($this, array('lastResult', 'lastResults', 'last'), 'lastResult', "Take the last x results, where x is one if not specified. --lastResult=x", array('result'));
 				$this->core->registerFeature($this, array('offsetResult', 'offsetResults'), 'offsetResult', "After x results, take the first y results. --offsetResult=x,y . If y is negative, The results will be taken from the end rather than the beginning. In this case x therefore is an offset from the end, not the beginning.", array('result'));
+				$this->core->registerFeature($this, array('keyOn'), 'keyOn', "Key items in the resultSet using a named value from each item in the resultSet. --keyOn=valueName", array('result'));
+				$this->core->registerFeature($this, array('keyValueOn'), 'keyValueOn', "Key items in the value of each item in the resultSet using a named value from each item inside that item in the resultSet. If this sounds confusing, just think of it as running --keyOn inside a value inside each item in the result set. --keyValueOn=valueName,subValueName", array('result'));
 				
 				#$this->core->registerFeature($this, array('cleanUnresolvedStoreVars'), 'cleanUnresolvedStoreVars', 'Clean out any store variables that have not been resolved. This is important when a default should be blank.', array('array', 'escaping', 'result'));
 				
@@ -178,6 +180,14 @@ class Manipulator extends Module
 				break;
 			case 'createOneResult':
 				return array(array());
+				break;
+			case 'keyOn':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 1, 1));
+				return $this->keyOn($this->core->getResultSet(), $parms[0]);
+				break;
+			case 'keyValueOn':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 2));
+				return $this->keyValueOn($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
 			
 			default:
@@ -712,6 +722,32 @@ class Manipulator extends Module
 		}
 		
 		return $output;
+	}
+	
+	function keyOn($resultSet, $valueName)
+	{
+		$output=array();
+		
+		foreach ($resultSet as $oldKey=>$item)
+		{
+			$key=(isset($item[$valueName]))?$item[$valueName]:$oldKey;
+			$output[$key]=$item;
+		}
+		
+		return $output;
+	}
+	
+	function keyValueOn($resultSet, $valueName, $subValueName)
+	{
+		foreach ($resultSet as $oldKey=>&$item)
+		{
+			if (isset($item[$valueName]))
+			{
+				$item[$valueName]=$this->keyOn($item[$valueName], $subValueName);
+			}
+		}
+		
+		return $resultSet;
 	}
 }
 
