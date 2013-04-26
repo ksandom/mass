@@ -70,7 +70,7 @@ class core extends Module
 				$this->registerFeature($this, array('setArray'), 'setArray', 'set a value. All remaining values after the destination go into an array. --set=category'.valueSeparator.'variableName'.valueSeparator.'value', array('storeVars'));
 				$this->registerFeature($this, array('setIfNotSet', 'setDefault'), 'setIfNotSet', 'set a value if none has been set. --setIfNotSet=category'.valueSeparator.'variableName'.valueSeparator.'defaultValue', array('storeVars'));
 				$this->registerFeature($this, array('setIfNothing'), 'setIfNothing', 'set a value if none has been set or evaluates(PHP) to false. --setIfNothing=category'.valueSeparator.'variableName'.valueSeparator.'defaultValue', array('storeVars'));
-				$this->registerFeature($this, array('unset'), 'unset', 'un set (delete) a value. --unset=category'.valueSeparator.'variableName	', array('storeVars'));
+				$this->registerFeature($this, array('unset'), 'unset', 'un set (delete) a value. --unset=category'.valueSeparator.'variableName['.valueSeparator.'variableName['.valueSeparator.'variableName]] . Note that the extra optional variableNames are for nesting, not for deleting multiple variables in one command.', array('storeVars'));
 				$this->registerFeature($this, array('getCategory'), 'getCategory', 'Get an entire store into the result set. --getCategory=moduleNam', array('storeVars', 'store', 'dev'));
 				$this->registerFeature($this, array('setCategory'), 'setCategory', 'Set an entire store to the current state of the result set. --setCategory=category', array('storeVars', 'store', 'dev'));
 				$this->registerFeature($this, array('unsetCategory'), 'unsetCategory', 'Un set/delete an entire store. --unsetCategory=category', array('storeVars', 'store', 'dev'));
@@ -143,8 +143,8 @@ class core extends Module
 				$this->setIfNotSet($parms[0], $parms[1], $parms[2], true);
 				break;
 			case 'unset':
-				$parms=$this->interpretParms($this->get('Global', $event), 2, 2, true);
-				$this->doUnset($parms[0], $parms[1]);
+				$parms=$this->interpretParms($this->get('Global', $event), 0, 2, false);
+				$this->doUnset($parms);
 				break;
 			case 'getCategory':
 				return $this->getCategoryModule($this->get('Global', 'getCategory'));
@@ -888,18 +888,39 @@ class core extends Module
 		}
 	}
 	
-	function doUnSet($category, $valueName)
+	function doUnSet($deleteList)
 	{
-		$this->debug(5,"unSet($category, $valueName)");
-		unset($this->store[$category][$valueName]);
-		if ($category!=nestedPrivateVarsName) unset($this->store[$category][$valueName]);
-		else
+		return $this->doUnsetNested($this->store, $deleteList);
+	}
+	
+	function doUnsetNested(&$currentScope, $deleteList, $position=0)
+	{
+		if (!isset($currentScope[$deleteList[$position]]))
 		{
-			$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
-			if (isset($this->store[$category][$nesting]))
+			$fullChain=implode(',', $deleteList);
+			$failedChain='';
+			
+			foreach ($deleteList as $item)
 			{
-				if (isset($this->store[$category][$nesting][$valueName])) unset($this->store[$category][$nesting][$valueName]);
+				$failedChain=($failedChain)?"$failedChain,$item":$item;
 			}
+			
+			$this->debug(1, "doUnsetNested: Could not find \"{$deleteList[$position]}\" in $fullChain. Successfully got to \"$failedChain\"");
+			return false;
+		}
+		
+		$fullChain=implode(',', $deleteList);
+		$newPosition=$position+1;
+		if (count($deleteList)>$newPosition)
+		{ // Recurse into the currentScope
+			$this->debug(4, "doUnsetNested: Recuring for {$deleteList[$position]} in $fullChain");
+			return $this->doUnsetNested($currentScope[$deleteList[$position]], $deleteList, $newPosition);
+		}
+		else
+		{ // Time to delete
+			$this->debug(4, "doUnsetNested: Deleting {$deleteList[$position]} in $fullChain");
+			unset($currentScope[$deleteList[$position]]);
+			return true;
 		}
 	}
 	

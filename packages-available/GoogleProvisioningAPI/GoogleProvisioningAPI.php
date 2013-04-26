@@ -31,7 +31,7 @@ class GoogleProvisioningAPI extends Module
 			case 'init':
 				$this->core->registerFeature($this, array('GPAPISetCred'), 'GPAPISetCred', "Set the credentials for use with GoogleProvisioningAPI. --GPAPISetCred=domain,email,password eg --GPAPISetCred=example.com,dude@example.com,totallyRadDuuuuude", array('credentials', 'gapi'));
 				$this->core->registerFeature($this, array('GPAPIGetUserToResultSet'), 'GPAPIGetUserToResultSet', "Get a specific user using the GoogleProvisioningAPI. --GPAPIGetUserToResultSet[=username] . If a username is not specified, all the users will be retrieved.", array('users', 'gapi'));
-				$this->core->registerFeature($this, array('GPAPIGetGroupToResultSet'), 'GPAPIGetGroupToResultSet', "Get a specific group using the GoogleProvisioningAPI. --GPAPIGetUserToResultSet=group . If a group is not specified, all the groups will be retrieved.", array('users', 'gapi'));
+				$this->core->registerFeature($this, array('GPAPIGetGroupToResultSet'), 'GPAPIGetGroupToResultSet', "Get a specific group using the GoogleProvisioningAPI. --GPAPIGetUserToResultSet=user . If a user is not specified, all the groups will be retrieved.", array('users', 'gapi'));
 				break;
 			case 'last':
 				break;

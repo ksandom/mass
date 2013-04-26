@@ -11,6 +11,6 @@ loop
 	
 	debug 1,Getting groups for user ~!Result,userName!~
 	# TODO Test this
-	GPAPIListGroups ~!Result,userName!~
+	GPAPIGetGroupToResultSet ~!Result,userName!~@~!GPAPI,domain!~
 	GPAPIProcessGroups
 	stashResults Result,groups

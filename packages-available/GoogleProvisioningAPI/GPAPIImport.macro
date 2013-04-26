@@ -3,6 +3,8 @@
 listCredentials GPAPI
 loop
 	loadCredentials GPAPI,~!Result,line!~,GPAPISetCred,~!Result,line!~
+	set GPAPI,domain,~!Result,line!~
 	triggerEvent GPAPI,import
 
 clear
+unset GPAPI,domain
