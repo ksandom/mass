@@ -905,7 +905,7 @@ class core extends Module
 				$failedChain=($failedChain)?"$failedChain,$item":$item;
 			}
 			
-			$this->debug(1, "doUnsetNested: Could not find \"{$deleteList[$position]}\" in $fullChain. Successfully got to \"$failedChain\"");
+			$this->debug(3, "doUnsetNested: Could not find \"{$deleteList[$position]}\" in $fullChain. Successfully got to \"$failedChain\". This is unlikely to be a problem, but it worth considering when debugging.");
 			return false;
 		}
 		

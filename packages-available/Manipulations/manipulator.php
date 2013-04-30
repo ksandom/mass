@@ -428,7 +428,7 @@ class Manipulator extends Module
 		$outputMatch=array();
 		$outputNoMatch=array();
 		
-		if (!is_array($input)) return $output;
+		if (!is_array($input)) return false; # TODO double check what this should be.
 		
 		foreach ($input as $line)
 		{
