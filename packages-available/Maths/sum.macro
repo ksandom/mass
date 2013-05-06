@@ -1,0 +1,5 @@
+# Add together every intance of a particular variable in each item in the result set and store it in a variable. --sum=Category,storeVariableName,resultVariableName
+
+set ~!Global,sum-0!~,~!Global,sum-1!~,0
+loop
+	basicMaths ~!Global,sum-0!~,~!Global,sum-1!~,~!~!Global,sum-0!~,~!Global,sum-1!~!~,+,~!Result,~!Global,sum-2!~!~
