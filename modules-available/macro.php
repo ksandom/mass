@@ -256,7 +256,8 @@ class Macro extends Module
 				}
 				else
 				{
-					$output[$key]=$result;
+					if (count($result)) $output[$key]=$result;
+					else $this->core->debug(4, "loopMacro: Skipped key $key since it looks like it has been unset.");
 				}
 			}
 		}
