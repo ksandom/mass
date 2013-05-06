@@ -2,4 +2,4 @@
 ~!Color,default!~  ~!Color,green!~~%FQDN%~ ~!Color,default!~
 ~!Color,default!~  ~!Color,darkYellow!~~%instanceType%~ ~!Color,brightBlack!~/~!Color,default!~ ~!Color,darkYellow!~~%architecture%~ ~!Color,brightBlack!~/~!Color,default!~ ~!Color,darkYellow!~~%rootDeviceType%~~!Color,default!~
 
-~>
+~>~!ResultSet,howMany!~ hosts

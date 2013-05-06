@@ -4,4 +4,4 @@
 ~!Color,~%color%~!~#~!Color,default!~   chosen:   ~!Color,brightGreen!~~%FQDN%~ ~!Color,default!~(~!Color,brightCyan!~~%IP%~~!Color,default!~)
 ~!Color,~%color%~!~#~!Color,default!~   ~!Color,brightBlack!~architecture:  ~!Color,darkYellow!~~%instanceType%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%architecture%~ ~!Color,brightBlack!~/ ~!Color,darkYellow!~~%rootDeviceType%~~!Color,default!~ 
 
-~>
+~>~!ResultSet,howMany!~ hosts

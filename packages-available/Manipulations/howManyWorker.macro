@@ -1,0 +1,3 @@
+# Derive how many items are in the result set and post them to ResultSet,howMany ~ hidden
+
+countToVar ResultSet,howMany
