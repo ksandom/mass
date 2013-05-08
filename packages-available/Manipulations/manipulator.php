@@ -390,9 +390,9 @@ class Manipulator extends Module
 			{
 				if (preg_match('/'.$search.'/', $line))
 				{
-					$outputMatch[]=$line;
+					$outputMatch[$key]=$line;
 				}
-				else $outputNoMatch[]=$line;
+				else $outputNoMatch[$key]=$line;
 			}
 			elseif (is_array($line))
 			{ # TODO make this work recursively
@@ -430,7 +430,7 @@ class Manipulator extends Module
 		
 		if (!is_array($input)) return false; # TODO double check what this should be.
 		
-		foreach ($input as $line)
+		foreach ($input as $key=>$line)
 		{
 			if ($neededKey)
 			{
@@ -438,21 +438,21 @@ class Manipulator extends Module
 				{
 					if ($neededRegex)
 					{
-						if (preg_match('/'.$neededRegex.'/', $line[$neededKey])) $outputMatch[]=$line;
-						else $outputNoMatch[]=$line;
+						if (preg_match('/'.$neededRegex.'/', $line[$neededKey])) $outputMatch[$key]=$line;
+						else $outputNoMatch[$key]=$line;
 					}
-					else $outputMatch[]=$line;
+					else $outputMatch[$key]=$line;
 				}
-				else $outputNoMatch[]=$line;
+				else $outputNoMatch[$key]=$line;
 			}
 			else
 			{
 				if (is_array($line))
 				{
-					if (count($this->requireEach($line, $neededRegex))) $outputMatch[]=$line;
-					else $outputNoMatch[]=$line;
+					if (count($this->requireEach($line, $neededRegex))) $outputMatch[$key]=$line;
+					else $outputNoMatch[$key]=$line;
 				}
-				else $outputNoMatch[]=$line;
+				else $outputNoMatch[$key]=$line;
 			}
 		}
 		
