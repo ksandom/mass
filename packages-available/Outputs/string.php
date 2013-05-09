@@ -65,7 +65,7 @@ class String extends Module
 	
 	function singleStringNow($filename, $output, $separator="\n")
 	{
-		$readyValue=(is_array($output))?implode($separator, $output):$output;
+		$readyValue=(is_array($output))?implode($separator, $output)."\n":$output;
 		if ($filename) 
 		{
 			$this->core->debug(3, "singleStringNow: Sending to $filename");
