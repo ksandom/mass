@@ -1,3 +1,5 @@
+# Basic idea
+
 A few times I've been asked how to call mass from inside another script/program. In this particular case I was asked how to get the number of servers that we currently have. Here is my answer:
 
     ksandom@zelappy:~$ mass --list --count --nested
@@ -118,4 +120,12 @@ You can find out what information you can ask for in --toString like so:
         filename: dev.json
         categoryName: default
         key: 0
-    
+
+# More information
+
+You can find out feature used in this document like so:
+
+    ksandom@zelappy:/usr/files/develop/mass$ mass --help=--nested
+    Available features:
+    --nested ~ debug,dev,output,all,CommandLine (CommandLine)
+      Print output using a simple nested format. Particularly useful for debugging.
