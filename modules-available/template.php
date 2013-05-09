@@ -266,13 +266,16 @@ class Template extends Module
 		{
 			$this->core->debug(2, "Template->out: Using nestedTemplates: {$this->templateOut}");
 			$result=$this->core->callFeatureWithDataset('nestTemplates', $this->templateOut, $output);
-			$this->core->echoOut($result[0]);
 		}
 		else
 		{
 			$this->core->debug(2, "Template->out: Using a single template: {$this->templateOut}");
-			$this->core->echoOut($this->processTemplateByName($this->templateOut, $output));
+			$result=array($this->processTemplateByName($this->templateOut, $output));
 		}
+		
+		$modifiedResult=$this->core->callFeatureWithDataset('triggerEvent', 'Template,before', $result);
+		if ($modifiedResult) $this->core->echoOut($modifiedResult[0]);
+		else $this->core->echoOut($result[0]);
 	}
 	
 	function put($output)
