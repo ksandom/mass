@@ -261,6 +261,9 @@ class Template extends Module
 	
 	function out($output)
 	{
+		$modifiedOutput=$this->core->callFeatureWithDataset('triggerEvent', 'Template,beforeProcessing-'.$this->templateOut, $output);
+		if ($modifiedOutput) $output=$modifiedOutput;
+		
 		if (is_string($output)) $this->core->echoOut("template: Unexpected string=\"$output\"");
 		elseif(strpos($this->templateOut, ',')!==false)
 		{
@@ -273,7 +276,7 @@ class Template extends Module
 			$result=array($this->processTemplateByName($this->templateOut, $output));
 		}
 		
-		$modifiedResult=$this->core->callFeatureWithDataset('triggerEvent', 'Template,before', $result);
+		$modifiedResult=$this->core->callFeatureWithDataset('triggerEvent', 'Template,beforeOutput-'.$this->templateOut, $result);
 		if ($modifiedResult) $this->core->echoOut($modifiedResult[0]);
 		else $this->core->echoOut($result[0]);
 	}
