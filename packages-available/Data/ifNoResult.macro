@@ -1,0 +1,7 @@
+# If there is nothing in the resultSet, execute the specified feature. --ifNoResult=featureName[,parm[,parm[,parm[...]]]] ~ Data
+
+countToVar Tmp,count
+if ~!Tmp,count!~,<,1,
+	callFeature ~!Global,ifNoResult!~
+
+unset Tmp,count
