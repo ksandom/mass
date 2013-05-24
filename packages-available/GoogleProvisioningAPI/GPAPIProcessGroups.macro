@@ -1,7 +1,14 @@
 # Pull out the bits of the group details that we want ~ GPAPI,groups,hidden
 
 takeSubResult 0
+
+debug 1,process groups: before subResult2
+outNow
 takeSubResult entry
-keyValueOn property,name
+
+# TODO The problem is here. I haven't worked out what it should be yet.
+# Take the first user (Abdellah) and manually find the groups to see what the output should look like.
+# keyValueOn property,name
+
 
 GPAPIApplyGroupMappings

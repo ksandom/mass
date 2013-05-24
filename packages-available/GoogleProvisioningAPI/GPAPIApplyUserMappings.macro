@@ -1,5 +1,6 @@
 # Map user values to be more accessible in templates and macros. ~ GPAPI,hidden
 
+first
 loop
 	set Result,userName,~!Result,login,username!~
 	set Result,givenName,~!Result,name,givenName!~
@@ -11,6 +12,12 @@ loop
 	
 	debug 1,Getting groups for user ~!Result,userName!~
 	# TODO Test this
+	debug 1,got groups
 	GPAPIGetGroupToResultSet ~!Result,userName!~@~!GPAPI,domain!~
+	nested
+	outNow
+	
+	debug 1,processed
 	GPAPIProcessGroups
+	outNow
 	stashResults Result,groups
