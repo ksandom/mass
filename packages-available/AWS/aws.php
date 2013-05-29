@@ -212,102 +212,145 @@ class AWS extends Module
 			{
 				foreach ($usefulArray['item'] as $item) 
 				{
-					#print_r($item);
-					#die();
-					if (is_array($item) && isset($item['instancesSet']['item']['tagSet']['item']))
+					if (is_array($item))
 					{
-						# Make the structure more useful.
-						$host=$item;
-						foreach ($item['instancesSet']['item'] as $key=>$arraySet) 
-						{
-							$host[$key]=$arraySet;
-						}
-						unset($host['instancesSet']);
-						
-						# Get the name tag
-						# TODO It looks like there is a key problem, so this may break when there is more than one tag. Test this.
-						$tagKeys=array_keys($host['tagSet']);
-						$name='';
-						
-						$name=$this->AWSMagicDemangle($host['tagSet']);
-						
-						if ($name)
-						{
-							$host['hostName']=$name; # TODO check this!
-							
-							# Re-map a couple of keys, then remove them so people don't use them creating non-portable code.
-							if (isset($item['instancesSet']['item']['privateDnsName']))
-							{
-								$host['internalFQDN']=$item['instancesSet']['item']['privateDnsName'];
-							}
-							else $host['internalFQDN']='';
-							
-							if (isset($item['instancesSet']['item']['dnsName']))
-							{
-								$host['externalFQDN']=$item['instancesSet']['item']['dnsName'];
-							}
-							else $host['externalFQDN']='';
-							
-							if (isset($item['instancesSet']['item']['ipAddress']))
-							{
-								$host['externalIP']=$item['instancesSet']['item']['ipAddress'];
-								unset($item['instancesSet']['item']['ipAddress']);
-							}
-							else $host['externalIP']='';
-							
-							if (isset($item['instancesSet']['item']['privateIpAddress']))
-							{
-								$host['internalIP']=$item['instancesSet']['item']['privateIpAddress'];
-								unset($item['instancesSet']['item']['privateIpAddress']);
-							}
-							elseif ($includePoweredOffInstances) 
-							{
-								$host['internalIP']='';
-							}
-							
-							if (isset($output[$name]))
-							{
-								$originalInstanceID=$output[$name]['instanceId'];
-								$newInstanceID=$host['instanceId'];
-								
-								$this->core->debug(0, "AWS->AWSGetHostsForAllRegions: Found a duplicate instance ($originalInstanceID) with the name tag \"$name\" while trying to add $newInstanceID. This will cause you much pain. For now this host will be added anonymously, but you really should fix this then run the import again.");
-								$output[]=$host;
-							}
-							else $output[$name]=$host;
-							
-							
-							if (isset($item['placement']))
-							{
-								if (isset($item['placement']['availabilityZone']))
-								{
-									$host['fullAvailabilityZone']=$item['placement']['availabilityZone'];
-									$host['region']=substr($item['placement']['availabilityZone'], 0, strlen($item['placement']['availabilityZone'])-1);
-									$host['availabilityZone']=substr($item['placement']['availabilityZone'], -1);
-								}
-							}
-						
-						unset($host);
+						if (isset($item['instancesSet']['item']['tagSet']['item']))
+						{ // Most common structure
+							$this->AWSProcessInstance($item, $output);
 						}
 						else
 						{
-							$instanceID=$host['instanceId'];
-							$this->core->debug(2, "AWSGetHostsForAllRegions: Did not find a name tag for instance $instanceID");
-							print_r($host['tagSet']);
+							if (isset($item['instancesSet']['item'][0]['tagSet']['item']))
+							{ // Instance set (batch)
+								foreach ($item['instancesSet']['item'] as $subItem)
+								{
+									# TODO This is a horrific hack. Re-write in mass.
+									$fakeItem=array('instancesSet'=>array('item'=>$subItem));
+									$this->AWSProcessInstance($fakeItem, $output);
+								}
+							}
+							elseif (isset($item['item']['tagSet']['item']))
+							{ // I don't know how we got this, but we have a host that returns like this.
+								$fakeItem=array('instancesSet'=>$item);
+								$this->AWSProcessInstance($fakeItem, $output);
+							}
+							elseif (isset($item['item'][0]['tagSet']['item']))
+							{ // I've never struck this, but given the above combinations, it seems logical to plan for.
+								foreach ($item['item'] as $subItem)
+								{
+									$fakeItem=array('instancesSet'=>array('item'=>$subItem));
+									$this->AWSProcessInstance($fakeItem, $output);
+								}
+							}
+							elseif (isset($item['item']['groupId']) && count($item['item'])==2)
+							{
+								if ($this->core->isVerboseEnough(4))
+								{
+									$this->core->debug(3, "AWSGetHostsForAllRegions: Got what looks like something we can ignore:");
+									print_r($item);
+								}
+								else $this->core->debug(3, "AWSGetHostsForAllRegions: Got what looks like something we can ignore. Increment verbosity with -v one more time to see what it is.");
+							}
+							else
+							{
+								$this->core->debug(3, "AWSGetHostsForAllRegions: Got an array, but don't know what to do with it. Here is the content:");
+								if ($this->core->isVerboseEnough(3)) print_r($item);
+							}
 						}
 					}
-					else
-					{
-						$instanceId=(isset($item['instancesSet']['item']['instanceId']))?$item['instancesSet']['item']['instanceId']:'unknown';
-						if (is_array($item)) $this->core->debug(3, "AWSGetHostsForAllRegions: No name tag on instance $instanceId in $regionName.");
-						else $this->core->debug(3, "AWSGetHostsForAllRegions: Got a weird result in $regionName: $item");
-					}
+					else $this->core->debug(3, "AWSGetHostsForAllRegions: Got a weird result in $regionName: $item");
 				}
 			}
-			
-			# TODO check what we want the regionKey and region for in this context
 		}
 		
 		return $output;
+	}
+	
+	function AWSProcessInstance($item, &$output)
+	{
+		# TODO This structure is getting silly. It's time to move this into mass.
+		
+		
+		# Make the structure more useful.
+		$host=$item;
+		foreach ($item['instancesSet']['item'] as $key=>$arraySet) 
+		{
+			$host[$key]=$arraySet;
+		}
+		unset($host['instancesSet']);
+		
+		# Get the name tag
+		# TODO It looks like there is a key problem, so this may break when there is more than one tag. Test this.
+		$tagKeys=array_keys($host['tagSet']);
+		$name='';
+		
+		$name=$this->AWSMagicDemangle($host['tagSet']);
+		$instanceID=(isset($item['instancesSet']['item']['instanceId']))?$item['instancesSet']['item']['instanceId']:'unknown';
+		
+		if ($name)
+		{
+			$host['hostName']=$name; # TODO check this!
+			$this->core->debug(3, "AWSGetHostsForAllRegions: Instance $instanceID is $name.");
+			
+			# Re-map a couple of keys, then remove them so people don't use them creating non-portable code.
+			if (isset($item['instancesSet']['item']['privateDnsName']))
+			{
+				$host['internalFQDN']=$item['instancesSet']['item']['privateDnsName'];
+			}
+			else $host['internalFQDN']='';
+			
+			if (isset($item['instancesSet']['item']['dnsName']))
+			{
+				$host['externalFQDN']=$item['instancesSet']['item']['dnsName'];
+			}
+			else $host['externalFQDN']='';
+			
+			if (isset($item['instancesSet']['item']['ipAddress']))
+			{
+				$host['externalIP']=$item['instancesSet']['item']['ipAddress'];
+				unset($item['instancesSet']['item']['ipAddress']);
+			}
+			else $host['externalIP']='';
+			
+			if (isset($item['instancesSet']['item']['privateIpAddress']))
+			{
+				$host['internalIP']=$item['instancesSet']['item']['privateIpAddress'];
+				unset($item['instancesSet']['item']['privateIpAddress']);
+			}
+			elseif ($includePoweredOffInstances) 
+			{
+				$host['internalIP']='';
+			}
+			
+			if (isset($output[$name]))
+			{
+				$originalInstanceID=$output[$name]['instanceId'];
+				$newInstanceID=$host['instanceId'];
+				
+				$this->core->debug(0, "AWS->AWSGetHostsForAllRegions: Found a duplicate instance ($originalInstanceID) with the name tag \"$name\" while trying to add $newInstanceID. This will cause you much pain. For now this host will be added anonymously, but you really should fix this then run the import again.");
+				$output[]=$host;
+			}
+			else $output[$name]=$host;
+			
+			
+			if (isset($item['placement']))
+			{
+				if (isset($item['placement']['availabilityZone']))
+				{
+					$host['fullAvailabilityZone']=$item['placement']['availabilityZone'];
+					$host['region']=substr($item['placement']['availabilityZone'], 0, strlen($item['placement']['availabilityZone'])-1);
+					$host['availabilityZone']=substr($item['placement']['availabilityZone'], -1);
+				}
+			}
+		
+		unset($host);
+		}
+		else
+		{
+			$instanceID=$host['instanceId'];
+			$this->core->debug(2, "AWSGetHostsForAllRegions: Did not find a name tag for instance $instanceID");
+			print_r($host['tagSet']);
+		}
 	}
 	
 	function AWSGetELBsForAllRegions()
