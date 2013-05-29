@@ -204,7 +204,7 @@ class Manipulator extends Module
 	function replace($input, $search, $replace)
 	{
 		$output=implode($replace, explode($search, $input));;
-		$this->core->debug(3, "replace: Search=$search Replace=$replace Input=\"$input\" Output=\"$output\"");
+		$this->core->debug(4, "replace: Search=$search Replace=$replace Input=\"$input\" Output=\"$output\"");
 		return $output;
 	}
 	
@@ -242,7 +242,7 @@ class Manipulator extends Module
 		foreach ($input as $key=>$value)
 		{
 			if (!is_array($value)) $outputLine=$this->replace($outputLine, resultVarBegin."$key".resultVarEnd, $value);
-			else $this->core->debug(3, "processResultVarsInString: value for key $key is an array, so the replace has not been attempted.");
+			else $this->core->debug(4, "processResultVarsInString: value for key $key is an array, so the replace has not been attempted.");
 			# $this->core->debug(3, "processResultVarsInString: In=\"$string\" Out=\"$outputLine\" Search=$key Value=$value");
 		}
 		
