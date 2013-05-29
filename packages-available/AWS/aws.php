@@ -36,7 +36,7 @@ class AWS extends Module
 				$this->core->registerFeature($this, array('AWSSetCred'), 'AWSSetCred', "Set the AWS credentials. --AWSSetCred=awsKey,awsSecret", array('credentials'));
 				$this->core->registerFeature($this, array('AWSGetRegions'), 'AWSGetRegions', "Get the AWS regions", array('import'));
 				$this->core->registerFeature($this, array('AWSGetHosts'), 'AWSGetHosts', "Get all running AWS instances", array('import'));
-				$this->core->registerFeature($this, array('AWSGetAllHosts'), 'AWSGetAllHosts', "Get all AWS instances (even powered off ones). More often than not, you probably want --AWSGetInstances.", array('import'));
+				$this->core->registerFeature($this, array('AWSGetAllHosts'), 'AWSGetAllHosts', "Get all AWS instances (even powered off ones).", array('import'));
 				$this->core->registerFeature($this, array('AWSGetELBs'), 'AWSGetELBs', "Get all Elastic Load Balancers", array('import'));
 				$this->core->registerFeature($this, array('AWSGetRoute53'), 'AWSGetRoute53', "Get all Route53 entries.", array('import'));
 				$this->core->registerFeature($this, array('AWSCloseConnection'), 'AWSCloseConnection', "Close any open connections to AWS so that a new one can be created.", array('import'));
@@ -297,7 +297,8 @@ class AWS extends Module
 					}
 					else
 					{
-						if (is_array($item)) $this->core->debug(3, "AWSGetHostsForAllRegions: No name tag on result in $regionName.");
+						$instanceId=(isset($item['instancesSet']['item']['instanceId']))?$item['instancesSet']['item']['instanceId']:'unknown';
+						if (is_array($item)) $this->core->debug(3, "AWSGetHostsForAllRegions: No name tag on instance $instanceId in $regionName.");
 						else $this->core->debug(3, "AWSGetHostsForAllRegions: Got a weird result in $regionName: $item");
 					}
 				}
