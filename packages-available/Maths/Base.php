@@ -75,11 +75,11 @@ class Base extends Module
 		if (!$hexWidth) $hexWidth=defaultHexWidth;
 		$numberOfParts=strlen($value)/$hexWidth;
 		
-		for ($partNumber=0;$partNumber<$numberOfParts;$partNumber++)
+		for ($partNumber=0;$partNumber<$numberOfParts-1;$partNumber++)
 		{
 			$part=substr($input, $partNumber*$hexWidth, $hexWidth);
 			
-			$this->core->debug(0, "hexToInts($category, $value, $input, $hexWidth) $partNumber $part $hexWidth");
+			$this->core->debug(3, "hexToInts($category, $value, $input, $hexWidth) $partNumber $part $hexWidth");
 			$this->core->setNested($category, $value, array($partNumber, hexdec($part)));
 		}
 	}
