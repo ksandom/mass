@@ -9,7 +9,10 @@ set CreateHost,internalFQDN,~!Global,createHost-2!~
 set CreateHost,externalIP,~!Global,createHost-3!~
 set CreateHost,externalFQDN,~!Global,createHost-4!~
 set CreateHost,location,~!Global,createHost-5!~
-set CreateHost,collection,~!Global,createHost-6!~
+if ~!Global,createHost-6!~,!=,,
+	set CreateHost,collection,~!Global,createHost-6!~
+else
+	set CreateHost,collection,manual
 
 
 # Apply defaults if necessary
