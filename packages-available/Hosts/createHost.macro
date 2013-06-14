@@ -1,6 +1,5 @@
 # Manually create a manual host. This is for if you can't import a particular host from AWS, hosts file etc. --createHost=hostName,internalIP,internalFQDN,[externalIP],[externalFQDN],[location],[collection] . location is up to you how you use. collection is to separate out logical groups/sources of hosts and defaults to "manual". ~ host,hosts,create,manualHosts
 
-
 # Put input into a more readable format
 unsetCategory CreateHost
 set CreateHost,hostName,~!Global,createHost-0!~
