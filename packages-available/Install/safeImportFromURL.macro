@@ -29,9 +29,9 @@ count
 stashResults Import,count
 
 if ~!Import,count,0!~,>,0,
-	debug 1,safeImportFromURL: Got ~!Import,count,0!~ entries from "~!Import,URL!~". Saving to "~!Import,file!~"
+	debug 1,~!Color,green!~safeImportFromURL~!Color,default!~: Got ~!Color,yellow!~~!Import,count,0!~~!Color,default!~ entries from "~!Color,blue!~~!Import,URL!~~!Color,default!~". Saving to "~!Color,blue!~~!Import,file!~~!Color,default!~"
 	exec cp "~!Import,tmpFile!~" "~!Import,file!~"
 else
-	debug 0,safeImportFromURL: Could not load "~!Import,URL!~"
+	debug 0,~!Color,red!~safeImportFromURL~!Color,default!~: Could not load "~!Color,blue!~~!Import,URL!~~!Color,default!~"
 
 exec rm "~!Import,tmpFile!~"

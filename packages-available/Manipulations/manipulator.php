@@ -50,6 +50,9 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('offsetResult', 'offsetResults'), 'offsetResult', "After x results, take the first y results. --offsetResult=x,y . If y is negative, The results will be taken from the end rather than the beginning. In this case x therefore is an offset from the end, not the beginning.", array('result'));
 				$this->core->registerFeature($this, array('keyOn'), 'keyOn', "Key items in the resultSet using a named value from each item in the resultSet. --keyOn=valueName", array('result'));
 				$this->core->registerFeature($this, array('keyValueOn'), 'keyValueOn', "Key items in the value of each item in the resultSet using a named value from each item inside that item in the resultSet. If this sounds confusing, just think of it as running --keyOn inside a value inside each item in the result set. --keyValueOn=valueName,subValueName", array('result'));
+				$this->core->registerFeature($this, array('lessThan'), 'lessThan', "Restrict the resultset to items where a named result value is less than a specified value. --lessThan=valueName,valueToTest", array('result'));
+				$this->core->registerFeature($this, array('greaterThan'), 'greaterThan', "Restrict the resultset to items where a named result value is greater than a specified value. --greaterThan=valueName,valueToTest", array('result'));
+				$this->core->registerFeature($this, array('between'), 'between', "Restrict the resultset to items where a named result value is between two specified values. --between=valueName,smallValue,largeValue", array('result'));
 				
 				$this->core->registerFeature($this, array('sortOnKey'), 'sortOnKey', "Sort items by key.", array('result', 'sort'));
 				
@@ -193,6 +196,18 @@ class Manipulator extends Module
 				break;
 			case 'sortOnKey':
 				return ksort($this->core->getResultSet());
+				break;
+			case 'lessThan':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 2));
+				return $this->lessThan($this->core->getResultSet(), $parms[0], $parms[1]);
+				break;
+			case 'greaterThan':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 2));
+				return $this->greaterThan($this->core->getResultSet(), $parms[0], $parms[1]);
+				break;
+			case 'between':
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 3, 3));
+				return $this->between($this->core->getResultSet(), $parms[0], $parms[1], $parms[2]);
 				break;
 			
 			default:
@@ -753,6 +768,96 @@ class Manipulator extends Module
 		}
 		
 		return $resultSet;
+	}
+	
+	function findPoint($resultSet, $method, $valueName, $value)
+	{ // Divide and conquer to find an approximate value.
+		
+		$keys=array_keys($resultSet);
+		$min=0;
+		$total=count($keys);
+		$max=$total-1;
+		$interations=0;
+		$half=intval(($max-$min)/2);
+		
+		while ($interations<$total)
+		{
+			$iterationValue=$resultSet[$keys[$half]][$valueName];
+			$maxValue=$resultSet[$keys[$max]][$valueName];
+			$minValue=$resultSet[$keys[$min]][$valueName];
+			$this->core->debug(3, "findPoint: Iteration $interations min=$min half=$half max=$max");
+			
+			if ($iterationValue == $value and $method == '==') return $half;
+			elseif ($max==$min or $min==$half) # TODO potentially we don't need $max==$min
+			{
+				switch ($method)
+				{
+					case '==':
+						return $half;
+					case '>':
+						return $half+1;
+					case '<':
+						return $half;
+				}
+			}
+			elseif ($iterationValue>$value)
+			{
+				$this->core->debug(3, "findPoint: ($iterationValue>$value) Set max to $half");
+				$max=$half;
+			}
+			else
+			{
+				$this->core->debug(3, "findPoint: (else) Set min to $half");
+				$min=$half;
+			}
+			
+			# TODO implement $method
+			
+			$half=intval(($max-$min)/2)+$min;
+			$interations++;
+		}
+		$this->core->debug(2, "findPoint: Finished having done $interations iterations.");
+		return $half;
+	}
+	
+	function getRange($resultSet, $start, $stop)
+	{
+		if (!$stop) $stop=count($resultSet)-1;
+		$keys=array_keys($resultSet);
+		$output=array();
+		$this->core->debug(3, "getRange(---, $start, $stop)");
+		
+		for ($i=$start;$i<=$stop;$i++)
+		{
+			$output[$keys[$i]]=$resultSet[$keys[$i]];
+		}
+		
+		return $output;
+	}
+	
+	function lessThan($resultSet, $valueName, $value)
+	{
+		$this->core->debug(3, "lessThan(---, $valueName, $value)");
+		$point=$this->findPoint($resultSet, '<', $valueName, $value);
+		$range=$this->getRange($resultSet, 0, $point);
+		return $range;
+	}
+	
+	function greaterThan($resultSet, $valueName, $value)
+	{
+		$this->core->debug(3, "greaterThan(---, $valueName, $value)");
+		$point=$this->findPoint($resultSet, '>', $valueName, $value);
+		$range=$this->getRange($resultSet, $point, false);
+		return $range;
+	}
+	
+	function between($resultSet, $valueName, $smallValue, $largeValue)
+	{
+		$this->core->debug(3, "between(---, $valueName, $smallValue, $largeValue)");
+		$startPoint=$this->findPoint($resultSet, '>', $valueName, $smallValue);
+		$stopPoint=$this->findPoint($resultSet, '<', $valueName, $largeValue);
+		$range=$this->getRange($resultSet, $startPoint, $stopPoint);
+		return $range;
 	}
 }
 

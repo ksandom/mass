@@ -956,10 +956,18 @@ class core extends Module
 	{
 		if ($progress<$valueCount-1)
 		{
+			# TODO I suspect the problem of the extra empty array is with this.
 			if (!isset($existingArray[$values[$progress]])) $existingArray[$values[$progress]]=array();
 			if (!is_array($existingArray[$values[$progress]])) $existingArray[$values[$progress]]=array();
 			
-			$existingArray[$values[$progress]]=$this->setNestedRecursively($existingArray[$values[$progress]], $values, $valueCount, $progress+1);
+			if ($values[$progress] != '')
+			{
+				$existingArray[$values[$progress]]=$this->setNestedRecursively($existingArray[$values[$progress]], $values, $valueCount, $progress+1);
+			}
+			else
+			{
+				$existingArray[]=$this->setNestedRecursively($existingArray[$values[$progress]], $values, $valueCount, $progress+1);
+			}
 			
 			return $existingArray;
 		}
