@@ -43,6 +43,7 @@ class JsonOut extends Module
 	function out($output)
 	{
 		$readyValue=(is_array($output))?$output:array($output);
+		# TODO JSON_FORCE_OBJECT
 		echo json_encode($readyValue);
 	}
 	

@@ -527,7 +527,15 @@ class core extends Module
 				}
 				else $varValue=$this->getNested($varParts);
 				
-				$this->core->debug($debugLevel, "findAndProcessVariables: start=$startPos next=$nextStartPos end=$endPos Got $varValue");
+				if (is_array($varValue))
+				{
+					$this->core->debug($debugLevel, "findAndProcessVariables: start=$startPos next=$nextStartPos end=$endPos Got array");
+				}
+				else
+				{
+					$this->core->debug($debugLevel, "findAndProcessVariables: start=$startPos next=$nextStartPos end=$endPos Got $varValue");
+				}
+				
 				
 				if (!is_array($varValue)) $output=implode($varValue, explode(storeValueBegin.$varDef.storeValueEnd, $output));
 				else 
@@ -949,6 +957,8 @@ class core extends Module
 		$initialValue=$this->get($store, $category);
 		if (!is_array($initialValue)) $initialValue=array();
 		
+		# $this->debug(0, "setNested($store, $category, ".json_encode($values).")");
+		
 		$this->set($store, $category, $this->setNestedRecursively($initialValue, $values, count($values)));
 	}
 	
@@ -960,12 +970,14 @@ class core extends Module
 			if (!isset($existingArray[$values[$progress]])) $existingArray[$values[$progress]]=array();
 			if (!is_array($existingArray[$values[$progress]])) $existingArray[$values[$progress]]=array();
 			
-			if ($values[$progress] != '')
+			if ($values[$progress] != '' or is_numeric($values[$progress]))
 			{
+				# $this->debug(0, "setNestedRecursively(".json_encode($existingArray).", ".json_encode($values).", $valueCount, $progress=0) - keyed ($values[$progress])");
 				$existingArray[$values[$progress]]=$this->setNestedRecursively($existingArray[$values[$progress]], $values, $valueCount, $progress+1);
 			}
 			else
 			{
+				# $this->debug(0, "setNestedRecursively(".json_encode($existingArray).", ".json_encode($values).", $valueCount, $progress=0) - incremeted ($values[$progress])");
 				$existingArray[]=$this->setNestedRecursively($existingArray[$values[$progress]], $values, $valueCount, $progress+1);
 			}
 			
@@ -973,6 +985,7 @@ class core extends Module
 		}
 		else
 		{
+			# $this->debug(0, "setNestedRecursively(".json_encode($existingArray).", ".json_encode($values).", $valueCount, $progress=0) - final");
 			return $values[$progress];
 		}
 	}

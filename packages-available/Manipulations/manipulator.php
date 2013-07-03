@@ -788,14 +788,14 @@ class Manipulator extends Module
 			$this->core->debug(3, "findPoint: Iteration $interations min=$min half=$half max=$max");
 			
 			if ($iterationValue == $value and $method == '==') return $half;
-			elseif ($max==$min or $min==$half) # TODO potentially we don't need $max==$min
+			elseif ($max==$min or $max==$half) # TODO potentially we don't need $max==$min
 			{
-				switch ($method)
+				switch ($method) # TODO is this really right? It seems simpler than I imagined...
 				{
 					case '==':
 						return $half;
 					case '>':
-						return $half+1;
+						return $half;
 					case '<':
 						return $half;
 				}
@@ -811,9 +811,9 @@ class Manipulator extends Module
 				$min=$half;
 			}
 			
-			# TODO implement $method
-			
-			$half=intval(($max-$min)/2)+$min;
+			$difference=$max-$min;
+			if ($difference>1) $half=intval($difference/2)+$min;
+			else $half=$max;
 			$interations++;
 		}
 		$this->core->debug(2, "findPoint: Finished having done $interations iterations.");
