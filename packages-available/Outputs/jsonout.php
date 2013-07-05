@@ -44,7 +44,7 @@ class JsonOut extends Module
 	{
 		$readyValue=(is_array($output))?$output:array($output);
 		# TODO JSON_FORCE_OBJECT
-		echo json_encode($readyValue);
+		echo json_encode($readyValue, JSON_FORCE_OBJECT);
 	}
 	
 	function resultJsonToArray($input, $sourceField, $destinationField)
