@@ -177,7 +177,7 @@ class core extends Module
 				break;
 			case 'callFeatureReturn':
 				$parms=$this->splitOnceOn(valueSeparator, $this->get('Global', $event));
-				$this->callFeature($parms[0], $parms[1]);
+				return $this->callFeature($parms[0], $parms[1]);
 				break;
 			case 'callFeatureNoReturn':
 				$parms=$this->splitOnceOn(valueSeparator, $this->get('Global', $event));

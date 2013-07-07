@@ -2,9 +2,10 @@
 
 countToVar Tmp,countResults
 if ~!Tmp,countResults!~,<,1,
-	debug 2,ifNoResult: Got ~!Tmp,countResults!~ results
 	callFeature ~!Global,ifNoResult!~
+	countToVar Tmp,countResults
+	debug 2,ifNoResult: Got 0 results - Ran the supplimentary feature and got ~!Tmp,countResults!~ results.
 else
-	debug 2,ifNoResult: Got ~!Tmp,countResults!~ results
+	debug 2,ifNoResult: Got ~!Tmp,countResults!~ results - No need to do anything further.
 
 unset Tmp,countResults
