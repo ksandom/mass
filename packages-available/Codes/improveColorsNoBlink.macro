@@ -1,5 +1,7 @@
 # Remove all the blink colors ~ improveColors
 
+debug 2,improveColorsNoBlink: Removing nasty colour combinations
+
 removeColor blinkBlackHLRed
 removeColor blinkBlackHLGreen
 removeColor blinkBlackHLYellow
@@ -64,3 +66,4 @@ removeColor blinkHLYellow
 removeColor blinkHLBlue
 removeColor blinkHLPurple
 removeColor blinkBlack
+removeColor testControl
