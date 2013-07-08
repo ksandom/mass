@@ -1,0 +1,8 @@
+# Load a specified collection --collectionLoad=collectionName ~ collection
+
+if ~!Global,collectionLoad!~,!=,,
+	registerForEvent Mass,finishGeneral,collectionSave,~!Global,collectionLoad!~
+
+	load loadStoreFromData ~!Global,collectionLoad!~
+else
+	complain Collection: No collection specified.

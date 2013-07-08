@@ -1,0 +1,10 @@
+# Save a specified collection. --collectionSave=collectionName ~ collection
+
+if ~!Global,collectionSave!~,!=,,
+	debug 2,Collection: Saving ~!Global,collectionSave!~.
+	saveStoreToData ~!Global,collectionSave!~
+
+	getCategory ~!Global,collectionSave!~
+else
+	complain Collection: No collection specified.
+
