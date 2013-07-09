@@ -1,0 +1,5 @@
+# Show how much each feature is being used. ~ debug,language
+
+getCategory Features
+templateOut featureUsage
+excludeItem name,--

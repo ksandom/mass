@@ -606,6 +606,7 @@ class core extends Module
 		if (is_array($obj))
 		{
 			$this->store['Macros'][$macroName][]=array('obj'=>&$obj, 'name'=>$obj['name'], 'value'=>$value, 'lineNumber'=>$lineNumber);
+			$this->store['Features'][$argument]['referenced']++;
 		}
 		else
 		{
@@ -1049,7 +1050,7 @@ class core extends Module
 		$tagString=implode(',', $arrayTags);
 		
 		# TODO Remove the tag string from descriptoin once we have proper integration with help
-		$entry=array('obj'=>&$obj, 'flags'=>$flags, 'name'=>$name, 'description'=>$description, 'tagString'=>$tagString, 'provider'=>$obj->getName(), 'isMacro'=>$isMacro, 'source'=>$source);
+		$entry=array('obj'=>&$obj, 'flags'=>$flags, 'name'=>$name, 'description'=>$description, 'tagString'=>$tagString, 'provider'=>$obj->getName(), 'isMacro'=>$isMacro, 'source'=>$source, 'referenced'=>0);
 		
 		foreach ($flags as $flag)
 		{

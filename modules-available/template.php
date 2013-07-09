@@ -161,6 +161,11 @@ class Template extends Module
 		return $contents;
 	}
 	
+	function isInsertable($value)
+	{
+		return (is_string($value) or is_numeric($value));
+	}
+	
 	function insertResultIntoTemplate($input, $template)
 	{
 		$output='';
@@ -175,7 +180,7 @@ class Template extends Module
 				{
 					foreach ($inputLine as $lineKey=>$lineValue)
 					{
-						if (is_string($lineValue))
+						if ($this->isInsertable($lineValue))
 						{
 							$this->core->debug(4, "Template: itemKey=$key, lineKey=$lineKey");
 							$templateLine=implode(strval($lineValue), explode(resultVarBegin."$lineKey".resultVarEnd, $templateLine));
