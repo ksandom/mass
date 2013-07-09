@@ -1,5 +1,7 @@
 # Show how much each feature is being used. ~ debug,language
 
 getCategory Features
+keyOn name
 templateOut featureUsage
 excludeItem name,--
+sortOnKey
