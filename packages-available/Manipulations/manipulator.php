@@ -22,8 +22,10 @@ class Manipulator extends Module
 				$this->core->registerFeature($this, array('replace'), 'replace', 'Replace a pattern matching a regular expression and replace it with something defined. --replace=searchRegex,replacement', array('array', 'string'));
 				$this->core->registerFeature($this, array('unique'), 'unique', 'Only keep unique entries. The exception is non-string values will simply be kept without being compared.', array('array', 'string'));
 				$this->core->registerFeature($this, array('requireEach', 'refine'), 'requireEach', 'Require each entry to match this regular expression. --requireEach=regex', array('array', 'result'));
+				$this->core->registerFeature($this, array('recursiveRequireEach', 'recursiveRefine'), 'recursiveRequireEach', 'Require each entry to match this regular expression somewhere in its dataset. --requireEach=regex', array('array', 'result'));
 				$this->core->registerFeature($this, array('requireItem'), 'requireItem', 'Require a named entry in each of the root entries. A regular expression can be supplied to provide a more precise match. --requireItem=entryKey[,regex]', array('array', 'result'));
 				$this->core->registerFeature($this, array('excludeEach'), 'excludeEach', 'The counterpart of --requireEach. Excludes any item that contains an entry that matches the regular expression. --requireEach=regex', array('array', 'result'));
+				$this->core->registerFeature($this, array('recursiveExcludeEach', 'recursiveExclude'), 'recursiveExcludeEach', 'The counterpart of --recursiveRequireEach. Excludes any item that contains an entry that matches the regular expression somewhere in the dataset. --requireEach=regex', array('array', 'result'));
 				$this->core->registerFeature($this, array('excludeItem'), 'excludeItem', 'The counterpart of --requireItem. Excludes any items wherre a named entry matches the specified regex. --excludeItem=entryKey[,regex]', array('array', 'result'));
 				$this->core->registerFeature($this, array('manipulateEach'), 'manipulateEach', 'Call a feature for each entry in the result set that contains an item matching this regular expression. --manipulateEach=regex,feature featureParameters', array('array', 'result'));
 				$this->core->registerFeature($this, array('manipulateItem'), 'manipulateItem', 'Call a feature for each entry that contains an item explicity matching the one specified. --manipulateItem=entryKey,regex,feature featureParameters', array('array', 'result'));
@@ -65,32 +67,38 @@ class Manipulator extends Module
 			case 'last':
 				break;
 			case 'requireEach':
-				return $this->requireEach($this->core->getResultSet(), $this->core->get('Global', 'requireEach'));
+				return $this->requireEach($this->core->getResultSet(), $this->core->get('Global', $event));
+				break;
+			case 'recursiveRequireEach':
+				return $this->requireEach($this->core->getResultSet(), $this->core->get('Global', $event), false, true, true);
 				break;
 			case 'requireItem':
-				$parms=$this->core->interpretParms($this->core->get('Global', 'requireItem'), 2, 1);
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 1);
 				return $this->requireEntry($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
 			case 'excludeEach':
 				return $this->requireEach($this->core->getResultSet(), $this->core->get('Global', $event), false, false);
+				break;
+			case 'recursiveExcludeEach':
+				return $this->requireEach($this->core->getResultSet(), $this->core->get('Global', $event), false, false, true);
 				break;
 			case 'excludeItem':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 1);
 				return $this->requireEntry($this->core->getResultSet(), $parms[0], $parms[1], false, false);
 				break;
 			case 'manipulateEach':
-				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateEach'), 1, 2);
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 1, 2);
 				return $this->requireEach($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
 			case 'manipulateItem':
-				$parms=$this->core->interpretParms($this->core->get('Global', 'manipulateItem'), 2, 3);
+				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 3);
 				return $this->requireEntry($this->core->getResultSet(), $parms[0], $parms[1], $parms[2]);
 				break;
 			case 'toString':
-				return $this->toString($this->core->getResultSet(), $this->core->get('Global', 'toString'));
+				return $this->toString($this->core->getResultSet(), $this->core->get('Global', $event));
 				break;
 			case 'flatten':
-				$limitIn=$this->core->get('Global', 'flatten');
+				$limitIn=$this->core->get('Global', $event);
 				if ($limitIn == null) $limit=-1;
 				elseif ($limitIn==0) $limit=false;
 				else $limit=$limitIn;
@@ -107,7 +115,7 @@ class Manipulator extends Module
 				return $this->unique($this->core->getResultSet());
 				break;
 			case 'chooseFirst':
-				return $this->chooseFirst($this->core->getResultSet(), $this->core->interpretParms($this->core->get('Global', 'chooseFirst')));
+				return $this->chooseFirst($this->core->getResultSet(), $this->core->interpretParms($this->core->get('Global', $event)));
 				break;
 			case 'chooseFirstSet':
 				return $this->chooseFirstSet($this->core->getResultSet(), $this->core->interpretParms($this->core->get('Global', $event)));
@@ -126,7 +134,7 @@ class Manipulator extends Module
 				return $this->resultSet($this->core->getResultSet(), $parms[0], $parms[1], false);
 				break;
 			case 'resultUnset':
-				return $this->resultUnset($this->core->getResultSet(), explode(',', $this->core->get('Global', 'resultUnset')));
+				return $this->resultUnset($this->core->getResultSet(), explode(',', $this->core->get('Global', $event)));
 				break;
 			case 'cleanUnresolvedResultVars':
 				return $this->cleanUnresolvedVars($this->core->getResultSet(), resultVarBegin, resultVarEnd);
@@ -395,7 +403,7 @@ class Manipulator extends Module
 		return array_merge($processed, $notMatching);
 	}
 	
-	private function requireEach($input, $search, $feature=false, $shouldMatch=true)
+	private function requireEach($input, $search, $feature=false, $shouldMatch=true, $shouldRecurse=false)
 	{
 		//print_r($input);
 		$outputMatch=array();
@@ -410,25 +418,44 @@ class Manipulator extends Module
 			{
 				if (preg_match('/'.$search.'/', $line))
 				{
+					$this->core->debug(2, "requireEach: Matched \"$search\" in \"$line\"");
 					$outputMatch[$key]=$line;
 				}
 				else $outputNoMatch[$key]=$line;
 			}
 			elseif (is_array($line))
-			{ # TODO make this work recursively
+			{
+				$matched=false;
 				foreach ($line as $subline)
 				{
 					$matched=false;
-					if ((is_string($subline) && preg_match('/'.$search.'/', $subline)))
+					if (is_string($subline))
 					{
-						$outputMatch[]=$line;
-						$matched=true;
-						break;
+						if (preg_match('/'.$search.'/', $subline))
+						{
+							$outputMatch[$key]=$line;
+							$matched=true;
+							break;
+						}
+					}
+					elseif ($shouldRecurse and is_array($subline))
+					{
+						$subResult=$this->requireEach($subline, $search, $feature, true, true);
+						#echo "$search\n";
+						#print_r($subline);
+						#print_r($subResult);
+						#die();
+						if (count($subResult))
+						{
+							$outputMatch[$key]=$line;
+							$matched=true;
+							break;
+						}
 					}
 				}
-				if (!$matched) $outputNoMatch[]=$line;
+				if (!$matched) $outputNoMatch[$key]=$line;
 			}
-			else $outputNoMatch[]=$line;
+			else $outputNoMatch[$key]=$line;
 		}
 		
 		if ($feature)

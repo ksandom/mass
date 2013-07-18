@@ -2,3 +2,4 @@
 
 getCategory Macros
 recursiveRefine ~!Global,whatUses!~
+templateOut whatUses
