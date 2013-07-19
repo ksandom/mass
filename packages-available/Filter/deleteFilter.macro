@@ -1,0 +1,8 @@
+# Delete a filter created with --filter ~ filter
+
+collectionLoad Filter
+
+if ~!Global,filter!~,!=,,
+	unset Filter,~!Global,filter!~
+else
+	complain deleteFilter: Y u no specify filter???

@@ -1,0 +1,6 @@
+# List out the available filters that have been defined with --filter. ~ filter
+
+collectionLoad Filter
+
+getCategory Filter
+templateOut filters

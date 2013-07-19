@@ -1,0 +1,4 @@
+# Filter results using a preset named query. This is useful for queries you do regularly like (eg city or colour). --filter=name[,description,[field],regex[,noReplace]]. If a description is specified, the entry will be saved (overwriting any exising rule by that name). If a field is specified, then the filter will only search that field. Otherwise everyfield will be searched. If the string "noReplace" is specified the query will only be saved if no other query exists with that name. ~ filter
+
+collectionLoad Filter
+
