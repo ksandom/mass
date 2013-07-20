@@ -1,0 +1,11 @@
+# Save a filter. --filter=name[,description,[field],regex[,noReplace]] ~ filter,hidden
+
+if ~!Global,saveFilter-4!~,!=,noReplace,
+	debug 3,saveFilter: Saving ~!Global,saveFilter-0!~.
+	setNested Filter,filters,~!Global,saveFilter-0!~,name,~!Global,saveFilter-0!~
+	setNested Filter,filters,~!Global,saveFilter-0!~,description,~!Global,saveFilter-1!~
+	setNested Filter,filters,~!Global,saveFilter-0!~,field,~!Global,saveFilter-2!~
+	setNested Filter,filters,~!Global,saveFilter-0!~,regex,~!Global,saveFilter-3!~
+else
+	debug 3,saveFilter: noReplace specified for ~!Global,saveFilter-0!~. Filter ~!Global,saveFilter-0!~ will not be overwritten.
+

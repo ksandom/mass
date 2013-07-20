@@ -3,8 +3,9 @@
 if ~!Global,collectionSave!~,!=,,
 	debug 2,Collection: Saving ~!Global,collectionSave!~.
 	saveStoreToData ~!Global,collectionSave!~
-
-	getCategory ~!Global,collectionSave!~
+	
+	# TODO Is this really necessary?
+	# getCategory ~!Global,collectionSave!~
 else
 	complain Collection: No collection specified.
 

@@ -2,3 +2,16 @@
 
 collectionLoad Filter
 
+if ~!Global,filter-1!~,!=,,
+	saveFilter ~!Global,filter!~
+
+if ~!Filter,filters,~!Global,filter-0!~,name!~,!=,,
+	if ~!Filter,filters,~!Global,filter-0!~,field!~,==,,
+		debug 2,filter: Applying filter ~!Filter,filters,~!Global,filter-0!~,name!~ (~!Filter,filters,~!Global,filter-0!~,description!~) on any field.
+		requireEach ~!Filter,filters,~!Global,filter-0!~,regex!~
+	else
+		debug 2,filter: Applying filter ~!Filter,filters,~!Global,filter-0!~,name!~ (~!Filter,filters,~!Global,filter-0!~,description!~) on ~!Filter,filters,~!Global,filter-0!~,field!~
+		requireItem ~!Filter,filters,~!Global,filter-0!~,field!~,~!Filter,filters,~!Global,filter-0!~,regex!~
+else
+	complain filter: Filter ~!Global,filter-0!~ does not exist.
+
