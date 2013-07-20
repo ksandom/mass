@@ -1,0 +1,6 @@
+# Install all the defaults ~ install,hidden
+#onDefine registerForEvent Install,general,installAWS
+
+debug 1,AWS: Installing default filters
+filter ebs,Root device is EBS,rootDeviceType,ebs
+filter is,Root device is emphemeral/instance-store,rootDeviceType,instance-store
