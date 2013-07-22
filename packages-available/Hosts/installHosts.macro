@@ -1,6 +1,6 @@
 # Install all the defaults ~ install,hidden
-#onDefine registerForEvent Install,general,installDoneIt
+#onDefine registerForEvent Install,general,installHosts
 
 debug 1,Hosts: Installing default filters
-filter 32,'32bit machines',architecture,i386
-filter 64,'64bit machines',architecture,x86_64
+saveFilter 32,Hosts: 32bit machines,architecture,i386
+saveFilter 64,Hosts: 64bit machines,architecture,x86_64

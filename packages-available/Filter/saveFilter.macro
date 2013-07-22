@@ -1,7 +1,9 @@
 # Save a filter. --filter=name[,description,[field],regex[,noReplace]] ~ filter,hidden
 
+collectionLoad Filter
+
 if ~!Global,saveFilter-4!~,!=,noReplace,
-	debug 3,saveFilter: Saving ~!Global,saveFilter-0!~.
+	debug 2,saveFilter: Saving ~!Global,saveFilter-0!~ (~!Global,saveFilter-1!~).
 	setNested Filter,filters,~!Global,saveFilter-0!~,name,~!Global,saveFilter-0!~
 	setNested Filter,filters,~!Global,saveFilter-0!~,description,~!Global,saveFilter-1!~
 	setNested Filter,filters,~!Global,saveFilter-0!~,field,~!Global,saveFilter-2!~
