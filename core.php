@@ -540,7 +540,12 @@ class core extends Module
 				if (!is_array($varValue)) $output=implode($varValue, explode(storeValueBegin.$varDef.storeValueEnd, $output));
 				else 
 				{
-					# print_r($varValue);
+					if (count($varValue))
+					{
+						$varValue=json_encode($varValue, JSON_FORCE_OBJECT);
+						$output=implode($varValue, explode(storeValueBegin.$varDef.storeValueEnd, $output));
+					}
+					else $output=implode('', explode(storeValueBegin.$varDef.storeValueEnd, $output));
 				}
 			}
 			else
