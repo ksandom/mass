@@ -179,7 +179,7 @@ class Manipulator extends Module
 				return $this->crc($this->core->getResultSet(), $parms[0], $parms[1], true);;
 				break;
 			case 'firstResult':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 1, 0));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event), 1, 0);
 				return $this->offsetResult($this->core->getResultSet(), 0, $parms[0]);
 				break;
 			case 'lastResult':

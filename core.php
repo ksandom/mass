@@ -224,16 +224,44 @@ class core extends Module
 	
 	function interpretParms($parms, $limit=0, $require=null, $reassemble=true)
 	{
+		if (strlen($parms)<1)
+		{ // No parms$require
+			# TODO Potentially some detection could happen here to allow atomic failure.
+			if ($require>0) $this->debug(0, "Expected $require parameters, but got nothing. Bad things could happen if execution had been allowed to continue. Parms=$parms");
+			$parts=array();
+		}
+		else
+		{
+			
+			
+			$firstChar=substr($parms, 0, 1);
+			if ($firstChar=='[' or $firstChar=='{')
+			{ // Json
+				$parts=json_decode($parms, 1);
+				if (!count($parts))
+				{
+					$this->debug(0, "interpretParms: Got 0 parts back from json \"$parms\" which usually means invalid json. I've caused this myself when chosing the wrong combination of { vs [.");
+					
+					# TODO Do we want to do some other clean up here.
+					$parts=array(); // Prevent stuff from breaking since they always expect an array.
+				}
+			}
+			else
+			{ // Legacy comma separated format
+				$parts=explode(valueSeparator, $parms);
+			}
+		}
+		
+		
 		#if ($require===null) $require=$limit;
-		$parts=explode(valueSeparator, $parms);
+		
 		$partsCount=count($parts);
 		
-		if ($partsCount<$require)
+		if ($partsCount<$limit)
 		{
-			$this->debug(0, "Expected $require parameters, but got $partsCount. Bad things could happen if execution had been allowed to continue. Parms=$parms");
+			if ($partsCount<$require) $this->debug(0, "Expected $require parameters, but got $partsCount. Bad things could happen if execution had been allowed to continue. Parms=$parms");
 			
-			# TODO This array almost certainly could be generated in a  better way.
-			$output=array();
+			$output=$parts;
 			while (count($output)< $limit) $output[]='';
 			return $output;
 		}
