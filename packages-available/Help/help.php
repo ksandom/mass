@@ -29,8 +29,8 @@ class Help extends Module
 				break;
 			case 'last':
 				break;
-			case 'help':
-				$this->showHelp($this->core->get('Global', 'help'));
+			case 'oldHelp':
+				$this->showHelp($this->core->get('Global', 'oldHelp'));
 				break;
 			case 'searchHelp':
 				return $this->searchHelp($this->core->get('Global', 'searchHelp'));
