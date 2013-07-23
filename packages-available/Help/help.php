@@ -30,13 +30,13 @@ class Help extends Module
 			case 'last':
 				break;
 			case 'oldHelp':
-				$this->showHelp($this->core->get('Global', 'oldHelp'));
+				$this->showHelp($this->core->get('Global', $event));
 				break;
 			case 'searchHelp':
-				return $this->searchHelp($this->core->get('Global', 'searchHelp'));
+				return $this->searchHelp($this->core->get('Global', $event));
 				break;
 			case 'getTags':
-				return $this->getTags($this->core->get('Global', 'getTags'));
+				return $this->getTags($this->core->get('Global', $event));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
