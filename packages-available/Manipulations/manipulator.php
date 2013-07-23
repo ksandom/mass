@@ -159,7 +159,7 @@ class Manipulator extends Module
 				return array(count($this->core->getResultSet()));
 				break;
 			case 'countToVar':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event), 2);
 				$this->core->set($parms[0], $parms[1], count($this->core->getResultSet()));
 				break;
 			case 'pos':
@@ -167,15 +167,15 @@ class Manipulator extends Module
 				return $this->assignPos($this->core->getResultSet(), $parms[0], $parms[1]);;
 				break;
 			case 'chooseBasedOn':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 3, true));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event), 2, 3, true);
 				return $this->chooseBasedOn($this->core->getResultSet(), $parms[0], $parms[1], $parms[2]);;
 				break;
 			case 'crc':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 2, true));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event), 2, 2, true);
 				return $this->crc($this->core->getResultSet(), $parms[0], $parms[1], false);;
 				break;
 			case 'positiveCRC':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 2, true));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event), 2, 2, true);
 				return $this->crc($this->core->getResultSet(), $parms[0], $parms[1], true);;
 				break;
 			case 'firstResult':
@@ -183,38 +183,38 @@ class Manipulator extends Module
 				return $this->offsetResult($this->core->getResultSet(), 0, $parms[0]);
 				break;
 			case 'lastResult':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 1, 0));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event), 1, 0);
 				$number=($parms[0])?$parms[0]*-1:-1;
 				return $this->offsetResult($this->core->getResultSet(), 0, $number);
 				break;
 			case 'offsetResult':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 2));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event), 2, 2);
 				return $this->offsetResult($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
 			case 'createOneResult':
 				return array(array());
 				break;
 			case 'keyOn':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 1, 1));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event), 1, 1);
 				return $this->keyOn($this->core->getResultSet(), $parms[0]);
 				break;
 			case 'keyValueOn':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 2));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event), 2, 2);
 				return $this->keyValueOn($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
 			case 'sortOnKey':
 				return ksort($this->core->getResultSet());
 				break;
 			case 'lessThan':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 2));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event), 2, 2);
 				return $this->lessThan($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
 			case 'greaterThan':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 2, 2));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event), 2, 2);
 				return $this->greaterThan($this->core->getResultSet(), $parms[0], $parms[1]);
 				break;
 			case 'between':
-				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event, 3, 3));
+				$parms=$this->core->interpretParms($originalParms=$this->core->get('Global', $event), 3, 3);
 				return $this->between($this->core->getResultSet(), $parms[0], $parms[1], $parms[2]);
 				break;
 			
