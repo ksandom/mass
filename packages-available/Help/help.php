@@ -20,7 +20,7 @@ class Help extends Module
 		{
 			case 'init':
 				$this->core->registerFeature($this, array('oldHelp'), 'oldHelp', 'Deprecated. Display this help. --oldHelp[=searchForTag]', array('deprecated'));
-				$this->core->registerFeature($this, array('searchHelp'), 'searchHelp', 'Search tags for help. Will return an array that can be used in a template. --searchHelp[=searchForTag]', array('help'));
+				$this->core->registerFeature($this, array('searchHelp'), 'searchHelp', 'Search tags for help. Will return an array that can be used in a template. --searchHelp[=searchForTag] eg --help=debug .', array('help'));
 				$this->core->registerFeature($this, array('getTags'), 'getTags', 'List available tags', array('help'));
 				
 				$this->core->setRef('General', 'outputObject', $this);
@@ -34,6 +34,9 @@ class Help extends Module
 				break;
 			case 'searchHelp':
 				return $this->searchHelp($this->core->get('Global', $event));
+				break;
+			case 'searchAllHelp':
+				return $this->searchHelp($this->core->get('Global', $event), true);
 				break;
 			case 'getTags':
 				return $this->getTags($this->core->get('Global', $event));

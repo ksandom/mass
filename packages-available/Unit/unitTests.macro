@@ -1,0 +1,8 @@
+# Run unitTests. This is any feature that includes unitTest in its tags. ~ unit
+
+searchFeatures unitTest
+requireItem tagString,unitTest
+excludeItem name,--
+
+
+

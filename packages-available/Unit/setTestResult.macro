@@ -1,0 +1,4 @@
+# Set the result of the current unitTest. --setTestResult=pass|fail|warn,comment ~ unit,hidden
+
+set UnitResults,currentResult,~!Global,setTestResult-0!~
+set UnitResults,currentComment,~!Global,setTestResult-1!~
