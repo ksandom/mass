@@ -38,6 +38,11 @@ function rootInstall
 	binExec=/usr/bin
 	installType='cp'
 	
+	if [ -e /root/.mass ]; then
+		echo "Legacy root install exists. This will interfere with new installs."
+		mv -v /root/.mass /root/.mass.obsolete
+	fi
+	
 	doInstall
 }
 
