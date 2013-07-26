@@ -8,6 +8,8 @@ set UnitResults,passColor,~!Color,green!~
 set UnitResults,failColor,~!Color,red!~
 set UnitResults,warnColor,~!Color,yellow!~
 
+debug 3,unitTests: Set colours ~!UnitResults,passColor!~pass~!Color,brightBlack!~, ~!UnitResults,failColor!~fail~!Color,brightBlack!~, ~!UnitResults,warnColor!~warn~!Color,default!~.
+
 searchFeatures unitTest
 requireItem tagString,unitTest
 excludeItem name,--

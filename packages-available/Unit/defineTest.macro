@@ -18,5 +18,5 @@ setNested UnitResults,results,~!Global,defineTest-0!~,resultComment,~!UnitResult
 setNested UnitResults,results,~!Global,defineTest-0!~,resultColor,~!UnitResults,currentColor!~
 
 
-
+# TODO the problem is here
 resetTest

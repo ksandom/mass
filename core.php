@@ -491,7 +491,7 @@ class core extends Module
 	
 	private function findAndProcessVariables($input, &$iterations=0)
 	{
-		$debugLevel=4;
+		$debugLevel=5;
 		$output=$input;
 		
 		$this->core->debug($debugLevel, "findAndProcessVariables: Enter \"$output\"");
