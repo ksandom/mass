@@ -4,9 +4,16 @@ set UnitResults,pass,0
 set UnitResults,fail,0
 set UnitResults,warn,0
 
+set UnitResults,passColor,~!Color,green!~
+set UnitResults,failColor,~!Color,red!~
+set UnitResults,warnColor,~!Color,yellow!~
+
 searchFeatures unitTest
 requireItem tagString,unitTest
 excludeItem name,--
 
+loop
+	callFeatureNoReturn ~!Result,name!~
 
-
+retrieveResults UnitResults,results
+templateOut unitTestResults

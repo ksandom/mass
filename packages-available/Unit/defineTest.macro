@@ -15,6 +15,7 @@ else
 setNested UnitResults,results,~!Global,defineTest-0!~,description,~!Global,defineTest-0!~
 setNested UnitResults,results,~!Global,defineTest-0!~,result,~!UnitResults,currentResult!~
 setNested UnitResults,results,~!Global,defineTest-0!~,resultComment,~!UnitResults,currentComment!~
+setNested UnitResults,results,~!Global,defineTest-0!~,resultColor,~!UnitResults,currentColor!~
 
 
 

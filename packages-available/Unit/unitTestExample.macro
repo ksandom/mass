@@ -1,12 +1,12 @@
 # A unit test example ~ unitTest,example
 
-test Unit example test1
+defineTest Unit example test1,
 	if 1,==,1,
 		passTest Yay
 	else
 		failTest If this happens something has gone very wrong with the Condition module.
 
-test Unit example test2
+defineTest Unit example test2,
 	if 1,==,1,
 		passTest Wheee
 	else

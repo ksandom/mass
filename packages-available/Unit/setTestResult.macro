@@ -2,3 +2,4 @@
 
 set UnitResults,currentResult,~!Global,setTestResult-0!~
 set UnitResults,currentComment,~!Global,setTestResult-1!~
+set UnitResults,currentColor,~!UnitResults,~!Global,setTestResult-1!~Color!~
