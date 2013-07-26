@@ -1,5 +1,7 @@
 # Run unitTests. This is any feature that includes unitTest in its tags. ~ unit
 
+unsetCategory UnitResults
+
 set UnitResults,pass,0
 set UnitResults,fail,0
 set UnitResults,warn,0
