@@ -1,4 +1,4 @@
-# Test the if features ~ test,unitTest,hidden
+# Test if/elseIf/else and nested if conditions. ~ test,unitTest,hidden
 
 defineTest ifResult - no result,
 	clear
