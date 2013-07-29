@@ -125,3 +125,44 @@ function doInstall
 	mass --verbosity=2 --finalInstallStage
 }
 
+function checkParameters
+{
+	allowed='\(configDir\|bin\|binExec\|installTimeParameters\)'
+	for parm in $1;do
+		parmAction=`echo $parm | cut -d= -f1`
+		parmValue=`echo $parm | cut -d= -f2`
+		case $parmAction in
+			'--help')
+				helpFile="docs/installTimeParameters.md"
+				if [ -e $helpFile ]; then
+					cat "$helpFile"
+				else
+					echo "Could not find $helpFile. Currently looking from `pwd`."
+				fi
+				exit 0
+			;;
+			'--showConfig')
+				echo "configDir=$configDir"
+				echo "bin=$bin"
+				echo "binExec=$binExec"
+				echo "installType=$installType"
+				exit 0
+			;;
+			*)
+				if [ "`echo $parmAction| grep "$allowed"`" != "" ]; then
+					if [ "$parmValue" != "$parmAction" ]; then
+						varName=`echo $parmAction| cut -b 3-`
+						echo "Will set $varName to $parmValue."
+						export "$varName=$parmValue"
+					else
+						echo "A value must be specified for $parmAction in the form $parmAction=value."
+						exit 0
+					fi
+				else
+					echo "Unknown parameter $parm."
+					exit 1
+				fi
+			;;
+		esac
+	done
+}

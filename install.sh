@@ -26,8 +26,6 @@ function userInstall
 	configDir=~/.$programName
 	bin="$configDir/bin"
 	binExec=~/bin
-	
-	doInstall
 }
 
 function rootInstall
@@ -42,8 +40,6 @@ function rootInstall
 		echo "Legacy root install exists. This will interfere with new installs."
 		mv -v /root/.mass /root/.mass.obsolete
 	fi
-	
-	doInstall
 }
 
 function linkedInstall
@@ -60,8 +56,6 @@ function linkedInstall
 	if [ "`echo $PATH|grep $binExec`" == '' ]; then # A hack for the mac
 		binExec=/usr/local/bin
 	fi
-	
-	doInstall
 }
 
 
@@ -70,4 +64,7 @@ if [ `id -u` -gt 0 ];then
 else
 	rootInstall
 fi
- 
+
+checkParameters "$*" $0
+
+doInstall
