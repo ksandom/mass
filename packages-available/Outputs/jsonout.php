@@ -5,6 +5,8 @@
 
 class JsonOut extends Module
 {
+	private $forceObject=true;
+	
 	function __construct()
 	{
 		parent::__construct('JsonOut');
@@ -15,8 +17,10 @@ class JsonOut extends Module
 		switch ($event)
 		{
 			case 'init':
-				$this->core->registerFeature($this, array('j', 'json'), 'json', 'Send returned output as a json array.', array('json', 'output'));
-				$this->core->registerFeature($this, array('toJson'), 'toJson', 'Put the results into a json array in the result array to be used with something like --singleStringNow.', array('json'));
+				$this->core->registerFeature($this, array('j', 'json', 'jsonObjects'), 'json', 'Send returned output as a json object list.', array('json', 'output'));
+				$this->core->registerFeature($this, array('jsonArray'), 'jsonArray', 'Send returned output as a json array. NOTE that this is suboptimal since the keys have to be iteratively stripped. If you know a better way, please get in touch via github.', array('json', 'output'));
+				$this->core->registerFeature($this, array('toJson', 'toJsonObjects'), 'toJson', 'Put the results into a json object list in the result array to be used with something like --singleStringNow.', array('json'));
+				$this->core->registerFeature($this, array('toJsonArray'), 'toJsonArray', 'Put the results into a json array in the result array to be used with something like --singleStringNow. NOTE that this is suboptimal since the keys have to be iteratively stripped. If you know a better way, please get in touch via github.', array('json'));
 				$this->core->registerFeature($this, array('resultJsonToArray'), 'resultJsonToArray', 'Convert json sitting in a result variable into an array. The default is to replace the existing field, but you can also specify a separate field to keep the original. --resultJsonToArray=fieldToConvert[,destinationField] .', array('json', 'array', 'resultSet'));
 				break;
 			case 'followup':
@@ -24,7 +28,10 @@ class JsonOut extends Module
 			case 'last':
 				break;
 			case 'toJson':
-				return array(json_encode($this->core->getResultSet()));
+				return array(json_encode($this->core->getResultSet(), JSON_FORCE_OBJECT));
+				break;
+			case 'toJsonArray':
+				return array(json_encode($this->stripKeys($this->core->getResultSet())));
 				break;
 			case 'resultJsonToArray':
 				$parms=$this->core->interpretParms($this->core->get('Global', $event), 2, 1);
@@ -33,6 +40,12 @@ class JsonOut extends Module
 			case 'json':
 				$this->core->setRef('General', 'outputObject', $this);
 				$this->core->setRef('General', 'echoObject', $this);
+				$this->forceObject=true;
+				break;
+			case 'jsonArray':
+				$this->core->setRef('General', 'outputObject', $this);
+				$this->core->setRef('General', 'echoObject', $this);
+				$this->forceObject=false;
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -43,8 +56,14 @@ class JsonOut extends Module
 	function out($output)
 	{
 		$readyValue=(is_array($output))?$output:array($output);
-		# TODO JSON_FORCE_OBJECT
-		echo json_encode($readyValue, JSON_FORCE_OBJECT);
+		if ($this->forceObject)
+		{
+			echo json_encode($readyValue, JSON_FORCE_OBJECT);
+		}
+		else
+		{
+			echo json_encode($this->stripKeys($readyValue));
+		}
 	}
 	
 	function resultJsonToArray($input, $sourceField, $destinationField)
@@ -59,6 +78,14 @@ class JsonOut extends Module
 				$line[$destinationField]=json_decode($line[$sourceField], true);
 			}
 		}
+		
+		return $output;
+	}
+	
+	function stripKeys($input)
+	{
+		$output=array();
+		foreach ($input as $line) $output[]=$line;
 		
 		return $output;
 	}

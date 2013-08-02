@@ -24,7 +24,7 @@ function userInstall
 {
 	# echo "Non root install chosen"
 	configDir=~/.$programName
-	bin="$configDir/bin"
+	storageDir=$configDir
 	binExec=~/bin
 }
 
@@ -32,7 +32,7 @@ function rootInstall
 {
 	# echo "Root install chosen"
 	configDir="/etc/$programName"
-	bin="/usr/bin"
+	storageDir=$configDir
 	binExec=/usr/bin
 	installType='cp'
 	
@@ -49,7 +49,7 @@ function linkedInstall
 	If you don't want to do this, you may want to consider installing as root, which will make it available to all users."
 	
 	configDir=~/.$programName
-	bin="."
+	storageDir=$configDir
 	binExec=~/bin
 	installType='ln'
 	
