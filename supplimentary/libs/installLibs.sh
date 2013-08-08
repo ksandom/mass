@@ -53,9 +53,40 @@ function showConfig
 	# 	repoDir: $repoDir
 }
 
+function copyTemplatedFile
+{
+	src="$1"
+	dst="$2"
+	
+	rm -f "$dst"
+	cat $src | sed '
+		s#~%configDir%~#'$configDir'#g;
+		s#~%storageDir%~#'$storageDir'#g;
+		s#~%installType%~#'$installType'#g;
+		s#~%binExec%~#'$binExec'#g;
+		s#~%.*%~##g' > "$dst"
+}
+
 function doInstall
 {
-	if mkdir -p "$configDir/"{data/hosts,externalLibraries,credentials} "$binExec" "$configDir/repos"
+	# Migrate any old data
+	mkdir -p "$storageDir"
+	if [ "$configDir" != "$storageDir" ]; then
+		for dirName in "$configDir"{data,config} ~/.mass/{data,config}; do
+			if [ -e "$dirName" ]; then
+				lastName=`echo $dirName | sed 's#.*/##g'`
+				if [ -e "$storageDir/$lastName" ]; then
+					echo "$dirName exists, but $storageDir/$lastName also exists, so no migration will be done."
+				else
+					echo "$dirName exists, migrating to $storageDir/$lastName."
+					mv "$dirName" "$storageDir"
+				fi
+			fi
+		done
+	fi
+
+	# Do initial directory structure and test write access
+	if mkdir -p "$configDir/"{externalLibraries,repos} "$binExec" "$storageDir/"{data/hosts,config,credentials}
 	then
 		echo a> $configDir/canWrite
 	elif [ "`cat $configDir/canWrite`" != 'a' ]; then
@@ -69,11 +100,13 @@ function doInstall
 	
 	rm $configDir/canWrite
 	
+	# Pre install stuff
 	checkPrereqs
 	removeObsoleteStuff
 	
 	showConfig
 	
+	# Put in the main content
 	if [ "$installType" == 'cp' ]; then
 		# echo -e "Copying available stuff"
 		cp -R "$startDir" "$configDir/repos"
@@ -82,24 +115,25 @@ function doInstall
 		ln -sf "$startDir" .
 	fi
 	
+	# Linking like there's no tomorrow.
 	cd "$configDir"
-	# echo -e "Linking like there's no tomorrow."
 	ln -sf "$repoDir"/docs "$repoDir/core.php" "$repoDir"/interfaces "$repoDir"/supplimentary .
 	rm -f examples
 	
-	# "$repoDir"/modules-*available "$repoDir"/macros-*available "$repoDir"/templates-*available "$repoDir"/packages-*available
+	copyTemplatedFile "$startDir/index.php" index.php
 	
-	ln -sf "$repoDir/index.php" .
-	
-	# echo -e "Setting up remaining directory structure"
+	# Setting up remaining directory structure
+	cd "$storageDir"
 	mkdir -p config data/1LayerHosts
 	
+	# Make it executable
 	cd $binExec
 	rm -f "$programName" "manageMass"
-	cat "$startDir/$programName" | sed 's#~%configDir%~#'$configDir'#g;s#~%storageDir%~#'$storageDir'#g' > "$programName"
-	cp "$startDir/manageMass" .
+	copyTemplatedFile "$startDir/$programName" "$programName"
+	copyTemplatedFile "$startDir/manageMass" manageMass
 	chmod 755 "$programName" "manageMass"
 	
+	# Set up profiles
 	createProfile commandLine
 	enableEverythingForProfile commandLine mass 
 	cleanProfile commandLine
@@ -113,7 +147,7 @@ function doInstall
 	disableItemInProfile publicWebAPI packages mass-AWS
 	cleanProfile publicWebAPI
 	
-	# echo -e "Cleanup"
+	# Cleanup
 	rm -f "$configDir/macros-enabled/example"*
 	rm -f "$configDir/modules-enabled/example"
 	rm -f "$configDir/templates-enabled/example"
@@ -123,10 +157,27 @@ function doInstall
 		mass --set=Credentials,defaultKey,id_rsa --saveStoreToConfig=Credentials
 	fi
 	
-	# It should be safe to do this on an existing setup.
+	# Run the final stage
 	echo -e "Calling the final stage"
-	
 	mass --verbosity=2 --finalInstallStage
+}
+
+function detectOldSettings
+{
+	if which mass > /dev/null; then
+		echo -n "Detecting settings from previous install: "
+		for setting in configDir storageDir installType binExec; do
+			echo -n "$setting "
+			settingValue=`mass --get=General,$setting -s`
+			if [ "$settingValue" != '' ]; then
+				export $setting="$settingValue"
+				export old$setting="$settingValue"
+			fi
+		done
+		echo "Done."
+	else
+		echo "detectOldSettings: No previous install found. Using defaults."
+	fi
 }
 
 function checkParameters
@@ -150,6 +201,12 @@ function checkParameters
 			'--showConfig')
 				showConfig
 				exit 0
+			;;
+			'--dontDetect')
+				echo "checkParameters: User requested not to detect previous settings."
+			;;
+			'--defaults')
+				echo "checkParameters: User requested to migrate from the previous settings to the defaults."
 			;;
 			*)
 				if [ "`echo $parmAction| grep "$allowed"`" != "" ]; then

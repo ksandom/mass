@@ -8,6 +8,8 @@ $profile='commandLine';
 
 define('configDir', '~%configDir%~');
 define('storageDir', '~%storageDir%~');
+define('installType', '~%installType%~');
+define('binExec', '~%binExec%~');
 
 include configDir.'/core.php';
 
@@ -26,8 +28,10 @@ $core=core::assert($verbosity);
 $core->set('General', 'EOL', "\n");
 $core->set('General', 'configDir', configDir);
 $core->set('General', 'storageDir', storageDir);
+$core->set('General', 'installType', installType);
+$core->set('General', 'binExec', binExec);
 $core->set('General', 'profile', $profile);
-$core->set('General', 'hostsDir', configDir.'/data/1LayerHosts');
+$core->set('General', 'hostsDir', storageDir.'/data/1LayerHosts');
 $core->set('General', 'programName', programName);
 $core->set('General', 'description', $description);
 include (configDir.'/interfaces/commandLine.php');

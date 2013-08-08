@@ -58,13 +58,31 @@ function linkedInstall
 	fi
 }
 
-
+# Choose defaults based on whether we are root or not.
 if [ `id -u` -gt 0 ];then
 	linkedInstall
 else
 	rootInstall
 fi
 
+# Detect old settings in the right situations.
+case  "$1" in
+	'--help')
+		true
+	;;
+	'--dontDetect')
+		true
+	;;
+	'--defaults')
+		detectOldSettings defaults
+	;;
+	*)
+		detectOldSettings
+	;;
+esac
+
+# Check parameters for any settings that needs to be set.
 checkParameters "$*" $0
 
+# Make it happen
 doInstall
