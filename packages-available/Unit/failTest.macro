@@ -1,0 +1,3 @@
+# Indicate that the current test has failed ~ unit,result
+
+setTestResult fail,~!Global,failTest!~

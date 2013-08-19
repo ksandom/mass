@@ -33,11 +33,60 @@ function checkPrereqs
 	done
 }
 
+function derivePaths
+{
+	export startDir=`pwd`
+	export repoDir="$configDir/repos/$programName"
+}
+
+function showConfig
+{
+	echo "Install config
+	what: 		$programName
+	config: 	$configDir
+	storage: 	$storageDir
+	binExec: 	$binExec
+	installType: 	$installType
+	installNotes: 	$installTypeComments"
+	
+	#startDir: 	$startDir
+	# 	repoDir: $repoDir
+}
+
+function copyTemplatedFile
+{
+	src="$1"
+	dst="$2"
+	
+	rm -f "$dst"
+	cat $src | sed '
+		s#~%configDir%~#'$configDir'#g;
+		s#~%storageDir%~#'$storageDir'#g;
+		s#~%installType%~#'$installType'#g;
+		s#~%binExec%~#'$binExec'#g;
+		s#~%.*%~##g' > "$dst"
+}
+
 function doInstall
 {
-	startDir=`pwd`
-	repoDir="$configDir/repos/$programName"
-	if mkdir -p "$configDir/"{data/hosts,externalLibraries,credentials} "$binExec" "$bin" "$configDir/repos"
+	# Migrate any old data
+	mkdir -p "$storageDir"
+	if [ "$configDir" != "$storageDir" ]; then
+		for dirName in "$configDir"{data,config} ~/.mass/{data,config}; do
+			if [ -e "$dirName" ]; then
+				lastName=`echo $dirName | sed 's#.*/##g'`
+				if [ -e "$storageDir/$lastName" ]; then
+					echo "$dirName exists, but $storageDir/$lastName also exists, so no migration will be done."
+				else
+					echo "$dirName exists, migrating to $storageDir/$lastName."
+					mv "$dirName" "$storageDir"
+				fi
+			fi
+		done
+	fi
+
+	# Do initial directory structure and test write access
+	if mkdir -p "$configDir/"{externalLibraries,repos} "$binExec" "$storageDir/"{data/hosts,config,credentials}
 	then
 		echo a> $configDir/canWrite
 	elif [ "`cat $configDir/canWrite`" != 'a' ]; then
@@ -51,19 +100,13 @@ function doInstall
 	
 	rm $configDir/canWrite
 	
+	# Pre install stuff
 	checkPrereqs
 	removeObsoleteStuff
 	
-	echo "Install details:
-	what: $programName
-	config: $configDir
-	bin: $bin
-	binExec: $binExec
-	startDir: $startDir
-	repoDir: $repoDir
-	installType: $installType
-	installNotes: $installTypeComments"
+	showConfig
 	
+	# Put in the main content
 	if [ "$installType" == 'cp' ]; then
 		# echo -e "Copying available stuff"
 		cp -R "$startDir" "$configDir/repos"
@@ -72,30 +115,25 @@ function doInstall
 		ln -sf "$startDir" .
 	fi
 	
+	# Linking like there's no tomorrow.
 	cd "$configDir"
-	# echo -e "Linking like there's no tomorrow."
 	ln -sf "$repoDir"/docs "$repoDir/core.php" "$repoDir"/interfaces "$repoDir"/supplimentary .
 	rm -f examples
 	
-	# "$repoDir"/modules-*available "$repoDir"/macros-*available "$repoDir"/templates-*available "$repoDir"/packages-*available
+	copyTemplatedFile "$startDir/index.php" index.php
 	
-	ln -sf "$repoDir/index.php" .
-	
-	# echo -e "Setting up remaining directory structure"
+	# Setting up remaining directory structure
+	cd "$storageDir"
 	mkdir -p config data/1LayerHosts
 	
+	# Make it executable
+	cd $binExec
+	rm -f "$programName" "manageMass"
+	copyTemplatedFile "$startDir/$programName" "$programName"
+	copyTemplatedFile "$startDir/manageMass" manageMass
+	chmod 755 "$programName" "manageMass"
 	
-	if [ "$installType" == 'cp' ]; then
-		# echo -e "Making the thing runnable"
-		cd $binExec
-		cp -R "$startDir/$programName" "$startDir/manageMass" .
-		chmod 755 "$bin/$programName" "$bin/manageMass"
-	else
-		# echo -e "Making the thing runnable"
-		cd $binExec
-		ln -sf "$startDir/$programName" "$startDir/manageMass" .
-	fi
-	
+	# Set up profiles
 	createProfile commandLine
 	enableEverythingForProfile commandLine mass 
 	cleanProfile commandLine
@@ -109,7 +147,7 @@ function doInstall
 	disableItemInProfile publicWebAPI packages mass-AWS
 	cleanProfile publicWebAPI
 	
-	# echo -e "Cleanup"
+	# Cleanup
 	rm -f "$configDir/macros-enabled/example"*
 	rm -f "$configDir/modules-enabled/example"
 	rm -f "$configDir/templates-enabled/example"
@@ -119,9 +157,72 @@ function doInstall
 		mass --set=Credentials,defaultKey,id_rsa --saveStoreToConfig=Credentials
 	fi
 	
-	# It should be safe to do this on an existing setup.
+	# Run the final stage
 	echo -e "Calling the final stage"
-	
 	mass --verbosity=2 --finalInstallStage
 }
 
+function detectOldSettings
+{
+	if which mass > /dev/null; then
+		echo -n "Detecting settings from previous install: "
+		for setting in configDir storageDir installType binExec; do
+			echo -n "$setting "
+			settingValue=`mass --get=General,$setting -s`
+			if [ "$settingValue" != '' ]; then
+				export $setting="$settingValue"
+				export old$setting="$settingValue"
+			fi
+		done
+		echo "Done."
+	else
+		echo "detectOldSettings: No previous install found. Using defaults."
+	fi
+}
+
+function checkParameters
+{
+	derivePaths
+	
+	allowed='^--\(configDir\|storageDir\|binExec\)'
+	for parm in $1;do
+		parmAction=`echo $parm | cut -d= -f1`
+		parmValue=`echo $parm | cut -d= -f2`
+		case $parmAction in
+			'--help')
+				helpFile="docs/installTimeParameters.md"
+				if [ -e $helpFile ]; then
+					cat "$helpFile"
+				else
+					echo "Could not find $helpFile. Currently looking from `pwd`."
+				fi
+				exit 0
+			;;
+			'--showConfig')
+				showConfig
+				exit 0
+			;;
+			'--dontDetect')
+				echo "checkParameters: User requested not to detect previous settings."
+			;;
+			'--defaults')
+				echo "checkParameters: User requested to migrate from the previous settings to the defaults."
+			;;
+			*)
+				if [ "`echo $parmAction| grep "$allowed"`" != "" ]; then
+					if [ "$parmValue" != "$parmAction" ]; then
+						varName=`echo $parmAction| cut -b 3-`
+						echo "Will set $varName to $parmValue."
+						export "$varName=$parmValue"
+					else
+						echo "A value must be specified for $parmAction in the form $parmAction=value."
+						exit 0
+					fi
+				else
+					echo "Unknown parameter $parm."
+					exit 1
+				fi
+			;;
+		esac
+	done
+}

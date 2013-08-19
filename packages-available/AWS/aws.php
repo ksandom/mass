@@ -473,6 +473,7 @@ $core=core::assert();
 $configDir=$core->get('General', 'configDir');
 
 $awsLibrary=array(
+	'installedViaManageMass'=>"$configDir/repos/forkedForkedAws-sdk-for-php/sdk.class.php",
 	'installedViaMass'=>"$configDir/repos/aws-sdk-for-php/sdk.class.php",
 	'obsoleteInstalledViaMass'=>"$configDir/externalLibraries/aws-sdk-for-php/sdk.class.php",
 	'installedViaApt'=>'/usr/share/php/AWSSDKforPHP/sdk.class.php'

@@ -24,17 +24,15 @@ function userInstall
 {
 	# echo "Non root install chosen"
 	configDir=~/.$programName
-	bin="$configDir/bin"
+	storageDir=$configDir
 	binExec=~/bin
-	
-	doInstall
 }
 
 function rootInstall
 {
 	# echo "Root install chosen"
 	configDir="/etc/$programName"
-	bin="/usr/bin"
+	storageDir=$configDir
 	binExec=/usr/bin
 	installType='cp'
 	
@@ -42,8 +40,6 @@ function rootInstall
 		echo "Legacy root install exists. This will interfere with new installs."
 		mv -v /root/.mass /root/.mass.obsolete
 	fi
-	
-	doInstall
 }
 
 function linkedInstall
@@ -53,21 +49,40 @@ function linkedInstall
 	If you don't want to do this, you may want to consider installing as root, which will make it available to all users."
 	
 	configDir=~/.$programName
-	bin="."
+	storageDir=$configDir
 	binExec=~/bin
 	installType='ln'
 	
 	if [ "`echo $PATH|grep $binExec`" == '' ]; then # A hack for the mac
 		binExec=/usr/local/bin
 	fi
-	
-	doInstall
 }
 
-
+# Choose defaults based on whether we are root or not.
 if [ `id -u` -gt 0 ];then
 	linkedInstall
 else
 	rootInstall
 fi
- 
+
+# Detect old settings in the right situations.
+case  "$1" in
+	'--help')
+		true
+	;;
+	'--dontDetect')
+		true
+	;;
+	'--defaults')
+		detectOldSettings defaults
+	;;
+	*)
+		detectOldSettings
+	;;
+esac
+
+# Check parameters for any settings that needs to be set.
+checkParameters "$*" $0
+
+# Make it happen
+doInstall

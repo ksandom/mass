@@ -1,0 +1,12 @@
+# Set the result of the current unitTest. --setTestResult=pass|fail|warn,comment ~ unit,hidden
+
+set UnitResults,currentResult,~!Global,setTestResult-0!~
+set UnitResults,currentComment,~!Global,setTestResult-1!~
+set UnitResults,currentColor,~!UnitResults,~!Global,setTestResult-0!~Color!~
+
+debug 2,setTestResult: '~!Global,setTestResult-1!~'
+if ~!Global,setTestResult-0!~,!=,,
+	basicMaths UnitResults,~!Global,setTestResult-0!~,~!UnitResults,~!Global,setTestResult-0!~!~,+,1
+
+unset Global,setTestResult-0
+unset Global,setTestResult-1

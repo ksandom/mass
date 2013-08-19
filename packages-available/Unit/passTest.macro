@@ -1,0 +1,3 @@
+# Indicate that the current test has passed ~ unit,result
+
+setTestResult pass,~!Global,passTest!~

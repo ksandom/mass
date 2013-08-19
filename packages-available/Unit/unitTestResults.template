@@ -1,0 +1,4 @@
+<~~ [~%resultColor%~~%result%~~!Color,default!~] ~!Color,default!~~%description%~ ~!Color,brightBlack!~- ~!Color,green!~~%resultComment%~~!Color,default!~
+
+~>
+~!UnitResults,passColor!~Pass~!Color,brightBlack!~=~!Color,default!~~!UnitResults,pass!~, ~!UnitResults,warnColor!~Warn~!Color,brightBlack!~=~!Color,default!~~!UnitResults,warn!~, ~!UnitResults,failColor!~Fail~!Color,brightBlack!~=~!Color,default!~~!UnitResults,fail!~~!Color,default!~

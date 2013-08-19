@@ -1,115 +1,107 @@
-# Test the if features ~ test
+# Test if/elseIf/else and nested if conditions. ~ test,unitTest,hidden
 
-verbose
+defineTest ifResult - no result,
+	clear
+	ifResult failTest got a result
+	notIfResult passTest no result
 
-debug 1,Test ifResult
-ifResult debug 1,Test 1: Got a result - incorrect
-notIfResult debug 1,Test 1: NO result - correct
 
-
-list db.*staging
-ifResult debug 1,Test 2: Got a result - correct
-notIfResult debug 1,Test 2: NO result - incorrect
+defineTest ifResult - result,
+	list local
+	ifResult passTest result
+	notIfResult failTest no result
 
 clear
 nested
 
-debug 0,Test if/elseif/else construct
-if a,==,a,
-	debug 1,Test3: correct - if
+defineTest if - if,
+	if a,==,a,
+		passTest if
 
-elseIf b,==,a,
-	debug 1,Test3: incorrect - elseif
+	elseIf b,==,a,
+		failTest elseif
 
-else
-	debug 1,Test3: incorrect - else
-
-
-if a,==,b,
-	debug 1,Test4: incorrect - if
-
-elseIf b,==,b,
-	debug 1,Test4: correct - elseif
-
-else
-	debug 1,Test4: incorrect - else
-
-
-if a,==,c,
-	debug 1,Test5: incorrect - if
-
-elseIf b,==,c,
-	debug 1,Test5: incorrect - elseif
-
-else
-	debug 1,Test5: correct - else
-
-
-
-debug 0,Test nested if
-if a,==,a,
-	debug 1,Test6: correct - if
-	if a,==,b,
-		debug 1,  6/a: if/nestedIf non-match - incorrect
 	else
-		debug 1,  6/b: if/nestedElse non-match - correct
+		failTest else
 
-elseIf b,==,a,
-	debug 1,Test6: incorrect - elseif
+defineTest if - elseIf,
 	if a,==,b,
-		debug 1,  6/a: elseif/nestedIf non-match - incorrect
-	else
-		debug 1,  6/b: elseif/nestedElse non-match - incorrect
+		failTest if
 
-else
-	debug 1,Test6: incorrect - else
+	elseIf b,==,b,
+		passTest elseif
+
+	else
+		failTest else
+
+
+defineTest if - else,
+	if a,==,c,
+		failTest if
+
+	elseIf b,==,c,
+		failTest elseif
+
+	else
+		passTest else
+
+
+
+defineTest nested - if else,
+	if a,==,a,
+		if a,==,b,
+			failTest if if
+		else
+			passTest if else
+	
+	elseIf b,==,a,
+		if a,==,b,
+			failTest elseIf if
+		else
+			failTest elseIf else
+	
+	else
+		if a,==,b,
+			failTest else if
+		else
+			failTest else else
+
+defineTest nested - elseIf else,
 	if a,==,b,
-		debug 1,  6/a: else/nestedIf non-match - incorrect
+		if a,==,b,
+			failTest if if
+		else
+			failTest if else
+	
+	elseIf b,==,b,
+		if a,==,b,
+			failTest elseIf if
+		else
+			passTest elseIf else
+	
 	else
-		debug 1,  6/b: else/nestedElse non-match - incorrect
+		if a,==,b,
+			failTest else if
+		else
+			failTest else else
 
-if a,==,b,
-	debug 1,Test7: incorrect - if
-	if a,==,b,
-		debug 1,  7/a: if/nestedIf non-match - incorrect
+
+defineTest nested - else else,
+	if a,==,c,
+		if a,==,b,
+			failTest if if
+		else
+			failTest if else
+	
+	elseIf b,==,c,
+		if a,==,b,
+			failTest elseIf if
+		else
+			failTest elseIf else
+	
 	else
-		debug 1,  7/b: if/nestedElse non-match - incorrect
+		if a,==,b,
+			failTest else if
+		else
+			passTest else else
 
-elseIf b,==,b,
-	debug 1,Test7: correct - elseif
-	if a,==,b,
-		debug 1,  7/a: elseif/nestedIf non-match - incorrect
-	else
-		debug 1,  7/b: elseif/nestedElse non-match - correct
-
-else
-	debug 1,Test7: incorrect - else
-	if a,==,b,
-		debug 1,  7/a: else/nestedIf non-match - incorrect
-	else
-		debug 1,  7/b: else/nestedElse non-match - incorrect
-
-
-if a,==,c,
-	debug 1,Test8: incorrect - if
-	if a,==,b,
-		debug 1,  8/a: if/nestedIf non-match - incorrect
-	else
-		debug 1,  8/b: if/nestedElse non-match - correct
-
-elseIf b,==,c,
-	debug 1,Test8: incorrect - elseif
-	if a,==,b,
-		debug 1,  8/a: elseif/nestedIf non-match - incorrect
-	else
-		debug 1,  8/b: elseif/nestedElse non-match - incorrect
-
-else
-	debug 1,Test8: correct - else
-	if a,==,b,
-		debug 1,  8/a: else/nestedIf non-match - incorrect
-	else
-		debug 1,  8/b: else/nestedElse non-match - correct
-
-
-V

@@ -1,0 +1,23 @@
+# Run unitTests. This is any feature that includes unitTest in its tags. ~ unit
+
+unsetCategory UnitResults
+
+set UnitResults,pass,0
+set UnitResults,fail,0
+set UnitResults,warn,0
+
+set UnitResults,passColor,~!Color,green!~
+set UnitResults,failColor,~!Color,red!~
+set UnitResults,warnColor,~!Color,yellow!~
+
+debug 3,unitTests: Set colours ~!UnitResults,passColor!~pass~!Color,brightBlack!~, ~!UnitResults,failColor!~fail~!Color,brightBlack!~, ~!UnitResults,warnColor!~warn~!Color,default!~.
+
+searchFeatures unitTest
+requireItem tagString,unitTest
+excludeItem name,--
+
+loop
+	callFeatureNoReturn ~!Result,name!~
+
+retrieveResults UnitResults,results
+templateOut unitTestResults

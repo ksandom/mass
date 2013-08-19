@@ -1,0 +1,8 @@
+# Get the same dataset that --help uses, but not filtering out hidden features. This is intended for features that want to safely get a list of features. ~ user,hidden
+
+templateOut help
+searchHelp all
+if ~!Global,searchFeatures!~,!=,,
+	requireEach ~!Global,searchFeatures!~
+else
+	requireEach ~!Help,default!~
