@@ -41,16 +41,20 @@ function derivePaths
 
 function showConfig
 {
-	echo "Install config
-	what: 		$programName
-	config: 	$configDir
-	storage: 	$storageDir
-	binExec: 	$binExec
-	installType: 	$installType
-	installNotes: 	$installTypeComments"
+	echo "Install config"
 	
-	#startDir: 	$startDir
-	# 	repoDir: $repoDir
+	for configItem in configDir storageDir installType binExec;do
+		oldConfigItem=old$configItem
+		if [ "${!oldConfigItem}" == '' ]; then
+			echo "	$configItem: 	${!configItem} **NEW**"
+		elif [ "${!configItem}" != "${!oldConfigItem}" ]; then
+			echo "	$configItem: 	${!configItem} **CHANGED FROM** ${!oldConfigItem}"
+		else
+			echo "	$configItem: 	${!configItem}"
+		fi
+	done
+	
+	echo "	installNotes: 	$installTypeComments"
 }
 
 function copyTemplatedFile
@@ -69,7 +73,7 @@ function copyTemplatedFile
 
 function doInstall
 {
-	# Migrate any old data
+	# Migrate any old data changing between a unified directory structure to a split structure.
 	mkdir -p "$storageDir"
 	if [ "$configDir" != "$storageDir" ]; then
 		for dirName in "$configDir"{data,config} ~/.mass/{data,config}; do
