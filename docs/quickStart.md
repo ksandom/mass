@@ -73,4 +73,5 @@ You may also be interested in `--json` which outputs it in json format, although
 
 * `--cssh` uses clusterSSH to open and control a terminal to every server in the resultSet. This seems to be the most popular feature amoungst people I've talked to who use mass. For convenience, you can use `manageMass installClusterSSH` to install it on Linux or OSX (NOTE that on OSX, this script requies brew.)
 
+TODO finish this.
 
