@@ -60,6 +60,8 @@ It's important to recognise the different between data/resultSet output and debu
 * debug: -V decrements the verbosity
 * debug: --verbosity=integer sets the verbosity.
 
+If verbosity is greater than 0, some macros will give you some extra output
+
 ## EEEEEEEEEEEEVERYTHIIIIING
 
 Sometimes you want to see all the data that comes back, and not just what the active template shows you. For this you can use:
@@ -72,6 +74,7 @@ You may also be interested in `--json` which outputs it in json format, although
 # Taking action
 
 * `--cssh` uses clusterSSH to open and control a terminal to every server in the resultSet. This seems to be the most popular feature amoungst people I've talked to who use mass. For convenience, you can use `manageMass installClusterSSH` to install it on Linux or OSX (NOTE that on OSX, this script requies brew.)
-
-TODO finish this.
+* `--term` opens up an isolated terminal to every server in the resultSet. If this doesn't work for you, feel free to debug it with `-v` and let me know what the command should look like on your platform.
+* `--upload` uploads a file/directory to to each server in the resultSet. See `--help=--upload` for more details.
+* `--download` uploads a file/directory to to each server in the resultSet. See `--help=--download` for more details.
 
