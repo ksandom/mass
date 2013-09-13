@@ -882,7 +882,7 @@ class core extends Module
 		}
 		else
 		{
-			$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+			$nesting=$this->get('Core', 'nesting');
 			if (!isset($this->store[$category])) $shouldSet=true;
 			elseif(!isset($this->store[$category][$nesting])) $shouldSet=true;
 			elseif (!isset($this->store[$category][$nesting][$valueName])) $shouldSet=true;
@@ -902,7 +902,7 @@ class core extends Module
 		if ($category!=nestedPrivateVarsName) $this->store[$category][$valueName]=$args;
 		else
 		{
-			$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+			$nesting=$this->get('Core', 'nesting');
 			if (!isset($this->store[$category][$nesting])) $this->store[$category][$nesting]=array();
 			$this->store[$category][$nesting][$valueName]=$args;
 		}
@@ -917,7 +917,7 @@ class core extends Module
 		if ($category!=nestedPrivateVarsName) $this->store[$category][$valueName]=&$args;
 		else
 		{
-			$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+			$nesting=$this->get('Core', 'nesting');
 			if (!isset($this->store[$category][$nesting])) $this->store[$category][$nesting]=array();
 			$this->store[$category][$nesting][$valueName]=$args;
 		}
