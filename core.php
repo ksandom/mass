@@ -45,6 +45,10 @@ class core extends Module
 		$this->verbosity=$verbosity;
 		$this->set('Verbosity', 'level', $verbosity);
 		
+		# This is for setting default default result set so that functions definitely get the data type they are expecting.
+		#$defaultResultSet=array();
+		#$this->setResultSet($defaultResultSet, 'start up');
+		
 		parent::__construct('Core');
 		$this->set('Core', 'serial', intval(rand()));
 		$this->registerModule($this);

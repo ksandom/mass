@@ -408,7 +408,9 @@ class Manipulator extends Module
 		//print_r($input);
 		$outputMatch=array();
 		$outputNoMatch=array();
-		if (!is_array($input)) return $output;
+		
+		# This could techinically be done with return array();, but would be prone to bugs if the default value of one of these arrays changes in the future.
+		if (!is_array($input)) return ($shouldMatch)?$outputMatch:$outputNoMatch;
 		
 		foreach ($input as $key=>$line)
 		{
