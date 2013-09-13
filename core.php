@@ -827,7 +827,7 @@ class core extends Module
 			switch ($category)
 			{
 				case isolatedNestedPrivateVarsName:
-					$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+					$nesting=$this->get('Core', 'nesting');
 					if (isset($this->store[isolatedNestedPrivateVarsName][$nesting]))
 					{
 						if (isset($this->store[isolatedNestedPrivateVarsName][$nesting][$valueName]))
@@ -839,7 +839,7 @@ class core extends Module
 					else $result=null;
 					break;
 				case nestedPrivateVarsName:
-					$nesting=$this->get('Core', 'nesting'); # TODO Evaluate whether this should be done directly. Based on how often this will be called, I think no.
+					$nesting=$this->get('Core', 'nesting');
 					if (isset($this->store[nestedPrivateVarsName][$nesting])) 
 					{
 						for ($i=$nesting;$i>0;$i--)
