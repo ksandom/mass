@@ -2,8 +2,8 @@
 
 * --help - Show this help and exit.
 * --showConfig - Show the settings that would be used and exit.
-* --configDir="/etc/mass" - Where to save configuration files and data.
-* --storageDir="/etc/mass" - Where you want persistent storage to go. The directories data and config will be created inside this directory.
+* --configDir="/etc/mass" - Where to save configuration files and data. It is the base directory for all configuration.
+* --storageDir="/etc/mass" - Where you want persistent storage to go. The directories data and config will be created inside this directory. Normally this is the same as the configDir.
 * --binExec=/usr/bin - Where to put the file to be execurted.
 * --installType='cp' - Can be cp for copy, or ln for link.
 * --defaults - Use this to go back to the default settings. This will migrate any data/settings you already have. This must be the first parameter.

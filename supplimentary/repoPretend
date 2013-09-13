@@ -3,7 +3,7 @@
 #   Adds a pretent repository (a complete directory structure that is not yet a repository). This is useful for something that is still in the experimentation stage.
 #
 # Syntax:
-#   $0 pathToDirectoryStructure
+#   $0 pathToDirectoryStructure [whatToCallIt]
 #
 # Examples:
 #   Add a directory structure.
@@ -12,5 +12,39 @@
 requiredParms="$1"
 . `dirname $0`/libs/includeLibs.sh
 
+ # Sort out what we are working with.
+fullSrcPath="$1"
+name=`echo "$fullSrcPath" | sed 's#.*/##g'`
+if [ "$2" != "" ]; then
+	dstName="$2"
+else
+	dstName="$name"
+fi
+
+
+ # Prep
+mkdir /tmp/$$
+cd /tmp/$$
+
+ # Get the link
+ln -s "$fullSrcPath" .
+if [ "$name" != "$dstName" ]; then
+	mv "$name" "$dstName"
+fi 
+
+ # Pre clean
 cd "$configDir"/repos
-ln -s "$1" .
+if [ -f "$dstName" ]; then
+	rm "$dstName"
+elif [ -d "$dstName" ]; then
+	rm -Rf "$dstName"
+elif [ -L "$dstName" ]; then
+	rm "$dstName"
+fi
+
+
+ # Put it in place
+mv "/tmp/$$/$dstName" .
+
+ # Clean up
+rm -Rf /tmp/$$
