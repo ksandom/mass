@@ -623,17 +623,6 @@ class core extends Module
 		return $output;
 	}
 	
-	function processSingleResult($input) # TODO This looks like it might not be relevant any more. 2012-07-30
-	{
-		for ($i=0;$i<50;$i++)
-		{
-			
-			
-			# iterate through array
-		}
-		return $output;
-	}
-	
 	function addAction($argument, $value=null, $macroName='default', $lineNumber=false)
 	{
 		if (!isset($this->store['Macros'])) $this->store['Macros']=array();
