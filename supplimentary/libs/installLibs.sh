@@ -172,7 +172,7 @@ function detectOldSettings
 		echo -n "Detecting settings from previous install: "
 		for setting in configDir storageDir installType binExec; do
 			echo -n "$setting "
-			settingValue=`mass --get=General,$setting -s`
+			settingValue=`mass -q --get=General,$setting -s`
 			if [ "$settingValue" != '' ]; then
 				export $setting="$settingValue"
 				export old$setting="$settingValue"
