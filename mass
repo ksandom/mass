@@ -4,7 +4,7 @@
  
 define('programName', 'mass');
 $description="A commandline tool/API for doing awesome stuff on many nodes of a cluster.";
-$profile='commandLine';
+$profile=(isset($argv[0])?$argv[0]:programName;
 
 define('configDir', '~%configDir%~');
 define('storageDir', '~%storageDir%~');

@@ -138,18 +138,18 @@ function doInstall
 	chmod 755 "$programName" "manageMass"
 	
 	# Set up profiles
-	createProfile commandLine
-	enableEverythingForProfile commandLine mass 
-	cleanProfile commandLine
+	createProfile mass
+	enableEverythingForProfile mass mass 
+	cleanProfile mass
 
-	createProfile privateWebAPI
-	enableEverythingForProfile privateWebAPI mass 
-	disableItemInProfile privateWebAPI packages mass-SSH
-	cleanProfile privateWebAPI
+	createProfile massPrivateWebAPI
+	enableEverythingForProfile massPrivateWebAPI mass 
+	disableItemInProfile massPrivateWebAPI packages mass-SSH
+	cleanProfile massPrivateWebAPI
 
-	cloneProfile privateWebAPI publicWebAPI
-	disableItemInProfile publicWebAPI packages mass-AWS
-	cleanProfile publicWebAPI
+	cloneProfile massPrivateWebAPI massPublicWebAPI
+	disableItemInProfile massPublicWebAPI packages mass-AWS
+	cleanProfile massPublicWebAPI
 	
 	# Cleanup
 	rm -f "$configDir/macros-enabled/example"*

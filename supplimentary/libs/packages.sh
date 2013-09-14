@@ -121,7 +121,7 @@ function cloneProfile
 	from="$1"
 	to="$2"
 	
-	cd $configDir/profiles
+	cd "$configDir/profiles"
 	rm -Rf "$to"
 	cp -R "$from" "$to"
 }
@@ -137,4 +137,15 @@ function cleanProfile
 	for thing in $directoryThings;do
 		cleanEnabled testEnabledDirectory "$configDir/profiles/$name/$thing" "$name"
 	done
+}
+
+function obsoleteProfile
+{
+	name="$1"
+	
+	cd "$configDir/profiles"
+	if [ -e "$name" ]; then
+		mkdir -p "$configDir/obsolete/profiles"
+		mv -v "$name" "$configDir/obsolete/profiles"
+	fi
 }
