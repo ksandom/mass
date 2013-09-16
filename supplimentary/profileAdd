@@ -14,4 +14,6 @@ requiredParms="$1"
 . `dirname $0`/libs/includeLibs.sh
 . "$libDir"/packages.sh
 
+detectOldSettingsIfWeDontHaveThem
+
 createProfile $1

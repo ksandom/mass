@@ -1,5 +1,7 @@
 # Useful install libraries.
 
+settingNames="configDir storageDir installType binExec"
+
 function removeObsoleteStuff
 {
 	if ! mkdir -p $configDir/obsolete; then
@@ -68,6 +70,7 @@ function copyTemplatedFile
 		s#~%storageDir%~#'$storageDir'#g;
 		s#~%installType%~#'$installType'#g;
 		s#~%binExec%~#'$binExec'#g;
+		s#~%programName%~#'$programName'#g;
 		s#~%.*%~##g' > "$dst"
 }
 
@@ -121,10 +124,10 @@ function doInstall
 	
 	# Linking like there's no tomorrow.
 	cd "$configDir"
-	ln -sf "$repoDir"/docs "$repoDir/core.php" "$repoDir"/interfaces "$repoDir"/supplimentary .
+	ln -sf "$repoDir"/docs "$repoDir/src/core.php" "$repoDir"/interfaces "$repoDir"/supplimentary .
 	rm -f examples
 	
-	copyTemplatedFile "$startDir/index.php" index.php
+	copyTemplatedFile "$startDir/src/index.php" index.php
 	
 	# Setting up remaining directory structure
 	cd "$storageDir"
@@ -133,8 +136,8 @@ function doInstall
 	# Make it executable
 	cd $binExec
 	rm -f "$programName" "manageMass"
-	copyTemplatedFile "$startDir/$programName" "$programName"
-	copyTemplatedFile "$startDir/manageMass" manageMass
+	copyTemplatedFile "$startDir/src/$programName" "$programName"
+	copyTemplatedFile "$startDir/src/manageMass" manageMass
 	chmod 755 "$programName" "manageMass"
 	
 	# Set up profiles
@@ -166,18 +169,41 @@ function doInstall
 	mass --verbosity=2 --finalInstallStage
 }
 
+function detectOldSettingsIfWeDontHaveThem
+{
+	shouldDetect=false
+	
+	for setting in $settingNames;do
+		if [ "${!$setting}" != '' ]; then
+			shouldDetect=true
+		fi
+	done
+	
+	if [ "$shouldDetect" == 'true' ]; then
+		detectOldSettings
+	fi
+}
+
 function detectOldSettings
 {
 	if which mass > /dev/null; then
-		echo -n "Detecting settings from previous install: "
-		for setting in configDir storageDir installType binExec; do
-			echo -n "$setting "
-			settingValue=`mass -q --get=General,$setting -s`
+		echo -n "Detecting settings from previous install... "
+		
+		request=""
+		for setting in $settingNames; do
+			request="$request~!General,$setting!~	"
+		done
+		values=`mass --get=Tmp,nonExistent --toString="$request" -s`
+		let settingPosition=0
+		for setting in $settingNames; do
+			let settingPosition=$settingPosition+1
+			settingValue=`echo "$values" | cut -d\	  -f $settingPosition`
 			if [ "$settingValue" != '' ]; then
-				export $setting="$settingValue"
-				export old$setting="$settingValue"
+				export $setting=$settingValue
+				export old$setting=$settingValue
 			fi
 		done
+		
 		echo "Done."
 	else
 		echo "detectOldSettings: No previous install found. Using defaults."

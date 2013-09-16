@@ -2,9 +2,8 @@
 <?php
 # Copyright (c) 2012, Kevin Sandom under the BSD License. See LICENSE for full details.
  
-define('programName', 'mass');
+define('programName', '~%programName%~');
 $description="A commandline tool/API for doing awesome stuff on many nodes of a cluster.";
-#$profile=(isset($argv[0]))?$argv[0]:programName;
 $profile=programName;
 
 define('configDir', '~%configDir%~');
