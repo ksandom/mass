@@ -22,6 +22,10 @@
 
  # The export saves called scripts from having to do this detection, and thus speeds up loading time.
 export configDir='~%configDir%~'
+export storageDir='~%storageDir%~'
+export installType='~%installType%~'
+export binExec='~%binExec%~'
+
 export libDir=$configDir/supplimentary/libs
 export supplimentaryDir=$configDir/supplimentary
 

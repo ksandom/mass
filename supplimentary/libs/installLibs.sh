@@ -136,8 +136,8 @@ function doInstall
 	# Make it executable
 	cd $binExec
 	rm -f "$programName" "manageMass"
-	copyTemplatedFile "$startDir/src/$programName" "$programName"
-	copyTemplatedFile "$startDir/src/manageMass" manageMass
+	copyTemplatedFile "$startDir/src/exec" "$programName"
+	copyTemplatedFile "$startDir/src/manage" manageMass
 	chmod 755 "$programName" "manageMass"
 	
 	# Set up profiles
