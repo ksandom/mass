@@ -14,13 +14,13 @@ requiredParms="$1"
 
  # Sort out what we are working with.
 fullSrcPath="$1"
-name=`echo "$fullSrcPath" | sed 's#.*/##g'`
+name=`echo "$fullSrcPath" | sed 's#/$##;
+	s#.*/##g'`
 if [ "$2" != "" ]; then
 	dstName="$2"
 else
 	dstName="$name"
 fi
-
 
  # Prep
 mkdir /tmp/$$
