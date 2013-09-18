@@ -43,10 +43,65 @@ function testEnabledDirectory
 function createProfile
 {
 	name="$1"
-	mkdir -p $configDir/profiles/$name/{packages,modules,macros,templates}
+	
+	# TODO add protection for invalid fileNaming
+	
+	createBareProfile "$name"
+	
+	doExec='true'
+	for parm in "$@"; do
+		case $parm in
+			'--noExec')
+				doExec='false'
+			;;
+		esac
+	done
+	
+	if [ "$doExec" == 'true' ]; then
+		createExec "$name"
+	fi
 }
 
 function removeProfile
+{
+	name="$1"
+	removeBareProfile "$name"
+}
+
+
+function createExec
+{
+	name="$1"
+	cd "$binExec"
+	
+	# TODO check that this is finished/
+	programName="$name"
+	copyTemplatedFile "$startDir/src/exec" "$name"
+	chmod 755 "$name"
+}
+
+function removeExec
+{
+	name="$1"
+	
+	# TODO add protection for invalid fileNaming
+	
+	cd "$binExec"
+	if [ "`ls -1 "$configDir"/profiles | grep \"^$name$\"`" != '' ]; then
+		rm "$name"
+	else
+		echo "There is no profile by this name. Although the profile and the exec are not intrinsicly linked, it would be a bad idea to let someone delete any string which we don't know about. Your easies t next step is to create a profile and then run removeProfile, which will call removeExec."
+	fi
+}
+
+
+function createBareProfile
+{
+	name="$1"
+	mkdir -p $configDir/profiles/$name/{packages,modules,macros,templates}
+}
+
+function removeBareProfile
 {
 	name="$1"
 	profileToRemove="$configDir/profiles/$name"

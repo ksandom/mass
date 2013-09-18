@@ -134,7 +134,7 @@ function doInstall
 	mkdir -p config data/1LayerHosts
 	
 	# Make it executable
-	cd $binExec
+	cd "$binExec"
 	rm -f "$programName" "manageMass"
 	copyTemplatedFile "$startDir/src/exec" "$programName"
 	copyTemplatedFile "$startDir/src/manage" manageMass
