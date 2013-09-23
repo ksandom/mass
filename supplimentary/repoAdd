@@ -21,4 +21,8 @@ requiredParms="$2"
 . `dirname $0`/libs/includeLibs.sh
 . $libDir/getRepo.sh
 
-getRepo "$1" "$2"
+if [ "`echo $2 | grep '\(@\|://\)'`" != '' ]; then
+	getRepo "$1" "$2"
+else
+	addPretendRepo "$2" "$1"
+fi

@@ -145,7 +145,7 @@ function doInstall
 	enableEverythingForProfile mass mass 
 	cleanProfile mass
 
-	createProfile massPrivateWebAPI
+	createProfile massPrivateWebAPI --noExec
 	enableEverythingForProfile massPrivateWebAPI mass 
 	disableItemInProfile massPrivateWebAPI packages mass-SSH
 	cleanProfile massPrivateWebAPI

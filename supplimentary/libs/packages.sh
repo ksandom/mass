@@ -48,6 +48,12 @@ function createProfile
 	
 	createBareProfile "$name"
 	
+	# TODO This should probably be abstracted out to an "all" profile that includes these files for all profiles.
+	enableItemInProfile "$name" 'modules' 'data.php' 'mass'
+	enableItemInProfile "$name" 'modules' 'macro.php' 'mass'
+	enableItemInProfile "$name" 'modules' 'packages.php' 'mass'
+	enableItemInProfile "$name" 'modules' 'template.php' 'mass'
+	
 	doExec='true'
 	for parm in "$@"; do
 		case $parm in
@@ -124,6 +130,7 @@ function enableEverythingForProfile
 		cd $configDir/profiles/$name/$thing
 		if [ `ls $configDir/repos/$repo/$thing-available|wc -l 2> /dev/null` -gt 0 ]; then
 			while read item;do
+				# TODO Potentially this can be refactored to use enableItemInProfile
 				if [ "$thing" == 'packages' ]; then
 					if [ -e "$repo-$item" ]; then
 						true
@@ -148,10 +155,13 @@ function enableItemInProfile
 	profile="$1"
 	itemType="$2" # package,module,macro,template
 	item="$3" # AWS,SSH
+	repo="$4"
+	
+	itemPath="$configDir/repos/$repo/$itemType-available/$item"
 	
 	cd $configDir/profiles/$profile/$itemType
-	if [ -e $configDir/profiles/$profile/$itemType/$item ]; then
-		ln -sf $configDir/profiles/$profile/$itemType/$item .
+	if [ -e "$itemPath" ]; then
+		ln -sf "$itemPath" .
 	else
 		echo "enableItemInProfile: Could not find $configDir/profiles/$profile/$itemType/$item" 1>&2
 	fi
