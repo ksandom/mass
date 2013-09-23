@@ -22,6 +22,6 @@ fi
 
 if [ -h "$1" ]; then # Symlink (pretend repo)
 	rm "$1"
-elif [ -d "$1" ] # Directory
+elif [ -d "$1" ]; then # Directory
 	rm -Rf "$1"
 fi
