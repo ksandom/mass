@@ -1,0 +1,4 @@
+# Load repository parameters. --loadRepoParms=repoName ~ repoParms,hidden
+
+set Tmp,parmFile,~!General,configDir!~/repos/~!Global,loadRepoParms!~/parameters.json
+collectionLoadArbitrary RepoParms~!Global,loadRepoParms!~,~!Tmp,parmFile!~
