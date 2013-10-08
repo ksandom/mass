@@ -71,7 +71,15 @@ function copyTemplatedFile
 		s#~%installType%~#'$installType'#g;
 		s#~%binExec%~#'$binExec'#g;
 		s#~%programName%~#'$programName'#g;
+		s#~%languageName%~#mass#g;
 		s#~%.*%~##g' > "$dst"
+}
+
+function createExec
+{
+	echo "createExec is not finished yet. Tried to create \"$1\""
+	# TODO finish this.
+	# copyTemplatedFile "" ""
 }
 
 function doInstall

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Description
-#   Installs a repository from start to finish. **Most users will want this.
+#   Installs a repository from start to finish. **Most users will want this.**
 #
 # Syntax:
 #   $0 repoAddress
@@ -20,18 +20,45 @@ requiredParms="$1"
 checkoutDir="repoInstall-$$"
 . `dirname $0`/libs/includeLibs.sh
 . $libDir/getRepo.sh
+. $libDir/packages.sh
+repoAddress="$1"
 
-if [ "`echo $2 | grep '\(@\|://\)'`" != '' ]; then
-	getRepo "$checkoutDir" "$2"
-else
-	addPretendRepo "$checkoutDir" "$1"
-fi
+addRepo "$repoAddress" "$checkoutDir"
 
 cd "$configDir/repos/$checkoutDir"
-# TODO detect name
-# TODO detect conflict
-	# TODO clean up and abort
-# TODO mv to final destination
-# TODO create profile
-# TODO enable packages
+
+# detect name
+name=`repoGetParm "$checkoutDir" name`
+
+if [ "$name" == "" ]; then
+	# TODO add the option for the user to specify the parameters.
+	echo "The repository at \"$repoAddress\" does not appear to have a name set. You'll need to do this installation manually."
+	repoRemove "$checkoutDir"
+	exit 1
+fi
+
+# detect conflict
+if ! repoExists "$name"; then # clean up and warn
+	echo "$scriptName: A repo of name \"$name\" is already installed. Will update." >&2
+	repoRemove "$checkoutDir"
+	# TODO do update
+else
+	renameRepo "$checkoutDir" "$name"
+fi
+
+
+# create profile
+createProfile "$name"
+
+# enable packages
+disablePackage "$name" ".*" ".*"
+while read repoName regex; do
+	enabledPacakge "$repoName" "$regex" "$name"
+done < <(repoGetParmPackages "$name")
+
 # TODO create executable
+execName=`repoGetParm "$checkoutDir" execName`
+if [ ! "$execName" == '' ]; then
+	createExec "$execName"
+fi
+

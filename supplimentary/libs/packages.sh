@@ -214,3 +214,67 @@ function obsoleteProfile
 		mv -v "$name" "$configDir/obsolete/profiles"
 	fi
 }
+
+function enabledPacakge
+{
+	#     repoName is the named repository. (found with repoList)
+	#     packageRegex is a regular expression to match packages found with packageList.
+	#     profileNameRegex is a regular expression to match profiles found with profileList.
+	repoName="$1"
+	packageRegex="$2"
+	profileNameRegex="$3"
+
+	if [ ! -e "$configDir/repos/$repoName" ]; then
+		echo "Did not find a repo matching \"$repoName\""
+		exit 1
+	fi
+
+	profiles=`$managementTool profileList | grep "$profileNameRegex"`
+	if [ "$profiles" == '' ]; then
+		echo "Did not match any profiles using regex \"$profileNameRegex\""
+		exit 1
+	fi
+
+	while read profile; do
+		while read package;do
+			# TODO test this
+			packagePath="$configDir/repos/$repoName/packages-available/$package"
+			profilePath="$configDir/profiles/$profile/packages"
+			cd "$profilePath"
+			
+			if [ -e "$package" ]; then
+				echo "Obsolete named package \"$package\" in \"$packagePath\". It should be in the form repoNanme-packageName."
+			elif [ ! -e "$repoName-$package" ]; then
+				ln -sf "$packagePath" .
+				mv "$package" "$repoName-$package"
+			fi
+		done < <($managementTool repoListPackages $repoName --short | grep "$packageRegex")
+	done < <(echo "$profiles")
+}
+
+function disablePackage
+{
+	#     repoName is the named repository. (found with repoList)
+	#     packageRegex is a regular expression to match packages found with packageList.
+	#     profileNameRegex is a regular expression to match profiles found with profileList.
+	repoName="$1"
+	packageRegex="$2"
+	profileNameRegex="$3"
+
+	profiles=`$managementTool profileList | grep "$profileNameRegex"`
+	if [ "$profiles" == '' ]; then
+		echo "Did not match any profiles using regex \"$profileNameRegex\""
+		exit 1
+	fi
+
+	while read profile; do
+		while read package;do
+			packagePath="$configDir/profiles/$profile/packages/$repoName-$package"
+			if [ -h "$packagePath" ]; then
+				rm -f "$packagePath"
+			elif [ -d "$packagePath" ]; then
+				echo "$packagePath is a directory. Is this your only copy of your work?! This should be a symlink."
+			fi
+		done < <($managementTool repoListPackages $repoName --short | grep "$packageRegex")
+	done < <(echo "$profiles")
+}

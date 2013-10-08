@@ -11,7 +11,10 @@
 #     IMPORTANT: You can not use commas (,) in any of these parameters.
 #
 # Examples:
-#   Set the name of the application.
+#   Set the short-friendly name of the application.
+#     $0 doneIt name "doneit"
+
+#   Set the execuable name of the application.
 #     $0 doneIt execName "doneit"
 #
 #   Set the description of the application.

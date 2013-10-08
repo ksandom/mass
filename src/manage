@@ -25,6 +25,7 @@ export configDir='~%configDir%~'
 export storageDir='~%storageDir%~'
 export installType='~%installType%~'
 export binExec='~%binExec%~'
+export languageName='~%languageName%~'
 
 export libDir=$configDir/supplimentary/libs
 export supplimentaryDir=$configDir/supplimentary

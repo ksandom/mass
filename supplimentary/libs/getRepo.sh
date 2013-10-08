@@ -1,6 +1,18 @@
 # Get a repo
 # Install/update a repo
 
+function addRepo
+{
+	repoSrc="$1"
+	dstName="$2"
+	
+	if [ "`echo $repoSrc | grep '\(@\|://\)'`" != '' ]; then
+		getRepo "$dstName" "$repoSrc"
+	else
+		addPretendRepo "$repoSrc" "$dstName"
+	fi
+}
+
 function getRepo
 {
 	repoName="$1" # What we are going to refer to it as once it's installed.
@@ -61,4 +73,32 @@ function addPretendRepo
 
 	# Clean up
 	rm -Rf /tmp/$$
+}
+
+function repoExists
+{
+	name="$1"
+	if [ -e "$configDir/repos/$name" ]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+function renameRepo
+{
+	fromName="$1"
+	toName="$2"
+	
+	if [ ! -e "$configDir/repos/$fromName" ]; then
+		echo "renameRepo: source repo \"$fromName\" does not exist." >&2
+		return 1
+	fi
+	
+	if [ -e "$configDir/repos/$toName" ]; then
+		echo "renameRepo: destination repo \"$toName\" already exists." >&2
+		return 1
+	fi
+	
+	mv "$configDir/repos/$fromName" "$configDir/repos/$toName"
 }

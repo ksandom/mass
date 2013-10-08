@@ -1,0 +1,13 @@
+#!/bin/bash
+# Description
+#   Debug: Check the packages TODO Remove this.
+#
+# Syntax:
+#   $0 repoName
+
+requiredParms="$1"
+checkoutDir="repoInstall-$$"
+. `dirname $0`/libs/includeLibs.sh
+. $libDir/repoParms.sh
+
+repoGetParmPackages "$1"
