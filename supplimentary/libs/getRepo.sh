@@ -75,6 +75,23 @@ function addPretendRepo
 	rm -Rf /tmp/$$
 }
 
+function removeRepo
+{
+	repoName="$1"
+	repoDir="$configDir/repos/$repoName"
+
+	if [ ! -e "$repoDir" ]; then
+		echo "Could not find repo \"$repoName\". You can list them using repoList."
+		exit 1
+	fi
+
+	if [ -h "$repoDir" ]; then # Symlink (pretend repo)
+		rm "$repoDir"
+	elif [ -d "$repoDir" ]; then # Directory
+		rm -Rf "$repoDir"
+	fi
+}
+
 function repoExists
 {
 	name="$1"

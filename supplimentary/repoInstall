@@ -20,7 +20,9 @@ requiredParms="$1"
 checkoutDir="repoInstall-$$"
 . `dirname $0`/libs/includeLibs.sh
 . $libDir/getRepo.sh
+. $libDir/repoParms.sh
 . $libDir/packages.sh
+. $libDir/installLibs.sh
 repoAddress="$1"
 
 addRepo "$repoAddress" "$checkoutDir"
@@ -33,14 +35,14 @@ name=`repoGetParm "$checkoutDir" name`
 if [ "$name" == "" ]; then
 	# TODO add the option for the user to specify the parameters.
 	echo "The repository at \"$repoAddress\" does not appear to have a name set. You'll need to do this installation manually."
-	repoRemove "$checkoutDir"
+	removeRepo "$checkoutDir"
 	exit 1
 fi
 
 # detect conflict
 if ! repoExists "$name"; then # clean up and warn
 	echo "$scriptName: A repo of name \"$name\" is already installed. Will update." >&2
-	repoRemove "$checkoutDir"
+	removeRepo "$checkoutDir"
 	# TODO do update
 else
 	renameRepo "$checkoutDir" "$name"
@@ -52,9 +54,13 @@ createProfile "$name"
 
 # enable packages
 disablePackage "$name" ".*" ".*"
-while read repoName regex; do
-	enabledPacakge "$repoName" "$regex" "$name"
-done < <(repoGetParmPackages "$name")
+while read srcRepoName regex; do
+	echo enabledPacakge "$srcRepoName" "$regex" "$name"
+	enabledPacakge "$srcRepoName" "$regex" "$name"
+done < <(repoGetParmPackages "$repoName")
+
+echo "$repoName"
+repoGetParmPackages "$repoName"
 
 # TODO create executable
 execName=`repoGetParm "$checkoutDir" execName`

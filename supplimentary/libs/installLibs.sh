@@ -75,13 +75,6 @@ function copyTemplatedFile
 		s#~%.*%~##g' > "$dst"
 }
 
-function createExec
-{
-	echo "createExec is not finished yet. Tried to create \"$1\""
-	# TODO finish this.
-	# copyTemplatedFile "" ""
-}
-
 function doInstall
 {
 	# Migrate any old data changing between a unified directory structure to a split structure.
