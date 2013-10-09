@@ -40,7 +40,7 @@ if [ "$name" == "" ]; then
 fi
 
 # detect conflict
-if ! repoExists "$name"; then # clean up and warn
+if repoExists "$name"; then # clean up and warn
 	echo "$scriptName: A repo of name \"$name\" is already installed. Will update." >&2
 	removeRepo "$checkoutDir"
 	# TODO do update
@@ -57,14 +57,11 @@ disablePackage "$name" ".*" ".*"
 while read srcRepoName regex; do
 	echo enabledPacakge "$srcRepoName" "$regex" "$name"
 	enabledPacakge "$srcRepoName" "$regex" "$name"
-done < <(repoGetParmPackages "$repoName")
+done < <(repoGetParmPackages "$name")
 
-echo "$repoName"
-repoGetParmPackages "$repoName"
 
-# TODO create executable
+# create executable
 execName=`repoGetParm "$checkoutDir" execName`
 if [ ! "$execName" == '' ]; then
 	createExec "$execName"
 fi
-

@@ -79,10 +79,10 @@ function createExec
 {
 	name="$1"
 	cd "$binExec"
-	
-	# TODO check that this is finished/
 	programName="$name"
-	copyTemplatedFile "$startDir/src/exec" "$name"
+	srcFile="${languageRepo:-$startDir}/src/exec"
+	
+	copyTemplatedFile "$srcFile" "$name"
 	chmod 755 "$name"
 }
 
