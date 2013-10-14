@@ -78,8 +78,12 @@ function removeProfile
 function createExec
 {
 	name="$1"
+	if [ ! "$2" == '' ]; then 
+		export programName="$2"
+	else
+		programName="$name"
+	fi
 	cd "$binExec"
-	programName="$name"
 	srcFile="${languageRepo:-$startDir}/src/exec"
 	
 	copyTemplatedFile "$srcFile" "$name"
@@ -90,11 +94,17 @@ function removeExec
 {
 	name="$1"
 	
-	# TODO add protection for invalid fileNaming
+	cd "$binExec"
+	rm "$name"
+}
+
+function userRemoveExec
+{
+	name="$1"
 	
 	cd "$binExec"
 	if [ "`ls -1 "$configDir"/profiles | grep \"^$name$\"`" != '' ]; then
-		rm "$name"
+		removeExec "$name"
 	else
 		echo "There is no profile by this name. Although the profile and the exec are not intrinsicly linked, it would be a bad idea to let someone delete any string which we don't know about. Your easies t next step is to create a profile and then run removeProfile, which will call removeExec."
 	fi

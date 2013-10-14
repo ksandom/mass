@@ -119,3 +119,31 @@ function renameRepo
 	
 	mv "$configDir/repos/$fromName" "$configDir/repos/$toName"
 }
+
+function findRepo
+{
+	repoSearchTerm="$1"
+	
+	if repoExists "$repoSearchTerm"; then
+		echo "$repoSearchTerm"
+		return 0
+	else
+		repos="`resolveSymlinks \"$configDir\"/repos | grep \"$repoSearchTerm\"`"
+		echo "$repos" | cut -d\	 -f 1
+		if [ `echo "$repos" | wc -l` == '1' ]; then
+			return 0
+		else
+			return 1
+		fi
+	fi
+}
+
+function formatRepoResults
+{
+	while read in;do
+		echo "$in" | tabsToSpacedDashes
+		name=`echo "$in" | cut -d\	 -f1`
+		repoGetParms "$name"
+		echo
+	done
+}
