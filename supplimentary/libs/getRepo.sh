@@ -79,7 +79,7 @@ function removeRepo
 {
 	repoName="$1"
 	repoDir="$configDir/repos/$repoName"
-
+	
 	if [ ! -e "$repoDir" ]; then
 		echo "Could not find repo \"$repoName\". You can list them using repoList."
 		exit 1

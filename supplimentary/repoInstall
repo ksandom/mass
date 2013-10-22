@@ -20,55 +20,14 @@
 #     $0 /usr/local/something
 
 requiredParms="$1"
-checkoutDir="repoInstall-$$"
 . `dirname $0`/libs/includeLibs.sh
+. $libDir/repoInstall.sh
 . $libDir/getRepo.sh
 . $libDir/repoParms.sh
 . $libDir/packages.sh
 . $libDir/installLibs.sh
+
 repoAddress="$1"
 overRideRepoName="$2"
 
-addRepo "$repoAddress" "$checkoutDir"
-
-cd "$configDir/repos/$checkoutDir"
-
-# get tha name
-if [ "$overRideRepoName" == '' ]; then # detect name
-	name=`repoGetParm "$checkoutDir" name`
-else # override name
-	echo "repoInstall: Overrode repoName. This may lead to pain. If you haven't already, read the help for repoInstall." >&2
-	name="$overRideRepoName"
-fi
-
-if [ "$name" == "" ]; then
-	# TODO add the option for the user to specify the parameters.
-	echo "The repository at \"$repoAddress\" does not appear to have a name set. You'll need to do this installation manually."
-	removeRepo "$checkoutDir"
-	exit 1
-fi
-
-# detect conflict
-if repoExists "$name"; then # clean up and warn
-	echo "$scriptName: A repo of name \"$name\" is already installed. Re-installing." >&2
-	removeRepo "$checkoutDir"
-else
-	renameRepo "$checkoutDir" "$name"
-fi
-
-
-# create profile
-createProfile "$name"
-
-# enable packages
-disablePackage "$name" ".*" ".*"
-while read srcRepoName regex; do
-	enabledPacakge "$srcRepoName" "$regex" "$name"
-done < <(repoGetParmPackages "$name")
-
-
-# create executable
-execName=`repoGetParm "$name" execName`
-if [ ! "$execName" == '' ]; then
-	createExec "$execName" "$name"
-fi
+installRepo "$repoAddress" "$overRideRepoName"

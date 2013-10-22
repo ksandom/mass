@@ -95,7 +95,14 @@ function removeExec
 	name="$1"
 	
 	cd "$binExec"
-	rm "$name"
+	if [ ! "$name" == '' ] && [ -e "$binExec/$name" ]; then
+		rm "$name"
+	else
+		echo "removeExec: Could not find \"$name\"" >&2
+		return 1
+	fi
+	
+	
 }
 
 function userRemoveExec

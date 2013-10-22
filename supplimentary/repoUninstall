@@ -15,41 +15,14 @@
 #     $0 /usr/local/something
 
 requiredParms="$1"
-checkoutDir="repoInstall-$$"
 . `dirname $0`/libs/includeLibs.sh
+. $libDir/repoInstall.sh
 . $libDir/getRepo.sh
 . $libDir/repoParms.sh
 . $libDir/packages.sh
 . $libDir/installLibs.sh
+
 repo="$1"
 overRideRepoName="$2"
 
-# figure out name
-repoResults=`findRepo "$repo"`
-repoValue=$?
-echo "$repoResults" | formatRepoResults
-
-if [ $repoValue -eq 0 ]; then
-	repoName=$repoResults
-	if ! confirm "Do you want to uninstall the \"$repoName\" repository?"; then
-		echo "User abort." >&2
-		exit 1
-	fi
-else
-	echo "Too many results. Please refine your search to get one result." >&2
-	exit 1
-fi
-
-
-# TODO test this stuff
-
-# remove executable
-execName=`repoGetParm "$name" execName`
-# TODO the input protection will likely be a curse here, so should be revised.
-removeExec "$execName"
-
-# remove profile
-removeProfile "$repoName"
-
-# remove repo
-removeRepo "$repoName"
+userUninstallRepo "$repo" "$overRideRepoName"
