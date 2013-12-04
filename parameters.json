@@ -1,1 +1,1 @@
-{"name":"mass","mass":{"name":"mass","description":"A commandline tool\/API for doing awesome stuff on many nodes of a cluster.","execName":"mass","packages":{"SELF":{"sourceRepo":"mass","packageRegex":".*"}}}}
+{"name":"mass","mass":{"name":"mass","description":"A commandline tool\/API for doing awesome stuff on many nodes of a cluster.","execName":"mass","packages":{"SELF":{"sourceRepo":"mass","packageRegex":".*"},"BASE":{"sourceRepo":"achel","packageRegex":".*"}}}}
