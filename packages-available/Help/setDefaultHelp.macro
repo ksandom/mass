@@ -1,4 +1,0 @@
-# Set default help for  ~ help
-#onDefine registerForEvent CommandLine,startup,setDefaultHelp,(^|,)user(,|$)
-
-set Help,default,~!Global,setDefaultHelp!~

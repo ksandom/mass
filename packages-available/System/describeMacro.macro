@@ -1,5 +1,0 @@
-# Describe the compiled result of a macro ~ describe,macro
-#onLoaded setFeatureType describeMacro,feature
-
-get Macros,~!Global,describeMacro!~
-flatten 1

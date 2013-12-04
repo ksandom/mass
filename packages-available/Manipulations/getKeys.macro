@@ -1,8 +1,0 @@
-# Get keys of the resultSet ~ array,Manipulations,keys
-
-loop
-	set Tmp,key,~!Result,key!~
-	unsetCategory Result
-	set Result,line,~!Tmp,key!~
-
-unset Tmp,key

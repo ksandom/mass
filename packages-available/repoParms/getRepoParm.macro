@@ -1,5 +1,0 @@
-# Get a repository parameter. --getRepoParm=repoName,parmName ~ repoParms
-
-loadRepoParms ~!Global,getRepoParm-0!~
-
-get RepoParms~!Global,getRepoParm-0!~,~!Global,getRepoParm-1!~

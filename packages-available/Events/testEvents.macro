@@ -1,7 +1,0 @@
-# Test that events are working correctly. ~ test
-
-registerForEvent Events,test,eventTestAction1,blah1
-registerForEvent Events,test,eventTestAction2,blah2
-
-triggerEvent Events,test
-triggerEvent Events,test,extraValue

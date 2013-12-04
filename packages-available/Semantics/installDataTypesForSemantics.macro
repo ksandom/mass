@@ -1,5 +1,0 @@
-# Install the data types to be used with semantics. Ya have to try your own medicine roooight?. ~ semantics,internal,install
-#onDefine registerForEvent Install,dataTypes,installDataTypesForSemantics
-
-createDataType dataType,dataType,dataTypeMore,dataTypeLess,,Defines how a dataType will be displayed.
-createDataType featureType,featureType,featureTypeMore,featureTypeLess,,Defines how a featureType will be displayed.
