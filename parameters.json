@@ -1,1 +1,2 @@
-{"name":"mass","mass":{"name":"mass","description":"A commandline tool\/API for doing awesome stuff on many nodes of a cluster.","execName":"mass","packages":{"packageHackToTransitionFromOldMass":{"sourceRepo":"mass","packageRegex":"\\(AWS\\|Hosts\\|MiscTests\\|SimpleBastionHosts\\|SSH\\)"},"BASE":{"sourceRepo":"achel","packageRegex":".*"}}}}
+{"name":"mass","mass":{"name":"mass","description":"A commandline tool\/API for doing awesome stuff on many nodes of a cluster.","execName":"mass","packages":{"packageHackToTransitionFromOldMass":{"sourceRepo":"mass","packageRegex":"\\\\(AWS\\\\|Hosts\\\\|MiscTests\\\\|SimpleBastionHosts\\\\|SSH\\\\)"},"BASE":{"sourceRepo":"achel","packageRegex":".*"}}}}
+
