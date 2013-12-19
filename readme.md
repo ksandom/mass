@@ -1,5 +1,5 @@
 # Mass
-is a modularised tool for managing several nodes of a cluster. Open individual SSH terminals to specific groups of nodes of your cluster, a single node, or the whole lot. Do the same with CSSH or virtual terminals in screen. Upload a file to each node or dowload a file from each, prefixed with the hostname. Run a command to conquer the world... or conduct that essential maintenance. Essentially your nodes are one RegEx away.
+is a modularised tool for managing several nodes of a cluster. Open individual SSH terminals to specific groups of nodes of your cluster, a single node, or the whole lot. Do the same with ClusterSSH or virtual terminals in screen. Upload a file to each node or dowload a file from each, prefixed with the hostname. Run a command to conquer the world... or conduct that essential maintenance. Essentially your nodes are one RegEx away.
 
 Now, that's what was significant to me. It turns out though that a lot of people find it really useful as a tool for looking up servers.
 
@@ -14,15 +14,15 @@ This is a tiny percentage of the final vision, so there's a lot more to come!
 
 # Important updates
 
-* The -available folders are now within repos/mass/ . The -enabled folders remain in profiles/profileName/ . This is going to allow packages to be installed from other repos.
+* Mass has undergone significant refactoring. You can now install it using the one-liner below. [More info](mass/tree/master/docs/install.md).
 
 As a general rule, when ever you update, you should re-run install.sh to apply any structural changes as the internals are regularly being refactored.
 
 # Install
 
-See [docs/install.md](mass/tree/master/docs/install.md)
+    export extraSrc="git@github.com:ksandom/mass.git"; curl https://raw.github.com/ksandom/achel/master/supplimentary/misc/webInstall | bash
 
-Use install.sh.
+See [docs/install.md](mass/tree/master/docs/install.md) for more information.
 
 # Contributing
 
@@ -31,6 +31,10 @@ Use install.sh.
 * There are `# TODO`'s floating around in the code. There are going to be a few which I'll reserve for me. Typically I only do this if I've planned something else based on how that thing gets done.
 
 The bottom line is, I wrote this tool because it's useful to me. If it's useful to you and you have something to contribute, it would be lovely for you to put it forward.
+
+To submit it, create a pull request to the development branch. Make sure to include in the description
+* What you are trying to achieve.
+* Any relevant information that can help me test before and after that your code does what you are trying to achieve.
 
 # History
 I've written a version of this tool at every company I've worked at since 2007 and it's always been a big hit. In each case it was very specific to the architecture of the given place, so it wasn't very portable.
