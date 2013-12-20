@@ -1,4 +1,0 @@
-# Clear the resultset ~ resultset
-#onDefine aliasFeature clearResultset,clear
-
-get SomeArbitraryCategory,someArbitraryThing

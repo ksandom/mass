@@ -1,4 +1,0 @@
-# Display this help ~ user,help
-
-templateOut help
-searchHelp ~!Global,helpTags!~

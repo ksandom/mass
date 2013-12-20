@@ -4,7 +4,7 @@ On a day-to-day basis `mass --help=searchTerm` should be your first point of cal
 
 If you're starting out, you'll want install.md to get you up and running with data. (Even if you have it installed, you should take a look at this!) After that gettingStarted.md will give you a very basic jumpstart into using mass.
 
-Once you're ready to do custom stuff, you'll want to check out the "creatingA" series. I recommend starting with creatingAPackage.md, which will save you much effort! And then move on to creatingAMacro.md and creatingATemplate.md.
+Once you're ready to do custom stuff, you'll want to check out the [programming reference](/ksandom/achel/tree/master/docs/programming) in the [Achel documentation](/ksandom/achel/tree/master/docs/). I recommend starting with [creatingAPackage.md](/ksandom/achel/tree/master/docs/programming/creatingAPackage.md), which will save you much effort! And then move on to [creatingAMacro.md]((/ksandom/achel/tree/master/docs/programming/creatingAMacro.md)) and [creatingATemplate.md](/ksandom/achel/tree/master/docs/programming/creatingATemplate.md).
 
 
 If you spot a `TODO` in the documentation, you're welcome to fill it in. That would be very helpful!

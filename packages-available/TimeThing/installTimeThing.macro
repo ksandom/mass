@@ -1,6 +1,0 @@
-# Save defaults for TimeThing ~ defaults,hidden
-#onDefine registerForEvent Install,general,installTimeThing
-
-set Settings,timestampFormat,Y-m-d--G:i:s
-
-saveStoreToConfig Settings

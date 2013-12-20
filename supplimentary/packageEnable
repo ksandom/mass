@@ -23,34 +23,4 @@ requiredParms="$3"
 . `dirname $0`/libs/includeLibs.sh
 . "$libDir"/packages.sh
 
-repoName="$1"
-packageRegex="$2"
-profileNameRegex="$3"
-
-if [ ! -d "$configDir/repos/$repoName" ]; then
-	echo "Did not find a repo matching \"$repoName\""
-	exit 1
-fi
-
-profiles=`$managementTool profileList | grep "$profileNameRegex"`
-if [ "$profiles" == '' ]; then
-	echo "Did not match any profiles using regex \"$profileNameRegex\""
-	exit 1
-fi
-
-while read profile; do
-	while read package;do
-		# TODO test this
-		packagePath="$configDir/repos/$repoName/packages-available/$package"
-		profilePath="$configDir/profiles/$profile/packages"
-		cd "$profilePath"
-		
-		if [ -e "$package" ]; then
-			echo "Obsolete named package \"$package\" in \"$packagePath\". It should be in the form repoNanme-packageName."
-		elif [ ! -e "$repoName-$package" ]; then
-			ln -sf "$packagePath" .
-			mv "$package" "$repoName-$package"
-		fi
-	done < <($managementTool repoListPackages $repoName --short | grep "$packageRegex")
-done < <(echo "$profiles")
-
+enabledPacakge "$1" "$2" "$3"

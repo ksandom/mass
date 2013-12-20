@@ -1,6 +1,0 @@
-# List data types. --listDataTypes=regex ~ semantics,dataTypes
-#onDefine aliasFeature listDataTypes,listDT
-#onLoaded setFeatureType listDataTypes,generateDataTypes
-
-retrieveResults Semantics,dataTypes
-requireEach ~!Global,listDataTypes!~

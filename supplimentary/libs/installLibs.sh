@@ -1,5 +1,7 @@
 # Useful install libraries.
 
+settingNames="configDir storageDir installType binExec"
+
 function removeObsoleteStuff
 {
 	if ! mkdir -p $configDir/obsolete; then
@@ -41,16 +43,20 @@ function derivePaths
 
 function showConfig
 {
-	echo "Install config
-	what: 		$programName
-	config: 	$configDir
-	storage: 	$storageDir
-	binExec: 	$binExec
-	installType: 	$installType
-	installNotes: 	$installTypeComments"
+	echo "Install config"
 	
-	#startDir: 	$startDir
-	# 	repoDir: $repoDir
+	for configItem in configDir storageDir installType binExec;do
+		oldConfigItem=old$configItem
+		if [ "${!oldConfigItem}" == '' ]; then
+			echo "	$configItem: 	${!configItem} **NEW**"
+		elif [ "${!configItem}" != "${!oldConfigItem}" ]; then
+			echo "	$configItem: 	${!configItem} **CHANGED FROM** ${!oldConfigItem}"
+		else
+			echo "	$configItem: 	${!configItem}"
+		fi
+	done
+	
+	echo "	installNotes: 	$installTypeComments"
 }
 
 function copyTemplatedFile
@@ -64,12 +70,14 @@ function copyTemplatedFile
 		s#~%storageDir%~#'$storageDir'#g;
 		s#~%installType%~#'$installType'#g;
 		s#~%binExec%~#'$binExec'#g;
+		s#~%programName%~#'$programName'#g;
+		s#~%languageName%~#mass#g;
 		s#~%.*%~##g' > "$dst"
 }
 
 function doInstall
 {
-	# Migrate any old data
+	# Migrate any old data changing between a unified directory structure to a split structure.
 	mkdir -p "$storageDir"
 	if [ "$configDir" != "$storageDir" ]; then
 		for dirName in "$configDir"{data,config} ~/.mass/{data,config}; do
@@ -117,35 +125,35 @@ function doInstall
 	
 	# Linking like there's no tomorrow.
 	cd "$configDir"
-	ln -sf "$repoDir"/docs "$repoDir/core.php" "$repoDir"/interfaces "$repoDir"/supplimentary .
+	ln -sf "$repoDir"/docs "$repoDir/src/core.php" "$repoDir"/interfaces "$repoDir"/supplimentary .
 	rm -f examples
 	
-	copyTemplatedFile "$startDir/index.php" index.php
+	copyTemplatedFile "$startDir/src/index.php" index.php
 	
 	# Setting up remaining directory structure
 	cd "$storageDir"
 	mkdir -p config data/1LayerHosts
 	
 	# Make it executable
-	cd $binExec
+	cd "$binExec"
 	rm -f "$programName" "manageMass"
-	copyTemplatedFile "$startDir/$programName" "$programName"
-	copyTemplatedFile "$startDir/manageMass" manageMass
+	copyTemplatedFile "$startDir/src/exec" "$programName"
+	copyTemplatedFile "$startDir/src/manage" manageMass
 	chmod 755 "$programName" "manageMass"
 	
 	# Set up profiles
-	createProfile commandLine
-	enableEverythingForProfile commandLine mass 
-	cleanProfile commandLine
+	createProfile mass
+	enableEverythingForProfile mass mass 
+	cleanProfile mass
 
-	createProfile privateWebAPI
-	enableEverythingForProfile privateWebAPI mass 
-	disableItemInProfile privateWebAPI packages mass-SSH
-	cleanProfile privateWebAPI
+	createProfile massPrivateWebAPI --noExec
+	enableEverythingForProfile massPrivateWebAPI mass 
+	disableItemInProfile massPrivateWebAPI packages mass-SSH
+	cleanProfile massPrivateWebAPI
 
-	cloneProfile privateWebAPI publicWebAPI
-	disableItemInProfile publicWebAPI packages mass-AWS
-	cleanProfile publicWebAPI
+	cloneProfile massPrivateWebAPI massPublicWebAPI
+	disableItemInProfile massPublicWebAPI packages mass-AWS
+	cleanProfile massPublicWebAPI
 	
 	# Cleanup
 	rm -f "$configDir/macros-enabled/example"*
@@ -162,18 +170,41 @@ function doInstall
 	mass --verbosity=2 --finalInstallStage
 }
 
+function detectOldSettingsIfWeDontHaveThem
+{
+	shouldDetect=false
+	
+	for setting in $settingNames;do
+		if [ "${!$setting}" != '' ]; then
+			shouldDetect=true
+		fi
+	done
+	
+	if [ "$shouldDetect" == 'true' ]; then
+		detectOldSettings
+	fi
+}
+
 function detectOldSettings
 {
 	if which mass > /dev/null; then
-		echo -n "Detecting settings from previous install: "
-		for setting in configDir storageDir installType binExec; do
-			echo -n "$setting "
-			settingValue=`mass --get=General,$setting -s`
+		echo -n "Detecting settings from previous install... "
+		
+		request=""
+		for setting in $settingNames; do
+			request="$request~!General,$setting!~	"
+		done
+		values=`mass --get=Tmp,nonExistent --toString="$request" -s`
+		let settingPosition=0
+		for setting in $settingNames; do
+			let settingPosition=$settingPosition+1
+			settingValue=`echo "$values" | cut -d\	  -f $settingPosition`
 			if [ "$settingValue" != '' ]; then
-				export $setting="$settingValue"
-				export old$setting="$settingValue"
+				export $setting=$settingValue
+				export old$setting=$settingValue
 			fi
 		done
+		
 		echo "Done."
 	else
 		echo "detectOldSettings: No previous install found. Using defaults."

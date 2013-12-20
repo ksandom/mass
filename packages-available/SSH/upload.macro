@@ -1,9 +1,21 @@
-# Upload a specified single file/directory to the listed servers. --list[=hostRegex] --upload=destinationPathOnTheServer file/directoryToUpload ~ user,files
+# Upload a specified single file/directory to the listed servers. --list[=hostRegex] --upload=fileOrDirectoryToUpload,destinationPathOnTheServer ~ user,files
 #onLoaded setFeatureType upload,actOnHosts
 
 triggerEvent Bastion,load
 triggerEvent Bastion,lookup
 triggerEvent Bastion,deriveCommands
+
+if ~!Global,upload-1!~,!=,,
+	# New syntax that is macro friendly and more intuitive.
+	# --upload=src,dst
+	set Tmp,uploadSrc,~!Global,upload-0!~
+	set Tmp,uploadDst,~!Global,upload-1!~
+else
+	# Legacy syntax that is not particularly friendly to being called by another macro.
+	# --upload=dst src
+	set Tmp,uploadDst,~!Global,upload-0!~
+	set Tmp,uploadSrc,~!Global,stray!~
+
 
 stashResults SSH,hosts
 
@@ -14,7 +26,7 @@ if ~!Verbosity,level!~,>=,1,
 if ~!Global,cmd!~,!=,,
 	resultSet cmd,~!Global,cmd!~
 
-toString scp ~!Verbosity,externalMinusV!~ ~%scpExtra%~ ~%auth%~ -r ~!Global,stray!~ ~%userAt%~~%FQDN%~:~!Global,upload!~ ~!Verbosity,onlyVerbose!~ ~!Settings,backgroundTasks!~
+toString scp ~!Verbosity,externalMinusV!~ ~%scpExtra%~ ~%auth%~ -r ~!Tmp,uploadSrc!~ ~%userAt%~~%FQDN%~:~!Tmp,uploadDst!~ ~!Verbosity,onlyVerbose!~ ~!Settings,backgroundTasks!~
 cleanUnresolvedResultVars
 nested
 exec
@@ -29,3 +41,5 @@ exec
 
 retrieveResults SSH,hosts
 unset SSH,hosts
+unset Tmp,uploadSrc
+unset Tmp,uploadDst

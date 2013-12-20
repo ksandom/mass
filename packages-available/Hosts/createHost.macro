@@ -39,6 +39,6 @@ retrieveResults Hosts,~!CreateHost,collection!~
 
 
 # Save the result out
-registerOnceForEvent Mass,finishGeneral,saveHostsCollection,~!CreateHost,collection!~
+registerOnceForEvent Achel,finishGeneral,saveHostsCollection,~!CreateHost,collection!~
 unsetCategory CreateHost 
 

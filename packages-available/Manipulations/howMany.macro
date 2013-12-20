@@ -1,3 +1,0 @@
-# Count how many items are in the result set when mass terminates. This can be used by templates using the store variable ResultSet,howMany . ~ manipulator
-
-registerForEvent Mass,finishGeneral,howManyWorker

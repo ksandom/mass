@@ -1,5 +1,0 @@
-# Get the timestamp of midnight begining today. --tsToday=Category,variableName ~ time
-
-now Tmp,timestamp
-strToTime ~!Global,tsToday-0!~,~!Global,tsToday-1!~,0:00:00,~!Tmp,timestamp!~
-unset Tmp,timestamp

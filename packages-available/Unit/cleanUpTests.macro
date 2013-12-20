@@ -1,3 +1,0 @@
-# Clean up after running all the unit tests ~ unit,hidden
-
-unsetCategory UnitResults

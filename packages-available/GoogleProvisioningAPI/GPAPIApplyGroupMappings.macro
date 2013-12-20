@@ -1,8 +1,0 @@
-# Map group values to be more accessible in templates and macros. ~ GPAPI,hidden
-
-loop
-	set Result,groupID,~!Result,property,groupId,value!~
-	set Result,groupName,~!Result,property,groupName,value!~
-	
-	# TODO There's quite a lot that can probably be trimmed out.
-	# unset Result,service

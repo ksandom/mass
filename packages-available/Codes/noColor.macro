@@ -1,4 +1,0 @@
-# Turn off colored output ~ color
-#onDefine aliasFeature noColor,nocolor,b
-
-unsetCategory Color
