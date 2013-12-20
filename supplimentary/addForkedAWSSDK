@@ -15,4 +15,4 @@ requiredParms="none"
 . $libDir/getRepo.sh
 
 # Make this work in /repos instead of /externalLibraries
-getRepo "aws-sdk-for-php" "git://github.com/rawswift/aws-sdk-for-php.git"
+getRepo "forkedForkedAws-sdk-for-php" "git://github.com/ksandom/aws-sdk-for-php.git"

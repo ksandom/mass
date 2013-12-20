@@ -5,7 +5,7 @@
 
 class Data extends Module
 {
-	private $configDir=null;
+	private $storageDir=null;
 	
 	function __construct()
 	{
@@ -27,7 +27,7 @@ class Data extends Module
 				$this->core->registerFeature($this, array('saveStoreToFile'), 'saveStoreToFile', 'Save all store values for a particular module name to a file. This can be useful for exporting data to other applications. --saveStoreToFile=fullPathToFilename[,StoreName]');
 				$this->core->registerFeature($this, array('assertFileExists'), 'assertFileExists', "Assert that a file exists. If it doesn't an empty file will be created.", array('file'));
 
-				$this->configDir=$this->core->get('General', 'configDir');
+				$this->storageDir=$this->core->get('General', 'storageDir');
 				$this->loadConfig();
 				break;
 			case 'followup':
@@ -75,7 +75,7 @@ class Data extends Module
 	{
 		$filenameTouse=false;
 		if (file_exists($filename)) $filenameTouse=$filename;
-		elseif (file_exists($this->configDir."/$source/$filename")) $filenameTouse=$this->configDir."/$filename";
+		elseif (file_exists($this->storageDir."/$source/$filename")) $filenameTouse=$this->storageDir."/$filename";
 		else
 		{
 			$this->core->complain($this, "Could not find $filename.");
@@ -121,13 +121,13 @@ class Data extends Module
 	
 	function loadStoreEntryFromName($storeName, $source='config')
 	{
-		$filename=$this->configDir."/$source/$storeName.$source.json";
+		$filename=$this->storageDir."/$source/$storeName.$source.json";
 		return $this->loadStoreEntry($storeName, $filename);
 	}
 	
 	function loadStoreEntryFromDataDir($storeName, $dirName)
 	{
-		$fileList=$this->core->getFileList($this->configDir.'/data/'.$dirName);
+		$fileList=$this->core->getFileList($this->storageDir.'/data/'.$dirName);
 		$result=array();
 		foreach ($fileList as $fileName)
 		{
@@ -143,7 +143,7 @@ class Data extends Module
 
 	function loadConfig()
 	{
-		$configFiles=$this->core->getFileList($this->configDir.'/config');
+		$configFiles=$this->core->getFileList($this->storageDir.'/config');
 		foreach ($configFiles as $filename=>$fullPath)
 		{
 			$this->loadStoreEntryFromFilename($fullPath);
@@ -154,7 +154,7 @@ class Data extends Module
 	{
 		if ($config=$this->core->getCategoryModule($storeName))
 		{
-			$fullPath="{$this->configDir}/$source/$storeName.$source.json";
+			$fullPath="{$this->storageDir}/$source/$storeName.$source.json";
 			file_put_contents($fullPath, json_encode($config));
 		}
 	}

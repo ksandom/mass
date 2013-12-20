@@ -1,5 +1,7 @@
 # Useful install libraries.
 
+settingNames="configDir storageDir installType binExec"
+
 function removeObsoleteStuff
 {
 	if ! mkdir -p $configDir/obsolete; then
@@ -33,11 +35,66 @@ function checkPrereqs
 	done
 }
 
+function derivePaths
+{
+	export startDir=`pwd`
+	export repoDir="$configDir/repos/$programName"
+}
+
+function showConfig
+{
+	echo "Install config"
+	
+	for configItem in configDir storageDir installType binExec;do
+		oldConfigItem=old$configItem
+		if [ "${!oldConfigItem}" == '' ]; then
+			echo "	$configItem: 	${!configItem} **NEW**"
+		elif [ "${!configItem}" != "${!oldConfigItem}" ]; then
+			echo "	$configItem: 	${!configItem} **CHANGED FROM** ${!oldConfigItem}"
+		else
+			echo "	$configItem: 	${!configItem}"
+		fi
+	done
+	
+	echo "	installNotes: 	$installTypeComments"
+}
+
+function copyTemplatedFile
+{
+	src="$1"
+	dst="$2"
+	
+	rm -f "$dst"
+	cat $src | sed '
+		s#~%configDir%~#'$configDir'#g;
+		s#~%storageDir%~#'$storageDir'#g;
+		s#~%installType%~#'$installType'#g;
+		s#~%binExec%~#'$binExec'#g;
+		s#~%programName%~#'$programName'#g;
+		s#~%languageName%~#mass#g;
+		s#~%.*%~##g' > "$dst"
+}
+
 function doInstall
 {
-	startDir=`pwd`
-	repoDir="$configDir/repos/$programName"
-	if mkdir -p "$configDir/"{data/hosts,externalLibraries,credentials} "$binExec" "$bin" "$configDir/repos"
+	# Migrate any old data changing between a unified directory structure to a split structure.
+	mkdir -p "$storageDir"
+	if [ "$configDir" != "$storageDir" ]; then
+		for dirName in "$configDir"{data,config} ~/.mass/{data,config}; do
+			if [ -e "$dirName" ]; then
+				lastName=`echo $dirName | sed 's#.*/##g'`
+				if [ -e "$storageDir/$lastName" ]; then
+					echo "$dirName exists, but $storageDir/$lastName also exists, so no migration will be done."
+				else
+					echo "$dirName exists, migrating to $storageDir/$lastName."
+					mv "$dirName" "$storageDir"
+				fi
+			fi
+		done
+	fi
+
+	# Do initial directory structure and test write access
+	if mkdir -p "$configDir/"{externalLibraries,repos} "$binExec" "$storageDir/"{data/hosts,config,credentials}
 	then
 		echo a> $configDir/canWrite
 	elif [ "`cat $configDir/canWrite`" != 'a' ]; then
@@ -51,19 +108,13 @@ function doInstall
 	
 	rm $configDir/canWrite
 	
+	# Pre install stuff
 	checkPrereqs
 	removeObsoleteStuff
 	
-	echo "Install details:
-	what: $programName
-	config: $configDir
-	bin: $bin
-	binExec: $binExec
-	startDir: $startDir
-	repoDir: $repoDir
-	installType: $installType
-	installNotes: $installTypeComments"
+	showConfig
 	
+	# Put in the main content
 	if [ "$installType" == 'cp' ]; then
 		# echo -e "Copying available stuff"
 		cp -R "$startDir" "$configDir/repos"
@@ -72,44 +123,39 @@ function doInstall
 		ln -sf "$startDir" .
 	fi
 	
+	# Linking like there's no tomorrow.
 	cd "$configDir"
-	# echo -e "Linking like there's no tomorrow."
-	ln -sf "$repoDir"/docs "$repoDir/core.php" "$repoDir"/interfaces "$repoDir"/supplimentary .
+	ln -sf "$repoDir"/docs "$repoDir/src/core.php" "$repoDir"/interfaces "$repoDir"/supplimentary .
 	rm -f examples
 	
-	# "$repoDir"/modules-*available "$repoDir"/macros-*available "$repoDir"/templates-*available "$repoDir"/packages-*available
+	copyTemplatedFile "$startDir/src/index.php" index.php
 	
-	ln -sf "$repoDir/index.php" .
-	
-	# echo -e "Setting up remaining directory structure"
+	# Setting up remaining directory structure
+	cd "$storageDir"
 	mkdir -p config data/1LayerHosts
 	
+	# Make it executable
+	cd "$binExec"
+	rm -f "$programName" "manageMass"
+	copyTemplatedFile "$startDir/src/exec" "$programName"
+	copyTemplatedFile "$startDir/src/manage" manageMass
+	chmod 755 "$programName" "manageMass"
 	
-	if [ "$installType" == 'cp' ]; then
-		# echo -e "Making the thing runnable"
-		cd $binExec
-		cp -R "$startDir/$programName" "$startDir/manageMass" .
-		chmod 755 "$bin/$programName" "$bin/manageMass"
-	else
-		# echo -e "Making the thing runnable"
-		cd $binExec
-		ln -sf "$startDir/$programName" "$startDir/manageMass" .
-	fi
-	
-	createProfile commandLine
-	enableEverythingForProfile commandLine mass 
-	cleanProfile commandLine
+	# Set up profiles
+	createProfile mass
+	enableEverythingForProfile mass mass 
+	cleanProfile mass
 
-	createProfile privateWebAPI
-	enableEverythingForProfile privateWebAPI mass 
-	disableItemInProfile privateWebAPI packages mass-SSH
-	cleanProfile privateWebAPI
+	createProfile massPrivateWebAPI --noExec
+	enableEverythingForProfile massPrivateWebAPI mass 
+	disableItemInProfile massPrivateWebAPI packages mass-SSH
+	cleanProfile massPrivateWebAPI
 
-	cloneProfile privateWebAPI publicWebAPI
-	disableItemInProfile publicWebAPI packages mass-AWS
-	cleanProfile publicWebAPI
+	cloneProfile massPrivateWebAPI massPublicWebAPI
+	disableItemInProfile massPublicWebAPI packages mass-AWS
+	cleanProfile massPublicWebAPI
 	
-	# echo -e "Cleanup"
+	# Cleanup
 	rm -f "$configDir/macros-enabled/example"*
 	rm -f "$configDir/modules-enabled/example"
 	rm -f "$configDir/templates-enabled/example"
@@ -119,9 +165,95 @@ function doInstall
 		mass --set=Credentials,defaultKey,id_rsa --saveStoreToConfig=Credentials
 	fi
 	
-	# It should be safe to do this on an existing setup.
+	# Run the final stage
 	echo -e "Calling the final stage"
-	
 	mass --verbosity=2 --finalInstallStage
 }
 
+function detectOldSettingsIfWeDontHaveThem
+{
+	shouldDetect=false
+	
+	for setting in $settingNames;do
+		if [ "${!$setting}" != '' ]; then
+			shouldDetect=true
+		fi
+	done
+	
+	if [ "$shouldDetect" == 'true' ]; then
+		detectOldSettings
+	fi
+}
+
+function detectOldSettings
+{
+	if which mass > /dev/null; then
+		echo -n "Detecting settings from previous install... "
+		
+		request=""
+		for setting in $settingNames; do
+			request="$request~!General,$setting!~	"
+		done
+		values=`mass --get=Tmp,nonExistent --toString="$request" -s`
+		let settingPosition=0
+		for setting in $settingNames; do
+			let settingPosition=$settingPosition+1
+			settingValue=`echo "$values" | cut -d\	  -f $settingPosition`
+			if [ "$settingValue" != '' ]; then
+				export $setting=$settingValue
+				export old$setting=$settingValue
+			fi
+		done
+		
+		echo "Done."
+	else
+		echo "detectOldSettings: No previous install found. Using defaults."
+	fi
+}
+
+function checkParameters
+{
+	derivePaths
+	
+	allowed='^--\(configDir\|storageDir\|binExec\)'
+	for parm in $1;do
+		parmAction=`echo $parm | cut -d= -f1`
+		parmValue=`echo $parm | cut -d= -f2`
+		case $parmAction in
+			'--help')
+				helpFile="docs/installTimeParameters.md"
+				if [ -e $helpFile ]; then
+					cat "$helpFile"
+				else
+					echo "Could not find $helpFile. Currently looking from `pwd`."
+				fi
+				exit 0
+			;;
+			'--showConfig')
+				showConfig
+				exit 0
+			;;
+			'--dontDetect')
+				echo "checkParameters: User requested not to detect previous settings."
+			;;
+			'--defaults')
+				echo "checkParameters: User requested to migrate from the previous settings to the defaults."
+			;;
+			*)
+				if [ "`echo $parmAction| grep "$allowed"`" != "" ]; then
+					if [ "$parmValue" != "$parmAction" ]; then
+						varName=`echo $parmAction| cut -b 3-`
+						echo "Will set $varName to $parmValue."
+						export "$varName=$parmValue"
+					else
+						echo "A value must be specified for $parmAction in the form $parmAction=value."
+						exit 0
+					fi
+				else
+					echo "Unknown parameter $parm."
+					exit 1
+				fi
+			;;
+		esac
+	done
+}

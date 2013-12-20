@@ -1,8 +1,0 @@
-# Filter records older than the timestamp specified. --older=resultVariableNameToTest,timestamp ~ filter,time
-
-if ~!Tmp,slowFlag!~,!=,1,
-	lessThan ~!Global,older-0!~,~!Global,older-1!~
-else
-	loop
-		if ~!Result,~!Global,older-0!~!~,>,~!Global,older-1!~,
-			unsetCategory Result

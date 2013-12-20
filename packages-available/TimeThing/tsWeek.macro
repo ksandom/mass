@@ -1,3 +1,0 @@
-# Choose a subset of results based on a number of weeks ago. --tsWeek=startNumberOfWeeksAgo,[howManyWeeksToTake],[fieldToDecideOn] ~ time
-
-tsUnit ~!Global,tsWeek-0!~,~!Global,tsWeek-1!~,~!Global,tsWeek-2!~,week

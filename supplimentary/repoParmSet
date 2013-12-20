@@ -1,0 +1,27 @@
+#!/bin/bash
+# Description
+#   Set a parameter for an existing repository. Use this for creating executables.
+#
+# Syntax:
+#   $0 repoName parameterName "value"
+#     repoName is the name of the repository you'd like to set the parameter in.
+#     parameterName is the name of the parameter you'd like to set. It doesn't have to already exist.
+#     value is what the parameter will be set to.
+#
+#     IMPORTANT: You can not use commas (,) in any of these parameters.
+#
+# Examples:
+#   Set the short-friendly name of the application.
+#     $0 doneIt name "doneit"
+
+#   Set the execuable name of the application.
+#     $0 doneIt execName "doneit"
+#
+#   Set the description of the application.
+#     $0 doneIt description "A tool for remember where the day went. So when you are asked about your progress, you can say."
+
+requiredParms="$3"
+. `dirname $0`/libs/includeLibs.sh
+. $libDir/repoParms.sh
+
+repoSetParm "$1" "$2" "$3"

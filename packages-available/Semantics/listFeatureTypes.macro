@@ -1,6 +1,0 @@
-# List feature types. --listFeatureTypes=regex ~ semantics,featureTypes
-#onDefine aliasFeature listFeatureTypes,listFT
-#onLoaded setFeatureType listFeatureTypes,generateFeatureTypes
-
-retrieveResults Semantics,featureTypes
-requireEach ~!Global,listFeatureTypes!~

@@ -1,0 +1,46 @@
+#!/bin/bash
+# Description
+#   Define a set of packages to be enabled by default when a repo is installed.
+#
+# Syntax:
+#   $0 repoName shortName [sourceRepo] [packageRegex]
+#     repoName is the name of the repository you'd like to define the set of packages in.
+#     shortName uniquely identifies this particular set of pacakges.
+#       SELF sets the sourceRepo to repoName, and packageRegex to .*
+#       BASE defines all the generic language packages.
+#     sourceRepo is the repository to find the packages from. If omitted repoName is assumed unless one of the presets was used for shortName.
+#     packageRegex is a regular expression to select just the packages you want. If omitted .* is assumed unless one of the presets was used for shortName.
+#
+# Examples:
+#   Set the short-friendly name of the application.
+#     $0 doneIt name "doneit"
+
+#   Set the execuable name of the application.
+#     $0 doneIt execName "doneit"
+#
+#   Set the description of the application.
+#     $0 doneIt description "A tool for remember where the day went. So when you are asked about your progress, you can say."
+
+requiredParms="$2"
+. `dirname $0`/libs/includeLibs.sh
+. $libDir/repoParms.sh
+
+defaultRegEx='.*'
+repoName="$1"
+shortName="$2"
+sourceRepo="${3:-$repoName}"
+packageRegex="${4:-$defaultRegEx}"
+
+case "$shortName" in
+	'SELF')
+		sourceRepo="$repoName"
+		packageRegex=".*"
+	;;
+	'BASE')
+		sourceRepo="$languageName"
+		packageRegex=".*"
+	;;
+esac
+
+repoSetParm "$repoName" "packages,$shortName,sourceRepo" "$sourceRepo"
+repoSetParm "$repoName" "packages,$shortName,packageRegex" "$packageRegex"

@@ -21,4 +21,4 @@ requiredParms="$2"
 . `dirname $0`/libs/includeLibs.sh
 . $libDir/getRepo.sh
 
-getRepo "$1" "$2"
+addRepo "$2" "$1"

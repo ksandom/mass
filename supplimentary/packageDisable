@@ -23,23 +23,4 @@ requiredParms="$3"
 . `dirname $0`/libs/includeLibs.sh
 . "$libDir"/packages.sh
 
-repoName="$1"
-packageRegex="$2"
-profileNameRegex="$3"
-
-profiles=`$managementTool profileList | grep "$profileNameRegex"`
-if [ "$profiles" == '' ]; then
-	echo "Did not match any profiles using regex \"$profileNameRegex\""
-	exit 1
-fi
-
-while read profile; do
-	while read package;do
-		packagePath="$configDir/profiles/$profile/packages/$repoName-$package"
-		if [ -h "$packagePath" ]; then
-			rm -f "$packagePath"
-		elif [ -d "$packagePath" ]; then
-			echo "$packagePath is a directory. Is this your only copy of your work?! This should be a symlink."
-		fi
-	done < <($managementTool repoListPackages $repoName --short | grep "$packageRegex")
-done < <(echo "$profiles")
+disablePackage "$1" "$2" "$3"

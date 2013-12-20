@@ -1,6 +1,0 @@
-# List out the available filters that have been defined with --filter. ~ filter
-
-collectionLoad Filter
-
-retrieveResults Filter,filters
-templateOut filters

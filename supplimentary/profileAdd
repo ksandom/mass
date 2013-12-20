@@ -13,5 +13,6 @@
 requiredParms="$1"
 . `dirname $0`/libs/includeLibs.sh
 . "$libDir"/packages.sh
+. "$libDir"/installLibs.sh
 
 createProfile $1

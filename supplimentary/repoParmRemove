@@ -1,0 +1,24 @@
+#!/bin/bash
+# Description
+#   Remove a parameter from an existing repository.
+#
+# Syntax:
+#   $0 repoName parameterName "value"
+#     repoName is the name of the repository you'd like to remove the parameter from.
+#     parameterName is the name of the parameter you'd like to remove.
+#
+#     IMPORTANT: You can not use commas (,) in any of these parameters.
+#
+# Examples:
+#   Remove the name of the application.
+#     $0 doneIt execName
+#
+#   Remove the description of the application.
+#     $0 doneIt description
+
+requiredParms="$2"
+. `dirname $0`/libs/includeLibs.sh
+. $libDir/repoParms.sh
+
+repoRemoveParm "$1" "$2"
+

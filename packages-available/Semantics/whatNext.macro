@@ -1,5 +1,0 @@
-# Show possible features that could be called with the current data set. --whatNext ~ Semantics
-#onDefine aliasFeature whatNext,w
-
-help
-requireItem inDataType,~!SemanticsState,currentDataType,dataTypeName!~

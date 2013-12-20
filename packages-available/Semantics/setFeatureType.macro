@@ -1,5 +1,0 @@
-# Set the featureType for a feature. --setFeatureType=featureName,featureType ~ Semantics,feature
-
-setFeatureAttribute ~!Global,setFeatureType-0!~,featureType,~!Global,setFeatureType-1!~
-setFeatureAttribute ~!Global,setFeatureType-0!~,inDataType,~!Semantics,featureTypes,~!Global,setFeatureType-1!~,inDataType!~
-setFeatureAttribute ~!Global,setFeatureType-0!~,outDataType,~!Semantics,featureTypes,~!Global,setFeatureType-1!~,outDataType!~

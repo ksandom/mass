@@ -1,3 +1,0 @@
-# Choose a subset of results based on a number of days ago. --tsDay=startNumberOfDaysAgo,[howManyDaysToTake],[fieldToDecideOn] ~ time
-
-tsUnit ~!Global,tsDay-0!~,~!Global,tsDay-1!~,~!Global,tsDay-2!~,day

@@ -1,16 +1,21 @@
 #!/bin/bash
 # Description
-#   Adds a pretent repository (a complete directory structure that is not yet a repository). This is useful for something that is still in the experimentation stage.
+#   DEPRECATED (use repoAdd instead) Adds a pretend repository (a complete directory structure that is not yet a repository). This is useful for something that is still in the experimentation stage.
 #
 # Syntax:
-#   $0 pathToDirectoryStructure
+#   $0 pathToDirectoryStructure [whatToCallIt]
 #
 # Examples:
 #   Add a directory structure.
 #     $0 /usr/local/something
+#
+#   Add a directory structure and call it blah.
+#     $0 /usr/local/something blah
+
 
 requiredParms="$1"
 . `dirname $0`/libs/includeLibs.sh
+. $libDir/getRepo.sh
 
-cd "$configDir"/repos
-ln -s "$1" .
+echo "$0: This is deprecated. Use repoAdd instead." >&2
+addPretendRepo "$1" "$2"

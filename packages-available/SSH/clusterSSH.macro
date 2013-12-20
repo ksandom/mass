@@ -2,6 +2,8 @@
 #onDefine aliasFeature clusterSSH,clusterssh,cssh
 #onLoaded setFeatureType clusterSSH,actOnHostsUnknown
 
+# TODO detect existing clusterSSH installtion.
+
 debug 0,--clusterSSH has gone through heavy refactoring in the last few days. It should be working, but if it isn't you can use --legacyClusterSSH (or --lcssh) and let me know what the trouble is you're having with it.
 
 outNow

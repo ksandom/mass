@@ -1,8 +1,0 @@
-# Get the timestamp of midnight begining yesterday. --tsYesterday=Category,variableName ~ time
-
-tsDay 1
-
-# now Tmp,timestamp
-# strToTime ~!Global,tsYesterday-0!~,~!Global,tsYesterday-1!~,0:00:00,~!Tmp,timestamp!~
-# strToTime ~!Global,tsYesterday-0!~,~!Global,tsYesterday-1!~,-1 day,~!~!Global,tsYesterday-0!~,~!Global,tsYesterday-1!~!~
-# unset Tmp,timestamp

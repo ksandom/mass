@@ -1,6 +1,0 @@
-# Detect the best terminal available ~ install,terminal
-#onDefine registerForEvent Install,general,detectTerminal
-
-debug 1,Detecting the best terminal to use
-detect Terminal,seed,GUI
-saveStoreToConfig Terminal

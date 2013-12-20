@@ -1,0 +1,24 @@
+#!/bin/bash
+# Description
+#   Get a parameter for an existing repository.
+#
+# Syntax:
+#   $0 repoName parameterName "value"
+#     repoName is the name of the repository you'd like to get the parameter in.
+#     parameterName is the name of the parameter you'd like to get. It doesn't have to already exist.
+#
+#     IMPORTANT: You can not use commas (,) in any of these parameters.
+#
+# Examples:
+#   Get the name of the application.
+#     $0 doneIt execName
+#
+#   Get the description of the application.
+#     $0 doneIt description
+
+requiredParms="$2"
+. `dirname $0`/libs/includeLibs.sh
+. $libDir/repoParms.sh
+
+repoGetParm "$1" "$2"
+

@@ -1,5 +1,0 @@
-# Install the feature types to be used with semantics. ~ semantics,internal,install
-#onDefine registerForEvent Install,featureTypes,installFeatureTypesForSemantics
-
-createFeatureType generateDataTypes,,dataType,Generates a list of dataTypes.
-createFeatureType generateFeatureTypes,,featureType,Generates a list of featureTypes.

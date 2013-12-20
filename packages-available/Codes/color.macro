@@ -1,4 +1,0 @@
-# Turn on colored output ~ color
-#onDefine aliasFeature color,C
-
-loadStoreFromConfig Color

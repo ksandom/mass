@@ -25,6 +25,11 @@ repoDir="$configDir/repos"
 
 managementTool="manageMass"
 
+# TODO Does this actually need to be in a condition? I think probably not.
+if [ "$scriptName" == '' ]; then
+	scriptName=`echo $0|sed 's#^.*/##g'`
+fi
+
 for parameter in $@;do
 	case $parameter in
 		'--short')
