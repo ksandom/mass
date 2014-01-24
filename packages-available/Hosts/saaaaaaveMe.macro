@@ -2,8 +2,9 @@
 
 list
 me
-ifResult flatten 3
-ifResult setCategory Me
-ifResult saveStoreToConfig Me
+ifResult
+	flatten 3
+	setCategory Me
+	saveStoreToConfig Me
 
 nested

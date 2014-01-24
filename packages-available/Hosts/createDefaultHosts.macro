@@ -4,3 +4,5 @@
 debug 1,Creating default hosts
 
 createHost localhost,127.0.0.1,localhost,,,local,local
+getHostName
+createHost ~!Local,hostName!~,127.0.0.1,~!Local,hostName!~,,,local,local
