@@ -1,4 +1,5 @@
 # Adds/replace a bastion server. --addBastionHost=networkName,hostName . Note that hostName must be the full hostName that is needed to contact the server. eg --addBastionHost=staging,bastionServer.example.com ~ add,bastion
 
+collectionLoad Bastion
+
 set Bastion,~!Global,addSimpleBastionHost-0!~,~!Global,addSimpleBastionHost-1!~
-saveStoreToData Bastion
