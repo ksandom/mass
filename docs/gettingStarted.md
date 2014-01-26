@@ -36,20 +36,20 @@ See install.md. If you are using a company specific install, this is probably do
 
 # The basics under the hood
 
-Mass works using a bus/resultset for features to communicate with each other. Generally you:
+Mass is written in Achel, which works using a bus/resultset for features to communicate with each other. Generally you:
 
-1. Put stuff in the bus 
+1. Put stuff in the resultSet
 2. Do stuff to that stuff
 3. Take action on that stuff
 
-Eg `mass --search=local --chooseFirst=IP,externalIP,internalIP --resultSet=cmd,top --toString='~!Terminal,GUICMD!~' --exec`
+Eg `mass --search=local --chooseFirst=IP,externalIP,internalIP --resultSet=termCmd,'ssh -t ~%IP%~ top' --toString='~!Terminal,GUICMD!~' --exec`
 
 Which:
 
 1. searches for all hosts containing local somewhere.
 2. takes the first available IP out of externalIP & internalIP and sticks it in a variable called IP.
 3. Sets the `cmd` variable to `top` so that we will run the top command on each host.
-4. takes all the details to make a single string we can execute per result. `~!Terminal,GUICMD!~` expands to something like `xterm -e bash -c "ssh -t ~%IP%~ ~%cmd%~" &` (originally set in defaultVales.macro), which in turn will resolve to something like `xterm -e bash -c "ssh -t 127.0.0.1 top" &`
+4. takes all the details to make a single string we can execute per result. `~!Terminal,GUICMD!~` expands to something like `konsole -e bash -c "ssh -t 127.0.0.1 top" 2>/dev/null 1>/dev/null &` . To see what it resolves to, simply remove the `--exec` at the end so it doesn't get executed.
 5. execute every string we recieve. As you might imagine, some care should be taken when using this.
 
 The end result is we open a terminal to every matching host.

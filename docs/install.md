@@ -1,3 +1,5 @@
+This document is out of date and needs refactoring. It should still be useful, but a few things will be different. Mostly paths. Eg ./mass becomes ./achel.
+
 # Introduction
 
 First off, thanks for installing mass. I hope you like it.
@@ -8,21 +10,10 @@ Once installed, `mass --help=searchTerm` is your friend!
 
 # Installation
 ## 1) Install the program
-For now, the installation method is ./install.sh. I suggest giving it a read to see what it does. I've detailed the different ways of using it below.
 
-### Types of install
-#### As root (System-wide)
-If you run `./install` as root, mass will be installed to be available system wide.
+    export extraSrc="git@github.com:ksandom/mass.git"; curl https://raw.github.com/ksandom/achel/master/supplimentary/misc/webInstall | bash
 
-#### Linked (Development)
-If you run `./install linked` as a non-root user, mass will be linked to original the files that it was installed from. This is particularly useful for development. 
-
-##### As yourself (Local)
-_Currently broken_
-
-This is currently broken and is low on my priorities to fix. If it's useful to you feel free to have a go.
-
-If you run `./install` as a non-root user, mass will only be available to that user. Realistically I think the only time you'll use this now is experimentation or trying to reproduce a bug.
+This installs Achel (if it hasn't been already) and then installs the Mass repo in Achel.
 
 ## 2) Getting data to use
 ### Hosts
@@ -34,8 +25,7 @@ Here are the sources I plan to have available --help=import:
 
 * [AWS](../packages-available/AWS/docs/importingHostsFromAWS.md) --help=AWS
 * /etc/hosts --help=Hosts --importFromHostsFile
-* .ssh/config # TODO
-* /etc/ssh/ssh_config # TODO
+* manual with `--createHost`
 
 ### Other stuff
 
@@ -49,22 +39,27 @@ See [gettingStarted.md](gettingStarted.md) in the mean time do `mass --help` whi
  * `mass --help=all` which will show eeeeeeeeeeeeeeverything. This is now getting sufficiently long that it's more about showing off "Hey! We haz all da stuff!"
 
 # Updating
-Simply do a git pull where ever you checked out the code then run `./install.sh` in the same way you did under the install section.
 
-The `./install.sh` is important since I'm regularly refactoring the internals at the moment, so the install will sort that out.
+The best way to update is to
+
+    manageAchel repoUpdate mass
 
 # Stuff to think about after installing
 ## What stuff to enable
-There are two reasons to consider what you want to enable:
+For the majority of users, the default settings should be really good.
 
-1. Everything that is enabled is using memory all the time and takes time to load. Right now things are sufficiently small that this isn't an issue, but it's not hard to imagine this growing to a size where it's worth taking this into account.
-2. In the future there may be alternate versions of the same functionality. Often this functionality will be mutually exclusive, so one will have to be chosen over the other. When this becomes relevant, I'll try to make it as painless as possible.
+There are some reasons to consider what you want to enable:
+
+1. Everything that is enabled is using memory all the time and takes time to load. Now that Achel supports profiles which know which packages should be enabled, this shouldn't be much of an issue.
+2. In the future there may be alternate versions of the same functionality. Often this functionality will be mutually exclusive, so one will have to be chosen over the other. The default path should be handled transparently for you.
 3. Security. You can serve mass as an API via apache or nginx. **At this time, you can't run this accidentally, so you don't need to panic yet.** If you do this, you want to think **very** carefully about what you want people to have access to, and more importantly what you don't want them to have access to. I strongly recommend locking down access to the API also. Where I work, we only have it accessible from inside any given environment. Read more [here](runningMassAsAnAPI.md).
 
 ## Enabling or disabling stuff
 _I've gone to a lot of effort to make the defaults pretty good. Feed back is welcome._
 
-It all works like available/enabled system that ubuntu uses via symlinks. The biggest differnce is that enabled folders now sit with profiles/profileName, where each profile is for diffenent interfaces/use-cases (most people will want profiles/commandLine.) You can use `ln -s` to create symlinks in the same way that you'd use cp to copy a file. Please do not simply copy the files as that will make things very hard to diagnose when there are problems.
+You should enable and disable packages using the `packageEnable` and `packageDisable` in manageAchel.
+
+It all works like available/enabled system that ubuntu uses via symlinks. The biggest differnce is that enabled folders now sit with profiles/profileName, where each profile is for diffenent interfaces/use-cases/Achel-applications.
 
 TODO This needs updating.
 
