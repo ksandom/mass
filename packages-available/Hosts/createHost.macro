@@ -22,23 +22,21 @@ debug 2,Creating host ~!CreateHost,hostName!~ in collection ~!CreateHost,locatio
 
 
 # Load the collection if it has not been loaded already
-retrieveResults Hosts,~!CreateHost,collection!~
-notIfResult loadStoreVariableFromFile ~!General,configDir!~/data/1LayerHosts/~!CreateHost,collection!~.json,Hosts,~!CreateHost,collection!~
-
+editHostDefinitions ~!CreateHost,collection!~
 
 # Set the details and cleanup
-setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,hostName,~!CreateHost,hostName!~
-setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,internalIP,~!CreateHost,internalIP!~
-setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,internalFQDN,~!CreateHost,internalFQDN!~
-setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,externalIP,~!CreateHost,externalIP!~
-setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,externalFQDN,~!CreateHost,externalFQDN!~
-setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,location,~!CreateHost,location!~
-setNested Hosts,~!CreateHost,collection!~,~!CreateHost,hostName!~,collection,~!CreateHost,collection!~
+setNested Hosts-~!CreateHost,collection!~,~!CreateHost,hostName!~,hostName,~!CreateHost,hostName!~
+setNested Hosts-~!CreateHost,collection!~,~!CreateHost,hostName!~,internalIP,~!CreateHost,internalIP!~
+setNested Hosts-~!CreateHost,collection!~,~!CreateHost,hostName!~,internalFQDN,~!CreateHost,internalFQDN!~
+setNested Hosts-~!CreateHost,collection!~,~!CreateHost,hostName!~,externalIP,~!CreateHost,externalIP!~
+setNested Hosts-~!CreateHost,collection!~,~!CreateHost,hostName!~,externalFQDN,~!CreateHost,externalFQDN!~
+setNested Hosts-~!CreateHost,collection!~,~!CreateHost,hostName!~,location,~!CreateHost,location!~
+setNested Hosts-~!CreateHost,collection!~,~!CreateHost,hostName!~,collection,~!CreateHost,collection!~
 
-retrieveResults Hosts,~!CreateHost,collection!~
+getCategory Hosts-~!CreateHost,collection!~
 
 
 # Save the result out
 registerOnceForEvent Achel,finishGeneral,saveHostsCollection,~!CreateHost,collection!~
 unsetCategory CreateHost 
-
+unsetCategory Tmp-~!CreateHost,collection!~
