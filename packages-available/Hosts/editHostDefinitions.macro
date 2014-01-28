@@ -1,6 +1,0 @@
-# Load a hosts definitions collection with auto save so you can make manual changes to it. --editHostsDefinitions[=collectionName] where collectionName is the name of the json file sitting in configDir/data/1LayerHosts/ and defaults to "manual". The collection will be loaded into Hosts-collectionName, so you could follow up with something like --setNested=Hosts-manual,bob,blah,wheee which will set blah to wheee on the host bob., ~ hosts,manualHosts
-
-if ~!Global,editHostsDefinitions!~,==,,
-	set Global,editHostsDefinitions,manual
-
-collectionLoadArbitrary Hosts-~!Global,editHostsDefinitions!~,~!General,configDir!~/data/1LayerHosts/~!Global,editHostsDefinitions!~.json
