@@ -22,7 +22,7 @@ debug 2,Creating host ~!CreateHost,hostName!~ in collection ~!CreateHost,locatio
 
 
 # Load the collection if it has not been loaded already
-editHostDefinitions ~!CreateHost,collection!~
+editHostsDefinitions ~!CreateHost,collection!~
 
 # Set the details and cleanup
 setNested Hosts-~!CreateHost,collection!~,~!CreateHost,hostName!~,hostName,~!CreateHost,hostName!~
