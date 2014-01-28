@@ -20,9 +20,22 @@ Let's add a couple of bastion hosts
     $ mass --addSimpleBastionHost=example,zelappy
     $ mass --addSimpleBastionHost=anotherExample,k1
 
-And manipulate the hosts during import
+And manipulate the hosts during import. We'll call this applBastionManipulations
 
-TODO finish this
+    # Apply bastion host manipulations during import ~ bastion,example
+    #onDefine registerForEvent Import,readyForManipulations,applBastionManipulations
+    
+    # Set which bastion host to use for which servers.
+    manipulateItem hostName,staging,resultSet bastion,example
+    manipulateItem hostName,live,resultSet bastion,anotherExample
+    
+    # If we are using a bastion host, we should use the internal address.
+    manipulateItem bastion,..*,resultSet preferredInterface,internal
+
+This will set the bastion server for hosts matching specific regexes, and then make sure the internal address is used to contact those hosts.
+
+TODO Add output
+
 
 ## A worked example - after import
 
