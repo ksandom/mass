@@ -12,17 +12,17 @@ This is a tiny percentage of the final vision, so there's a lot more to come!
 * PHP
 * Bash
 
+# Install
+
+    export extraSrc="https://github.com/ksandom/mass.git"; curl https://raw.github.com/ksandom/achel/master/supplimentary/misc/webInstall | bash
+
+See [docs/install.md](mass/tree/master/docs/install.md) for more information.
+
 # Important updates
 
 * Mass has undergone significant refactoring. You can now install it using the one-liner below. [More info](mass/tree/master/docs/install.md).
 
 As a general rule, when ever you update, you should re-run install.sh to apply any structural changes as the internals are regularly being refactored.
-
-# Install
-
-    export extraSrc="git@github.com:ksandom/mass.git"; curl https://raw.github.com/ksandom/achel/master/supplimentary/misc/webInstall | bash
-
-See [docs/install.md](mass/tree/master/docs/install.md) for more information.
 
 # Contributing
 
