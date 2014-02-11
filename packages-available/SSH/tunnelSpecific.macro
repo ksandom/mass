@@ -9,8 +9,15 @@ triggerEvent Bastion,deriveCommands
 pos fromPort,~!Global,tunnelSpecific-0!~
 
 # Gather input
-set TunnelSpecific,toHost,~!Global,tunnelSpecific-1!~
-set TunnelSpecific,toPort,~!Global,tunnelSpecific-2!~
+if ~!Global,tunnelSpecific-1!~,!=,,
+	set TunnelSpecific,toHost,~!Global,tunnelSpecific-1!~
+else
+	set TunnelSpecific,toHost,localhost
+
+if ~!Global,tunnelSpecific-2!~,!=,,
+	set TunnelSpecific,toPort,~!Global,tunnelSpecific-2!~
+else
+	set TunnelSpecific,toPort,~!Global,tunnelSpecific-0!~
 
 # Set defaults
 setIfNotSet TunnelSpecific,toHost,localhost
