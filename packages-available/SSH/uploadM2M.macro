@@ -9,11 +9,11 @@ triggerEvent Bastion,deriveCommands
 stashResults UploadM2M,sourcelist
 
 retrieveResults UploadM2M,sourcelist
-toString mkdir -p ~%externalFQDN%~
+toString mkdir -p ~%FQDN%~
 exec
 
 retrieveResults UploadM2M,sourcelist
-toString scp ~!Verbosity,externalMinusV!~ ~%scpExtra%~ ~%auth%~ -r ~%externalFQDN%~/`echo ~!Global,uploadM2M!~|sed 's/.*\///'` ~%userAt%~~%FQDN%~:~!Global,uploadM2M!~ >&2 ~!Settings,backgroundTasks!~
+toString scp ~!Verbosity,externalMinusV!~ ~%scpExtra%~ ~%auth%~ -r ~%FQDN%~/`echo ~!Global,uploadM2M!~|sed 's/.*\///'` ~%userAt%~~%FQDN%~:~!Global,uploadM2M!~ >&2 ~!Settings,backgroundTasks!~
 cleanUnresolvedResultVars
 nested
 exec

@@ -8,7 +8,7 @@ triggerEvent Bastion,deriveCommands
 
 stashResults Download,sourcelist
 
-toString mkdir -p ~%externalFQDN%~
+toString mkdir -p ~%FQDN%~
 exec
 
 retrieveResults Download,sourcelist
