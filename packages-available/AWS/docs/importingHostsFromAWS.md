@@ -24,6 +24,10 @@ Although I recommend using -vv to help you understand what's going on better in 
 
 Probably that's all you'll need. If not, or if you want to know more, read on.
 
+## Dependancies
+
+* php5-curl
+
 ## Using Saved credentials
 
 ### Overview
