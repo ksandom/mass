@@ -1,6 +1,4 @@
-# Not ready. Use --AWSSetCred instead. Save your amazon credentials --AWSSaveCred=accountName,AWSKey,AWSSecret ~ AWS,NOTREADY
-
-# Note that dev is the only account name that can be used at the moment.
+# Save your amazon credentials --AWSSaveCred=accountName,AWSKey,AWSSecret ~ AWS
 
 loadStoreFromData AWSCreds
 set AWSCreds,~!Global,AWSSaveCred!~
