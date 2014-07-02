@@ -1,0 +1,14 @@
+# Clean up host data to make it look nicer for hummans. ~ hosts,hidden
+
+loop
+	if ~!Result,instanceType!~,==,,
+		set Result,instanceType,unknown type
+
+	if ~!Result,location!~,==,,
+		set Result,location,unknown location
+
+	if ~!Result,architecture!~,==,,
+		set Result,architecture,unknown architecture
+
+	if ~!Result,rootDeviceType!~,==,,
+		set Result,rootDeviceType,unknown rootDeviceType

@@ -2,5 +2,7 @@
 
 importFromHostsFile ~!Global,inputHosts!~
 
+cleanHostData
+
 # save store to data
 saveToJson ~!General,configDir!~/data/1LayerHosts/importedFromETCHosts.json
