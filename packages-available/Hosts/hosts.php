@@ -19,7 +19,7 @@ class Hosts extends Module
 			case 'init':
 				$this->core->registerFeature($this, array('search'), 'search', 'List/Search host entries. ', array('search'));
 				$this->core->registerFeature($this, array('searchOld'), 'searchOld', 'Deprecated. List/Search old style host entries. ', array('deprecated', 'search'));
-				$this->core->registerFeature($this, array('importFromHostsFile'), 'importFromHostsFile', 'Import host entries from a hosts file.', array('import'));
+				$this->core->registerFeature($this, array('importFromHostsFile'), 'importFromHostsFile', 'Import host entries from a hosts file. --importFromHostsFile[=fileName]. If fileName is omitted, /etc/hosts is assumed.', array('import'));
 				$this->core->registerFeature($this, array('reloadOldStyleHosts'), 'reloadOldStyleHosts', 'Import host entries from a hosts file.', array('hosts', 'src'));
 				break;
 			case 'followup':
@@ -36,7 +36,7 @@ class Hosts extends Module
 				return $this->loadOldStyleHostDefinitions();
 				break;
 			case 'importFromHostsFile':
-				return $this->importFromHostsFile();
+				return $this->importFromHostsFile($this->core->get('Global', $event));
 				break;
 			default:
 				$this->core->complain($this, 'Unknown event', $event);
@@ -169,11 +169,14 @@ class Hosts extends Module
 		}
 	}
 	
-	function importFromHostsFile()
+	function importFromHostsFile($inputFile)
 	{
-		if (file_exists('/etc/hosts'))
+		if (!$inputFile) $inputFile='/etc/hosts';
+		
+		# TODO take input file
+		if (file_exists($inputFile))
 		{
-			if ($contents=file_get_contents('/etc/hosts')) return $this->processHostsFile($contents);
+			if ($contents=file_get_contents($inputFile)) return $this->processHostsFile($contents);
 			else $this->core->complain($this, "Didn't get any contents from /etc/hosts. Permissions?");
 		}
 		else $this->core->complain($this, "Could not find /etc/hosts. Are you on a real computer?");
