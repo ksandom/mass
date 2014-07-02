@@ -212,19 +212,21 @@ class Hosts extends Module
 						
 						$ipKey=(strpos($parts[0], '.'))?'internalIP':'internalIPv6';
 						$lineOutput[$ipKey]=$parts[0];
-						$lineOutput['hostname']=$parts[1];
+						$lineOutput['hostName']=$parts[1];
 						
 						for ($i=0; $i<$numberOfParts; $i++)
 						{
-							if (!(isset($lineOutput['hostnameMap'][$parts[$i]])) and $parts[$i]!=$lineOutput['hostname'] and (trim($parts[$i])))
+							if (!(isset($lineOutput['hostnameMap'][$parts[$i]])) and $parts[$i]!=$lineOutput['hostName'] and (trim($parts[$i])))
 							{
 								$lineOutput['hostnameMap'][$parts[$i]]=$parts[$i];
 								$lineOutput['hostnameCount']++;
-								$lineOutput['hostname'.$lineOutput['hostnameCount']]=$parts[$i];
+								$lineOutput['hostName'.$lineOutput['hostnameCount']]=$parts[$i];
 							}
 						}
 						
-						$output[$lineOutput['hostname']]=$lineOutput;
+						$lineOutput['source']='hosts file';
+						
+						$output[$lineOutput['hostName']]=$lineOutput;
 					}
 				}
 			}
