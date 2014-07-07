@@ -1,6 +1,6 @@
 # Import /etc/hosts. Read importHosts.macro for more information ~ user,import
 
-importFromHostsFile ~!Global,inputHosts!~
+importFromHostsFile ~!Global,importHosts!~
 
 cleanHostData
 

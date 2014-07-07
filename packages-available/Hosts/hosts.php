@@ -173,6 +173,8 @@ class Hosts extends Module
 	{
 		if (!$inputFile) $inputFile='/etc/hosts';
 		
+		$this->core->debug(1, "importFromHostsFile: Importing from \"$inputFile\"");
+		
 		# TODO take input file
 		if (file_exists($inputFile))
 		{
