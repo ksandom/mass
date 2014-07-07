@@ -8,10 +8,16 @@ if ~!MassSettings,useExplicitOrdering!~,==,true,
 	chooseFirst chosenInterface,~!MassSettings,interfaceOrder!~
 else
 	loop
-		if ~!Result,preferredInterface!~,!=,,
-			debug 1,chooseBestInterface(~!Result,hostName!~): preferredInterface=~!Result,preferredInterface!~ so IP and FQDN are set accordingly (~!Result,~!Result,preferredInterface!~IP!~, ~!Result,~!Result,preferredInterface!~FQDN!~).
+		if ~!Result,~!Result,preferredInterface!~!~,!=,,
+			debug 1,chooseBestInterface(~!Result,hostName!~): preferredInterface=~!Result,preferredInterface!~IP so IP and FQDN are set accordingly (~!Result,~!Result,preferredInterface!~IP!~, ~!Result,~!Result,preferredInterface!~FQDN!~).
+			set Result,IP,~!Result,~!Result,preferredInterface!~!~
+			set Result,FQDN,~!Result,~!Result,preferredInterface!~!~
+			
+		elseIf ~!Result,~!Result,preferredInterface!~IP!~,!=,,
+			debug 1,chooseBestInterface(~!Result,hostName!~): preferredInterface=~!Result,preferredInterface!~IP so IP and FQDN are set accordingly (~!Result,~!Result,preferredInterface!~IP!~, ~!Result,~!Result,preferredInterface!~FQDN!~).
 			set Result,IP,~!Result,~!Result,preferredInterface!~IP!~
 			set Result,FQDN,~!Result,~!Result,preferredInterface!~FQDN!~
+		
 		
 		elseIf ~!Result,externalIP!~,!=,,
 			set Result,IP,~!Result,externalIP!~
