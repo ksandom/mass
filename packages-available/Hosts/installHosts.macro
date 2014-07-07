@@ -4,3 +4,7 @@
 debug 1,Hosts: Installing default filters
 saveFilter 32,Hosts: 32bit machines,architecture,i386
 saveFilter 64,Hosts: 64bit machines,architecture,x86_64
+
+collectionLoad MassSettings
+setIfNotSet MassSettings,interfaceOrder,externalIP,internalIP,IP,FQDN,hostName
+setIfNotSet MassSettings,useExplicitOrdering,true

@@ -1,0 +1,5 @@
+# Choose a particular interface to connect to. This will override what mass would normally choose, but for this one time only. ~ hosts,interface
+
+loop
+	set Result,IP,~!Result,~!Global,useInterface!~!~
+	set Result,FQDN,~!Result,~!Global,useInterface!~!~

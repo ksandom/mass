@@ -1,0 +1,4 @@
+# Define wether to use explicit ordering when choosing the best interface to connect to a host on. --useExplicitInterfaceOrdering=true|false . This macro pairs with --useInterface . ~ hosts,interface
+
+collectionLoad MassSettings
+set MassSettings,useExplicitOrdering,true

@@ -1,39 +1,48 @@
 # Choose the best interface. This actually happens as part of doing a --list. But if you do some manipulations to the resultSet, you may want to run it again before taking action on it. ~ manipulations
 
-loop
-	if ~!Result,preferredInterface!~,!=,,
-		debug 1,chooseBestInterface(~!Result,hostName!~): preferredInterface=~!Result,preferredInterface!~ so IP and FQDN are set accordingly (~!Result,~!Result,preferredInterface!~IP!~, ~!Result,~!Result,preferredInterface!~FQDN!~).
-		set Result,IP,~!Result,~!Result,preferredInterface!~IP!~
-		set Result,FQDN,~!Result,~!Result,preferredInterface!~FQDN!~
+if ~!MassSettings,useExplicitOrdering!~,==,true,
+	if ~!MassSettings,interfaceOrder!~,==,,
+		# Invalid configuration, let's try to fix it.
+		installHosts
 	
-	elseIf ~!Result,externalIP!~,!=,,
-		set Result,IP,~!Result,externalIP!~
-		if ~!Result,externalFQDN!~,!=,,
-			debug 1,chooseBestInterface(~!Result,hostName!~): external details found (~!Result,externalIP!~, ~!Result,externalFQDN!~)
-			set Result,FQDN,~!Result,externalFQDN!~
+	chooseFirst chosenInterface,~!MassSettings,interfaceOrder!~
+else
+	loop
+		if ~!Result,preferredInterface!~,!=,,
+			debug 1,chooseBestInterface(~!Result,hostName!~): preferredInterface=~!Result,preferredInterface!~ so IP and FQDN are set accordingly (~!Result,~!Result,preferredInterface!~IP!~, ~!Result,~!Result,preferredInterface!~FQDN!~).
+			set Result,IP,~!Result,~!Result,preferredInterface!~IP!~
+			set Result,FQDN,~!Result,~!Result,preferredInterface!~FQDN!~
+		
+		elseIf ~!Result,externalIP!~,!=,,
+			set Result,IP,~!Result,externalIP!~
+			if ~!Result,externalFQDN!~,!=,,
+				debug 1,chooseBestInterface(~!Result,hostName!~): external details found (~!Result,externalIP!~, ~!Result,externalFQDN!~)
+				set Result,FQDN,~!Result,externalFQDN!~
+			else
+				debug 1,chooseBestInterface(~!Result,hostName!~): external details found (~!Result,externalIP!~, *using IP*)
+				set Result,FQDN,~!Result,externalIP!~
+		
+		elseIf ~!Result,internalIP!~,!=,,
+			set Result,IP,~!Result,internalIP!~
+			if ~!Result,internalFQDN!~,!=,,
+				debug 1,chooseBestInterface(~!Result,hostName!~): defaulting to internal details (~!Result,internalIP!~, ~!Result,internalFQDN!~)
+				set Result,FQDN,~!Result,internalFQDN!~
+			else
+				debug 1,chooseBestInterface(~!Result,hostName!~): defaulting to internal details (~!Result,internalIP!~, *using IP*)
+				set Result,FQDN,~!Result,internalIP!~
+		
+		elseIf ~!Result,IP!~,!=,,
+			debug 1,chooseBestInterface(~!Result,hostName!~): Could not find a preferred method, but IP was set. So leaving it untouched. (~!Result,IP!~)
+		
+		elseIf ~!Result,FQDN!~,!=,,
+			debug 1,chooseBestInterface(~!Result,hostName!~): Could not find a preferred method, but FQDN was set. So setting IP to FQDN (~!Result,IP!~) and hoping that some form of name resolution figures it out at a later stage for you.
+			set Result,IP,~!Result,FQDN!~
+		
+		elseIf ~!Result,hostName!~,!=,,
+			debug 1,chooseBestInterface(~!Result,hostName!~): Could not find a preferred method, but we at least have a hostName. So setting IP to the hostName (~!Result,hostName!~) and hoping that some form of name resolution figures it out at a later stage for you. You can help your chances on unixy systems by making sure search is set in /etc/resolv.conf.
+			set Result,IP,~!Result,hostName!~
+		
 		else
-			debug 1,chooseBestInterface(~!Result,hostName!~): external details found (~!Result,externalIP!~, *using IP*)
-			set Result,FQDN,~!Result,externalIP!~
-	
-	elseIf ~!Result,internalIP!~,!=,,
-		set Result,IP,~!Result,internalIP!~
-		if ~!Result,internalFQDN!~,!=,,
-			debug 1,chooseBestInterface(~!Result,hostName!~): defaulting to internal details (~!Result,internalIP!~, ~!Result,internalFQDN!~)
-			set Result,FQDN,~!Result,internalFQDN!~
-		else
-			debug 1,chooseBestInterface(~!Result,hostName!~): defaulting to internal details (~!Result,internalIP!~, *using IP*)
-			set Result,FQDN,~!Result,internalIP!~
-	
-	elseIf ~!Result,IP!~,!=,,
-		debug 1,chooseBestInterface(~!Result,hostName!~): Could not find a preferred method, but IP was set. So leaving it untouched. (~!Result,IP!~)
-	
-	elseIf ~!Result,FQDN!~,!=,,
-		debug 1,chooseBestInterface(~!Result,hostName!~): Could not find a preferred method, but FQDN was set. So setting IP to FQDN (~!Result,IP!~) and hoping that some form of name resolution figures it out at a later stage for you.
-		set Result,IP,~!Result,FQDN!~
-	
-	elseIf ~!Result,hostName!~,!=,,
-		debug 1,chooseBestInterface(~!Result,hostName!~): Could not find a preferred method, but we at least have a hostName. So setting IP to the hostName (~!Result,hostName!~) and hoping that some form of name resolution figures it out at a later stage for you. You can help your chances on unixy systems by making sure search is set in /etc/resolv.conf.
-		set Result,IP,~!Result,hostName!~
-	
-	else
-		debug 1,chooseBestInterface(~!Result,hostName!~): Could not find anything of any value. So leaving it untouched. (~!Result,IP!~)
+			debug 1,chooseBestInterface(~!Result,hostName!~): Could not find anything of any value. So leaving it untouched. (~!Result,IP!~)
+		
+		set Result,chosenInterface,~!Result,IP!~

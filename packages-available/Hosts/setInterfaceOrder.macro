@@ -1,0 +1,5 @@
+# Set the interface search order for hosts. --setInterfaceOrder=field1[,field2[,field2[,...]]] ~ hosts,searchOrder
+
+collectionLoad MassSettings
+set MassSettings,interfaceOrder,~!Global,setInterfaceOrder!~
+useExplicitInterfaceOrdering true
