@@ -4,5 +4,7 @@ importFromHostsFile ~!Global,importHosts!~
 
 cleanHostData
 
+triggerEvent Hosts,importedFromETCHosts
+
 # save store to data
 saveToJson ~!General,configDir!~/data/1LayerHosts/importedFromETCHosts.json
