@@ -1,10 +1,20 @@
-# Import /etc/hosts. Read importHosts.macro for more information ~ user,import
+# Import /etc/hosts. Read importHosts.macro for more information. --importHosts=[fileToImport][,nameToSaveAs] ~ user,import
 
-importFromHostsFile ~!Global,importHosts!~
+set Tmp,filePrefix,~!General,configDir!~/data/1LayerHosts/
+
+importFromHostsFile ~!Global,importHosts-0!~
+if ~!Global,importHosts-1!~,!=,,
+	set Tmp,fileName,hosts-~!Global,importHosts-1!~
+else
+	set Tmp,fileName,importedFromETCHosts.json
 
 cleanHostData
 
 triggerEvent Hosts,importedFromETCHosts
 
 # save store to data
-saveToJson ~!General,configDir!~/data/1LayerHosts/importedFromETCHosts.json
+debug 1,importHosts: Saving to ~!Tmp,filePrefix!~~!Tmp,fileName!~
+saveToJson ~!Tmp,filePrefix!~~!Tmp,fileName!~
+
+unset Tmp,fileName
+unset Tmp,filePrefix
