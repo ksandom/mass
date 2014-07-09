@@ -14,7 +14,7 @@ This is a tiny percentage of the final vision, so there's a lot more to come!
 
 ## Install
 
-    export extraSrc="https://github.com/ksandom/mass.git"; curl https://raw.github.com/ksandom/achel/master/supplimentary/misc/webInstall | bash
+    export extraSrc="https://github.com/ksandom/mass.git"; curl https://raw.githubusercontent.com/ksandom/achel/master/supplimentary/misc/webInstall | bash
 
 See [docs/install.md](mass/tree/master/docs/install.md) for more information.
 
