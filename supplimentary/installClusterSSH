@@ -25,7 +25,7 @@ function installClusterSSH
 		ln -s csshX cssh
 	fi
 	
-	registerWithMass
+	registerWithAchel
 }
 
 function getFirstExecutable
@@ -46,7 +46,7 @@ function query
 	fi
 }
 
-function registerWithMass
+function registerWithAchel
 {
 	implementation=`query`
 	mass --setClusterSSH=$implementation
@@ -62,8 +62,8 @@ case $1 in
 	'query')
 		query
 	;;
-	'registerWithMass')
-		registerWithMass
+	'registerWithAchel')
+		registerWithAchel
 	;;
 	*)
 		installClusterSSH
