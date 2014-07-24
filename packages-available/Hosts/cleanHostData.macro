@@ -1,14 +1,15 @@
 # Clean up host data to make it look nicer for hummans. ~ hosts,hidden
 
 loop
-	if ~!Result,instanceType!~,==,,
-		set Result,instanceType,unknown type
+	setIfNothing Result,instanceType,unknown type
+	setIfNothing Result,location,unknown location
+	setIfNothing Result,architecture,unknown architecture
+	setIfNothing Result,rootDeviceType,unknown rootDeviceType
+	
+	defaultedSetResultVar display01,displayVar01,location,unknown location
+	defaultedSetResultVar display02,displayVar02,instanceType,unknown instanceType
+	defaultedSetResultVar display03,displayVar03,architecture,unknown architecture
+	defaultedSetResultVar display04,displayVar04,rootDeviceType,unknown rootDeviceType
+	defaultedSetResultVar display05,displayVar05,,unused
+	defaultedSetResultVar display06,displayVar06,,unused
 
-	if ~!Result,location!~,==,,
-		set Result,location,unknown location
-
-	if ~!Result,architecture!~,==,,
-		set Result,architecture,unknown architecture
-
-	if ~!Result,rootDeviceType!~,==,,
-		set Result,rootDeviceType,unknown rootDeviceType

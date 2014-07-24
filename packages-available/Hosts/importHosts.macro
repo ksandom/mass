@@ -4,13 +4,13 @@ set Tmp,filePrefix,~!General,configDir!~/data/1LayerHosts/
 
 importFromHostsFile ~!Global,importHosts-0!~
 if ~!Global,importHosts-1!~,!=,,
-	set Tmp,fileName,hosts-~!Global,importHosts-1!~
+	set Tmp,fileName,hosts-~!Global,importHosts-1!~.json
 else
 	set Tmp,fileName,importedFromETCHosts.json
 
-cleanHostData
 
 triggerEvent Hosts,importedFromETCHosts
+cleanHostData
 
 # save store to data
 debug 1,importHosts: Saving to ~!Tmp,filePrefix!~~!Tmp,fileName!~
