@@ -201,8 +201,9 @@ class Hosts extends Module
 				if (substr($trimmedLine,0, 1)!='#')
 				{
 					# TODO one of the ranges of regex functions is deprecated. Check this isn't one.
-					$line=preg_replace('/\ +/', "\t", $line);
-					$line=preg_replace('/\#.*$/', "\t", $line);
+					$line=preg_replace('/\ +/', "\t", $line); # Spaces to tabs
+					$line=preg_replace('/\t+/', "\t", $line); # Multiple tabs to single tabs
+					$line=preg_replace('/\#.*$/', "\t", $line); # Remove comments from lines.
 					
 					$parts=explode("\t", $line);
 					$numberOfParts=count($parts);
