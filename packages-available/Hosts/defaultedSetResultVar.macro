@@ -2,19 +2,22 @@
 
 # TODO This needs to be refactored into Achel.
 
-debug 0,defaultedSetResultVar: key=~!Result,key!~ dst=~!Global,defaultedSetResultVar-0!~ src1=~!Global,defaultedSetResultVar-1!~ src2=~!Global,defaultedSetResultVar-2!~ text=~!Global,defaultedSetResultVar-3!~
-if ~!Result,~!Global,defaultedSetResultVar-1!~!~,!=,,
-	debug 0,defaultedSetResultVar: A key=~!Result,key!~ Chose first option =~!Result,~!Result,~!Global,defaultedSetResultVar-1!~!~!~
+debug 2,defaultedSetResultVar: key=~!Result,key!~ hostName=~!Result,hostName!~ dst=~!Global,defaultedSetResultVar-0!~ src1=~!Global,defaultedSetResultVar-1!~ src2=~!Global,defaultedSetResultVar-2!~ text=~!Global,defaultedSetResultVar-3!~
+
+debug 2,defaultedSetResultVar: src1=~!Result,~!Global,defaultedSetResultVar-1!~!~ src2=~!Result,~!Global,defaultedSetResultVar-2!~!~
+
+if ~!Result,~!Result,~!Global,defaultedSetResultVar-1!~!~!~,!=,,
+	debug 3,defaultedSetResultVar: A key=~!Result,key!~ Chose first option =~!Result,~!Result,~!Global,defaultedSetResultVar-1!~!~!~
 	set Result,~!Global,defaultedSetResultVar-0!~,~!Result,~!Result,~!Global,defaultedSetResultVar-1!~!~!~
 
 if ~!Result,~!Global,defaultedSetResultVar-0!~!~,==,,
 	if ~!Global,defaultedSetResultVar-2!~,!=,,
 		if ~!Result,~!Global,defaultedSetResultVar-2!~!~,!=,,
-			debug 0,defaultedSetResultVar: B key=~!Result,key!~ Chose second option.
-			set Result,~!Global,defaultedSetResultVar-0!~,~!Result,~!Result,~!Global,defaultedSetResultVar-2!~!~!~
+			debug 2,defaultedSetResultVar: B key=~!Result,key!~ Chose second option. = ~!Result,~!Global,defaultedSetResultVar-2!~!~"
+			set Result,~!Global,defaultedSetResultVar-0!~,~!Result,~!Global,defaultedSetResultVar-2!~!~
 		else
-			debug 0,defaultedSetResultVar: C key=~!Result,key!~ Chose text option.
+			debug 2,defaultedSetResultVar: C key=~!Result,key!~ Chose text option.
 			set Result,~!Global,defaultedSetResultVar-0!~,~!Global,defaultedSetResultVar-3!~
 	else
-		debug 0,defaultedSetResultVar: D key=~!Result,key!~ Chose text option.
+		debug 2,defaultedSetResultVar: D key=~!Result,key!~ Chose text option.
 		set Result,~!Global,defaultedSetResultVar-0!~,~!Global,defaultedSetResultVar-3!~
