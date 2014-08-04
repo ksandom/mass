@@ -48,7 +48,11 @@ class Hosts extends Module
 	{
 		$this->core->debug(4, "hostMatches: Checking host");
 		if (!$search) return true; # If no search, return all results.
-		if (!is_array($host)) return false;
+		if (!is_array($host))
+		{
+			$this->core->debug(2, "hostMatches: Recieved invalid data of type ".gettype($host));
+			return false;
+		}
 		
 		foreach ($host as $key=>$detail)
 		{
