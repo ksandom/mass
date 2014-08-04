@@ -48,6 +48,7 @@ class Hosts extends Module
 	{
 		$this->core->debug(4, "hostMatches: Checking host");
 		if (!$search) return true; # If no search, return all results.
+		if (!is_array($host)) return false;
 		
 		foreach ($host as $key=>$detail)
 		{
@@ -73,6 +74,8 @@ class Hosts extends Module
 				$this->core->debug(4, "hostMatches: What is this? key=$key type=".gettype($detail));
 			}
 		}
+		
+		return false;
 	}
 	
 	function assertHostDefinitionsLoaded($folderName='1LayerHosts', $destination="hostDefinitions")
