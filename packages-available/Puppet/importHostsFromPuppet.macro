@@ -1,0 +1,15 @@
+# Import hosts definitions from puppet. --importHostsFromPuppet=[name] . name is something to prefix imported files with to help identify where the data belongs. If omitted, name will be set to default. ~ puppet,hosts,import
+
+listFiles /var/lib/puppet/yaml/node
+
+loopLite
+	fromYAMLFile ~!Result,line!~
+	stashResults PuppetImport,~!Result,key!~
+
+getCategory PuppetImport
+unsetCategory PuppetImport
+
+applyPuppetManipulations
+
+# TODO save!
+

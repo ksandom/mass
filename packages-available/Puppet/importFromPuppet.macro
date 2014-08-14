@@ -1,0 +1,3 @@
+# Import everything we can from puppet. --importFromPuppet=[name] . name is something to prefix imported files with to help identify where the data belongs. If omitted, name will be set to default. ~ puppet,hosts,import
+
+importHostsFromPuppet
