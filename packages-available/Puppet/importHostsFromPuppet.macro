@@ -11,5 +11,9 @@ unsetCategory PuppetImport
 
 applyPuppetManipulations
 
-# TODO save!
+triggerEvent Hosts,importedFrompuppet
+
+saveToJson ~!General,configDir!~/data/1LayerHosts/puppet.json
+
+clear
 

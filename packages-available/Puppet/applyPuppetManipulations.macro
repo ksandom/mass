@@ -1,4 +1,29 @@
 # Apply the puppet manipulations to make the data compatible with the mass standards. ~ puppet,manipulations
 
-pass
+loop
+	# Let's get rid of some stuff that could make us insecure.
+	unset Result,parameters,sshdsakey
+	unset Result,parameters,sshfp_dsa
+	unset Result,parameters,sshrsakey
+	unset Result,parameters,sshfp_rsa
+	
+	unset Result,facts,values,sshdsakey
+	unset Result,facts,values,sshfp_dsa
+	unset Result,facts,values,sshrsakey
+	unset Result,facts,values,sshfp_rsa
+	
+	# Resolve some stuff
+	# setNested ["Result","parameters","partitions",~!Result,parameters,partitions!~]
+	
+	# Make it mass compatible
+	set Result,hostName,~!Result,name!~
+	set Result,internalIP,~!Result,ipaddress_eth0!~
+	set Result,internalFQDN,~!Result,name!~
+	set Result,architecture,~!Result,hardwaremodel!~
+	# TODO instanceType
+	# TODO location
+	# TODO rootDeviceType
+	
+	# I was here
+	set Result,source,puppet
 
