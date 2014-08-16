@@ -19,7 +19,8 @@ loop
 	set Result,hostName,~!Result,name!~
 	set Result,internalIP,~!Result,ipaddress_eth0!~
 	set Result,internalFQDN,~!Result,name!~
-	set Result,architecture,~!Result,hardwaremodel!~
+	set Result,FQDN,~!Result,name!~
+	set Result,architecture,~!Result,facts,values,hardwaremodel!~
 	# TODO instanceType
 	# TODO location
 	# TODO rootDeviceType
