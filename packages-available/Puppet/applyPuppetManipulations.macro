@@ -21,9 +21,14 @@ loop
 	set Result,internalFQDN,~!Result,name!~
 	set Result,FQDN,~!Result,name!~
 	set Result,architecture,~!Result,facts,values,hardwaremodel!~
-	# TODO instanceType
+	
+	# TODO this needs to be made more robust so it will handel different setups.
+	set Result,rootDeviceType,~!Result,facts,values,blockdevice_sda_model!~
+	
+	# instanceType
+	set Result,instanceType,~!Result,facts,values,virtual!~
+	
 	# TODO location
-	# TODO rootDeviceType
 	
 	# I was here
 	set Result,source,puppet
