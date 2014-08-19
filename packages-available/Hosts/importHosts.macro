@@ -9,6 +9,7 @@ else
 	set Tmp,fileName,importedFromETCHosts.json
 
 
+applyHostsManipulations
 triggerEvent Hosts,importedFromETCHosts
 cleanHostData
 

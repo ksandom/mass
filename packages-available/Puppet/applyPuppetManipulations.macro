@@ -22,6 +22,13 @@ loop
 	set Result,FQDN,~!Result,name!~
 	set Result,architecture,~!Result,facts,values,hardwaremodel!~
 	
+	set Result,internalFQDN,~!Result,hostName!~
+	set Result,externalFQDN,~!Result,hostName!~
+	
+	# TODO this needs to be made more robust so it will handel different setups.
+	set Result,internalIP,~!Result,parameters,ipaddress_eth0!~
+	set Result,externalIP,~!Result,parameters,ipaddress_eth1!~
+	
 	# TODO this needs to be made more robust so it will handel different setups.
 	set Result,rootDeviceType,~!Result,facts,values,blockdevice_sda_model!~
 	
