@@ -1,17 +1,31 @@
 # List hosts. Search using regex. --list[=regex] . eg --list=^db.* ~ user
 #onLoaded setFeatureType list,generateHosts
 
-search ~!Global,list!~
+clear
+loadStoreFromData HostDefinitions
+getCategory HostDefinitions
+countToVar Tmp,hostCount
 
-if ~!Global,stray!~,!=,,
-	debug 0,These values have ended up in stray: "~!Global,stray!~". Please be aware that this functionality is deprecated and will soon disapear because incorrect assumptions about it lead to nasty bugs.
-	resultSet cmd,~!Global,stray!~
-	addSlashes cmd,cmd
-
-chooseBestInterface
+if ~!Tmp,hostCount!~,<,0,
+	# Use cache
+	if ~!Global,list!~,!=,,
+		requireEach ~!Global,list!~
+else
+	# Do a full look up
+	clear
+	search ~!Global,list!~
+	
+	if ~!Global,stray!~,!=,,
+		debug 0,These values have ended up in stray: "~!Global,stray!~". Please be aware that this functionality is deprecated and will soon disapear because incorrect assumptions about it lead to nasty bugs.
+		resultSet cmd,~!Global,stray!~
+		addSlashes cmd,cmd
+	
+	chooseBestInterface
 
 triggerEvent List,finished
 
 stashResults List,results
 
 howMany
+
+unset Tmp,hostCount

@@ -163,8 +163,15 @@ class Hosts extends Module
 					if (isset($hostDetails->hostName)) $hostName=$hostDetails->hostName;
 					
 					$outputLine=$hostDetails;
-					$outputLine['filename']=$filename;
-					$outputLine['categoryName']=$categoryName;
+					if (is_array($hostDetails))
+					{
+						$outputLine['filename']=$filename;
+						$outputLine['categoryName']=$categoryName;
+					}
+					else
+					{
+						$this->core->debug(4, "Hosts: Obscure data \"$hostDetails\"");
+					}
 					$output[]=$outputLine;
 				}
 				else $this->core->debug(4, "Did not match $hostName");
