@@ -2,16 +2,18 @@
 #onLoaded setFeatureType list,generateHosts
 
 clear
-loadStoreFromData HostDefinitions
-getCategory HostDefinitions
+loadStoreFromData HostsDefinitions
+getCategory HostsDefinitions
 countToVar Tmp,hostCount
 
-if ~!Tmp,hostCount!~,<,0,
+if ~!Tmp,hostCount!~,>,0,
 	# Use cache
+	debug 1,list: hostCount(~!Tmp,hostCount!~)>0 Using cache.
 	if ~!Global,list!~,!=,,
 		requireEach ~!Global,list!~
 else
 	# Do a full look up
+	debug 1,list: hostCount(~!Tmp,hostCount!~)!>0 Doing full lookup.
 	clear
 	search ~!Global,list!~
 	
