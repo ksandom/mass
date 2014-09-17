@@ -4,6 +4,13 @@ This is in very early stages, but it is quite useable. I have been using it for 
 
 For a list of all current AWS functionality, run `mass --help=AWS`
 
+# Prerequisites
+
+    sudo apt-get install php-pear
+    sudo pear channel-discover pear.amazonwebservices.com
+    sudo pear install aws/sdk
+    sudo apt-get install php5-curl
+
 # Importing hosts and other stuff from AWS
 
 This works by using the "name" tag that you can set for individual hosts. For now this is a requirement to be able to import hosts from AWS.
@@ -93,6 +100,8 @@ Now we've saved them so that we can query them with `mass --list=blah`.
 # Installing the PHP AWS API SDK
 
 ## Installing the official PHP AWS API SDK
+
+Note that if you're using ubuntu or other debian derivitive, this section should be done for you when you run `addForkedAWSSDK`.
 
     sudo apt-get install php-pear
     sudo pear channel-discover pear.amazonwebservices.com
