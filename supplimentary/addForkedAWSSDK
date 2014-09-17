@@ -13,6 +13,24 @@ requiredParms="none"
 . `dirname $0`/libs/includeLibs.sh
 
 . $libDir/getRepo.sh
+. $libDir/documentation.sh
 
 # Make this work in /repos instead of /externalLibraries
 getRepo "forkedForkedAws-sdk-for-php" "git://github.com/ksandom/aws-sdk-for-php.git"
+
+# TODO This should be abstracted out and made OS aware.
+echo "Will now install the dependancies. This code has not been made OS aware yet.
+If you're using something other than a debian derivative, this is unlikely to work.
+Therefore the you need to run the equivalents of:
+
+sudo apt-get install php-pear
+sudo pear channel-discover pear.amazonwebservices.com
+sudo pear install aws/sdk
+sudo apt-get install php5-curl
+
+"
+sudo apt-get install php-pear
+sudo pear channel-discover pear.amazonwebservices.com
+sudo pear install aws/sdk
+sudo apt-get install php5-curl
+

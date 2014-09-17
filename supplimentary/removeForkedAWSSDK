@@ -1,0 +1,19 @@
+#!/bin/bash
+# Description
+#   Install the PHP AWS SDK
+#
+# Syntax:
+#   $0
+#
+# Examples:
+#   Simply install it. Boo-ya!
+#   $0
+
+requiredParms="none"
+. `dirname $0`/libs/includeLibs.sh
+
+. $libDir/getRepo.sh
+. $libDir/documentation.sh
+
+# Make this work in /repos instead of /externalLibraries
+removeRepo "forkedForkedAws-sdk-for-php"
