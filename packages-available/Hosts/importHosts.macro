@@ -2,6 +2,7 @@
 
 set Tmp,filePrefix,~!General,configDir!~/data/1LayerHosts/
 
+debug 1,importHosts: Importing from "~!Global,importHosts-0!~"
 importFromHostsFile ~!Global,importHosts-0!~
 if ~!Global,importHosts-1!~,!=,,
 	set Tmp,fileName,hosts-~!Global,importHosts-1!~.json
@@ -9,13 +10,21 @@ else
 	set Tmp,fileName,importedFromETCHosts.json
 
 
-applyHostsManipulations
-triggerEvent Hosts,importedFromETCHosts
-cleanHostData
+countToVar Tmp,hostCount
+if ~!Tmp,hostCount!~,>,0,
+	applyHostsManipulations
+	triggerEvent Hosts,importedFromETCHosts
+	cleanHostData
+	
+	# save store to data
+	debug 1,importHosts: Saving to ~!Tmp,filePrefix!~~!Tmp,fileName!~
+	saveToJson ~!Tmp,filePrefix!~~!Tmp,fileName!~
 
-# save store to data
-debug 1,importHosts: Saving to ~!Tmp,filePrefix!~~!Tmp,fileName!~
-saveToJson ~!Tmp,filePrefix!~~!Tmp,fileName!~
+else
+	# We didn't succeed at importing from file, so lets just output what ever we had last time. The intention here is that scripts that rely on this working reliably will continue to function.
+	# TODO Re-evaluate whether this is a good approache.
+	list ~!Tmp,filePrefix!~~!Tmp,fileName!~
 
 unset Tmp,fileName
 unset Tmp,filePrefix
+unset Tmp,hostCount

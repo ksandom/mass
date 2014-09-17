@@ -193,9 +193,9 @@ class Hosts extends Module
 		if (file_exists($inputFile))
 		{
 			if ($contents=file_get_contents($inputFile)) return $this->processHostsFile($contents);
-			else $this->core->complain($this, "Didn't get any contents from /etc/hosts. Permissions?");
+			else $this->core->complain($this, "Didn't get any contents from \"$inputFile\". Permissions?");
 		}
-		else $this->core->complain($this, "Could not find /etc/hosts. Are you on a real computer?");
+		else $this->core->complain($this, "Could not find \"$inputFile\". Are you on a real computer?");
 	}
 	
 	function processHostsFile($fileContents)
