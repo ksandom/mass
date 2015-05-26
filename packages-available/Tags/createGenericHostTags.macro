@@ -1,0 +1,37 @@
+# Creates the tags that are most commonly used for a host. --createGenericHostTags=environment,project,class . environment, project and class should be meaningful to your organisation. Eg environment might be prod, stag, uat etc. project could be website, intranet etc. class could be app, db, cache etc. ~ mass,hosts,tags
+parameters environment,project,class
+
+# eg: prod-website-app
+
+if ~!Local,environment!~,!=,,
+	# eg prod
+	set Result,environment,~!Local,environment!~
+	tagHost ~!Local,environment!~
+	
+	if ~!Local,project!~,!=,,
+		# eg prod-websie
+		tagHost ~!Local,environment!~-~!Local,project!~
+		
+		if ~!Local,class!~,!=,,
+			# eg prod-website-app
+			tagHost ~!Local,environment!~-~!Local,project!~-~!Local,class!~
+
+if ~!Local,project!~,!=,,
+	# eg website
+	set Result,project,~!Local,project!~
+	tagHost ~!Local,project!~
+	
+	if ~!Local,class!~,!=,,
+		# eg website-app
+		tagHost ~!Local,project!~-~!Local,class!~
+
+if ~!Local,class!~,!=,,
+	# eg app
+	set Result,class,~!Local,class!~
+	tagHost ~!Local,class!~
+
+# Sort everything to give predictable output
+isolate
+	retrieveResults Result,tags
+	sortOnValue
+	stashResults Result,tags

@@ -1,0 +1,4 @@
+# Tags an individual host in the result set. Use this inside a --loop. ~ mass,hosts,tags
+parameters {"tagValue":"","tagGroup":"tags"}
+
+setNested Result,~!Local,tagGroup!~,,~!Local,tagValue!~
