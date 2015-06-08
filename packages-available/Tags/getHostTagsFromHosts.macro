@@ -1,0 +1,18 @@
+# Take some hosts and get the tags from them. ~ hosts,mass,tags
+parameters {"tagGroup":"tags"}
+
+debug 0,++++++++ BEFORE LOOP
+loop
+	debug 0,###### start ~!Local,key!~
+	set Local,key,~!Result,key!~
+	isolate
+		clear
+		retrieveResults Result,~!Local,tagGroup!~
+		loop
+			
+			debug 0,key=~!Result,key!~ tagGroup=~!Local,tagGroup!~ line=~!Result,value!~
+			setNested Local,tags,~!Result,line!~,,~!Local,key!~
+	unset Local,key
+	debug 0,###### end ~!Local,key!~
+
+retrieveResults Local,tags
