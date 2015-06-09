@@ -1,0 +1,46 @@
+# Unit tests for the Tags package. ~ mass,hosts,tags,unitTest,hidden
+
+
+
+defineTest tagAndSetHosts - defined tagSet,
+	setNested TagUnitTests,data,,name,a
+	setNested TagUnitTests,data,,name,b
+	setNested TagUnitTests,data,,name,c
+	
+	retrieveResults TagUnitTests,data
+	tagAndSetHosts example,test5
+	
+	stashResults TagUnitTests,data
+	
+	expect test5,~!TagUnitTests,data,0,tags,0!~
+	expect test5,~!TagUnitTests,data,1,tags,0!~
+	expect test5,~!TagUnitTests,data,2,tags,0!~
+	
+	expect test5,~!TagUnitTests,data,0,example!~
+	expect test5,~!TagUnitTests,data,1,example!~
+	expect test5,~!TagUnitTests,data,2,example!~
+	
+	unsetCategory TagUnitTests
+
+
+defineTest createGenericHostTags,
+	setNested TagUnitTests,data,,name,a
+	setNested TagUnitTests,data,,name,b
+	setNested TagUnitTests,data,,name,c
+	
+	retrieveResults TagUnitTests,data
+	
+	loop
+		createGenericHostTags prod,ws,app
+	
+	stashResults TagUnitTests,data
+	
+	expect app,~!TagUnitTests,data,0,tags,0!~
+	expect prod,~!TagUnitTests,data,0,tags,1!~
+	expect prod-ws,~!TagUnitTests,data,0,tags,2!~
+	expect prod-ws-app,~!TagUnitTests,data,0,tags,3!~
+	expect ws,~!TagUnitTests,data,0,tags,4!~
+	expect ws-app,~!TagUnitTests,data,0,tags,5!~
+	
+	unsetCategory TagUnitTests
+

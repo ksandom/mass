@@ -6,29 +6,29 @@ parameters environment,project,class
 if ~!Local,environment!~,!=,,
 	# eg prod
 	set Result,environment,~!Local,environment!~
-	tagHost ~!Local,environment!~
+	tagResult ~!Local,environment!~
 	
 	if ~!Local,project!~,!=,,
 		# eg prod-websie
-		tagHost ~!Local,environment!~-~!Local,project!~
+		tagResult ~!Local,environment!~-~!Local,project!~
 		
 		if ~!Local,class!~,!=,,
 			# eg prod-website-app
-			tagHost ~!Local,environment!~-~!Local,project!~-~!Local,class!~
+			tagResult ~!Local,environment!~-~!Local,project!~-~!Local,class!~
 
 if ~!Local,project!~,!=,,
 	# eg website
 	set Result,project,~!Local,project!~
-	tagHost ~!Local,project!~
+	tagResult ~!Local,project!~
 	
 	if ~!Local,class!~,!=,,
 		# eg website-app
-		tagHost ~!Local,project!~-~!Local,class!~
+		tagResult ~!Local,project!~-~!Local,class!~
 
 if ~!Local,class!~,!=,,
 	# eg app
 	set Result,class,~!Local,class!~
-	tagHost ~!Local,class!~
+	tagResult ~!Local,class!~
 
 # Sort everything to give predictable output
 isolate

@@ -1,5 +1,5 @@
 # Tag all hosts in the resultSet and set the corresponding field in each host. --tagAndSetHosts=tagName,value ~ mass,tags
 parameters tagName,value
 
-tagHosts ~!Local,value!~
+tagResults ~!Local,value!~
 resultSet ~!Local,tagName!~,~!Local,value!~

@@ -1,5 +1,0 @@
-# Tag each host in the resultSet with a grouped tag. Use this without a loop. This can be useful for searching, but also for other functionality. --tagHosts=tagValue,[tagGroup=tags] ~ mass,hosts,tags
-parameters {"tagValue":"","tagGroup":"tags"}
-
-loop
-	tagHost ["~!Local,tagValue!~","~!Local,tagGroup!~"]
