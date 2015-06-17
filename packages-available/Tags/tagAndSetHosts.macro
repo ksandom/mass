@@ -3,3 +3,4 @@ parameters tagName,value
 
 tagResults ~!Local,value!~
 resultSet ~!Local,tagName!~,~!Local,value!~
+addToIndex HostTags,~!Local,tagName!~
