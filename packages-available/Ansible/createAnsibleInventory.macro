@@ -1,0 +1,37 @@
+# Create an ansible inventory file from everything we know about the hosts in the resultSet. If there are no hosts in the resultSet, all known hosts will be used. ~ ansible
+
+loadHostTags
+
+countToVar Local,numberOfResultsToSearch
+debug 1,numberOfResultsToSearch=~!Local,numberOfResultsToSearch!~
+
+if ~!Local,numberOfResultsToSearch!~,<,2,
+	# If we don't have anything, get everything.
+	debug 1,No hosts were provided, so we're just getting everything.
+	list
+
+stashResults Ansible,inputHosts
+clear
+
+# TODO do the final output setting
+nested
+
+getCategory HostTags
+loop
+	set Ansible,currentSection,~!Result,key!~
+	debug 1,Doing ansible section "~!Ansible,currentSection!~"
+	isolate
+		retrieveResults Ansible,inputHosts
+		getIndexed HostTags,~!Ansible,currentSection!~
+		
+		# TODO template to a temporary area
+		template ansibleInventorySection
+		loop
+			setNested ["Local", "sections", "~!Ansible,currentSection!~", "~!Result,line!~"]
+
+
+retrieveResults Local,sections
+templateOut combineAnsibleInventorySections
+
+unset Ansible,inputHosts
+unset Ansible,currentSection

@@ -1,0 +1,4 @@
+[~!Ansible,currentSection!~]
+<~~ ~%hostName%~ ansible_ssh_host=~%IP%~
+
+~>
