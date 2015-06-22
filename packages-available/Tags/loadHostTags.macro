@@ -1,0 +1,3 @@
+# Load everything needed for the host tags. ~ host,tags
+
+collectionLoad HostTags
