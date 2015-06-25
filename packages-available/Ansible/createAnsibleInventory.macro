@@ -24,6 +24,10 @@ loop
 		retrieveResults Ansible,inputHosts
 		getIndexed HostTags,~!Ansible,currentSection!~
 		
+		# We must have a hostName and IP
+		requireItem hostName,^..*$
+		requireItem IP,^..*$
+		
 		# TODO template to a temporary area
 		template ansibleInventorySection
 		loop
