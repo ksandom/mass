@@ -3,6 +3,7 @@ parameters tagName,value
 
 loadHostTags
 
+keyOnPreserve hostName
 tagResults ~!Local,value!~
 resultSet ~!Local,tagName!~,~!Local,value!~
 addToIndex HostTags,~!Local,value!~

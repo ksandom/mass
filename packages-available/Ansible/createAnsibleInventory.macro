@@ -3,12 +3,14 @@
 loadHostTags
 
 countToVar Local,numberOfResultsToSearch
-debug 1,numberOfResultsToSearch=~!Local,numberOfResultsToSearch!~
+debug 1,pre-keying numberOfResultsToSearch=~!Local,numberOfResultsToSearch!~
 
 if ~!Local,numberOfResultsToSearch!~,<,2,
 	# If we don't have anything, get everything.
 	debug 1,No hosts were provided, so we're just getting everything.
 	list
+
+keyOnPreserve hostName
 
 stashResults Ansible,inputHosts
 clear
