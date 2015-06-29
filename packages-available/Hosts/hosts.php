@@ -61,7 +61,7 @@ class Hosts extends Module
 				if (preg_match('/'.$search.'/', $detail) or !$search)
 				{
 					$this->core->debug(4, "hostMatches: Matched search=\"$search\", detail=\"$detail\"");
-					return true;
+					return "key \"$key\" with value \"$detail\" matches search \"$search\"";
 				}
 				else
 				{
@@ -71,7 +71,7 @@ class Hosts extends Module
 			elseif(is_array($detail))
 			{
 				$this->core->debug(3, "hostMatches: Nested into array key=$key");
-				if ($this->hostMatches($detail, $search)) return true;
+				if ($matchWhy=$this->hostMatches($detail, $search)) return "key \"$key\" successfully nested ($matchWhy)";
 			}
 			else
 			{
@@ -152,7 +152,7 @@ class Hosts extends Module
 			foreach ($categoryDetails as $hostName=>$hostDetails)
 			{
 				$this->core->debug(4, "processCategory: checking $hostName");
-				if ($this->hostMatches($hostDetails, $search))
+				if ($matchWhy=$this->hostMatches($hostDetails, $search))
 				{
 					$this->core->debug(4, "processCategory: matched $hostName");
 					$iip=(isset($hostDetails->internalIP))?$hostDetails->internalIP:false;
@@ -172,6 +172,9 @@ class Hosts extends Module
 					{
 						$this->core->debug(4, "Hosts: Obscure data \"$hostDetails\"");
 					}
+					
+					$outputLine['matchWhy']=$matchWhy;
+					
 					$output[]=$outputLine;
 				}
 				else $this->core->debug(4, "Did not match $hostName");
