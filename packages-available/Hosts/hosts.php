@@ -167,13 +167,13 @@ class Hosts extends Module
 					{
 						$outputLine['filename']=$filename;
 						$outputLine['categoryName']=$categoryName;
+						$outputLine['matchWhy']=$matchWhy;
 					}
 					else
 					{
 						$this->core->debug(4, "Hosts: Obscure data \"$hostDetails\"");
 					}
 					
-					$outputLine['matchWhy']=$matchWhy;
 					
 					$output[]=$outputLine;
 				}
