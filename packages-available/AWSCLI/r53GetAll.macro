@@ -1,0 +1,11 @@
+# Get all route53 data that we currently work with. ~ aws,route53,awsImport
+#onDefine registerForEvent AWS,getAll,r53GetAll
+
+loadAWSCLIR53
+
+debug 1,Route53: Retrieving hosted zones
+r53RetrieveHostedZones
+stashResults AWSCLIR53,hostedZones
+
+r53RecursivelyRetrieveRecords
+stashResults AWSCLIR53,recordSets

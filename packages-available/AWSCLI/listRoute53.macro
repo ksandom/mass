@@ -1,0 +1,15 @@
+# List route53 entries. --listRoute53=[searchRegex] ~ aws,route53,r53,list
+parameters searchRegex
+
+loadAWSCLIR53
+retrieveResults AWSCLIR53,recordSets
+
+# Make easily viewable
+flatten 1
+loop
+	set Result,firstValue,~!Result,ResourceRecords,0,Value!~
+
+if ~!Local,searchRegex!~,!=,,
+	refine ~!Local,searchRegex!~
+
+templateOut r53Record

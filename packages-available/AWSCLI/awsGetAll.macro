@@ -1,0 +1,4 @@
+# Get every type of data that we can ~ aws,user
+
+triggerEvent AWS,getAll
+clear

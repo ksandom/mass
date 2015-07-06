@@ -1,0 +1,26 @@
+# Get all the DNS entries from route53. ~ aws,awscli,route53,dns,user
+
+debug 2,Route53: Retrieving recordsets
+
+# TODO test that this is working
+countToVar Local,numberOfResults
+if ~!Local,numberOfResults!~,==,0,
+	r53RetrieveHostedZones
+
+unsetCategory Route53
+loop
+	# Get the record set
+	debug 3,Route53: ID="~!Result,Id!~" Name="~!Result,Name!~"
+	displayProgress
+	r53RetrieveResourceRecordSets ~!Result,Id!~
+	
+	# Put the data into a more useable format
+	setCategory Route53Tmp
+	retrieveResults Route53Tmp,ResourceRecordSets
+	set Result,hostedZone,~!Result,Name!~
+	
+	# Put it into one place
+	stashResults Route53,~!Result,Name!~
+
+# Return the results
+getCategory Route53

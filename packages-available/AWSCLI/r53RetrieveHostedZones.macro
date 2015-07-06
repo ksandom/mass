@@ -1,3 +1,7 @@
 # Get all the route53 hosted zones ~ route53,aws
 
 exExec aws route53 list-hosted-zones --output json
+
+setCategory Route53Tmp
+retrieveResults Route53Tmp,HostedZones
+unsetCategory Route53Tmp
