@@ -1,4 +1,5 @@
 # List route53 entries. --listRoute53=[searchRegex] ~ aws,route53,r53,list
+#onDefine aliasFeature listRoute53,r53List
 parameters searchRegex
 
 loadAWSCLIR53
