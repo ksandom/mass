@@ -1,0 +1,5 @@
+# Retrieve the record sets for a route53 resource. --r53RetrieveResourceRecordSets=resourceID . Eg --r53RetrieveResourceRecordSets=/hostedzone/AAAAAAAAAA ~ route53,aws
+parameters resource
+
+exExec aws route53 list-resource-record-sets --hosted-zone-id ~!Local,resource!~ --output json
+
