@@ -9,3 +9,5 @@ ec2RetrieveInstances
 ec2ApplyManipulations
 
 stashResults AWSCLIEC2,instances
+
+ec2ExportToMassFormat

@@ -27,9 +27,11 @@ loop
 	# Get the private IP
 	# TODO This is not correct. It should probably be privateIP
 	set Result,internalIP,~!Result,PrivateIpAddress!~
+	set Result,IP,~!Result,PrivateIpAddress!~
 	
 	# When VPNed in without amazon's internal DNS, the IP is still useful, while the DNS entry isn't.
 	set Result,internalFQDN,~!Result,PrivateIpAddress!~
+	set Result,FQDN,~!Result,PrivateIpAddress!~
 	
 	
 	# Map some defaults
