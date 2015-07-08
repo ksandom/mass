@@ -1,0 +1,3 @@
+# Load the ec2 data ~ aws,ec2,hidden
+
+collectionLoad AWSCLIEC2

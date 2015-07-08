@@ -1,0 +1,11 @@
+# Get all ec2 data that we currently work with. ~ aws,ec2,awsImport
+#onDefine registerForEvent AWS,getAll,ec2GetAll
+
+loadAWSCLIEC2
+
+debug 1,Route53: Retrieving instances
+ec2RetrieveInstances
+
+ec2ApplyManipulations
+
+stashResults AWSCLIEC2,instances

@@ -1,0 +1,7 @@
+# Retrieve information about all clusters ~ aws,redshift
+
+exExec aws ec2 describe-instances --output json
+
+setCategory EC2Tmp
+retrieveResults EC2Tmp,Reservations
+unsetCategory EC2Tmp

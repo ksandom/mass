@@ -1,0 +1,39 @@
+# Apply EC2 manipulations to make the data more useable. This is intended to be called automatically during import. ~ aws,ec2,manipulations,hidden
+
+loop
+	# TODO some of this stuff might be interesting later on. Move it to a better location.
+	unset Result,OwnerId
+	unset Result,ReservationId
+	unset Result,Groups
+	unset Result,key
+
+flatten 2
+
+loop
+	# Get hostName
+	unset Local,hostName
+	
+	isolate
+		copyCategory Result,ResultBackup
+		retrieveResults Result,Tags
+		requireItem Key,Name
+		loop
+			set Local,hostName,~!Result,Value!~
+	copyCategory ResultBackup,Result
+	unset ResultBackup
+	set Result,hostName,~!Local,hostName!~
+	
+	# Get the private IP
+	# TODO This is not correct. It should probably be privateIP
+	set Result,IP,~!Result,PrivateIpAddress!~
+	set Result,FQDN,~!Result,PrivateDnsName!~
+
+pass
+	
+	
+# Trigger any other manipulations
+triggerEvent AWS,importedInstances
+
+# TODO remove legacy events
+triggerEvent AWS,importedHostsFromAccount
+triggerEvent AWS,importedFromAccount
