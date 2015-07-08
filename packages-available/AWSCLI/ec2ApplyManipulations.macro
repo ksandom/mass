@@ -6,7 +6,7 @@ loop
 	unset Result,ReservationId
 	unset Result,Groups
 	unset Result,key
-
+	
 flatten 2
 
 loop
@@ -23,10 +23,20 @@ loop
 	unset ResultBackup
 	set Result,hostName,~!Local,hostName!~
 	
+	
 	# Get the private IP
 	# TODO This is not correct. It should probably be privateIP
-	set Result,IP,~!Result,PrivateIpAddress!~
-	set Result,FQDN,~!Result,PrivateDnsName!~
+	set Result,internalIP,~!Result,PrivateIpAddress!~
+	
+	# When VPNed in without amazon's internal DNS, the IP is still useful, while the DNS entry isn't.
+	set Result,internalFQDN,~!Result,PrivateIpAddress!~
+	
+	
+	# Map some defaults
+	set Result,location,~!Result,Placement,AvailabilityZone!~
+	set Result,instanceType,~!Result,InstanceType!~
+	set Result,architecture,~!Result,Architecture!~
+	set Result,rootDeviceType,~!Result,RootDeviceType!~
 
 pass
 	
