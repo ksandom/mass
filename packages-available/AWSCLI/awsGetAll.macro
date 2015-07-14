@@ -1,4 +1,7 @@
-# Get every type of data that we can ~ aws,user
+# Get every type of data that we can ~ aws,user,import
+
+# This needs to be here because other things rely on it.
+ec2GetRegions
 
 triggerEvent AWS,getAll
 clear

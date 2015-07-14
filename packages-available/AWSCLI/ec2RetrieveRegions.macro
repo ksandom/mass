@@ -1,0 +1,9 @@
+# Get all the Regions from the AWS API. ~ aws,cli,import,regions
+
+debug 1,Retrieving regions
+exExec aws ec2 describe-regions --output json
+
+setCategory EC2Tmp
+retrieveResults EC2Tmp,Regions
+unsetCategory EC2Tmp
+

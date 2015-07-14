@@ -1,7 +1,11 @@
 # Retrieve information about all clusters ~ aws,redshift
+parameters {"region":"eu-west-1"}
 
-exExec aws ec2 describe-instances --output json
+debug 1,Retrieving instances
+exExec aws ec2 describe-instances --output json --region ~!Local,region!~
 
 setCategory EC2Tmp
 retrieveResults EC2Tmp,Reservations
 unsetCategory EC2Tmp
+
+resultSet Region,~!Local,region!~

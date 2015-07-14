@@ -1,0 +1,22 @@
+# Get all instances from every region. ~ ec2,aws,import
+
+debug 1,EC2: Retrieving instances
+loadAWSCLIEC2
+
+# Get the instances for every region.
+ec2ListRegions
+loop
+	displayProgress
+	set Local,region,~!Result,RegionName!~
+	isolate
+		ec2RetrieveInstances ~!Local,region!~
+		ec2ApplyManipulations
+		stashResults AWSCLIEC2import,~!Local,region!~
+
+# Combine them together.
+getCategory AWSCLIEC2import
+flatten 1
+stashResults AWSCLIEC2,instances
+
+# Make it useable for mass.
+ec2ExportToMassFormat

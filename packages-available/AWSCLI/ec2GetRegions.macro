@@ -1,0 +1,8 @@
+# Get all the AWS regions and save them for later use. ~ ec2,region,import
+
+debug 1,EC2: Retrieving Regions
+
+loadAWSCLIEC2
+ec2RetrieveRegions
+keyOnPreserve RegionName
+stashResults AWSCLIEC2,regions
