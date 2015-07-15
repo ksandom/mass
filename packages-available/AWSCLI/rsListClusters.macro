@@ -3,3 +3,8 @@
 loadAWSCLIRedshift
 
 retrieveResults AWSCLIRedshift,clusters
+
+loop
+	set Result,endPoint,~!Result,Endpoint,Address!~:~!Result,Endpoint,Port!~
+
+templateOut rs
