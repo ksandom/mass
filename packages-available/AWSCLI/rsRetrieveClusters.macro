@@ -4,5 +4,5 @@ parameters {"region":"eu-west-1"}
 exExec aws redshift describe-clusters --output json --region ~!Local,region!~
 
 setCategory RedshiftTmp
-retrieveResults RedshiftTmp,HostedZones
+retrieveResults RedshiftTmp,Clusters
 unsetCategory RedshiftTmp

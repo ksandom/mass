@@ -5,15 +5,16 @@ loadAWSCLIRedshift
 
 # Get the clusters for every region.
 ec2ListRegions
+excludeEach (sa-east-1|us-west-1)
 loop
 	displayProgress
 	set Local,region,~!Result,RegionName!~
 	isolate
+		clear
 		rsRetrieveClusters ~!Local,region!~
 		stashResults AWSCLIRSimport,~!Local,region!~
 
 # Combine them together.
 getCategory AWSCLIRSimport
-# TODO what happens to the data without the flatten?
-# flatten 1
-stashResults AWSCLIRSimport,clusters
+flatten 1
+stashResults AWSCLIRedshift,clusters
