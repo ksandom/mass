@@ -20,3 +20,6 @@ stashResults AWSCLIEC2,instances
 
 # Make it useable for mass.
 ec2ExportToMassFormat
+
+# Cleanup
+unsetCategory AWSCLIEC2import
