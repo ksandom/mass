@@ -1,8 +1,11 @@
 # List the redshift clusters that we know about. ~ aws,rs,redshift,cluster,import
+parameters searchRegex
 
 loadAWSCLIRedshift
 
 retrieveResults AWSCLIRedshift,clusters
+if ~!Local,searchRegex!~,!=,,
+	refine ~!Local,searchRegex!~
 
 loop
 	set Result,endPoint,~!Result,Endpoint,Address!~:~!Result,Endpoint,Port!~
