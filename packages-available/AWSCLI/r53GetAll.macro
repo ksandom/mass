@@ -8,4 +8,5 @@ r53RetrieveHostedZones
 stashResults AWSCLIR53,hostedZones
 
 r53RecursivelyRetrieveRecords
+unset AWSCLIR53,recordSets
 stashResults AWSCLIR53,recordSets
