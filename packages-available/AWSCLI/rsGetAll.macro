@@ -1,0 +1,4 @@
+# Get all Redshift data that we currently work with. ~ aws,rs,redshift,awsImport
+#onDefine registerForEvent AWS,getAll,rsGetAll
+
+rsGetClusters

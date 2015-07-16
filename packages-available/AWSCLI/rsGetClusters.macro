@@ -1,5 +1,4 @@
 # Get all redshift clusters from every region. ~ redshift,rs,aws,import
-#onDefine registerForEvent AWS,getAll,rsGetClusters
 
 debug 1,Redshift: Retrieving clusters
 loadAWSCLIRedshift
