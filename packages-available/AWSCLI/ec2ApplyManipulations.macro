@@ -6,6 +6,8 @@ loop
 	unset Result,ReservationId
 	unset Result,Groups
 	unset Result,key
+	unset Result,RequesterId
+	unset Result,Region
 	
 flatten 2
 
