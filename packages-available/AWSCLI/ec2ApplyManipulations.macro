@@ -23,7 +23,10 @@ loop
 			set Local,hostName,~!Result,Value!~
 	copyCategory ResultBackup,Result
 	unset ResultBackup
-	set Result,hostName,~!Local,hostName!~
+	if ~!Local,hostName!~,!=,,
+		set Result,hostName,~!Local,hostName!~
+	else
+		set Result,hostName,unNamedTravesty
 	
 	
 	# Get the private IP
