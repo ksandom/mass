@@ -2,3 +2,4 @@
 
 loadAWSCLIEC2
 retrieveResults AWSCLIEC2,regions
+templateOut ec2Region

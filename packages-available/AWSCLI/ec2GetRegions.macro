@@ -5,4 +5,5 @@ debug 1,EC2: Retrieving Regions
 loadAWSCLIEC2
 ec2RetrieveRegions
 keyOnPreserve RegionName
+unset AWSCLIEC2,regions
 stashResults AWSCLIEC2,regions

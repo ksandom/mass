@@ -16,6 +16,7 @@ loop
 # Combine them together.
 getCategory AWSCLIEC2import
 flatten 1
+unset AWSCLIEC2,instances
 stashResults AWSCLIEC2,instances
 
 # Make it useable for mass.

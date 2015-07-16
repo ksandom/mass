@@ -8,4 +8,4 @@ retrieveResults AWSCLIEC2,instances
 if ~!Local,searchRegex!~,!=,,
 	refine ~!Local,searchRegex!~
 
-# templateOut r53Record
+templateOut ec2Instance
