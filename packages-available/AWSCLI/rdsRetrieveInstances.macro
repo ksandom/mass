@@ -1,0 +1,8 @@
+# Retrieve information about all RDS instances ~ aws,redshift
+parameters {"region":"eu-west-1"}
+
+exExec aws rds describe-db-instances --output json --region ~!Local,region!~
+
+setCategory RDSTmp
+retrieveResults RDSTmp,DBInstances
+unsetCategory RDSTmp

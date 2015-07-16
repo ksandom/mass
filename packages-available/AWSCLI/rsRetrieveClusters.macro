@@ -1,4 +1,4 @@
-# Retrieve information about all clusters ~ aws,redshift
+# Retrieve information about all redshift clusters ~ aws,redshift
 parameters {"region":"eu-west-1"}
 
 exExec aws redshift describe-clusters --output json --region ~!Local,region!~

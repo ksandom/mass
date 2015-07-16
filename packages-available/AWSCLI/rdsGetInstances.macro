@@ -1,0 +1,22 @@
+# Get all RDS instances from every region. ~ rds,aws,import
+#onDefine registerForEvent AWS,getAll,rsGetClusters
+
+debug 1,RDS: Retrieving Instances
+loadAWSCLIRDS
+
+# Get the clusters for every region.
+ec2ListRegions
+# excludeEach (sa-east-1|us-west-1)
+loop
+	displayProgress
+	set Local,region,~!Result,RegionName!~
+	isolate
+		clear
+		rdsRetrieveInstances ~!Local,region!~
+		stashResults AWSCLIRDSimport,~!Local,region!~
+
+# Combine them together.
+getCategory AWSCLIRDSimport
+flatten 1
+unset AWSCLIRDS,instances
+stashResults AWSCLIRDS,instances

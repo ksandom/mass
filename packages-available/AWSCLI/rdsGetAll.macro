@@ -1,0 +1,4 @@
+# Get all RDS data that we currently work with. ~ aws,rds,awsImport
+#onDefine registerForEvent AWS,getAll,rdsGetAll
+
+rdsGetInstances

@@ -1,0 +1,16 @@
+# List the RDS instances that we know about. ~ aws,rs,redshift,cluster,import
+parameters searchRegex
+
+loadAWSCLIRDS
+
+retrieveResults AWSCLIRDS,instances
+if ~!Local,searchRegex!~,!=,,
+	refine ~!Local,searchRegex!~
+
+loop
+	if ~!Result,DBName!~,==,,
+		set Result,DBName,unNameed!
+	
+	set Result,endPoint,~!Result,Endpoint,Address!~:~!Result,Endpoint,Port!~
+
+templateOut rds
