@@ -18,4 +18,5 @@ loop
 # Combine them together.
 getCategory AWSCLIRSimport
 flatten 1
+unset AWSCLIRedshift,clusters
 stashResults AWSCLIRedshift,clusters
