@@ -1,5 +1,5 @@
 # List route53 entries. --listRoute53=[searchRegex] ~ aws,route53,r53,list
-#onDefine aliasFeature listRoute53,r53List
+#onDefine aliasFeature r53ListEntries,listRoute53,r53List
 parameters searchRegex
 
 loadAWSCLIR53
@@ -13,4 +13,4 @@ loop
 if ~!Local,searchRegex!~,!=,,
 	refine ~!Local,searchRegex!~
 
-templateOut r53Record
+templateOut r53
