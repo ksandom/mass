@@ -1,0 +1,22 @@
+# Get all load balancers from every region. ~ elb,aws,import
+#onDefine registerForEvent AWS,getAll,elbGetLoadBalancers
+
+debug 1,ELB: Retrieving Load balancers
+loadAWSCLIELB
+
+# Get the load balancers for every region.
+ec2ListRegions
+# excludeEach (sa-east-1|us-west-1)
+loop
+	displayProgress
+	set Local,region,~!Result,RegionName!~
+	isolate
+		clear
+		elbRetrieveLoadBalancers ~!Local,region!~
+		stashResults AWSCLIELBimport,~!Local,region!~
+
+# Combine them together.
+getCategory AWSCLIELBimport
+flatten 1
+unset AWSCLIELB,instances
+stashResults AWSCLIELB,loadBalancers

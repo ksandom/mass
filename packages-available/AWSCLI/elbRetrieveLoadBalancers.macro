@@ -1,0 +1,8 @@
+# Retrieve information about all load balancers ~ aws,elb
+parameters {"region":"eu-west-1"}
+
+exExec aws elb describe-load-balancers --output json --region ~!Local,region!~
+
+setCategory ELBTmp
+retrieveResults ELBTmp,LoadBalancerDescriptions
+unsetCategory ELBTmp

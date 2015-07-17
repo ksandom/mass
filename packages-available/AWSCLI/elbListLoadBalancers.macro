@@ -1,0 +1,15 @@
+# List the RDS instances that we know about. ~ aws,rs,redshift,cluster,import
+parameters searchRegex
+
+loadAWSCLIELB
+
+retrieveResults AWSCLIELB,loadBalancers
+if ~!Local,searchRegex!~,!=,,
+	refine ~!Local,searchRegex!~
+
+loop
+	if ~!Result,DBName!~,==,,
+		set Result,DBName,unNameed!
+	
+
+# templateOut elb
