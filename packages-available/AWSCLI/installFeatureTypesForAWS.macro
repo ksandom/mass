@@ -1,7 +1,10 @@
 # Install the feature types to be used with semantics. ~ semantics,internal,install
 #onDefine registerForEvent Install,featureTypes,installFeatureTypesForAWS
 
+createFeatureType generateListOfELBs,,EC2,Generates a list of EC2 instances.
 createFeatureType generateListOfELBs,,ELB,Generates a list of Elastic Load Balancers.
+createFeatureType generateListOfELBs,,RDS,Generates a list of RDS instances.
+createFeatureType generateListOfELBs,,redshift,Generates a list of redshift clusters.
 createFeatureType generateListOfR53s,,route53,Generates a list of Route53 DNS entries.
 createFeatureType R53ToELB,route53,ELB,Convert route53 entries to Elastic Load Balancer entries.
 createFeatureType ELBToInstances,ELB,host,Convert Elastic Load Balancer entries to instances (hosts).
