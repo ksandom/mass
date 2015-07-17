@@ -1,7 +1,8 @@
 # Install the data types to be used with hosts. ~ semantics,internal,install
 #onDefine registerForEvent Install,dataTypes,installDataTypesForAWS
 
-createDataType EC2,ec2,ec2More,ec2Less,,AWS EC2 instance.
+createDataType EC2,ec2Instance,ec2InstanceMore,ec2InstanceLess,,AWS EC2 instance.
+createDataType region,ec2Region,ec2RegionMore,ec2RegionLess,,AWS EC2 instance.
 createDataType ELB,elb,elbMore,elbLess,,AWS Elastic load balancer.
 createDataType RDS,rds,rdsMore,rdsLess,,AWS RDS database.
 createDataType redshift,rs,rsMore,rsLess,,AWS redshift cluders.
