@@ -1,4 +1,5 @@
 # List the redshift clusters that we know about. ~ aws,rs,redshift,cluster,import
+#onDefine aliasFeature rsListClusters,rsList
 parameters searchRegex
 
 loadAWSCLIRedshift

@@ -1,4 +1,5 @@
 # List the RDS instances that we know about. ~ aws,rs,redshift,cluster,import
+#onDefine aliasFeature elbListLoadBalancers,elbList
 parameters searchRegex
 
 loadAWSCLIELB
