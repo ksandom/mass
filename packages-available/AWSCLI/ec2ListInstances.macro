@@ -1,5 +1,7 @@
 # List ec2 instances. --listEC2=[searchRegex] ~ aws,ec2,instances,list
 #onDefine aliasFeature ec2ListInstances,ec2List
+#onLoaded setFeatureType ec2ListInstances,generateListOfEC2Instancess
+
 parameters searchRegex
 
 loadAWSCLIEC2
@@ -7,5 +9,3 @@ retrieveResults AWSCLIEC2,instances
 
 if ~!Local,searchRegex!~,!=,,
 	refine ~!Local,searchRegex!~
-
-templateOut ec2Instance
