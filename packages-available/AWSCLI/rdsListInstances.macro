@@ -1,5 +1,7 @@
 # List the RDS instances that we know about. ~ aws,rs,redshift,cluster,import
 #onDefine aliasFeature rdsListInstances,rdsList
+#onLoaded setFeatureType rdsListInstances,generateListOfRDSInstances
+
 parameters searchRegex
 
 loadAWSCLIRDS
