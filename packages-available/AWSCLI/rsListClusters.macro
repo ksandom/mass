@@ -13,4 +13,4 @@ if ~!Local,searchRegex!~,!=,,
 loop
 	set Result,endPoint,~!Result,Endpoint,Address!~:~!Result,Endpoint,Port!~
 
-templateOut rs
+triggerEvent RS,manipulations

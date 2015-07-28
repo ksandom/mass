@@ -1,0 +1,9 @@
+# Find out how many resource records there are per DNS entry. ~ r53,hidden
+#onDefine registerForEvent R53,manipulations,r53HowManyRecords
+
+loop
+	isolate
+		retrieveResults Result,ResourceRecords
+		countToVar Local,numberOfRecords
+	
+	set Result,numberOfRecords,~!Local,numberOfRecords!~

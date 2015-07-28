@@ -16,4 +16,4 @@ loop
 	
 	set Result,endPoint,~!Result,Endpoint,Address!~:~!Result,Endpoint,Port!~
 
-templateOut rds
+triggerEvent RDS,manipulations

@@ -9,3 +9,5 @@ retrieveResults AWSCLIEC2,instances
 
 if ~!Local,searchRegex!~,!=,,
 	refine ~!Local,searchRegex!~
+
+triggerEvent Ec2,manipulations

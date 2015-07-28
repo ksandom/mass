@@ -1,4 +1,4 @@
-<~~ ~!Color,blue!~~%Region%~~!Color,brightBlack!~ / ~!Color,default!~~%LoadBalancerName%~  ~!Color,yellow!~~%CreatedTime%~~!Color,default!~
+<~~ ~!Color,default!~~%LoadBalancerName%~  ~!Color,yellow!~~%CreatedTime%~~!Color,default!~ ~!Color,blue!~~%Scheme%~~!Color,default!~
   ~!Color,green!~~%DNSName%~~!Color,default!~
 
 ~>
