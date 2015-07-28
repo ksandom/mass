@@ -1,4 +1,5 @@
 # List the AWS regions. This is currently obttained via the EC2 APIm so may not be correct for everything, but it is at least a starting point. ~ aws,ec2,import,regions
+#onLoaded setFeatureType ec2ListRegions,generateListOfEC2Regions
 
 loadAWSCLIEC2
 retrieveResults AWSCLIEC2,regions

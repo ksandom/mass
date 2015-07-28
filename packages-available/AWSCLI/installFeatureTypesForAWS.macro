@@ -2,6 +2,7 @@
 #onDefine registerForEvent Install,featureTypes,installFeatureTypesForAWS
 
 createFeatureType generateListOfEC2Instancess,,EC2,Generates a list of EC2 instances.
+createFeatureType generateListOfEC2Regions,,region,Generates a list of EC2 regions.
 createFeatureType generateListOfELBs,,ELB,Generates a list of Elastic Load Balancers.
 createFeatureType generateListOfRDSInstances,,RDS,Generates a list of RDS instances.
 createFeatureType generateListOfRedshiftClusters,,redshift,Generates a list of redshift clusters.
