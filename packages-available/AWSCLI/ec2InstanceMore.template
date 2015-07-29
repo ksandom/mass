@@ -1,3 +1,4 @@
-<~~ ~!Color,default!~~%InstanceId%~ ~!Color,green!~~%PrivateDnsName%~~!Color,default!~ ~!Color,yellow!~~%InstanceType%~~!Color,default!~
+<~~ ~!Color,default!~~%InstanceId%~ ~!Color,green!~~%PrivateDnsName%~~!Color,default!~
+  ~!Color,yellow!~~%InstanceType%~~!Color,default!~  ~!Color,yellow!~~%architecture%~~!Color,default!~  ~!Color,yellow!~~%rootDeviceType%~~!Color,default!~  ~!Color,blue!~~%location%~~!Color,default!~
 
 ~>
