@@ -1,4 +1,4 @@
-# List the redshift clusters that we know about. ~ aws,rs,redshift,cluster,import
+# List the redshift clusters that we know about. ~ aws,rs,redshift,cluster,awsList,import
 #onDefine aliasFeature rsListClusters,rsList
 #onLoaded setFeatureType rsListClusters,generateListOfRedshiftClusters
 

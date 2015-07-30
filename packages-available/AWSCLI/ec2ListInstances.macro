@@ -1,4 +1,4 @@
-# List ec2 instances. --listEC2=[searchRegex] ~ aws,ec2,instances,list
+# List ec2 instances. --listEC2=[searchRegex] ~ aws,ec2,instances,awsList,list
 #onDefine aliasFeature ec2ListInstances,ec2List
 #onLoaded setFeatureType ec2ListInstances,generateListOfEC2Instancess
 

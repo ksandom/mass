@@ -6,7 +6,8 @@ It uses the Amazon's [AWS CLI](http://aws.amazon.com/cli/) to import data into m
 
 ## Using it
 
-* Get the [AWS CLI](http://aws.amazon.com/cli/) installed and setup.
+* Get the [AWS CLI](http://aws.amazon.com/cli/) installed and setup. - Make sure you get data you expect.
 * Run `mass --awsGetAll` to import everything that mass currently knows how to get. (Note that IAM permissions will affect what it is able to get.)
+* Do stuff with it. You can find the functionality available to you with `mass --help=awsList`
 
 If you'd like to just import some stuff, find what you can important separately using `mass --help=awsImport`.

@@ -1,4 +1,4 @@
-# List the RDS instances that we know about. ~ aws,rs,redshift,cluster,import
+# List the RDS instances that we know about. ~ aws,rs,redshift,cluster,awsList,import
 #onDefine aliasFeature rdsListInstances,rdsList
 #onLoaded setFeatureType rdsListInstances,generateListOfRDSInstances
 
