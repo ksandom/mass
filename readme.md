@@ -42,5 +42,5 @@ I've written a version of this tool at every company I've worked at since 2007 a
 
 This time I've developed it entirely in my own time, which means I can take the time to do it right and I can share it and take it with me. Phase 1, which is available now is maturing and ready for public use.
 
-A month or so in to development, it became apparent that this would be a fantastic set of foundations for a concept I came up with in late 2000/early 2001. This is phase 2. It doesn't replace anything, it simply adds a whole lot. Therefore you don't have to worry about any macros you create becomming obsolete because of it. More on this in due time. ;)
+A month or so in to development, it became apparent that this would be a fantastic set of foundations for a concept I came up with in late 2000/early 2001. This is phase 2. It doesn't replace anything, it simply adds a whole lot. Therefore you don't have to worry about any macros you create becoming obsolete because of it. More on this in due time. ;)
  
