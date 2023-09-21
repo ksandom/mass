@@ -1,5 +1,8 @@
 # Mass
-is a modularised tool for managing several nodes of a cluster. Open individual SSH terminals to specific groups of nodes of your cluster, a single node, or the whole lot. Do the same with ClusterSSH or virtual terminals in screen. Upload a file to each node or dowload a file from each, prefixed with the hostname. Run a command to conquer the world... or conduct that essential maintenance. Essentially your nodes are one RegEx away.
+
+has been replaced by [DevOpsDream](https://github.com/ksandom/devopsdream). This repo remains solely for legacy work-flows.
+
+Mass is a modularised tool for managing several nodes of a cluster. Open individual SSH terminals to specific groups of nodes of your cluster, a single node, or the whole lot. Do the same with ClusterSSH or virtual terminals in screen. Upload a file to each node or dowload a file from each, prefixed with the hostname. Run a command to conquer the world... or conduct that essential maintenance. Essentially your nodes are one RegEx away.
 
 Now, that's what was significant to me. It turns out though that a lot of people find it really useful as a tool for looking up servers.
 
